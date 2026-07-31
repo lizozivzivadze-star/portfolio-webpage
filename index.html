@@ -1,635 +1,524 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Lizi Zivzivadze — Electromechanical Engineer</title>
-<meta name="description" content="Lizi Zivzivadze — Electromechanical Engineer. Mechatronics, embedded control, and precision hardware.">
+<meta name="description" content="Portfolio of Lizi Zivzivadze, Electromechanical Engineer — mechatronics, embedded control, and precision hardware projects." />
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-  html { scroll-behavior: smooth; }
-  body {
-    background-color: #f8fafc;
+  :root{
+    --ink:#0f172a;
+    --border-soft:#cbd5e1;
+    --border-strong:#1e293b;
+    --sky:#0284c7;
+    --teal:#0d9488;
+    --bg:#f8fafc;
+  }
+  html,body{
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
+  }
+  .blueprint-grid{
     background-image:
-      linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
-    background-size: 22px 22px;
-    color: #0f172a;
+      linear-gradient(rgba(15,23,42,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15,23,42,0.035) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: -1px -1px;
   }
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  .panel{
+    background:#ffffff;
+    border:1px solid var(--border-soft);
+    box-shadow: 0 1px 2px rgba(15,23,42,0.04);
   }
-  ::-webkit-scrollbar { height: 6px; width: 6px; }
-  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  .snap-x-mandatory { scroll-snap-type: x mandatory; }
-  .snap-start { scroll-snap-align: start; }
-  .tab-btn { transition: all .15s ease; }
-  .tab-btn.active { background-color: #0284c7; color: #fff; }
-  .tab-btn:not(.active) { background-color: #f1f5f9; color: #334155; }
-  .skill-tab.active { background-color: #0d9488; color: #fff; }
-  .skill-tab:not(.active) { background-color: #f1f5f9; color: #334155; }
-  .card-body::-webkit-scrollbar { width: 4px; }
-  @keyframes pulseDot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
-  .pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
-  .fade-in { animation: fadeIn .25s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: translateY(0); } }
+  .panel-strong-edge{ border-color: var(--border-strong); }
+  .no-scrollbar::-webkit-scrollbar{ display:none; }
+  .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
+  .thin-scroll::-webkit-scrollbar{ width:6px; height:6px; }
+  .thin-scroll::-webkit-scrollbar-thumb{ background:#cbd5e1; border-radius:4px; }
+  .thin-scroll::-webkit-scrollbar-track{ background:transparent; }
+  .skill-pill{
+    flex:0 0 auto;
+    border:1px solid var(--border-soft);
+    background:#f8fafc;
+  }
+  .tab-btn{
+    position:relative;
+    color:#64748b;
+  }
+  .tab-btn.active-cat{
+    color:var(--ink);
+    font-weight:700;
+  }
+  .tab-btn.active-cat::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-9px;
+    height:2px;
+    background:var(--sky);
+  }
+  .card-tab{
+    color:#64748b;
+    border-bottom:2px solid transparent;
+  }
+  .card-tab.active-card-tab{
+    color:var(--ink);
+    font-weight:600;
+    border-bottom-color: var(--teal);
+  }
+  .doc-card{
+    border:1px solid var(--border-soft);
+    background:#ffffff;
+    transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease;
+  }
+  .doc-card.doc-selected{
+    border:2px solid var(--sky);
+    background:#f0f9ff;
+    font-weight:700;
+    box-shadow: 0 1px 3px rgba(2,132,199,0.15);
+  }
+  .status-dot{
+    width:8px; height:8px; border-radius:9999px;
+    background:#16a34a;
+    box-shadow: 0 0 0 3px rgba(22,163,74,0.15);
+  }
+  input:focus, button:focus, select:focus{
+    outline: 2px solid var(--sky);
+    outline-offset: 1px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ transition: none !important; animation: none !important; }
+  }
 </style>
 </head>
-<body class="antialiased text-slate-900">
+<body class="blueprint-grid min-h-screen">
 
 <!-- ================= HEADER ================= -->
 <header class="sticky top-0 z-50 h-[52px] bg-white/95 backdrop-blur border-b border-slate-200">
-  <div class="max-w-5xl mx-auto h-full px-3 flex items-center justify-between">
-    <div class="flex items-center gap-2 min-w-0">
-      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=100"
-           alt="Lizi Zivzivadze" class="w-7 h-7 rounded-full object-cover border border-slate-200 flex-shrink-0">
-      <span class="text-sm font-semibold text-slate-900 truncate">Lizi Zivzivadze</span>
+  <div class="max-w-5xl mx-auto h-full px-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <img id="headerAvatar" src="" alt="Lizi Zivzivadze" class="w-7 h-7 rounded-full object-cover border border-slate-300" />
+      <span class="text-sm font-semibold tracking-tight" style="color:var(--ink)">Lizi Zivzivadze</span>
     </div>
-    <div class="relative flex-shrink-0">
-      <button id="langBtn" onclick="toggleLangMenu()"
-              class="flex items-center gap-1 text-xs font-medium text-slate-600 border border-slate-200 rounded-full px-2.5 py-1 hover:border-sky-300 hover:text-sky-600 transition-colors">
-        <span id="langBadge">EN</span>
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    <div class="relative">
+      <button id="langBtn" class="flex items-center gap-1 text-xs font-semibold px-2.5 py-1.5 rounded-md border border-slate-300 bg-white text-slate-700 hover:border-slate-400">
+        <span id="langLabel">EN</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" class="mt-px"><path d="M1 3l4 4 4-4" stroke="#475569" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <div id="langMenu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-slate-200 rounded-lg shadow-lg overflow-hidden text-sm">
-        <button onclick="setLang('EN','English')" class="w-full text-left px-3 py-2 hover:bg-slate-50">EN (English)</button>
-        <button onclick="setLang('FR','Français')" class="w-full text-left px-3 py-2 hover:bg-slate-50">FR (Français)</button>
-        <button onclick="setLang('NL','Nederlands')" class="w-full text-left px-3 py-2 hover:bg-slate-50">NL (Nederlands)</button>
+      <div id="langMenu" class="hidden absolute right-0 mt-1.5 w-28 bg-white border border-slate-200 rounded-md shadow-md overflow-hidden">
+        <button data-lang="EN" class="lang-opt w-full text-left px-3 py-2 text-xs hover:bg-slate-50">English (EN)</button>
+        <button data-lang="FR" class="lang-opt w-full text-left px-3 py-2 text-xs hover:bg-slate-50">Français (FR)</button>
+        <button data-lang="NL" class="lang-opt w-full text-left px-3 py-2 text-xs hover:bg-slate-50">Nederlands (NL)</button>
       </div>
     </div>
   </div>
 </header>
 
-<main class="max-w-5xl mx-auto px-3">
+<!-- ================= MAIN ================= -->
+<main class="max-w-5xl mx-auto px-4 py-6 flex flex-col gap-6">
 
-  <!-- ================= PROFILE SECTION ================= -->
-  <section id="profile" class="mt-3 border border-slate-300 rounded-xl bg-white/70 p-3 sm:p-4">
-    <div class="flex items-center gap-3">
-      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400"
-           alt="Lizi Zivzivadze" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-white shadow-sm flex-shrink-0">
+  <!-- ========== 1. PROFILE PANEL ========== -->
+  <section class="panel rounded-xl p-5 md:p-6 min-h-[42vh] md:min-h-[300px] flex flex-col justify-between">
+    <div class="flex items-start gap-4">
+      <img id="profileAvatar" src="" alt="Lizi Zivzivadze" class="w-14 h-14 rounded-full object-cover border border-slate-300 flex-shrink-0" />
       <div class="min-w-0">
-        <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">Lizi Zivzivadze</h1>
-        <p class="text-xs sm:text-sm font-medium text-sky-600">Electromechanical Engineer</p>
+        <h1 class="text-lg font-bold leading-tight truncate" style="color:var(--ink)">Lizi Zivzivadze</h1>
+        <p class="text-sm font-medium" style="color:var(--sky)">Electromechanical Engineer</p>
+        <p id="yearTag" class="text-xs text-slate-500 mt-1"></p>
+        <p id="availTag" class="text-[11px] text-slate-400 -mt-0.5"></p>
       </div>
     </div>
 
-    <div class="flex flex-wrap items-center gap-1.5 mt-2.5">
-      <span class="flex items-center gap-1 text-[11px] bg-slate-100 text-slate-600 rounded-full px-2 py-1">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-        Leuven, Belgium
-      </span>
-      <a href="tel:+32499221680" class="flex items-center gap-1 text-[11px] bg-slate-100 text-slate-600 rounded-full px-2 py-1 hover:bg-sky-50 hover:text-sky-600 transition-colors">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-        +32 499 22 16 80
+    <p id="statementText" class="text-sm leading-relaxed text-slate-700 mt-4" style="display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;"></p>
+
+    <div class="mt-4 pt-4 border-t border-slate-200 flex flex-wrap items-center gap-2">
+      <a id="callLink" href="#" class="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-md border border-slate-300 hover:border-sky-500 hover:text-sky-600 transition-colors">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Call
       </a>
-      <a href="https://wa.me/32499221680" target="_blank" rel="noopener" class="flex items-center gap-1 text-[11px] bg-teal-50 text-teal-700 rounded-full px-2 py-1 hover:bg-teal-100 transition-colors">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.86 9.86 0 0 0 12.04 2zm0 1.67c2.2 0 4.27.86 5.82 2.42a8.2 8.2 0 0 1 2.42 5.82c0 4.55-3.7 8.25-8.25 8.25a8.2 8.2 0 0 1-4.2-1.15l-.3-.18-3.14.82.84-3.06-.2-.32a8.18 8.18 0 0 1-1.26-4.36c0-4.55 3.71-8.24 8.27-8.24zm-4.5 4.7c-.16 0-.42.06-.64.3-.22.24-.85.83-.85 2.02s.87 2.35.99 2.51c.12.16 1.7 2.6 4.12 3.54 2.03.8 2.44.64 2.88.6.44-.04 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.92-1.18-.71-.63-1.19-1.41-1.33-1.65-.14-.24-.01-.37.11-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.31-.74-1.79-.19-.46-.39-.4-.54-.4z"></path></svg>
+      <a id="whatsappLink" href="#" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-md border border-slate-300 hover:border-teal-500 hover:text-teal-600 transition-colors">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.868-2.03-.967-.273-.099-.472-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.05 22h-.005a9.87 9.87 0 0 1-5.031-1.378L2 22l1.398-4.895A9.9 9.9 0 0 1 2.049 12C2.047 6.477 6.526 2 12.05 2a9.93 9.93 0 0 1 7.049 2.929A9.9 9.9 0 0 1 22 12.021c-.002 5.523-4.48 9.979-9.95 9.979zm0-18.155a8.16 8.16 0 0 0-8.176 8.175 8.1 8.1 0 0 0 1.271 4.362l.198.315-.831 3.033 3.11-.815.303.18a8.11 8.11 0 0 0 4.121 1.127h.004a8.17 8.17 0 0 0 8.176-8.178 8.09 8.09 0 0 0-2.395-5.782 8.09 8.09 0 0 0-5.781-2.417z"/></svg>
         WhatsApp
       </a>
-      <a href="mailto:lizozivzivadze@gmail.com" class="flex items-center gap-1 text-[11px] bg-slate-100 text-slate-600 rounded-full px-2 py-1 hover:bg-sky-50 hover:text-sky-600 transition-colors">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" opacity="0"></path><path d="M22 6l-10 7L2 6"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg>
+      <a id="emailLink" href="#" class="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-md border border-slate-300 hover:border-sky-500 hover:text-sky-600 transition-colors">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" opacity="0"/><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
         Email
       </a>
-      <a href="https://www.linkedin.com/in/lizizivzivadze/" target="_blank" rel="noopener" class="flex items-center gap-1 text-[11px] bg-slate-100 text-slate-600 rounded-full px-2 py-1 hover:bg-sky-50 hover:text-sky-600 transition-colors">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.25h4V23h-4V8.25zM8.5 8.25h3.83v2.01h.05c.53-1 1.84-2.06 3.79-2.06 4.05 0 4.8 2.67 4.8 6.14V23h-4v-6.7c0-1.6-.03-3.66-2.23-3.66-2.24 0-2.58 1.75-2.58 3.55V23h-4V8.25z"></path></svg>
+      <a id="linkedinLink" href="#" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-md border border-slate-300 hover:border-sky-500 hover:text-sky-600 transition-colors">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.119 20.452H3.554V9h3.565v11.452z"/></svg>
         LinkedIn
       </a>
-      <a href="https://github.com/lizozivzivadze-star" target="_blank" rel="noopener" class="flex items-center gap-1 text-[11px] bg-slate-100 text-slate-600 rounded-full px-2 py-1 hover:bg-sky-50 hover:text-sky-600 transition-colors">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.98 5.24.98 11.5c0 5.02 3.26 9.27 7.77 10.77.57.1.78-.25.78-.55v-1.94c-3.16.69-3.82-1.52-3.82-1.52-.52-1.31-1.26-1.66-1.26-1.66-1.03-.7.08-.69.08-.69 1.14.08 1.74 1.17 1.74 1.17 1.01 1.73 2.65 1.23 3.3.94.1-.73.4-1.23.72-1.51-2.52-.29-5.17-1.26-5.17-5.6 0-1.24.44-2.25 1.17-3.04-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.14 1.16a10.9 10.9 0 0 1 5.72 0c2.18-1.47 3.14-1.16 3.14-1.16.62 1.57.23 2.73.11 3.02.73.79 1.17 1.8 1.17 3.04 0 4.35-2.66 5.31-5.19 5.59.41.35.77 1.04.77 2.11v3.13c0 .3.21.66.79.55 4.5-1.5 7.76-5.75 7.76-10.77C23.02 5.24 18.27.5 12 .5z"></path></svg>
+      <a id="githubLink" href="#" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-md border border-slate-300 hover:border-slate-500 transition-colors">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.66.5 12.03c0 5.1 3.29 9.42 7.86 10.95.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.1-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.17.08 1.78 1.2 1.78 1.2 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.05 11.05 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.76.12 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.7 5.4-5.27 5.69.42.36.78 1.08.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .3.2.66.79.55A10.53 10.53 0 0 0 23.5 12.03C23.5 5.66 18.35.5 12 .5z"/></svg>
         GitHub
       </a>
     </div>
-
-    <p class="text-xs sm:text-sm text-slate-600 leading-snug mt-2.5 line-clamp-3">
-      Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.
-    </p>
   </section>
 
-  <!-- ================= PROJECTS SECTION ================= -->
-  <section id="projects" class="mt-4">
-    <div class="inline-block bg-sky-600 text-white text-[11px] font-bold tracking-wide uppercase rounded-md px-3 py-1.5 shadow-sm">
-      Project Demonstrations
+  <!-- ========== 2. PROJECTS PANEL ========== -->
+  <section class="panel rounded-xl p-5 md:p-6 min-h-[46vh] md:min-h-[520px] flex flex-col">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-base font-bold" style="color:var(--ink)">Projects</h2>
     </div>
-    <div id="projectsScroll" class="mt-2.5 flex flex-nowrap gap-3 overflow-x-auto snap-x-mandatory pb-2 -mx-3 px-3"></div>
+
+    <div id="catTabs" class="flex items-center gap-5 border-b border-slate-200 pb-2.5 mb-4 overflow-x-auto no-scrollbar">
+      <button data-cat="All" class="tab-btn active-cat text-sm whitespace-nowrap pb-0.5">All</button>
+      <button data-cat="HardWare" class="tab-btn text-sm whitespace-nowrap pb-0.5"><b>H</b>ard<b>W</b>are</button>
+      <button data-cat="SoftWare" class="tab-btn text-sm whitespace-nowrap pb-0.5"><b>S</b>oft<b>W</b>are</button>
+      <button data-cat="HW + SW" class="tab-btn text-sm whitespace-nowrap pb-0.5">HW + SW</button>
+    </div>
+
+    <div id="projectList" class="flex flex-col gap-4 overflow-y-auto thin-scroll max-h-[420px] pr-1"></div>
   </section>
 
-  <!-- ================= SKILLSET SECTION ================= -->
-  <section id="skills" class="mt-4">
-    <div class="inline-block bg-teal-600 text-white text-[11px] font-bold tracking-wide uppercase rounded-md px-3 py-1.5 shadow-sm">
-      Skillset
+  <!-- ========== 3. SKILLSET PANEL ========== -->
+  <section class="panel rounded-xl p-5 md:p-6 min-h-[30vh] md:min-h-[300px] flex flex-col">
+    <div class="inline-block self-start px-3 py-1 rounded-md mb-4" style="background:#f0f9ff; border:1px solid var(--border-soft);">
+      <h2 class="text-base font-bold" style="color:var(--ink)">Skillset</h2>
     </div>
-    <div id="skillTabs" class="mt-2.5 flex flex-nowrap gap-1.5 overflow-x-auto pb-1 -mx-3 px-3"></div>
-    <div id="skillList" class="mt-2 border border-slate-200 rounded-xl bg-white p-3 space-y-2.5"></div>
+    <div id="skillCategories" class="flex flex-col gap-4 overflow-y-auto thin-scroll"></div>
   </section>
 
-  <!-- ================= WHAT I BRING SECTION ================= -->
-  <section id="value" class="mt-4">
-    <div class="inline-block bg-slate-800 text-white text-[11px] font-bold tracking-wide uppercase rounded-md px-3 py-1.5 shadow-sm">
-      What I Bring to the Table
-    </div>
-    <div id="valueScroll" class="mt-2.5 flex flex-nowrap gap-3 overflow-x-auto snap-x-mandatory pb-2 -mx-3 px-3"></div>
-  </section>
+  <!-- ========== 4. DOCUMENT GENERATION PANEL ========== -->
+  <section class="panel rounded-xl p-5 md:p-6 min-h-[42vh] md:min-h-[340px] flex flex-col">
+    <h2 class="text-base font-bold mb-1" style="color:var(--ink)">Get My Documents</h2>
+    <p class="text-xs text-slate-500 mb-4">Select one or more, then send them to your inbox.</p>
 
-  <!-- ================= PDF EXPORT SECTION ================= -->
-  <section id="export" class="mt-4 mb-6">
-    <div class="inline-block bg-sky-600 text-white text-[11px] font-bold tracking-wide uppercase rounded-md px-3 py-1.5 shadow-sm">
-      Document Generation &amp; Export System
-    </div>
-    <div class="mt-2.5 border border-slate-200 rounded-xl bg-white p-3">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-        <button onclick="openPdfPrompt('full')" class="border border-sky-200 bg-sky-50 hover:bg-sky-100 text-sky-700 text-sm font-semibold rounded-lg px-3 py-2.5 transition-colors">
-          Request Full Portfolio PDF
-        </button>
-        <button onclick="openPdfPrompt('cv')" class="border border-teal-200 bg-teal-50 hover:bg-teal-100 text-teal-700 text-sm font-semibold rounded-lg px-3 py-2.5 transition-colors">
-          Request CV Summary PDF
-        </button>
+    <div id="docCards" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5"></div>
+
+    <form id="docForm" class="mt-auto">
+      <label for="docEmail" class="block text-xs font-semibold text-slate-600 mb-1.5">Email address</label>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <input id="docEmail" type="email" required placeholder="you@company.com"
+          class="flex-1 text-sm px-3 py-2.5 rounded-md border border-slate-300 bg-white focus:border-sky-500" />
+        <button type="submit"
+          class="text-sm font-semibold px-5 py-2.5 rounded-md text-white flex-shrink-0"
+          style="background:var(--sky);">Send</button>
       </div>
-
-      <div id="pdfPromptBox" class="hidden mt-3 border-t border-slate-100 pt-3">
-        <label class="text-xs text-slate-500 block mb-1">Enter your email to receive the document</label>
-        <div class="flex gap-2">
-          <input id="pdfEmailInput" type="email" placeholder="you@company.com"
-                 class="flex-1 min-w-0 text-sm border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-sky-300">
-          <button onclick="submitPdfPrompt()" class="text-sm font-semibold bg-slate-900 text-white rounded-lg px-3 py-1.5 hover:bg-slate-700 transition-colors">
-            Send
-          </button>
-        </div>
-      </div>
-
-      <p id="pdfConfirmation" class="hidden mt-3 text-sm font-medium text-teal-700"></p>
-    </div>
+      <p id="docStatus" class="text-xs mt-2 min-h-[16px]"></p>
+    </form>
   </section>
 
 </main>
 
 <!-- ================= FOOTER ================= -->
-<footer class="border-t border-slate-200 bg-white/70">
-  <div class="max-w-5xl mx-auto px-3 py-3 flex items-center justify-between text-xs text-slate-500">
-    <span>© 2026 Lizi Zivzivadze</span>
-    <span class="flex items-center gap-1.5">
-      <span class="w-2 h-2 rounded-full bg-emerald-500 pulse-dot"></span>
-      Available for opportunities
-    </span>
+<footer class="border-t border-slate-200 bg-white/60">
+  <div class="max-w-5xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <a id="footerCall" href="#" class="text-xs font-semibold text-slate-600 hover:text-sky-600">Call</a>
+      <span class="text-slate-300">|</span>
+      <a id="footerWhatsapp" href="#" target="_blank" rel="noopener" class="text-xs font-semibold text-slate-600 hover:text-teal-600">WhatsApp</a>
+      <span class="text-slate-300">|</span>
+      <a id="footerEmail" href="#" class="text-xs font-semibold text-slate-600 hover:text-sky-600">Email</a>
+    </div>
+    <div class="flex items-center gap-4">
+      <p id="copyText" class="text-xs text-slate-400"></p>
+      <div class="flex items-center gap-1.5">
+        <span class="status-dot"></span>
+        <span class="text-xs text-slate-500">All systems operational</span>
+      </div>
+    </div>
   </div>
 </footer>
 
 <script>
-/* ============================================================
-   SINGLE SOURCE OF TRUTH
-   ============================================================ */
-const PORTFOLIO_DATA = {
-  personal: {
-    name: "Lizi Zivzivadze",
-    title: "Electromechanical Engineer",
-    statement: "Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.",
-    avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
-    email: "lizozivzivadze@gmail.com",
-    phone: "+32 499 22 16 80",
-    whatsapp: "32499221680",
-    location: "Leuven, Belgium",
-    linkedin: "https://www.linkedin.com/in/lizizivzivadze/",
-    github: "https://github.com/lizozivzivadze-star"
-  },
-  projects: [
-    {
-      id: "proj-1",
-      title: "Closed-Loop Micro-Actuator Rig",
-      classification: "HW + SW",
-      overview: "Sub-micron positioning stage with high-bandwidth FPGA feedback for active optical calibration assemblies.",
-      githubUrl: "https://github.com/lizozivzivadze-star",
-      resumeBullets: [
-        "Designed high-stiffness flexure mechanics in SolidWorks and performed modal FEA under dynamic load.",
-        "Built custom real-time C++ control firmware on STM32 microcontrollers achieving sub-micron step response."
-      ],
-      specs: [
-        { label: "Positioning Resolution", value: "0.05 µm" },
-        { label: "Control Loop Bandwidth", value: "2.5 kHz" },
-        { label: "Operating Voltage", value: "24V DC" }
-      ],
-      feaDetails: "Modal analysis verified structural natural frequency > 450 Hz, well clear of environmental noise floor. Stress analysis under maximum actuator thrust showed safety factor > 2.8 on Titanium Grade 5 flexures.",
-      mediaUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
+(function(){
+  "use strict";
+
+  // ================= SINGLE SOURCE OF TRUTH =================
+  const PORTFOLIO_DATA = {
+    personal: {
+      name: "Lizi Zivzivadze",
+      availabilityTag: "Available for opportunities",
+      yearText: "2026 Lizi Zivzivadze",
+      title: "Electromechanical Engineer",
+      statement: "Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.",
+      avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
+      email: "lizozivzivadze@gmail.com",
+      phone: "+32 499 22 16 80",
+      whatsapp: "32499221680",
+      location: "Leuven, Belgium",
+      linkedin: "https://www.linkedin.com/in/lizizivzivadze/",
+      github: "https://github.com/lizozivzivadze-star"
     },
-    {
-      id: "proj-2",
-      title: "4-Channel Brushless Motor Driver",
-      classification: "HW + SW",
-      overview: "Industrial 48V/20A motor driver board featuring integrated CAN-FD telemetry and dynamic thermal monitoring.",
-      githubUrl: "https://github.com/lizozivzivadze-star",
-      resumeBullets: [
-        "Architected 4-layer power PCB in Altium Designer with copper pours optimized for low thermal resistance.",
-        "Validated power conversion efficiency > 96% and verified full load stability under 85°C ambient thermal stress."
-      ],
-      specs: [
-        { label: "Input Voltage", value: "12V - 48V" },
-        { label: "Continuous Current", value: "20A / channel" },
-        { label: "Bus Protocol", value: "CAN-FD @ 5 Mbps" }
-      ],
-      feaDetails: "Thermal simulation in Altium verified power MOSFET junction temperatures remain below 72°C under full continuous load with natural convection cooling.",
-      mediaUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
-    },
-    {
-      id: "proj-3",
-      title: "ROS2 Autonomous Telemetry Rig",
-      classification: "HW + SW",
-      overview: "Autonomous inspection platform displaying dynamic sensor fusion and LiDAR point clouds at sub-20ms latency.",
-      githubUrl: "https://github.com/lizozivzivadze-star",
-      resumeBullets: [
-        "Implemented real-time sensor fusion telemetry streaming with C++/Python backend over WebSockets.",
-        "Programmed dynamic obstacle avoidance routines and automated fail-safe recovery sequences."
-      ],
-      specs: [
-        { label: "Telemetry Latency", value: "< 20 ms" },
-        { label: "Platform", value: "ROS2 Humble / Linux" },
-        { label: "LiDAR Sample Rate", value: "10 Hz / 360°" }
-      ],
-      feaDetails: "Kinematic joint load simulations conducted to evaluate torque limits across arm extension range, ensuring gear train longevity under maximum payload.",
-      mediaUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
-    }
-  ],
-  skills: {
-    "Electronics": [
-      { name: "PCB Layout (Altium Designer)", level: 92 },
-      { name: "Analog Signal Conditioning", level: 85 },
-      { name: "Power Electronics (DC-DC / Gate Drivers)", level: 82 },
-      { name: "High-Speed Bus Layout (CAN-FD, Ethernet)", level: 88 },
-      { name: "Circuit Simulation (LTspice / Tina-TI)", level: 86 }
+    projects: [
+      {
+        id: "proj-1",
+        title: "Closed-Loop Micro-Actuator Rig",
+        category: "HW + SW",
+        overviewText: "Sub-micron positioning stage with high-bandwidth FPGA feedback for active optical calibration assemblies.",
+        resumeBullets: [
+          "Designed high-stiffness flexure mechanics in SolidWorks and performed modal FEA under dynamic load.",
+          "Built custom real-time C++ control firmware on STM32 microcontrollers achieving sub-micron step response."
+        ],
+        githubUrl: "https://github.com/lizozivzivadze-star",
+        mediaUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        equipment: ["STM32", "SolidWorks", "Oscilloscope", "LTspice", "Altium", "Multimeter", "C++", "FreeRTOS", "3D Printer"]
+      },
+      {
+        id: "proj-2",
+        title: "4-Channel Brushless Motor Driver",
+        category: "HardWare",
+        overviewText: "Industrial 48V/20A motor driver board featuring integrated CAN-FD telemetry and dynamic thermal monitoring.",
+        resumeBullets: [
+          "Architected 4-layer power PCB in Altium Designer with copper pours optimized for low thermal resistance.",
+          "Validated power conversion efficiency > 96% and verified stability under 85°C ambient thermal stress."
+        ],
+        githubUrl: "https://github.com/lizozivzivadze-star",
+        mediaUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        equipment: ["Altium", "CAN Bus", "Oscilloscope", "Power Supply", "Thermal Camera", "LTspice", "Soldering Station"]
+      },
+      {
+        id: "proj-3",
+        title: "ROS2 Autonomous Telemetry Rig",
+        category: "SoftWare",
+        overviewText: "Autonomous inspection platform displaying dynamic sensor fusion and LiDAR point clouds at sub-20ms latency.",
+        resumeBullets: [
+          "Implemented real-time sensor fusion telemetry streaming with C++/Python backend over WebSockets.",
+          "Programmed dynamic obstacle avoidance routines and automated fail-safe recovery sequences."
+        ],
+        githubUrl: "https://github.com/lizozivzivadze-star",
+        mediaUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        equipment: ["Python", "C++", "ROS2", "Linux", "VS Code", "Docker", "Git", "LiDAR", "Raspberry Pi"]
+      }
     ],
-    "Embedded": [
-      { name: "STM32 / ARM Cortex-M Firmware", level: 94 },
-      { name: "Embedded C / Real-Time C++", level: 90 },
-      { name: "FreeRTOS Task Scheduling & Mutexes", level: 85 },
-      { name: "Low-Level Bus Protocols (SPI, I2C, UART)", level: 95 }
+    skillCategories: [
+      {
+        name: "Core Tech Stack",
+        items: [
+          "Python", "C", "C++", "Java", "JavaScript", "TypeScript", "HTML", "CSS", "React", "Next.js",
+          "Node.js", "Express", "PostgreSQL", "MySQL", "MongoDB", "Docker", "Git", "GitHub", "Linux",
+          "ROS", "OpenCV", "TensorFlow", "PyTorch", "MATLAB", "Simulink", "SolidWorks", "Fusion 360",
+          "KiCad", "Altium", "ESP32", "STM32", "Arduino", "Raspberry Pi", "PLC", "CAN Bus", "MQTT",
+          "FreeRTOS", "Embedded C", "Azure", "AWS", "Supabase", "Firebase", "Figma"
+        ]
+      }
     ],
-    "CAD": [
-      { name: "SolidWorks Parametric Modeling", level: 95 },
-      { name: "Structural & Thermal FEA (ANSYS)", level: 88 },
-      { name: "GD&T Tolerance Stack-Up Analysis", level: 90 },
-      { name: "Design for Manufacturing (DFM / DFA)", level: 92 }
+    valueProps: [
+      { title: "Cross-Disciplinary Integration", text: "Seamlessly uniting precision hardware mechanics, electronic PCB design, and control code." },
+      { title: "Rapid Functional Prototyping", text: "Transforming CAD concepts into fully working physical prototypes rapidly." },
+      { title: "Closed-Loop Controls", text: "Implementing feedback control systems for high-precision dynamic alignment." },
+      { title: "Production Execution", text: "Designing systems tailored for manufacturability, assembly, and serviceability." }
     ],
-    "Software": [
-      { name: "Python / Scientific Stack (NumPy, SciPy)", level: 90 },
-      { name: "ROS2 (Robot Operating System)", level: 84 },
-      { name: "MATLAB / Simulink Model-Based Control", level: 88 },
-      { name: "Linux System Administration & Bash", level: 82 }
-    ],
-    "AI": [
-      { name: "OpenCV Computer Vision Pipelines", level: 80 },
-      { name: "Closed-Loop PID / Control Loops", level: 88 },
-      { name: "Kinematic Path Planning Algorithms", level: 82 }
+    documents: [
+      { id: "full-portfolio", name: "Full Portfolio PDF", desc: "All projects, media links, and full technical detail." },
+      { id: "cv-summary", name: "CV Summary PDF", desc: "One-page resume-style summary for recruiters." }
     ]
-  },
-  valueProps: [
-    { title: "Cross-Disciplinary Integration", text: "Seamlessly uniting precision hardware mechanics, electronic PCB design, and control code." },
-    { title: "Rapid Functional Prototyping", text: "Transforming CAD concepts into fully working physical prototypes rapidly." },
-    { title: "Closed-Loop Controls", text: "Implementing feedback control systems for high-precision dynamic alignment." },
-    { title: "Production Execution", text: "Designing systems tailored for manufacturability, assembly, and serviceability." }
-  ]
-};
+  };
 
-/* ============================================================
-   APP STATE
-   ============================================================ */
-const state = {
-  lang: "EN",
-  activeProjectTab: {},   // { [projectId]: tabName }
-  activeSkillCategory: Object.keys(PORTFOLIO_DATA.skills)[0],
-  pdfPending: null        // 'full' | 'cv'
-};
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 
-const PROJECT_TABS = ["Overview", "GitHub", "Resume", "Specs", "FEA", "Media"];
+  // ================= HEADER / PROFILE BASICS =================
+  function renderPersonal(){
+    const p = PORTFOLIO_DATA.personal;
+    $("#headerAvatar").src = p.avatarUrl;
+    $("#profileAvatar").src = p.avatarUrl;
+    $("#yearTag").textContent = "© " + p.yearText;
+    $("#availTag").textContent = p.availabilityTag;
+    $("#statementText").textContent = p.statement;
 
-/* ============================================================
-   LANGUAGE SELECTOR
-   ============================================================ */
-function toggleLangMenu() {
-  document.getElementById("langMenu").classList.toggle("hidden");
-}
-function setLang(code, label) {
-  state.lang = code;
-  document.getElementById("langBadge").textContent = code;
-  document.getElementById("langMenu").classList.add("hidden");
-}
-document.addEventListener("click", function (e) {
-  const menu = document.getElementById("langMenu");
-  const btn = document.getElementById("langBtn");
-  if (!menu.classList.contains("hidden") && !menu.contains(e.target) && !btn.contains(e.target)) {
-    menu.classList.add("hidden");
-  }
-});
+    const callHref = "tel:" + p.phone.replace(/\s+/g, "");
+    const waHref = "https://wa.me/" + p.whatsapp;
+    const mailHref = "mailto:" + p.email;
 
-/* ============================================================
-   PROJECTS RENDERING
-   ============================================================ */
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-}
+    $("#callLink").href = callHref;
+    $("#whatsappLink").href = waHref;
+    $("#emailLink").href = mailHref;
+    $("#linkedinLink").href = p.linkedin;
+    $("#githubLink").href = p.github;
 
-function projectTabContent(project, tab) {
-  switch (tab) {
-    case "Overview":
-      return `<p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${escapeHtml(project.overview)}</p>`;
-    case "GitHub":
-      return `
-        <div class="h-full flex flex-col items-start justify-center gap-2">
-          <p class="text-xs text-slate-500">View the full source and commit history.</p>
-          <a href="${project.githubUrl}" target="_blank" rel="noopener"
-             class="inline-flex items-center gap-1.5 text-xs font-semibold bg-slate-900 text-white rounded-lg px-3 py-1.5 hover:bg-slate-700 transition-colors">
-            Open Repository
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"></path></svg>
-          </a>
-        </div>`;
-    case "Resume":
-      return `<ul class="space-y-1.5">${project.resumeBullets.map(function (b) {
-        return `<li class="text-xs sm:text-sm text-slate-600 leading-snug flex gap-1.5"><span class="text-sky-500 mt-0.5">▸</span><span>${escapeHtml(b)}</span></li>`;
-      }).join("")}</ul>`;
-    case "Specs":
-      return `<div class="space-y-1.5">${project.specs.map(function (s) {
-        return `<div class="flex items-center justify-between text-xs sm:text-sm border-b border-slate-100 pb-1.5">
-                  <span class="text-slate-500">${escapeHtml(s.label)}</span>
-                  <span class="font-semibold text-slate-800">${escapeHtml(s.value)}</span>
-                </div>`;
-      }).join("")}</div>`;
-    case "FEA":
-      return `<p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${escapeHtml(project.feaDetails)}</p>`;
-    case "Media":
-      return `<div class="w-full aspect-video rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
-                <iframe class="w-full h-full" src="${project.mediaUrl}" title="${escapeHtml(project.title)} demo"
-                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-              </div>`;
-    default:
-      return "";
-  }
-}
+    $("#footerCall").href = callHref;
+    $("#footerWhatsapp").href = waHref;
+    $("#footerEmail").href = mailHref;
 
-function renderProjectCard(project) {
-  const activeTab = state.activeProjectTab[project.id] || "Overview";
-  const tabsHtml = PROJECT_TABS.map(function (tab) {
-    const isActive = tab === activeTab;
-    return `<button onclick="setProjectTab('${project.id}','${tab}')"
-                     class="tab-btn ${isActive ? "active" : ""} text-[10px] sm:text-[11px] font-semibold rounded-md px-1.5 py-1 flex-1 whitespace-nowrap">
-              ${tab}
-            </button>`;
-  }).join("");
-
-  return `
-    <div class="snap-start flex-shrink-0 w-[85vw] sm:w-[360px] h-[340px] border border-slate-200 rounded-xl bg-white shadow-sm flex flex-col overflow-hidden">
-      <div class="p-2.5 pb-2 border-b border-slate-100">
-        <div class="flex items-start justify-between gap-2">
-          <h3 class="text-sm font-bold text-slate-900 leading-tight">${escapeHtml(project.title)}</h3>
-          <span class="flex-shrink-0 text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-200 rounded-full px-2 py-0.5">
-            ${escapeHtml(project.classification)}
-          </span>
-        </div>
-      </div>
-      <div class="px-2.5 pt-2 flex gap-1">${tabsHtml}</div>
-      <div id="card-body-${project.id}" class="card-body flex-1 min-h-0 overflow-y-auto p-3">
-        ${projectTabContent(project, activeTab)}
-      </div>
-    </div>`;
-}
-
-function renderProjects() {
-  const container = document.getElementById("projectsScroll");
-  container.innerHTML = PORTFOLIO_DATA.projects.map(renderProjectCard).join("");
-}
-
-function setProjectTab(projectId, tab) {
-  state.activeProjectTab[projectId] = tab;
-  const project = PORTFOLIO_DATA.projects.find(function (p) { return p.id === projectId; });
-  if (!project) return;
-
-  // Update only the card body content — the card container never resizes.
-  const body = document.getElementById("card-body-" + projectId);
-  body.classList.remove("fade-in");
-  void body.offsetWidth; // restart animation
-  body.innerHTML = projectTabContent(project, tab);
-  body.classList.add("fade-in");
-
-  // Update tab button active states without re-rendering the whole card.
-  const card = body.closest("div.snap-start");
-  const buttons = card.querySelectorAll(".tab-btn");
-  buttons.forEach(function (btn) {
-    const isActive = btn.textContent.trim() === tab;
-    btn.classList.toggle("active", isActive);
-  });
-}
-
-/* ============================================================
-   SKILLS RENDERING
-   ============================================================ */
-function renderSkillTabs() {
-  const container = document.getElementById("skillTabs");
-  const categories = Object.keys(PORTFOLIO_DATA.skills);
-  container.innerHTML = categories.map(function (cat) {
-    const isActive = cat === state.activeSkillCategory;
-    return `<button onclick="setSkillCategory('${cat}')"
-                     class="skill-tab ${isActive ? "active" : ""} flex-shrink-0 text-xs font-semibold rounded-full px-3 py-1.5 whitespace-nowrap">
-              ${escapeHtml(cat)}
-            </button>`;
-  }).join("");
-}
-
-function renderSkillList() {
-  const container = document.getElementById("skillList");
-  const items = PORTFOLIO_DATA.skills[state.activeSkillCategory] || [];
-  container.innerHTML = items.map(function (skill) {
-    return `
-      <div>
-        <div class="flex items-center justify-between text-xs sm:text-sm mb-1">
-          <span class="text-slate-700 font-medium">${escapeHtml(skill.name)}</span>
-          <span class="text-slate-400 font-semibold">${skill.level}%</span>
-        </div>
-        <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-          <div class="h-full bg-[#0284c7] rounded-full" style="width:${skill.level}%"></div>
-        </div>
-      </div>`;
-  }).join("");
-}
-
-function setSkillCategory(cat) {
-  state.activeSkillCategory = cat;
-  renderSkillTabs();
-  renderSkillList();
-}
-
-/* ============================================================
-   WHAT I BRING RENDERING
-   ============================================================ */
-function renderValueProps() {
-  const container = document.getElementById("valueScroll");
-  container.innerHTML = PORTFOLIO_DATA.valueProps.map(function (v) {
-    return `
-      <div class="snap-start flex-shrink-0 min-w-[260px] max-w-[260px] border border-slate-200 rounded-xl bg-white p-3 shadow-sm">
-        <h4 class="text-sm font-bold text-slate-900 mb-1">${escapeHtml(v.title)}</h4>
-        <p class="text-xs sm:text-sm text-slate-600 leading-snug">${escapeHtml(v.text)}</p>
-      </div>`;
-  }).join("");
-}
-
-/* ============================================================
-   PDF EXPORT SYSTEM
-   ============================================================ */
-function openPdfPrompt(type) {
-  state.pdfPending = type;
-  const box = document.getElementById("pdfPromptBox");
-  const confirmation = document.getElementById("pdfConfirmation");
-  confirmation.classList.add("hidden");
-  box.classList.remove("hidden");
-  document.getElementById("pdfEmailInput").focus();
-}
-
-function submitPdfPrompt() {
-  const emailInput = document.getElementById("pdfEmailInput");
-  const email = emailInput.value.trim();
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    emailInput.classList.add("border-red-400", "ring-2", "ring-red-200");
-    emailInput.placeholder = "Enter a valid email";
-    return;
-  }
-  emailInput.classList.remove("border-red-400", "ring-2", "ring-red-200");
-
-  const type = state.pdfPending;
-  if (type === "full") {
-    generateFullPortfolioPDF();
-  } else {
-    generateCVSummaryPDF();
+    $("#copyText").textContent = "© " + p.yearText;
   }
 
-  logPDFRequest(email, type === "full" ? "Full Portfolio" : "CV Summary").then(function () {
-    const confirmation = document.getElementById("pdfConfirmation");
-    confirmation.textContent = "PDF dispatched! Request logged successfully.";
-    confirmation.classList.remove("hidden");
-    document.getElementById("pdfPromptBox").classList.add("hidden");
-    emailInput.value = "";
-  });
-}
-
-// Mock asynchronous background logger / analytics notifier.
-function logPDFRequest(email, documentType) {
-  return new Promise(function (resolve) {
-    setTimeout(function () {
-      console.log("[PDF Request Logged]", {
-        email: email,
-        documentType: documentType,
-        timestamp: new Date().toISOString()
+  // ================= LANGUAGE SELECTOR =================
+  function initLangSelector(){
+    const btn = $("#langBtn");
+    const menu = $("#langMenu");
+    const label = $("#langLabel");
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menu.classList.toggle("hidden");
+    });
+    $$(".lang-opt").forEach(opt => {
+      opt.addEventListener("click", () => {
+        label.textContent = opt.dataset.lang;
+        menu.classList.add("hidden");
       });
-      resolve(true);
-    }, 350);
-  });
-}
-
-function generateFullPortfolioPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ unit: "pt", format: "a4" });
-  const margin = 48;
-  let y = margin;
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const maxWidth = pageWidth - margin * 2;
-
-  function line(text, size, style, gap, color) {
-    doc.setFont("helvetica", style || "normal");
-    doc.setFontSize(size);
-    doc.setTextColor(color ? color[0] : 15, color ? color[1] : 23, color ? color[2] : 42);
-    const wrapped = doc.splitTextToSize(text, maxWidth);
-    wrapped.forEach(function (l) {
-      if (y > 780) { doc.addPage(); y = margin; }
-      doc.text(l, margin, y);
-      y += size * 1.25;
     });
-    y += gap || 4;
+    document.addEventListener("click", () => menu.classList.add("hidden"));
   }
 
-  const p = PORTFOLIO_DATA.personal;
-  line(p.name, 22, "bold", 2);
-  line(p.title, 13, "normal", 4, [2, 132, 199]);
-  line(p.location + "  |  " + p.phone + "  |  " + p.email, 9, "normal", 4, [100, 116, 139]);
-  line(p.linkedin + "   " + p.github, 9, "normal", 10, [100, 116, 139]);
-  line(p.statement, 10.5, "normal", 14);
+  // ================= PROJECTS =================
+  let activeCategory = "All";
 
-  line("PROJECTS", 13, "bold", 8, [13, 148, 136]);
-  PORTFOLIO_DATA.projects.forEach(function (proj) {
-    line(proj.title + "  (" + proj.classification + ")", 11.5, "bold", 2);
-    line(proj.overview, 10, "normal", 3);
-    proj.resumeBullets.forEach(function (b) { line("• " + b, 9.5, "normal", 2); });
-    const specsLine = proj.specs.map(function (s) { return s.label + ": " + s.value; }).join("   |   ");
-    line(specsLine, 9, "normal", 2, [100, 116, 139]);
-    line("FEA: " + proj.feaDetails, 9, "normal", 10, [100, 116, 139]);
-  });
+  function projectCardHTML(project, idx){
+    const bulletsHTML = project.resumeBullets.map(b =>
+      `<li class="flex gap-2"><span style="color:var(--teal)">•</span><span>${escapeHTML(b)}</span></li>`
+    ).join("");
 
-  line("SKILLSET", 13, "bold", 8, [13, 148, 136]);
-  Object.keys(PORTFOLIO_DATA.skills).forEach(function (cat) {
-    line(cat, 11, "bold", 2);
-    const skillLine = PORTFOLIO_DATA.skills[cat].map(function (s) { return s.name + " (" + s.level + "%)"; }).join("   |   ");
-    line(skillLine, 9, "normal", 8, [100, 116, 139]);
-  });
+    const equipHTML = project.equipment.map(eq =>
+      `<span class="skill-pill text-xs px-2.5 py-1 rounded-md text-slate-700">${escapeHTML(eq)}</span>`
+    ).join("");
 
-  line("WHAT I BRING TO THE TABLE", 13, "bold", 8, [13, 148, 136]);
-  PORTFOLIO_DATA.valueProps.forEach(function (v) {
-    line(v.title + " — " + v.text, 9.5, "normal", 5);
-  });
+    return `
+    <article class="border border-slate-200 rounded-lg flex flex-col h-[380px] overflow-hidden" data-project-id="${project.id}">
+      <div class="px-4 pt-4 pb-2 flex items-start justify-between gap-2 flex-shrink-0">
+        <h3 class="text-sm font-bold leading-snug" style="color:var(--ink)">${escapeHTML(project.title)}</h3>
+        <span class="text-[10px] font-semibold px-2 py-1 rounded-md flex-shrink-0" style="background:#f0fdfa; color:var(--teal); border:1px solid #99f6e4;">${escapeHTML(project.category)}</span>
+      </div>
 
-  doc.save("Lizi-Zivzivadze-Full-Portfolio.pdf");
-}
+      <div class="flex items-center gap-4 px-4 border-b border-slate-200 flex-shrink-0">
+        <button class="card-tab active-card-tab text-xs py-2" data-tab="overview">Overview</button>
+        <button class="card-tab text-xs py-2" data-tab="media">Media</button>
+        <button class="card-tab text-xs py-2" data-tab="equipment">Equipment</button>
+      </div>
 
-function generateCVSummaryPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ unit: "pt", format: "a4" });
-  const margin = 48;
-  let y = margin;
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const maxWidth = pageWidth - margin * 2;
-
-  function line(text, size, style, gap, color) {
-    doc.setFont("helvetica", style || "normal");
-    doc.setFontSize(size);
-    doc.setTextColor(color ? color[0] : 15, color ? color[1] : 23, color ? color[2] : 42);
-    const wrapped = doc.splitTextToSize(text, maxWidth);
-    wrapped.forEach(function (l) {
-      if (y > 780) { doc.addPage(); y = margin; }
-      doc.text(l, margin, y);
-      y += size * 1.25;
-    });
-    y += gap || 4;
+      <div class="flex-1 min-h-0 relative">
+        <div class="card-pane px-4 py-3 h-full overflow-y-auto thin-scroll" data-pane="overview">
+          <p class="text-xs text-slate-700 leading-relaxed mb-2.5">${escapeHTML(project.overviewText)}</p>
+          <ul class="text-xs text-slate-700 leading-relaxed space-y-1.5 mb-3">${bulletsHTML}</ul>
+          <a href="${project.githubUrl}" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md border border-slate-300 hover:border-slate-500">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.66.5 12.03c0 5.1 3.29 9.42 7.86 10.95.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.1-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.17.08 1.78 1.2 1.78 1.2 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.05 11.05 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.76.12 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.7 5.4-5.27 5.69.42.36.78 1.08.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .3.2.66.79.55A10.53 10.53 0 0 0 23.5 12.03C23.5 5.66 18.35.5 12 .5z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+        <div class="card-pane px-4 py-3 h-full overflow-y-auto thin-scroll hidden" data-pane="media">
+          <div class="aspect-video w-full rounded-md overflow-hidden border border-slate-200 bg-slate-50">
+            <iframe class="w-full h-full" src="${project.mediaUrl}" title="${escapeHTML(project.title)} demo video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>
+        </div>
+        <div class="card-pane px-4 py-3 h-full overflow-y-auto thin-scroll hidden" data-pane="equipment">
+          <div class="flex flex-wrap gap-2">${equipHTML}</div>
+        </div>
+      </div>
+    </article>`;
   }
 
-  const p = PORTFOLIO_DATA.personal;
-  line(p.name, 22, "bold", 2);
-  line(p.title, 13, "normal", 4, [2, 132, 199]);
-  line(p.location + "  |  " + p.phone + "  |  " + p.email, 9, "normal", 12, [100, 116, 139]);
+  function renderProjects(){
+    const list = $("#projectList");
+    const filtered = activeCategory === "All"
+      ? PORTFOLIO_DATA.projects
+      : PORTFOLIO_DATA.projects.filter(p => p.category === activeCategory);
 
-  line("SELECTED PROJECTS", 12.5, "bold", 6, [13, 148, 136]);
-  PORTFOLIO_DATA.projects.forEach(function (proj) {
-    line(proj.title + "  (" + proj.classification + ")", 11, "bold", 2);
-    proj.resumeBullets.forEach(function (b) { line("• " + b, 9.5, "normal", 2); });
-    y += 4;
-  });
+    list.innerHTML = filtered.map(projectCardHTML).join("");
 
-  line("CORE SKILLS", 12.5, "bold", 6, [13, 148, 136]);
-  Object.keys(PORTFOLIO_DATA.skills).forEach(function (cat) {
-    const top = PORTFOLIO_DATA.skills[cat].slice(0, 3).map(function (s) { return s.name; }).join(", ");
-    line(cat + ": " + top, 9.5, "normal", 4);
-  });
+    $$(".card-tab", list).forEach(tabBtn => {
+      tabBtn.addEventListener("click", () => {
+        const card = tabBtn.closest("[data-project-id]");
+        $$(".card-tab", card).forEach(b => b.classList.remove("active-card-tab"));
+        tabBtn.classList.add("active-card-tab");
+        const target = tabBtn.dataset.tab;
+        $$(".card-pane", card).forEach(pane => {
+          pane.classList.toggle("hidden", pane.dataset.pane !== target);
+        });
+      });
+    });
+  }
 
-  doc.save("Lizi-Zivzivadze-CV-Summary.pdf");
-}
+  function initCategoryTabs(){
+    const tabs = $("#catTabs");
+    $$(".tab-btn", tabs).forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeCategory = btn.dataset.cat;
+        $$(".tab-btn", tabs).forEach(b => b.classList.remove("active-cat"));
+        btn.classList.add("active-cat");
+        renderProjects();
+      });
+    });
+  }
 
-/* ============================================================
-   INIT
-   ============================================================ */
-renderProjects();
-renderSkillTabs();
-renderSkillList();
-renderValueProps();
+  // ================= SKILLSET =================
+  function renderSkills(){
+    const container = $("#skillCategories");
+    container.innerHTML = PORTFOLIO_DATA.skillCategories.map(cat => {
+      const pills = cat.items.map(item =>
+        `<span class="skill-pill text-xs px-3 py-1.5 rounded-md text-slate-700">${escapeHTML(item)}</span>`
+      ).join("");
+      return `
+      <div>
+        <p class="text-xs font-semibold text-slate-500 mb-2">${escapeHTML(cat.name)}</p>
+        <div class="flex gap-2 overflow-x-auto no-scrollbar flex-nowrap whitespace-nowrap pb-1">${pills}</div>
+      </div>`;
+    }).join("");
+  }
+
+  // ================= DOCUMENT GENERATION =================
+  const selectedDocs = new Set();
+
+  function renderDocCards(){
+    const container = $("#docCards");
+    container.innerHTML = PORTFOLIO_DATA.documents.map(doc => `
+      <button type="button" class="doc-card text-left rounded-lg px-4 py-3" data-doc-id="${doc.id}">
+        <p class="text-sm" style="color:var(--ink)">${escapeHTML(doc.name)}</p>
+        <p class="text-xs text-slate-500 mt-0.5">${escapeHTML(doc.desc)}</p>
+      </button>
+    `).join("");
+
+    $$(".doc-card", container).forEach(card => {
+      card.addEventListener("click", () => {
+        const id = card.dataset.docId;
+        if (selectedDocs.has(id)) {
+          selectedDocs.delete(id);
+          card.classList.remove("doc-selected");
+        } else {
+          selectedDocs.add(id);
+          card.classList.add("doc-selected");
+        }
+      });
+    });
+  }
+
+  function initDocForm(){
+    const form = $("#docForm");
+    const status = $("#docStatus");
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = $("#docEmail").value.trim();
+      if (selectedDocs.size === 0) {
+        status.textContent = "Select at least one document above before sending.";
+        status.style.color = "#dc2626";
+        return;
+      }
+      const docNames = PORTFOLIO_DATA.documents
+        .filter(d => selectedDocs.has(d.id))
+        .map(d => d.name);
+
+      // Analytics-style log of the requested document combination
+      console.log("[document-request]", { email, documents: docNames, timestamp: new Date().toISOString() });
+
+      status.textContent = `Sent "${docNames.join('", "')}" to ${email}.`;
+      status.style.color = "#0d9488";
+    });
+  }
+
+  // ================= UTIL =================
+  function escapeHTML(str){
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // ================= INIT =================
+  function init(){
+    renderPersonal();
+    initLangSelector();
+    initCategoryTabs();
+    renderProjects();
+    renderSkills();
+    renderDocCards();
+    initDocForm();
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
 </script>
 </body>
 </html>
