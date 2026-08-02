@@ -2,661 +2,535 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Lizi Zivzivadze — Electromechanical Engineer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lizi Zivzivadze — Electromechanical Design Engineer</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#f8fafc;
-    --accent:#0284c7;
-    --accent-hover:#0369a1;
-    --text-primary:#0f172a;
-    --text-muted:#475569;
-    --teal:#0d9488;
-    --card-bg:#ffffff;
-    --card-border:#e2e8f0;
-    --border-strong:#1e293b;
+  :root {
+    --bg: #f8fafc;
+    --text-primary: #0f172a;
+    --text-muted: #475569;
+    --accent: #0284c7;
+    --accent-hover: #0369a1;
+    --accent-teal: #0d9488;
+    --border: #e2e8f0;
   }
-  *{box-sizing:border-box;}
-  html,body{
-    background-color:var(--bg);
-    color:var(--text-primary);
-    font-family:'Inter',ui-sans-serif,system-ui,sans-serif;
-    -webkit-font-smoothing:antialiased;
-    scroll-behavior:smooth;
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: var(--bg);
+    font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+    background-image: radial-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+    background-size: 18px 18px;
   }
-  body{
-    background-image:
-      linear-gradient(rgba(15,23,42,0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(15,23,42,0.035) 1px, transparent 1px);
-    background-size: 24px 24px;
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+  .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  .line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .section-container {
+    width: 100%;
+    max-width: 56rem;
+    margin: 1.5rem auto;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    background-color: #ffffff;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03);
   }
-  .font-mono{font-family:'JetBrains Mono',ui-monospace,monospace;}
-  .card-frame{
-    border:1px solid var(--border-strong);
-    border-radius:14px;
-    background:var(--card-bg);
+  .toast-enter { animation: toastIn 0.25s ease-out forwards; }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
   }
-  .section-header{
-    background:linear-gradient(180deg, #eef2f7 0%, #e7edf4 100%);
-    border-bottom:1px solid var(--border-strong);
-    border-top-left-radius:13px;
-    border-top-right-radius:13px;
+  .toast-leave { animation: toastOut 0.25s ease-in forwards; }
+  @keyframes toastOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(12px); }
   }
-  .no-scrollbar::-webkit-scrollbar{display:none;}
-  .no-scrollbar{-ms-overflow-style:none; scrollbar-width:none;}
-  .snap-x-mandatory{scroll-snap-type:x mandatory;}
-  .snap-start{scroll-snap-align:start;}
-  .chip-btn{
-    border:1px solid var(--card-border);
-    background:#fff;
-    color:var(--text-muted);
-    transition:all .15s ease;
+  .modal-backdrop { background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(2px); }
+  #sticky-header { transform: translateY(-100%); }
+  #sticky-header.visible { transform: translateY(0); }
+  .tab-btn { transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; }
+  .progress-fill { transition: width 0.6s ease; }
+  .doc-card { transition: border-color 0.15s ease, background-color 0.15s ease; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
   }
-  .chip-btn.active{
-    background:var(--accent);
-    color:#fff;
-    border-color:var(--accent);
-  }
-  .tab-btn{
-    color:var(--text-muted);
-    border-bottom:2px solid transparent;
-    transition:all .15s ease;
-  }
-  .tab-btn.active{
-    color:var(--accent);
-    border-bottom:2px solid var(--accent);
-    font-weight:600;
-  }
-  .skill-bar-track{
-    background:#e2e8f0;
-    border-radius:999px;
-    overflow:hidden;
-  }
-  .skill-bar-fill{
-    background:linear-gradient(90deg, var(--accent), var(--teal));
-    border-radius:999px;
-  }
-  .doc-card{
-    border:1px solid var(--card-border);
-    transition:all .15s ease;
-    cursor:pointer;
-  }
-  .doc-card.selected{
-    border:2px solid var(--accent);
-    font-weight:700;
-    background:#f0f9ff;
-  }
-  .ping-dot{
-    width:8px;height:8px;border-radius:999px;background:#16a34a;
-    box-shadow:0 0 0 0 rgba(22,163,74,0.6);
-    animation:ping-pulse 2s infinite;
-  }
-  @keyframes ping-pulse{
-    0%{box-shadow:0 0 0 0 rgba(22,163,74,0.5);}
-    70%{box-shadow:0 0 0 6px rgba(22,163,74,0);}
-    100%{box-shadow:0 0 0 0 rgba(22,163,74,0);}
-  }
-  #nav-sticky{
-    transform:translateY(-100%);
-    transition:transform .25s ease;
-  }
-  #nav-sticky.visible{
-    transform:translateY(0);
-  }
-  .fixed-card-height{
-    height:360px;
-  }
-  .tab-panel{
-    height:100%;
-    overflow-y:auto;
-  }
-  select.lang-select{
-    -webkit-appearance:none;
-    appearance:none;
-  }
-  .toast{
-    transition:opacity .3s ease, transform .3s ease;
-  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 </style>
 </head>
 <body class="min-h-screen">
 
-<!-- STICKY NAV -->
-<nav id="nav-sticky" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200" style="height:52px;">
-  <div class="max-w-4xl mx-auto h-full px-3 flex items-center justify-between">
-    <div class="flex items-center gap-2">
-      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" alt="Lizi Zivzivadze" class="w-8 h-8 rounded-full object-cover ring-2 ring-sky-600">
-      <span class="font-semibold text-sm text-slate-900">Lizi Zivzivadze</span>
+<!-- STICKY HEADER -->
+<header id="sticky-header" class="fixed top-0 left-0 w-full h-14 bg-white/95 backdrop-blur border-b border-[#e2e8f0] z-50 transition-transform duration-300">
+  <div class="max-w-4xl mx-auto h-full px-4 md:px-6 flex items-center justify-between">
+    <div class="flex items-center gap-2 font-bold text-[#0f172a]">
+      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=100" alt="Lizi Zivzivadze" class="w-8 h-8 rounded-full object-cover border border-[#e2e8f0]">
+      <span class="text-sm md:text-base">Lizi Zivzivadze</span>
     </div>
-    <div class="relative">
-      <select id="lang-select-top" class="lang-select font-mono text-xs border border-slate-300 rounded-md px-2 py-1 pr-6 bg-white text-slate-700 cursor-pointer">
-        <option value="EN">EN</option>
-        <option value="FR">FR</option>
-        <option value="NL">NL</option>
-      </select>
+    <select id="lang-select" aria-label="Select language" class="font-mono text-xs md:text-sm border border-[#e2e8f0] rounded-md px-2 py-1.5 bg-white text-[#475569] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0284c7]">
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+      <option value="nl">Nederlands</option>
+      <option value="de">Deutsch</option>
+    </select>
+  </div>
+</header>
+
+<!-- HERO / PROFILE SECTION -->
+<section id="hero" class="w-full max-w-4xl mx-auto mt-4 md:mt-6 p-4 md:p-6 rounded-xl bg-[#f8fafc] bg-[radial-gradient(#0f172a_1px,transparent_1px)] [background-size:16px_16px] border border-[#e2e8f0] shadow-sm max-h-[35vh] md:max-h-none h-auto overflow-hidden">
+  <div class="bg-white/70 backdrop-blur-sm rounded-lg p-4 md:p-5">
+    <div class="flex items-start gap-4">
+      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" alt="Lizi Zivzivadze profile photo" class="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-[#0284c7] object-cover shrink-0">
+      <div class="flex-1 min-w-0">
+        <h1 class="text-xl md:text-2xl font-bold text-[#0f172a]">Lizi Zivzivadze</h1>
+        <p class="font-mono text-xs md:text-sm text-[#0369a1] font-semibold tracking-wider mt-0.5">ELECTROMECHANICAL DESIGN ENGINEER</p>
+        <div class="flex flex-wrap items-center gap-2 mt-3">
+          <a href="tel:+32499221680" class="inline-flex items-center gap-1.5 bg-[#0284c7] hover:bg-[#0369a1] text-white font-mono text-xs px-3 py-1.5 rounded-full transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.36 11.36 0 003.57.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.36 11.36 0 00.57 3.57 1 1 0 01-.24 1.01l-2.21 2.21z"/></svg>
+            Call
+          </a>
+          <a href="https://wa.me/32499221680" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 bg-[#0d9488] hover:bg-[#0f766e] text-white font-mono text-xs px-3 py-1.5 rounded-full transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 4.99L2.05 22l5.25-1.38a9.9 9.9 0 004.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm0 18.14a8.2 8.2 0 01-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.37c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 012.41 5.83c0 4.55-3.7 8.22-8.26 8.22zm4.52-6.16c-.25-.12-1.47-.72-1.7-.81-.23-.08-.4-.12-.56.13-.17.25-.64.81-.78.97-.15.17-.29.19-.54.06-.25-.12-1.05-.38-1.99-1.22-.74-.65-1.23-1.46-1.38-1.7-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08 0 1.23.89 2.41 1.02 2.58.13.17 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
+            WhatsApp
+          </a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Leuven,Belgium" target="_blank" rel="noopener noreferrer" class="font-mono text-[11px] md:text-xs bg-[#f1f5f9] text-[#475569] px-2.5 py-1.5 rounded-full hover:bg-[#e2e8f0] transition-colors">📍 Leuven, Belgium</a>
+          <a href="mailto:lizozivzivadze@gmail.com" class="font-mono text-[11px] md:text-xs bg-[#f1f5f9] text-[#475569] px-2.5 py-1.5 rounded-full hover:bg-[#e2e8f0] transition-colors break-all">✉ lizozivzivadze@gmail.com</a>
+          <a href="https://www.linkedin.com/in/lizizivzivadze/" target="_blank" rel="noopener noreferrer" class="font-mono text-[11px] md:text-xs bg-[#f1f5f9] text-[#475569] px-2.5 py-1.5 rounded-full hover:bg-[#e2e8f0] transition-colors">in LinkedIn</a>
+          <a href="https://github.com/lizozivzivadze-star" target="_blank" rel="noopener noreferrer" class="font-mono text-[11px] md:text-xs bg-[#f1f5f9] text-[#475569] px-2.5 py-1.5 rounded-full hover:bg-[#e2e8f0] transition-colors">⌥ GitHub</a>
+        </div>
+        <p class="text-xs md:text-sm text-[#475569] mt-3 pt-3 border-t border-slate-100 line-clamp-3" id="hero-statement">
+          Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.
+        </p>
+      </div>
     </div>
   </div>
-</nav>
+</section>
 
-<main class="max-w-4xl mx-auto px-3 pt-4 pb-8 space-y-4">
+<!-- PROJECTS SECTION -->
+<section id="projects" class="section-container">
+  <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">PROJECTS</h2>
+  <div class="mb-5"></div>
+  <div class="flex justify-center gap-2 flex-wrap" id="project-tabs" role="tablist" aria-label="Project category filter">
+    <button data-cat="HardWare" class="tab-btn font-mono text-xs md:text-sm px-4 py-2 rounded-full border border-[#e2e8f0] text-[#475569]">HardWare</button>
+    <button data-cat="SoftWare" class="tab-btn font-mono text-xs md:text-sm px-4 py-2 rounded-full border border-[#e2e8f0] text-[#475569]">SoftWare</button>
+    <button data-cat="HW+SW" class="tab-btn font-mono text-xs md:text-sm px-4 py-2 rounded-full border border-[#e2e8f0] text-[#475569]">HW+SW</button>
+  </div>
+  <div class="mb-5"></div>
+  <div id="projects-list" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 custom-scrollbar"></div>
+</section>
 
-  <!-- SECTION 1: HERO / PROFILE -->
-  <section class="card-frame overflow-hidden" style="border-color:rgba(2,132,199,0.35);">
-    <div class="p-3 sm:p-4">
-      <div class="flex items-start justify-between gap-3">
-        <div class="flex items-center gap-3 min-w-0">
-          <img id="avatar-img" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" alt="Lizi Zivzivadze avatar" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover ring-2 ring-sky-600 flex-shrink-0">
-          <div class="min-w-0">
-            <h1 id="profile-name" class="text-lg sm:text-2xl font-bold text-slate-900 leading-tight truncate">Lizi Zivzivadze</h1>
-            <p id="profile-title" class="font-mono text-xs sm:text-sm text-teal-600 font-semibold tracking-tight">Electromechanical Engineer</p>
-          </div>
-        </div>
-        <div class="hidden sm:block flex-shrink-0">
-          <select id="lang-select-hero" class="lang-select font-mono text-xs border border-slate-300 rounded-md px-2 py-1 pr-6 bg-white text-slate-700 cursor-pointer">
-            <option value="EN">EN</option>
-            <option value="FR">FR</option>
-            <option value="NL">NL</option>
-          </select>
-        </div>
-      </div>
+<!-- SKILLS SECTION -->
+<section id="skills" class="section-container">
+  <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">SKILLS</h2>
+  <div class="mb-5"></div>
+  <div id="skills-tabs" class="flex overflow-x-auto gap-2 pb-2 whitespace-nowrap custom-scrollbar justify-start md:justify-center" role="tablist" aria-label="Skill category filter"></div>
+  <div class="mt-4 max-h-[280px] overflow-y-auto border border-[#e2e8f0] rounded-lg p-4 bg-white custom-scrollbar relative" id="skills-container">
+    <div id="skills-list" class="space-y-4"></div>
+  </div>
+  <div class="text-center text-[#0284c7] animate-bounce text-xs font-mono mt-1">↓ Scroll for more skills ↓</div>
+</section>
 
-      <p id="profile-statement" class="mt-2 text-xs sm:text-sm text-slate-600 leading-snug" style="max-width:56ch;">
-        Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.
-      </p>
+<!-- WHAT DO I BRING TO THE TABLE -->
+<section id="value-props" class="section-container">
+  <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">WHAT DO I BRING TO THE TABLE?</h2>
+  <div class="mb-5"></div>
+  <div id="value-props-list" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 custom-scrollbar"></div>
+</section>
 
-      <div class="mt-2 flex items-center gap-3 flex-wrap">
-        <a href="tel:+32499221680" class="flex items-center gap-1 text-xs sm:text-sm text-slate-700 hover:text-sky-600 font-mono" aria-label="Call phone number">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-          <span>+32 499 22 16 80</span>
-        </a>
-        <a href="https://wa.me/32499221680" target="_blank" rel="noopener" class="flex items-center justify-center w-7 h-7 rounded-full bg-green-500 text-white hover:bg-green-600" aria-label="Open WhatsApp chat">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.94 11.94 0 0 0 12.04 0C5.5 0 .18 5.32.18 11.86c0 2.09.55 4.13 1.6 5.93L0 24l6.37-1.67a11.86 11.86 0 0 0 5.67 1.44h.01c6.54 0 11.86-5.32 11.86-11.86 0-3.17-1.24-6.15-3.39-8.43zM12.05 21.6h-.01a9.8 9.8 0 0 1-5-1.37l-.36-.21-3.78.99 1.01-3.68-.23-.38a9.77 9.77 0 0 1-1.5-5.19c0-5.41 4.4-9.81 9.82-9.81 2.62 0 5.08 1.02 6.94 2.88a9.75 9.75 0 0 1 2.87 6.94c0 5.42-4.41 9.83-9.76 9.83zm5.36-7.35c-.29-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.29-.77.96-.94 1.15-.17.2-.35.22-.64.07-.29-.15-1.23-.45-2.35-1.44-.87-.77-1.45-1.73-1.62-2.02-.17-.29-.02-.45.13-.6.13-.13.29-.35.44-.52.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.52-.07-.15-.67-1.6-.91-2.2-.24-.58-.49-.5-.67-.5-.17 0-.37-.02-.57-.02s-.52.07-.79.37c-.27.29-1.04 1.02-1.04 2.48s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.24-.69.24-1.28.17-1.41-.07-.12-.27-.19-.56-.34z"></path></svg>
-        </a>
-        <a href="mailto:lizozivzivadze@gmail.com" class="flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 text-slate-700 hover:bg-sky-100 hover:text-sky-600" aria-label="Send email">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" stroke="none"></path><path d="M22 6l-10 7L2 6"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg>
-        </a>
-        <a href="https://www.linkedin.com/in/lizizivzivadze/" target="_blank" rel="noopener" class="flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 text-slate-700 hover:bg-sky-100 hover:text-sky-600" aria-label="LinkedIn profile">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45z"></path></svg>
-        </a>
-        <a href="https://github.com/lizozivzivadze-star" target="_blank" rel="noopener" class="flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 text-slate-700 hover:bg-sky-100 hover:text-sky-600" aria-label="GitHub profile">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.87 10.94c.58.1.79-.25.79-.56 0-.27-.01-1.16-.02-2.11-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.04-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.74.8 1.19 1.83 1.19 3.09 0 4.43-2.7 5.41-5.27 5.69.42.36.78 1.07.78 2.16 0 1.56-.02 2.82-.02 3.2 0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"></path></svg>
-        </a>
-      </div>
+<!-- HELP YOURSELF (DOCUMENT) SECTION -->
+<section id="documents" class="section-container">
+  <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">HELP YOURSELF</h2>
+  <div class="mb-5"></div>
+  <div class="space-y-3">
+    <button type="button" id="cv-card" class="doc-card w-full bg-white border border-[#e2e8f0] text-[#0f172a] cursor-pointer p-4 rounded-lg flex items-center justify-between font-semibold" aria-pressed="false">
+      <span>CV Document</span>
+      <span class="font-mono text-xs text-[#475569]" data-check>◯</span>
+    </button>
+    <button type="button" id="portfolio-card" class="doc-card w-full bg-white border border-[#e2e8f0] text-[#0f172a] cursor-pointer p-4 rounded-lg flex items-center justify-between font-semibold" aria-pressed="false">
+      <span>Portfolio Document</span>
+      <span class="font-mono text-xs text-[#475569]" data-check>◯</span>
+    </button>
+  </div>
+  <div class="mt-5 space-y-3">
+    <input type="email" id="doc-email" placeholder="your.email@example.com" class="w-full p-3 border border-[#e2e8f0] rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#0284c7]">
+    <button id="send-docs-btn" class="w-full bg-[#0d9488] hover:bg-[#0f766e] text-white font-bold py-3 rounded-lg transition-colors">Send Copies Now</button>
+  </div>
+</section>
 
-      <div class="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] sm:text-xs font-mono text-slate-500">
-        <span>© 2026 Lizi Zivzivadze</span>
-        <span class="flex items-center gap-1.5">
-          <span class="ping-dot"></span>
-          Available for opportunities
-        </span>
-      </div>
+<!-- FOOTER -->
+<footer class="border-t border-[#e2e8f0] py-6 bg-white text-center mt-4">
+  <div class="flex flex-col items-center gap-1 font-mono text-xs text-[#475569]">
+    <div>2026 Lizi Zivzivadze</div>
+    <div class="flex items-center gap-2">
+      <span class="relative flex h-2.5 w-2.5">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+      </span>
+      <span>Junior Engineer ready for deployment</span>
     </div>
-  </section>
-
-  <!-- SECTION 2: PROJECT DEMONSTRATIONS -->
-  <section class="card-frame overflow-hidden">
-    <div class="section-header px-3 sm:px-4 py-2 flex items-center justify-between">
-      <h2 class="text-sm sm:text-base font-bold tracking-wide text-slate-900">PROJECT DEMONSTRATIONS</h2>
-    </div>
-    <div class="p-3 sm:p-4">
-      <div id="project-filters" class="flex gap-2 mb-3 overflow-x-auto no-scrollbar pb-1">
-        <button data-filter="ALL" class="proj-filter-btn chip-btn active px-3 py-1.5 rounded-full text-xs font-mono whitespace-nowrap">All</button>
-        <button data-filter="Hardware" class="proj-filter-btn chip-btn px-3 py-1.5 rounded-full text-xs font-mono whitespace-nowrap"><b>H</b>ardware</button>
-        <button data-filter="Software" class="proj-filter-btn chip-btn px-3 py-1.5 rounded-full text-xs font-mono whitespace-nowrap"><b>S</b>oftware</button>
-        <button data-filter="HW + SW" class="proj-filter-btn chip-btn px-3 py-1.5 rounded-full text-xs font-mono whitespace-nowrap"><b>HW</b> + <b>SW</b></button>
-      </div>
-      <div id="project-cards-container" class="flex gap-3 overflow-x-auto no-scrollbar snap-x-mandatory pb-1">
-        <!-- injected by JS -->
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 3: SKILLSET -->
-  <section class="card-frame overflow-hidden">
-    <div class="section-header px-3 sm:px-4 py-2">
-      <h2 class="text-sm sm:text-base font-bold tracking-wide text-slate-900">Skillset</h2>
-    </div>
-    <div class="p-3 sm:p-4">
-      <div id="skill-categories" class="flex gap-2 mb-3 overflow-x-auto whitespace-nowrap no-scrollbar pb-1">
-        <!-- injected by JS -->
-      </div>
-      <div id="skill-chips" class="flex gap-3 overflow-x-auto no-scrollbar pb-2">
-        <!-- injected by JS -->
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 4: VALUE PROPS -->
-  <section class="card-frame overflow-hidden">
-    <div class="section-header px-3 sm:px-4 py-2">
-      <h2 class="text-sm sm:text-base font-bold tracking-wide text-slate-900">WHAT DO I BRING TO THE TABLE?</h2>
-    </div>
-    <div class="p-3 sm:p-4">
-      <div id="value-props-container" class="flex gap-3 overflow-x-auto no-scrollbar snap-x-mandatory pb-1">
-        <!-- injected by JS -->
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 5: DOCUMENT GENERATION -->
-  <section class="card-frame overflow-hidden">
-    <div class="section-header px-3 sm:px-4 py-2">
-      <h2 class="text-sm sm:text-base font-bold tracking-wide text-slate-900">DOCUMENT GENERATION &amp; EXPORT SYSTEM</h2>
-    </div>
-    <div class="p-3 sm:p-4 space-y-3">
-      <div>
-        <label for="doc-email" class="block text-xs font-mono text-slate-500 mb-1">Email address</label>
-        <input id="doc-email" type="email" placeholder="you@example.com" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-sky-600">
-      </div>
-      <div class="grid grid-cols-2 gap-3">
-        <div id="doc-full" data-doc="full" class="doc-card rounded-lg p-3 text-center">
-          <p class="text-xs sm:text-sm text-slate-800">Full Portfolio PDF</p>
-        </div>
-        <div id="doc-cv" data-doc="cv" class="doc-card rounded-lg p-3 text-center">
-          <p class="text-xs sm:text-sm text-slate-800">CV Summary PDF</p>
-        </div>
-      </div>
-      <button id="send-docs-btn" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-semibold text-sm rounded-lg py-2.5 transition-colors">
-        Send Copies Now
-      </button>
-      <div id="dispatch-toast" class="toast opacity-0 pointer-events-none text-xs sm:text-sm font-mono bg-teal-50 border border-teal-600 text-teal-700 rounded-lg px-3 py-2"></div>
-    </div>
-  </section>
-
-</main>
-
-<!-- SECTION 6: FOOTER -->
-<footer class="card-frame max-w-4xl mx-auto mx-3 mb-6 mt-2" style="margin-left:auto;margin-right:auto;">
-  <div class="px-3 sm:px-4 py-3 flex flex-col items-center gap-1 text-center">
-    <p class="font-mono text-xs sm:text-sm text-slate-600">© 2026 Lizi Zivzivadze | Single Source of Truth Architecture</p>
-    <p class="font-mono text-[11px] sm:text-xs text-slate-500 flex items-center gap-1.5">
-      <span class="ping-dot"></span>
-      Available for opportunities | System Status: Active
-    </p>
   </div>
 </footer>
 
+<!-- VIDEO MODAL -->
+<div id="video-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 modal-backdrop">
+  <div class="bg-black rounded-lg overflow-hidden w-full max-w-3xl relative">
+    <button id="close-video-modal" aria-label="Close video" class="absolute top-2 right-2 z-10 bg-white/90 hover:bg-white text-[#0f172a] rounded-full w-8 h-8 flex items-center justify-center font-bold">✕</button>
+    <div class="aspect-video">
+      <iframe id="video-modal-iframe" class="w-full h-full" src="" title="Project video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container" class="fixed bottom-4 right-4 z-[70] flex flex-col gap-2 items-end"></div>
+
 <script>
-// ==================================================
-// SINGLE SOURCE OF TRUTH (IMMUTABLE DATA ENGINE)
-// ==================================================
-const PORTFOLIO_DATA = {
-  personal: {
-    name: "Lizi Zivzivadze",
-    title: "Electromechanical Engineer",
-    statement: "Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.",
-    avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
-    email: "lizozivzivadze@gmail.com",
-    phone: "+32 499 22 16 80",
-    location: "Leuven, Belgium",
-    linkedin: "https://www.linkedin.com/in/lizizivzivadze/",
-    github: "https://github.com/lizozivzivadze-star",
-    whatsapp: "https://wa.me/32499221680"
-  },
-  projects: [
-    {
-      id: "proj-1",
-      title: "Closed-Loop Piezoelectric Micro-Actuator Rig",
-      category: "HW + SW",
-      summary: "Engineered sub-micron positioning stage with high-bandwidth FPGA feedback for active optical calibration assemblies.",
-      overview: "Designed high-stiffness flexure mechanics in SolidWorks, performed modal FEA under dynamic loads, and built custom C++ control firmware running on a real-time STM32 microcontroller.",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      media: [
-        { type: "image", url: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=600", caption: "Rig Assembly View" },
-        { type: "video", url: "https://www.youtube.com/embed/dQw4w9WgXcQ", caption: "Sub-micron Displacement Test" }
-      ],
-      equipment: ["SolidWorks", "STM32 Microcontroller", "Laser Interferometer", "ANSYS FEA", "Oscilloscope", "FPGA Development Board"],
-      links: { github: "https://github.com/lizozivzivadze-star", demo: "https://demo.dev", docs: "https://docs.dev" },
-      tags: ["STM32", "SolidWorks", "FEA", "Embedded C++", "Flexures"]
-    },
-    {
-      id: "proj-2",
-      title: "Compact 4-Channel Brushless Motor Driver (BLDC)",
-      category: "Hardware",
-      summary: "Developed a 48V/20A industrial motor drive featuring integrated CAN-FD telemetry and hardware power monitoring.",
-      overview: "Optimized 4-layer PCB layout using Altium Designer for high heat dissipation, verified power efficiency (>96%), and passed thermal load stress testing up to 85°C ambient.",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      media: [
-        { type: "image", url: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=600", caption: "4-Layer PCB Top View" }
-      ],
-      equipment: ["Altium Designer", "Thermal Imaging Camera", "Digital Multimeter", "Reflow Oven", "CAN Bus Analyzer"],
-      links: { github: "https://github.com/lizozivzivadze-star", docs: "https://docs.dev" },
-      tags: ["Altium", "Power Electronics", "CAN-FD", "Thermal FEA"]
-    },
-    {
-      id: "proj-3",
-      title: "ROS2 Autonomous Robotic Inspection Telemetry",
-      category: "Software",
-      summary: "Created a WebGL and ROS2 interface displaying dynamic sensor fusion and LiDAR point clouds at sub-20ms latency.",
-      overview: "Implemented asynchronous telemetry streaming with Python backend, dynamic kinematic path recalculation, and automated error recovery sequences for payload drops.",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      media: [
-        { type: "image", url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=600", caption: "LiDAR Pointcloud Visualization" }
-      ],
-      equipment: ["ROS2 Node Suite", "LiDAR Sensor Array", "Python 3.11 Environment", "Linux Ubuntu Workstation"],
-      links: { github: "https://github.com/lizozivzivadze-star", demo: "https://demo.dev" },
-      tags: ["ROS2", "Python", "LiDAR", "WebSockets", "C++"]
-    },
-    {
-      id: "proj-4",
-      title: "Precision Micro-Fluidic Dosing Station",
-      category: "HW + SW",
-      summary: "Built an automated micro-volume liquid dispenser utilizing computer vision feedback for dynamic droplet correction.",
-      overview: "Designed high-accuracy volumetric chambers, integrated OpenCV image analysis for volume verification, and validated +/-0.01mL accuracy across 10,000 automated cycles.",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      media: [
-        { type: "image", url: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=600", caption: "Dosing Chamber Assembly" }
-      ],
-      equipment: ["High-Speed Industrial Camera", "Piezoelectric Pumps", "OpenCV Library", "CNC Milled Manifold"],
-      links: { github: "https://github.com/lizozivzivadze-star", demo: "https://demo.dev", docs: "https://docs.dev" },
-      tags: ["OpenCV", "Python", "Piezo Control", "SolidWorks"]
-    }
-  ],
-  skills: {
-    "Mechanical": [{ name: "Kinematic Linkage Design", level: 92 }, { name: "Mechanism Synthesis", level: 88 }],
-    "CAD": [{ name: "SolidWorks Parametric Modeling", level: 95 }, { name: "GD&T Stack-Up Analysis", level: 90 }],
-    "Simulation": [{ name: "ANSYS Structural & Thermal FEA", level: 88 }, { name: "COMSOL Multiphysics", level: 82 }],
-    "Electronics": [{ name: "PCB Layout (Altium Designer)", level: 92 }, { name: "Analog Signal Conditioning", level: 85 }],
-    "Embedded": [{ name: "STM32 / ARM Cortex Firmware", level: 94 }, { name: "FreeRTOS Scheduling", level: 85 }],
-    "Firmware": [{ name: "Bare-Metal C Drivers", level: 92 }, { name: "C++ Microcontroller Architecture", level: 88 }],
-    "Software": [{ name: "Python / Scientific Stack", level: 90 }, { name: "ROS2 Telemetry", level: 84 }],
-    "Python": [{ name: "NumPy / SciPy Data Processing", level: 92 }, { name: "Scripting & Automation", level: 94 }],
-    "AI": [{ name: "OpenCV Computer Vision", level: 80 }, { name: "PyTorch Model Deployment", level: 75 }],
-    "Manufacturing": [{ name: "CNC Machining & Toolpathing", level: 84 }, { name: "Rapid Prototyping (SLA/FDM)", level: 94 }],
-    "Automation": [{ name: "PLC Programming (IEC 61131-3)", level: 80 }, { name: "Industrial Ethernet Telemetry", level: 82 }],
-    "Control": [{ name: "Closed-Loop PID / FOC Control", level: 88 }, { name: "State-Space Model Simulation", level: 84 }],
-    "Robotics": [{ name: "Forward & Inverse Kinematics", level: 86 }, { name: "Trajectory Generation", level: 85 }],
-    "Vision": [{ name: "High-Speed Camera Calibration", level: 82 }, { name: "Pattern Recognition Pipelines", level: 78 }],
-    "Testing": [{ name: "Automated HIL Test Rigs", level: 86 }, { name: "Data Acquisition (DAQ / LabVIEW)", level: 88 }],
-    "PCB": [{ name: "High-Speed Bus Impedance Control", level: 88 }, { name: "EMC/EMI Shielding Design", level: 80 }],
-    "Industrial": [{ name: "DIN Rail Enclosure Engineering", level: 85 }, { name: "24V Industrial Wiring Standard", level: 90 }],
-    "Project Management": [{ name: "Agile Hardware Sprint Planning", level: 85 }, { name: "BOM Optimization", level: 92 }],
-    "Documentation": [{ name: "Technical Spec Writing", level: 94 }, { name: "Schematic Architecture Papers", level: 90 }],
-    "Rapid Prototyping": [{ name: "Laser Cutting & Sheet Metal", level: 90 }, { name: "Silicone Molding", level: 82 }],
-    "Communication": [{ name: "Cross-Disciplinary Coordination", level: 95 }, { name: "Vendor Management", level: 88 }],
-    "Leadership": [{ name: "Technical Team Lead", level: 84 }, { name: "Design Review Direction", level: 88 }]
-  },
-  valueProps: [
-    { title: "Cross-Disciplinary Integration", text: "Seamlessly uniting precision hardware mechanics, electronic PCB design, and control code." },
-    { title: "Rapid Functional Prototyping", text: "Transforming CAD concepts into fully working physical prototypes rapidly." },
-    { title: "Closed-Loop Controls", text: "Implementing feedback control systems for high-precision dynamic alignment." },
-    { title: "Production-Minded Execution", text: "Designing systems tailored for manufacturability, assembly, and serviceability." },
-    { title: "Data-Driven Verification", text: "Empirically validating thermal, structural, and electrical limits through testing." }
-  ]
-};
+(function () {
+  "use strict";
 
-// ==================================================
-// STATE
-// ==================================================
-const state = {
-  projectFilter: "ALL",
-  activeProjectTab: {}, // { [projectId]: "overview" | "media" | "equipment" }
-  activeSkillCategory: Object.keys(PORTFOLIO_DATA.skills)[0],
-  selectedDocs: new Set()
-};
+  const PORTFOLIO_DATA = {
+    personal: {
+      name: "Lizi Zivzivadze",
+      title: "ELECTROMECHANICAL DESIGN ENGINEER",
+      statement: "Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.",
+      avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
+      email: "lizozivzivadze@gmail.com",
+      phone: "+32 499 22 16 80",
+      whatsapp: "https://wa.me/32499221680",
+      location: "Leuven, Belgium",
+      linkedin: "https://www.linkedin.com/in/lizizivzivadze/",
+      github: "https://github.com/lizozivzivadze-star"
+    },
+    projects: [
+      {
+        id: "proj-1",
+        title: "Closed-Loop Piezoelectric Micro-Actuator Rig",
+        category: "HW+SW",
+        summary: "Engineered sub-micron positioning stage with high-bandwidth FPGA feedback for active optical calibration assemblies.",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        links: { url: "https://github.com/lizozivzivadze-star" }
+      },
+      {
+        id: "proj-2",
+        title: "Compact 4-Channel Brushless Motor Driver (BLDC)",
+        category: "HardWare",
+        summary: "Developed a 48V/20A industrial motor drive featuring integrated CAN-FD telemetry and hardware power monitoring.",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        links: { url: "https://github.com/lizozivzivadze-star" }
+      },
+      {
+        id: "proj-3",
+        title: "ROS2 Autonomous Robotic Inspection Telemetry",
+        category: "SoftWare",
+        summary: "Created a WebGL and ROS2 interface displaying dynamic sensor fusion and LiDAR point clouds at sub-20ms latency.",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        links: { url: "https://github.com/lizozivzivadze-star" }
+      },
+      {
+        id: "proj-4",
+        title: "Precision Micro-Fluidic Dosing Station",
+        category: "HW+SW",
+        summary: "Built an automated micro-volume liquid dispenser utilizing computer vision feedback for dynamic droplet correction.",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        links: { url: "https://github.com/lizozivzivadze-star" }
+      }
+    ],
+    skills: {
+      "Electronics": [
+        { name: "PCB Layout (Altium Designer)", level: 92 },
+        { name: "Analog Signal Conditioning", level: 85 },
+        { name: "Power Electronics (DC-DC / Gate Drivers)", level: 82 },
+        { name: "High-Speed Bus Layout (CAN-FD, Ethernet)", level: 88 },
+        { name: "EMC/EMI Shielding & Noise Reduction", level: 80 },
+        { name: "Circuit Simulation (LTspice / Tina-TI)", level: 86 },
+        { name: "SMD Soldering & Lab Instrumentation", level: 90 },
+        { name: "Battery Management Systems (BMS)", level: 78 }
+      ],
+      "Embedded Systems": [
+        { name: "STM32 / ARM Cortex-M Firmware", level: 94 },
+        { name: "Embedded C / Real-Time C++", level: 90 },
+        { name: "FreeRTOS Task Scheduling & Mutexes", level: 85 },
+        { name: "Low-Level Bus Protocols (SPI, I2C, UART)", level: 95 },
+        { name: "DMA Telemetry & Hardware Interrupts", level: 88 },
+        { name: "Bare-Metal Microcontroller Architecture", level: 86 },
+        { name: "Bootloaders & OTA Updates", level: 78 },
+        { name: "Hardware In-The-Loop (HIL) Testing", level: 82 }
+      ],
+      "CAD": [
+        { name: "SolidWorks Parametric Modeling", level: 95 },
+        { name: "Structural & Thermal FEA (ANSYS)", level: 88 },
+        { name: "GD&T Tolerance Stack-Up Analysis", level: 90 },
+        { name: "Precision Flexure & Kinematic Design", level: 86 },
+        { name: "Design for Manufacturing (DFM / DFA)", level: 92 },
+        { name: "CNC Milling & Machining Toolpaths", level: 84 },
+        { name: "Rapid Prototyping (FDM / SLA / SLS)", level: 94 },
+        { name: "Enclosure IP Ingress Protection Design", level: 80 }
+      ],
+      "Software & AI": [
+        { name: "Python / Scientific Stack (NumPy, SciPy)", level: 90 },
+        { name: "ROS2 (Robot Operating System)", level: 84 },
+        { name: "MATLAB / Simulink Model-Based Control", level: 88 },
+        { name: "OpenCV Computer Vision Pipelines", level: 80 },
+        { name: "Closed-Loop PID / FOC Control Loops", level: 88 },
+        { name: "Linux System Administration & Bash", level: 82 },
+        { name: "Git Version Control & CI/CD Pipelines", level: 86 },
+        { name: "C++ Data Structures & Kinematics", level: 85 }
+      ]
+    },
+    valueProps: [
+      { title: "Cross-Disciplinary Integration", text: "Seamlessly uniting precision hardware mechanics, electronic PCB design, and control code." },
+      { title: "Rapid Functional Prototyping", text: "Transforming CAD concepts into fully working physical prototypes rapidly." },
+      { title: "Closed-Loop Controls", text: "Implementing feedback control systems for high-precision dynamic alignment." },
+      { title: "Production-Minded Execution", text: "Designing systems tailored for manufacturability, assembly, and serviceability." },
+      { title: "Data-Driven Verification", text: "Empirically validating thermal, structural, and electrical limits through testing." }
+    ]
+  };
 
-// ==================================================
-// UTIL
-// ==================================================
-function escapeHtml(str){
-  return String(str)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
+  // ---------- STATE ----------
+  const state = {
+    projectCategory: "HW+SW",
+    skillCategory: "Electronics",
+    lang: "en",
+    cvSelected: false,
+    portfolioSelected: false
+  };
 
-// ==================================================
-// STICKY NAV VISIBILITY
-// ==================================================
-const navEl = document.getElementById("nav-sticky");
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 100) {
-    navEl.classList.add("visible");
-  } else {
-    navEl.classList.remove("visible");
+  const escapeHtml = (str) => String(str).replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+
+  // ---------- TOASTS ----------
+  function showToast(message) {
+    const container = document.getElementById("toast-container");
+    const toast = document.createElement("div");
+    toast.className = "toast-enter bg-[#0f172a] text-white font-mono text-xs md:text-sm px-4 py-3 rounded-lg shadow-lg max-w-xs";
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.classList.remove("toast-enter");
+      toast.classList.add("toast-leave");
+      setTimeout(() => toast.remove(), 260);
+    }, 3200);
   }
-});
 
-// ==================================================
-// LANGUAGE SELECTOR (sync top + hero, cosmetic)
-// ==================================================
-const langTop = document.getElementById("lang-select-top");
-const langHero = document.getElementById("lang-select-hero");
-function syncLang(source){
-  langTop.value = source.value;
-  langHero.value = source.value;
-}
-langTop.addEventListener("change", () => syncLang(langTop));
-langHero.addEventListener("change", () => syncLang(langHero));
-
-// ==================================================
-// SECTION 2: PROJECT CARDS
-// ==================================================
-function renderProjectFilters(){
-  document.querySelectorAll(".proj-filter-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.filter === state.projectFilter);
-    btn.addEventListener("click", () => {
-      state.projectFilter = btn.dataset.filter;
-      renderProjectFilters();
-      renderProjectCards();
-    }, { once: false });
-  });
-}
-
-function buildTabButton(project, tabKey, label){
-  const active = (state.activeProjectTab[project.id] || "overview") === tabKey;
-  return `<button data-project="${project.id}" data-tab="${tabKey}" class="proj-tab-btn tab-btn ${active ? "active" : ""} text-[11px] sm:text-xs px-2 py-1.5 font-mono flex-1">${label}</button>`;
-}
-
-function buildOverviewPanel(project){
-  return `
-    <div class="tab-panel px-3 py-2">
-      <p class="text-xs sm:text-sm text-slate-600 leading-snug mb-2">${escapeHtml(project.overview)}</p>
-      <div class="flex flex-wrap gap-1.5 mb-2">
-        ${project.tags.map(t => `<span class="font-mono text-[10px] sm:text-[11px] bg-slate-100 text-slate-600 rounded px-1.5 py-0.5">${escapeHtml(t)}</span>`).join("")}
-      </div>
-      <div class="flex gap-3 text-xs font-mono">
-        ${project.links.github ? `<a href="${project.links.github}" target="_blank" rel="noopener" class="text-sky-600 hover:text-sky-700 underline">GitHub</a>` : ""}
-        ${project.links.demo ? `<a href="${project.links.demo}" target="_blank" rel="noopener" class="text-sky-600 hover:text-sky-700 underline">Demo</a>` : ""}
-        ${project.links.docs ? `<a href="${project.links.docs}" target="_blank" rel="noopener" class="text-sky-600 hover:text-sky-700 underline">Docs</a>` : ""}
-      </div>
-    </div>
-  `;
-}
-
-function buildMediaPanel(project){
-  const items = project.media.map(m => {
-    if (m.type === "image") {
-      return `<div class="flex-shrink-0 w-full">
-        <img src="${m.url}" alt="${escapeHtml(m.caption)}" class="w-full h-32 object-cover rounded-lg border border-slate-200">
-        <p class="font-mono text-[10px] text-slate-500 mt-1">${escapeHtml(m.caption)}</p>
-      </div>`;
+  // ---------- STICKY HEADER ----------
+  const stickyHeader = document.getElementById("sticky-header");
+  function onScroll() {
+    if (window.scrollY > 100) {
+      stickyHeader.classList.add("visible");
     } else {
-      return `<div class="flex-shrink-0 w-full">
-        <div class="w-full rounded-lg overflow-hidden border border-slate-200" style="aspect-ratio:16/9;">
-          <iframe class="w-full h-full" src="${m.url}" title="${escapeHtml(m.caption)}" frameborder="0" allowfullscreen loading="lazy"></iframe>
-        </div>
-        <p class="font-mono text-[10px] text-slate-500 mt-1">${escapeHtml(m.caption)}</p>
-      </div>`;
+      stickyHeader.classList.remove("visible");
     }
-  }).join("");
-  return `<div class="tab-panel px-3 py-2 space-y-2">${items}</div>`;
-}
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
 
-function buildEquipmentPanel(project){
-  return `
-    <div class="tab-panel px-3 py-2">
-      <ul class="space-y-1">
-        ${project.equipment.map(eq => `
-          <li class="flex items-center gap-2 text-xs sm:text-sm text-slate-700">
-            <span class="w-1.5 h-1.5 rounded-full bg-teal-600 flex-shrink-0"></span>
-            <span class="font-mono">${escapeHtml(eq)}</span>
-          </li>
-        `).join("")}
-      </ul>
-    </div>
-  `;
-}
-
-function buildProjectPanel(project){
-  const tab = state.activeProjectTab[project.id] || "overview";
-  if (tab === "media") return buildMediaPanel(project);
-  if (tab === "equipment") return buildEquipmentPanel(project);
-  return buildOverviewPanel(project);
-}
-
-function categoryLabel(category){
-  if (category === "Hardware") return "<b>H</b>ardware";
-  if (category === "Software") return "<b>S</b>oftware";
-  if (category === "HW + SW") return "<b>HW</b> + <b>SW</b>";
-  return escapeHtml(category);
-}
-
-function renderProjectCards(){
-  const container = document.getElementById("project-cards-container");
-  const filtered = state.projectFilter === "ALL"
-    ? PORTFOLIO_DATA.projects
-    : PORTFOLIO_DATA.projects.filter(p => p.category === state.projectFilter);
-
-  container.innerHTML = filtered.map(project => `
-    <div class="card-frame flex-shrink-0 snap-start flex flex-col fixed-card-height" style="width:280px; border-color:var(--card-border);">
-      <div class="px-3 pt-3 pb-2 border-b border-slate-100">
-        <span class="font-mono text-[10px] text-teal-600 font-semibold">${categoryLabel(project.category)}</span>
-        <h3 class="text-sm font-bold text-slate-900 leading-snug mt-0.5" style="min-height:2.5em;">${escapeHtml(project.title)}</h3>
-        <p class="text-[11px] text-slate-500 leading-snug mt-1" style="display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHtml(project.summary)}</p>
-      </div>
-      <div class="flex border-b border-slate-100 flex-shrink-0">
-        ${buildTabButton(project, "overview", "Overview")}
-        ${buildTabButton(project, "media", "Media")}
-        ${buildTabButton(project, "equipment", "Equipment")}
-      </div>
-      <div class="flex-1 overflow-hidden">
-        ${buildProjectPanel(project)}
-      </div>
-    </div>
-  `).join("");
-
-  container.querySelectorAll(".proj-tab-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      state.activeProjectTab[btn.dataset.project] = btn.dataset.tab;
-      renderProjectCards();
-    });
+  // language selector
+  document.getElementById("lang-select").addEventListener("change", (e) => {
+    state.lang = e.target.value;
+    const names = { en: "English", fr: "French", nl: "Dutch", de: "German" };
+    showToast("Language set to " + names[state.lang]);
   });
-}
 
-// ==================================================
-// SECTION 3: SKILLSET
-// ==================================================
-function renderSkillCategories(){
-  const container = document.getElementById("skill-categories");
-  const categories = Object.keys(PORTFOLIO_DATA.skills);
-  container.innerHTML = categories.map(cat => `
-    <button data-cat="${escapeHtml(cat)}" class="skill-cat-btn chip-btn ${cat === state.activeSkillCategory ? "active" : ""} px-3 py-1.5 rounded-full text-xs font-mono whitespace-nowrap flex-shrink-0">${escapeHtml(cat)}</button>
-  `).join("");
+  // ---------- PROJECTS ----------
+  function projectMatchesCategory(project, category) {
+    if (category === "HW+SW") return true;
+    if (category === "HardWare") return project.category === "HardWare" || project.category === "HW+SW";
+    if (category === "SoftWare") return project.category === "SoftWare" || project.category === "HW+SW";
+    return false;
+  }
 
-  container.querySelectorAll(".skill-cat-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      state.activeSkillCategory = btn.dataset.cat;
-      renderSkillCategories();
-      renderSkillChips();
+  function renderProjectTabs() {
+    const tabs = document.querySelectorAll("#project-tabs .tab-btn");
+    tabs.forEach((btn) => {
+      const isActive = btn.dataset.cat === state.projectCategory;
+      btn.setAttribute("aria-selected", isActive ? "true" : "false");
+      if (isActive) {
+        btn.className = "tab-btn font-mono text-xs md:text-sm px-4 py-2 rounded-full bg-[#0284c7] text-white border border-[#0284c7]";
+      } else {
+        btn.className = "tab-btn font-mono text-xs md:text-sm px-4 py-2 rounded-full border border-[#e2e8f0] text-[#475569] bg-white";
+      }
     });
+  }
+
+  function renderProjects() {
+    const list = document.getElementById("projects-list");
+    const filtered = PORTFOLIO_DATA.projects.filter((p) => projectMatchesCategory(p, state.projectCategory));
+    list.innerHTML = filtered.map((project) => `
+      <div class="w-[280px] md:w-[320px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between">
+        <div>
+          <div class="aspect-video relative rounded bg-slate-900 overflow-hidden flex items-center justify-center cursor-pointer group video-trigger" data-video="${escapeHtml(project.videoUrl)}" role="button" tabindex="0" aria-label="Play video for ${escapeHtml(project.title)}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-white/80 group-hover:text-white group-hover:scale-110 transition-all" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <h3 class="font-bold text-[#0f172a] mt-3 mb-1 line-clamp-1">${escapeHtml(project.title)}</h3>
+          <span class="font-mono text-[10px] text-[#0d9488] tracking-wider">${escapeHtml(project.category)}</span>
+          <p class="line-clamp-2 text-xs md:text-sm text-[#475569] mb-4 mt-1">${escapeHtml(project.summary)}</p>
+        </div>
+        <a href="${escapeHtml(project.links.url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 w-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-mono text-xs font-semibold py-2.5 rounded-lg transition-colors">
+          Visit / View Project →
+        </a>
+      </div>
+    `).join("");
+
+    list.querySelectorAll(".video-trigger").forEach((el) => {
+      el.addEventListener("click", () => openVideoModal(el.dataset.video));
+      el.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openVideoModal(el.dataset.video);
+        }
+      });
+    });
+  }
+
+  document.getElementById("project-tabs").addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-cat]");
+    if (!btn) return;
+    state.projectCategory = btn.dataset.cat;
+    renderProjectTabs();
+    renderProjects();
   });
-}
 
-function renderSkillChips(){
-  const container = document.getElementById("skill-chips");
-  const skills = PORTFOLIO_DATA.skills[state.activeSkillCategory] || [];
-  container.innerHTML = skills.map(skill => `
-    <div class="flex-shrink-0 border border-slate-200 rounded-lg p-3" style="width:200px;">
-      <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug mb-1.5" style="min-height:2.4em;">${escapeHtml(skill.name)}</p>
-      <div class="flex items-center justify-between mb-1">
-        <span class="font-mono text-[11px] text-sky-600 font-semibold">${skill.level}%</span>
+  // ---------- VIDEO MODAL ----------
+  const videoModal = document.getElementById("video-modal");
+  const videoIframe = document.getElementById("video-modal-iframe");
+  function openVideoModal(url) {
+    videoIframe.src = url;
+    videoModal.classList.remove("hidden");
+    videoModal.classList.add("flex");
+    document.body.style.overflow = "hidden";
+  }
+  function closeVideoModal() {
+    videoIframe.src = "";
+    videoModal.classList.add("hidden");
+    videoModal.classList.remove("flex");
+    document.body.style.overflow = "";
+  }
+  document.getElementById("close-video-modal").addEventListener("click", closeVideoModal);
+  videoModal.addEventListener("click", (e) => { if (e.target === videoModal) closeVideoModal(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeVideoModal(); });
+
+  // ---------- SKILLS ----------
+  function renderSkillTabs() {
+    const container = document.getElementById("skills-tabs");
+    const categories = Object.keys(PORTFOLIO_DATA.skills);
+    container.innerHTML = categories.map((cat) => {
+      const isActive = cat === state.skillCategory;
+      const cls = isActive
+        ? "tab-btn font-mono text-xs md:text-sm px-4 py-2 rounded-full bg-[#0284c7] text-white border border-[#0284c7] inline-block"
+        : "tab-btn font-mono text-xs md:text-sm px-4 py-2 rounded-full border border-[#e2e8f0] text-[#475569] bg-white inline-block";
+      return `<button data-skill-cat="${escapeHtml(cat)}" class="${cls}" aria-selected="${isActive}">${escapeHtml(cat)}</button>`;
+    }).join("");
+  }
+
+  function renderSkills() {
+    const list = document.getElementById("skills-list");
+    const skills = PORTFOLIO_DATA.skills[state.skillCategory] || [];
+    list.innerHTML = skills.map((skill) => `
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm text-[#0f172a]">${escapeHtml(skill.name)}</span>
+          <span class="font-mono text-xs text-[#475569]">${skill.level}%</span>
+        </div>
+        <div class="h-2 rounded-full bg-[#f1f5f9] overflow-hidden">
+          <div class="progress-fill h-2 rounded-full bg-[#0284c7]" style="width:${skill.level}%"></div>
+        </div>
       </div>
-      <div class="skill-bar-track h-1.5 w-full">
-        <div class="skill-bar-fill h-1.5" style="width:${skill.level}%;"></div>
+    `).join("");
+  }
+
+  document.getElementById("skills-tabs").addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-skill-cat]");
+    if (!btn) return;
+    state.skillCategory = btn.dataset.skillCat;
+    renderSkillTabs();
+    renderSkills();
+    document.getElementById("skills-container").scrollTop = 0;
+  });
+
+  // ---------- VALUE PROPS ----------
+  function renderValueProps() {
+    const list = document.getElementById("value-props-list");
+    list.innerHTML = PORTFOLIO_DATA.valueProps.map((vp, idx) => `
+      <div class="shrink-0 w-[280px] snap-start bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-5 flex flex-col justify-between">
+        <div>
+          <h3 class="font-bold text-base text-[#0f172a]">Reason #${idx + 1}: ${escapeHtml(vp.title)}</h3>
+          <p class="font-mono text-xs text-[#475569] mt-2">${escapeHtml(vp.text)}</p>
+        </div>
       </div>
-    </div>
-  `).join("");
-}
-
-// ==================================================
-// SECTION 4: VALUE PROPS
-// ==================================================
-function renderValueProps(){
-  const container = document.getElementById("value-props-container");
-  container.innerHTML = PORTFOLIO_DATA.valueProps.map(vp => `
-    <div class="card-frame flex-shrink-0 snap-start p-3" style="width:280px; border-color:var(--card-border);">
-      <h3 class="text-sm font-bold text-slate-900 mb-1">${escapeHtml(vp.title)}</h3>
-      <p class="text-xs sm:text-sm text-slate-600 leading-snug">${escapeHtml(vp.text)}</p>
-    </div>
-  `).join("");
-}
-
-// ==================================================
-// SECTION 5: DOCUMENT GENERATION
-// ==================================================
-const docFull = document.getElementById("doc-full");
-const docCv = document.getElementById("doc-cv");
-const sendBtn = document.getElementById("send-docs-btn");
-const toast = document.getElementById("dispatch-toast");
-const emailInput = document.getElementById("doc-email");
-
-function toggleDoc(el, key){
-  if (state.selectedDocs.has(key)) {
-    state.selectedDocs.delete(key);
-    el.classList.remove("selected");
-  } else {
-    state.selectedDocs.add(key);
-    el.classList.add("selected");
+    `).join("");
   }
-}
 
-docFull.addEventListener("click", () => toggleDoc(docFull, "full"));
-docCv.addEventListener("click", () => toggleDoc(docCv, "cv"));
+  // ---------- DOCUMENTS ----------
+  const cvCard = document.getElementById("cv-card");
+  const portfolioCard = document.getElementById("portfolio-card");
 
-function showToast(message){
-  toast.textContent = message;
-  toast.style.opacity = "1";
-  toast.style.pointerEvents = "auto";
-  clearTimeout(showToast._t);
-  showToast._t = setTimeout(() => {
-    toast.style.opacity = "0";
-    toast.style.pointerEvents = "none";
-  }, 4500);
-}
-
-sendBtn.addEventListener("click", () => {
-  const email = emailInput.value.trim();
-  if (!email || !email.includes("@")) {
-    showToast("Please enter a valid email address before dispatching.");
-    return;
+  function renderDocCards() {
+    [
+      { el: cvCard, selected: state.cvSelected },
+      { el: portfolioCard, selected: state.portfolioSelected }
+    ].forEach(({ el, selected }) => {
+      el.setAttribute("aria-pressed", selected ? "true" : "false");
+      const check = el.querySelector("[data-check]");
+      if (selected) {
+        el.className = "doc-card w-full border-2 border-[#0284c7] bg-[#f0f9ff] text-[#0f172a] cursor-pointer p-4 rounded-lg flex items-center justify-between font-semibold";
+        check.textContent = "●";
+        check.classList.add("text-[#0284c7]");
+      } else {
+        el.className = "doc-card w-full bg-white border border-[#e2e8f0] text-[#0f172a] cursor-pointer p-4 rounded-lg flex items-center justify-between font-semibold";
+        check.textContent = "◯";
+        check.classList.remove("text-[#0284c7]");
+      }
+    });
   }
-  if (state.selectedDocs.size === 0) {
-    showToast("Select at least one document (Full Portfolio or CV Summary) to send.");
-    return;
-  }
-  const docNames = [];
-  if (state.selectedDocs.has("full")) docNames.push("Full Portfolio PDF");
-  if (state.selectedDocs.has("cv")) docNames.push("CV Summary PDF");
-  console.log(`[Background Notification] Dispatch request logged for site owner — package: ${docNames.join(" + ")} — recipient: ${email}`);
-  showToast(`${docNames.join(" + ")} dispatched to ${email}.`);
-});
 
-// ==================================================
-// INIT
-// ==================================================
-function init(){
-  renderProjectFilters();
-  renderProjectCards();
-  renderSkillCategories();
-  renderSkillChips();
-  renderValueProps();
-}
-document.addEventListener("DOMContentLoaded", init);
+  cvCard.addEventListener("click", () => { state.cvSelected = !state.cvSelected; renderDocCards(); });
+  portfolioCard.addEventListener("click", () => { state.portfolioSelected = !state.portfolioSelected; renderDocCards(); });
+
+  document.getElementById("send-docs-btn").addEventListener("click", () => {
+    const emailInput = document.getElementById("doc-email");
+    const email = emailInput.value.trim();
+
+    if (!state.cvSelected && !state.portfolioSelected) {
+      showToast("Please select at least one document first.");
+      return;
+    }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showToast("Please enter a valid email address.");
+      return;
+    }
+
+    const items = [];
+    if (state.cvSelected) items.push("CV Document");
+    if (state.portfolioSelected) items.push("Portfolio Document");
+
+    showToast(`Notification: Dispatched ${items.join(" & ")} to ${email}`);
+
+    state.cvSelected = false;
+    state.portfolioSelected = false;
+    renderDocCards();
+    emailInput.value = "";
+  });
+
+  // ---------- INIT ----------
+  function init() {
+    renderProjectTabs();
+    renderProjects();
+    renderSkillTabs();
+    renderSkills();
+    renderValueProps();
+    renderDocCards();
+    onScroll();
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
 </script>
 </body>
 </html>
