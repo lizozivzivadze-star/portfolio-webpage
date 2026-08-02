@@ -4,247 +4,185 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lizi Zivzivadze — Electromechanical Design Engineer</title>
-<meta name="description" content="Portfolio of Lizi Zivzivadze, Electromechanical Design Engineer — precision mechanics, embedded control electronics, and automated test rigs.">
-
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <style>
-  :root {
-    --grid-line: rgba(15, 23, 42, 0.035);
+  :root{
+    --bg:#f8fafc;
+    --ink:#0f172a;
+    --muted:#475569;
+    --blue:#0284c7;
+    --blue-hover:#0369a1;
+    --teal:#0d9488;
+    --teal-hover:#0f766e;
+    --card:#ffffff;
+    --border:#e2e8f0;
   }
-
-  * { box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background-color: #f8fafc;
-    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  html{scroll-behavior:smooth;}
+  body{
+    background-color:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
     background-image:
-      linear-gradient(var(--grid-line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      linear-gradient(rgba(15,23,42,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15,23,42,0.035) 1px, transparent 1px);
     background-size: 32px 32px;
   }
-
-  .font-mono, [class*="font-mono"] {
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-  }
-
-  /* Line clamp fallbacks (in case Tailwind CDN build lacks the plugin) */
-  .line-clamp-1 {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
-  .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 999px; }
-  .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-  .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #cbd5e1 #f1f5f9; }
-
-  #sticky-header {
-    transform: translateY(-100%);
-  }
-  #sticky-header.visible {
-    transform: translateY(0);
-  }
-
-  .tab-btn {
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  }
-
-  .toast-item {
-    animation: toast-in 0.25s ease forwards;
-  }
-  @keyframes toast-in {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .toast-out {
-    animation: toast-out 0.2s ease forwards;
-  }
-  @keyframes toast-out {
-    from { opacity: 1; transform: translateY(0); }
-    to { opacity: 0; transform: translateY(8px); }
-  }
-
-  #video-modal-frame-wrap { aspect-ratio: 16 / 9; }
-
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    .animate-bounce, .animate-ping { animation: none !important; }
-  }
+  .font-mono{font-family:'JetBrains Mono',monospace;}
+  .line-clamp-1{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}
+  .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .line-clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+  .custom-scrollbar::-webkit-scrollbar{height:6px;width:6px;}
+  .custom-scrollbar::-webkit-scrollbar-track{background:#f1f5f9;border-radius:10px;}
+  .custom-scrollbar::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px;}
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover{background:#94a3b8;}
+  .tab-btn{transition:all 0.15s ease;}
+  .toast-enter{animation:toastIn 0.25s ease forwards;}
+  @keyframes toastIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+  .toast-leave{animation:toastOut 0.25s ease forwards;}
+  @keyframes toastOut{from{opacity:1;transform:translateY(0);}to{opacity:0;transform:translateY(12px);}}
+  .modal-backdrop{background:rgba(15,23,42,0.65);}
+  [data-lang-hidden]{display:none;}
 </style>
 </head>
-<body class="text-[#0f172a] antialiased">
+<body class="min-h-screen pb-10">
 
-<!-- ============ STICKY HEADER (shows on scroll) ============ -->
-<header id="sticky-header" class="fixed top-0 left-0 w-full h-14 bg-white/95 backdrop-blur border-b border-[#e2e8f0] z-50 transition-transform duration-300">
-  <div class="max-w-4xl mx-auto h-full px-4 md:px-6 flex items-center justify-between">
+<!-- ============ STICKY HEADER ============ -->
+<header id="sticky-header" class="fixed top-0 left-0 w-full h-14 bg-white/95 backdrop-blur border-b border-[#e2e8f0] z-50 transition-all duration-300 -translate-y-full opacity-0">
+  <div class="max-w-4xl mx-auto h-full px-4 flex items-center justify-between">
     <div class="flex items-center gap-2 font-bold text-[#0f172a]">
-      <img id="sticky-avatar" src="" alt="Lizi Zivzivadze" class="w-8 h-8 rounded-full border border-[#0284c7] object-cover" />
-      <span class="text-sm md:text-base">Lizi Zivzivadze</span>
+      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" alt="Lizi Zivzivadze" class="w-8 h-8 rounded-full object-cover border border-[#0284c7]">
+      <span class="text-sm">Lizi Zivzivadze</span>
     </div>
-    <div class="flex items-center">
-      <label for="language-select" class="sr-only">Language</label>
-      <select id="language-select" class="font-mono text-xs md:text-sm border border-[#e2e8f0] rounded-md px-2 py-1.5 bg-white text-[#475569] focus:outline-none focus:ring-2 focus:ring-[#0284c7] cursor-pointer">
-        <option value="en">English</option>
-        <option value="fr">French</option>
-        <option value="nl">Dutch</option>
-        <option value="de">German</option>
-      </select>
-    </div>
+    <select id="lang-select" class="font-mono text-xs border border-[#e2e8f0] rounded-lg py-1.5 px-2 text-[#0f172a] bg-white focus:outline-none focus:ring-2 focus:ring-[#0284c7] cursor-pointer">
+      <option value="en">English</option>
+      <option value="fr">French</option>
+      <option value="nl">Dutch</option>
+      <option value="de">German</option>
+    </select>
   </div>
 </header>
 
-<!-- ============ MAIN PAGE CONTENT ============ -->
-<main class="px-4 md:px-6">
+<main class="pt-6 px-3 md:px-4">
 
-  <!-- 1. HERO / PROFILE SECTION -->
-  <section id="hero-section" class="w-full max-w-4xl mx-auto mt-6 mb-6 rounded-xl bg-white border border-[#e2e8f0] shadow-sm overflow-hidden">
-    <div id="hero-inner"
-         class="p-5 md:p-6 bg-[#f8fafc] bg-[radial-gradient(#0f172a_1px,transparent_1px)] [background-size:16px_16px] max-h-[35vh] md:max-h-none h-auto overflow-hidden md:overflow-visible">
+  <!-- ============ 1. HERO / PROFILE SECTION ============ -->
+  <section class="w-full max-w-4xl mx-auto my-4 p-4 md:p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <div class="flex items-start gap-3 md:gap-4">
+      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" alt="Lizi Zivzivadze" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-[#0284c7] object-cover shrink-0">
+      <div class="flex flex-col min-w-0 flex-1">
+        <h1 class="text-lg md:text-xl font-bold text-[#0f172a] leading-tight">Lizi Zivzivadze</h1>
+        <p class="font-mono text-[11px] md:text-xs text-[#0369a1] font-semibold tracking-wider mt-0.5">ELECTROMECHANICAL DESIGN ENGINEER</p>
 
-      <div class="flex items-start gap-4">
-        <img id="hero-avatar" src="" alt="Lizi Zivzivadze"
-             class="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-[#0284c7] object-cover shrink-0" />
-
-        <div class="flex-1 min-w-0">
-          <h1 id="hero-name" class="text-xl md:text-2xl font-bold text-[#0f172a] leading-tight"></h1>
-          <p id="hero-title" class="font-mono text-xs md:text-sm text-[#0369a1] font-semibold tracking-wider mt-0.5"></p>
-
-          <div id="hero-contacts" class="flex flex-wrap items-center gap-1.5 mt-2.5"></div>
+        <div class="flex flex-wrap items-center gap-1.5 mt-2.5">
+          <a href="tel:+32499221680" class="flex items-center gap-1 py-1 px-2.5 text-xs rounded-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-semibold transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24 11.36 11.36 0 003.57.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.36 11.36 0 00.57 3.57 1 1 0 01-.25 1.02l-2.2 2.2z"/></svg>
+            Call
+          </a>
+          <a href="https://wa.me/32499221680" target="_blank" rel="noopener" class="flex items-center gap-1 py-1 px-2.5 text-xs rounded-full bg-[#0d9488] hover:bg-[#0f766e] text-white font-semibold transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.34 4.99L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.9 9.9 0 0012.04 2zm5.8 14.14c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.8-.11a16.3 16.3 0 01-1.6-.59c-2.8-1.21-4.62-4.03-4.76-4.22-.14-.19-1.14-1.52-1.14-2.9 0-1.38.72-2.05.98-2.33.26-.28.56-.35.75-.35h.54c.17 0 .4-.06.63.48.24.55.8 1.9.87 2.04.07.14.12.3.02.49-.1.19-.15.3-.29.47-.14.16-.3.36-.43.48-.14.14-.29.29-.13.57.17.28.74 1.22 1.6 1.98 1.1.98 2.02 1.28 2.31 1.43.29.14.46.12.63-.07.17-.19.72-.83.91-1.12.19-.28.38-.24.63-.14.26.09 1.63.77 1.91.91.29.14.48.21.55.33.07.12.07.68-.17 1.36z"/></svg>
+            WhatsApp
+          </a>
+          <span class="py-1 px-2.5 text-xs rounded-full border border-[#e2e8f0] text-[#475569] font-mono">📍 Leuven, Belgium</span>
+          <a href="mailto:lizozivzivadze@gmail.com" class="py-1 px-2.5 text-xs rounded-full border border-[#e2e8f0] text-[#475569] font-mono hover:border-[#0284c7] hover:text-[#0284c7] transition-colors">lizozivzivadze@gmail.com</a>
+          <a href="https://www.linkedin.com/in/lizizivzivadze/" target="_blank" rel="noopener" class="py-1 px-2.5 text-xs rounded-full border border-[#e2e8f0] text-[#475569] font-mono hover:border-[#0284c7] hover:text-[#0284c7] transition-colors">LinkedIn</a>
+          <a href="https://github.com/lizozivzivadze-star" target="_blank" rel="noopener" class="py-1 px-2.5 text-xs rounded-full border border-[#e2e8f0] text-[#475569] font-mono hover:border-[#0284c7] hover:text-[#0284c7] transition-colors">GitHub</a>
         </div>
-      </div>
 
-      <p id="hero-statement" class="text-xs md:text-sm text-[#475569] mt-3 pt-3 border-t border-slate-100 line-clamp-3"></p>
+        <p class="text-xs md:text-sm text-[#475569] mt-2.5 pt-2 border-t border-slate-100 line-clamp-3">Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.</p>
+      </div>
     </div>
   </section>
 
-  <!-- 2. PROJECTS SECTION -->
-  <section id="projects-section" class="w-full max-w-4xl mx-auto my-6 p-6 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+  <!-- ============ 2. PROJECTS SECTION ============ -->
+  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
     <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">PROJECTS</h2>
     <div class="mb-5"></div>
 
-    <div id="project-tabs" class="flex items-center justify-center flex-wrap gap-2"></div>
-    <div class="mb-5"></div>
+    <div id="project-tabs" class="flex flex-wrap justify-center gap-2 mb-5">
+      <button data-cat="HardWare" class="proj-tab tab-btn font-mono text-xs py-2 px-4 rounded-full border border-[#e2e8f0] text-[#475569]">HardWare</button>
+      <button data-cat="SoftWare" class="proj-tab tab-btn font-mono text-xs py-2 px-4 rounded-full border border-[#e2e8f0] text-[#475569]">SoftWare</button>
+      <button data-cat="HW+SW" class="proj-tab tab-btn font-mono text-xs py-2 px-4 rounded-full bg-[#0284c7] text-white border border-[#0284c7]">HW+SW</button>
+    </div>
 
-    <div id="projects-track" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 custom-scrollbar"></div>
+    <div id="projects-container" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 custom-scrollbar"></div>
   </section>
 
-  <!-- 3. SKILLS SECTION -->
-  <section id="skills-section" class="w-full max-w-4xl mx-auto my-6 p-6 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+  <!-- ============ 3. SKILLS SECTION ============ -->
+  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
     <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">SKILLS</h2>
     <div class="mb-5"></div>
 
-    <div id="skill-tabs" class="flex overflow-x-auto gap-2 pb-2 whitespace-nowrap custom-scrollbar justify-start md:justify-center"></div>
+    <div id="skills-tabs" class="flex overflow-x-auto gap-2 pb-2 whitespace-nowrap custom-scrollbar justify-start md:justify-center mb-4"></div>
 
-    <div id="skills-container" class="max-h-[280px] overflow-y-auto border border-[#e2e8f0] rounded-lg p-4 bg-white custom-scrollbar relative mt-3">
-      <div id="skills-list" class="flex flex-col gap-4"></div>
-    </div>
+    <div id="skills-container" class="max-h-[280px] overflow-y-auto border border-[#e2e8f0] rounded-lg p-4 bg-white custom-scrollbar relative"></div>
     <div class="text-center text-[#0284c7] animate-bounce text-xs font-mono mt-1">↓ Scroll for more skills ↓</div>
   </section>
 
-  <!-- 4. WHAT DO I BRING TO THE TABLE -->
-  <section id="value-props-section" class="w-full max-w-4xl mx-auto my-6 p-6 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+  <!-- ============ 4. WHAT DO I BRING TO THE TABLE ============ -->
+  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
     <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">WHAT DO I BRING TO THE TABLE?</h2>
     <div class="mb-5"></div>
 
-    <div id="value-props-track" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 custom-scrollbar"></div>
+    <div id="valueprops-container" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 custom-scrollbar"></div>
   </section>
 
-  <!-- 5. DOCUMENT SECTION ("HELP YOURSELF") -->
-  <section id="documents-section" class="w-full max-w-4xl mx-auto my-6 p-6 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+  <!-- ============ 5. DOCUMENT SECTION ============ -->
+  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
     <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">HELP YOURSELF</h2>
     <div class="mb-5"></div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-      <button type="button" id="cv-card" data-doc="cv"
-              class="doc-card bg-white border border-[#e2e8f0] text-[#0f172a] cursor-pointer p-4 rounded-lg flex items-center justify-between font-semibold transition-all text-left">
-        <span class="flex items-center gap-2">
-          <span class="doc-icon shrink-0"></span>
-          CV Document
-        </span>
-        <span class="doc-check font-mono text-xs text-[#0284c7] hidden">✓ selected</span>
+      <button id="cv-card" data-selected="false" class="doc-card bg-white border border-[#e2e8f0] text-[#0f172a] cursor-pointer p-4 rounded-lg flex items-center justify-between font-semibold transition-all">
+        <span>CV Document</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#0284c7]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
       </button>
-
-      <button type="button" id="portfolio-card" data-doc="portfolio"
-              class="doc-card bg-white border border-[#e2e8f0] text-[#0f172a] cursor-pointer p-4 rounded-lg flex items-center justify-between font-semibold transition-all text-left">
-        <span class="flex items-center gap-2">
-          <span class="doc-icon shrink-0"></span>
-          Portfolio Document
-        </span>
-        <span class="doc-check font-mono text-xs text-[#0284c7] hidden">✓ selected</span>
+      <button id="portfolio-card" data-selected="false" class="doc-card bg-white border border-[#e2e8f0] text-[#0f172a] cursor-pointer p-4 rounded-lg flex items-center justify-between font-semibold transition-all">
+        <span>Portfolio Document</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#0284c7]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
       </button>
     </div>
 
     <div class="flex flex-col gap-3">
-      <input type="email" id="email-input" placeholder="your.email@example.com"
-             class="w-full p-3 border border-[#e2e8f0] rounded-lg font-mono text-sm text-[#0f172a] placeholder-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#0284c7]">
-      <button type="button" id="send-docs-btn"
-              class="w-full bg-[#0d9488] hover:bg-[#0f766e] text-white font-bold py-3 rounded-lg transition-colors">
-        Send Copies Now
-      </button>
+      <input type="email" id="email-input" placeholder="your.email@example.com" class="w-full p-3 border border-[#e2e8f0] rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#0284c7]">
+      <button id="send-docs-btn" class="w-full bg-[#0d9488] hover:bg-[#0f766e] text-white font-bold py-3 rounded-lg transition-colors">Send Copies Now</button>
     </div>
   </section>
 
-  <!-- 6. FOOTER -->
-  <footer class="w-full max-w-4xl mx-auto border-t border-[#e2e8f0] py-6 bg-white text-center rounded-b-xl">
-    <div class="flex flex-col items-center gap-1 font-mono text-xs text-[#475569]">
-      <div>2026 Lizi Zivzivadze</div>
-      <div class="flex items-center gap-2">
-        <span class="relative flex h-2.5 w-2.5">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-        </span>
-        <span>Junior Engineer ready for deployment</span>
-      </div>
-    </div>
-  </footer>
-
 </main>
 
+<!-- ============ FOOTER ============ -->
+<footer class="border-t border-[#e2e8f0] py-6 bg-white text-center">
+  <div class="flex flex-col items-center gap-1 font-mono text-xs text-[#475569]">
+    <div>2026 Lizi Zivzivadze</div>
+    <div class="flex items-center gap-2">
+      <span class="relative flex h-2.5 w-2.5">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+      </span>
+      <span>Junior Engineer ready for deployment</span>
+    </div>
+  </div>
+</footer>
+
 <!-- ============ VIDEO MODAL ============ -->
-<div id="video-modal" class="hidden fixed inset-0 bg-black/80 z-[60] items-center justify-center p-4">
-  <div class="relative w-full max-w-3xl">
-    <button id="video-modal-close" type="button" aria-label="Close video"
-            class="absolute -top-10 right-0 md:top-0 md:-right-10 text-white/90 hover:text-white p-2">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-    </button>
-    <div id="video-modal-frame-wrap" class="w-full rounded-lg overflow-hidden bg-black">
-      <iframe id="video-modal-frame" class="w-full h-full" src="" title="Project video" frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div id="video-modal" class="fixed inset-0 z-[100] hidden items-center justify-center modal-backdrop p-4">
+  <div class="bg-black rounded-lg overflow-hidden w-full max-w-2xl relative">
+    <button id="close-video-modal" class="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-white/90 hover:bg-white flex items-center justify-center text-[#0f172a] font-bold">✕</button>
+    <div class="aspect-video">
+      <iframe id="video-modal-iframe" class="w-full h-full" src="" title="Project video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
   </div>
 </div>
 
 <!-- ============ TOAST CONTAINER ============ -->
-<div id="toast-container" class="fixed bottom-4 right-4 z-[70] flex flex-col gap-2 items-end"></div>
+<div id="toast-container" class="fixed bottom-4 right-4 z-[200] flex flex-col gap-2 items-end"></div>
 
 <script>
-(function () {
+(function(){
   "use strict";
 
-  /* ==================================================
-     SINGLE SOURCE OF TRUTH (IMMUTABLE DATA ENGINE)
-  ================================================== */
   const PORTFOLIO_DATA = {
     personal: {
       name: "Lizi Zivzivadze",
@@ -343,387 +281,250 @@
     ]
   };
 
-  /* ==================================================
-     ICONS (inline SVG, no external icon library)
-  ================================================== */
-  const ICONS = {
-    phone: '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>',
-    whatsapp: '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"></path><path d="M12.012 2.001c-5.514 0-9.99 4.476-9.99 9.99 0 1.762.462 3.484 1.34 5.004L2 22l5.117-1.334a9.96 9.96 0 0 0 4.895 1.246h.004c5.514 0 9.99-4.476 9.99-9.989 0-2.669-1.038-5.176-2.924-7.063a9.933 9.933 0 0 0-7.07-2.859zm0 18.15h-.003a8.15 8.15 0 0 1-4.156-1.138l-.298-.177-3.037.791.811-2.96-.194-.304a8.15 8.15 0 0 1-1.253-4.372c0-4.507 3.669-8.176 8.184-8.176a8.13 8.13 0 0 1 5.786 2.398 8.13 8.13 0 0 1 2.395 5.787c0 4.507-3.67 8.15-8.235 8.15z"></path></svg>',
-    mappin: '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>',
-    mail: '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>',
-    linkedin: '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.114 20.452H3.558V9h3.556v11.452z"></path></svg>',
-    github: '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.303-5.467-1.334-5.467-5.93 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23a11.5 11.5 0 0 1 3.003-.404c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.814 1.103.814 2.222 0 1.604-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg>',
-    external: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>',
-    play: '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>',
-    document: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>'
-  };
-
-  /* ==================================================
-     STATE
-  ================================================== */
+  // ---------- STATE ----------
   const state = {
     projectFilter: "HW+SW",
     skillCategory: "Electronics",
     cvSelected: false,
     portfolioSelected: false,
-    language: "en"
+    lang: "en"
   };
 
-  /* ==================================================
-     UTIL
-  ================================================== */
-  function escapeHtml(str) {
-    const div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
+  // ---------- HELPERS ----------
+  function el(tag, className, html){
+    const e = document.createElement(tag);
+    if(className) e.className = className;
+    if(html !== undefined) e.innerHTML = html;
+    return e;
   }
 
-  function toTitleCase(name) {
-    return name
-      .split(" ")
-      .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-      .join(" ");
+  function escapeHtml(str){
+    const d = document.createElement("div");
+    d.textContent = str;
+    return d.innerHTML;
   }
 
-  /* ==================================================
-     RENDER: HERO / STICKY HEADER
-  ================================================== */
-  function renderHero() {
-    const p = PORTFOLIO_DATA.personal;
-
-    document.getElementById("hero-avatar").src = p.avatarUrl;
-    document.getElementById("hero-avatar").alt = p.name;
-    document.getElementById("sticky-avatar").src = p.avatarUrl;
-
-    document.getElementById("hero-name").textContent = toTitleCase(p.name);
-    document.getElementById("hero-title").textContent = p.title;
-    document.getElementById("hero-statement").textContent = p.statement;
-
-    const telHref = "tel:" + p.phone.replace(/\s+/g, "");
-
-    const contactsHtml = `
-      <a href="${telHref}"
-         class="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-white bg-[#0284c7] hover:bg-[#0369a1] rounded-full px-3 py-1.5 transition-colors">
-        ${ICONS.phone}<span>Call</span>
-      </a>
-      <a href="${p.whatsapp}" target="_blank" rel="noopener noreferrer"
-         class="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-white bg-[#0d9488] hover:bg-[#0f766e] rounded-full px-3 py-1.5 transition-colors">
-        ${ICONS.whatsapp}<span>WhatsApp</span>
-      </a>
-      <span class="inline-flex items-center gap-1 text-[10px] md:text-xs font-mono text-[#475569] bg-[#f1f5f9] border border-[#e2e8f0] rounded-full px-2.5 py-1.5">
-        ${ICONS.mappin}<span>${escapeHtml(p.location)}</span>
-      </span>
-      <a href="mailto:${p.email}"
-         class="inline-flex items-center gap-1 text-[10px] md:text-xs font-mono text-[#475569] bg-[#f1f5f9] border border-[#e2e8f0] rounded-full px-2.5 py-1.5 hover:border-[#0284c7] hover:text-[#0284c7] transition-colors">
-        ${ICONS.mail}<span>${escapeHtml(p.email)}</span>
-      </a>
-      <a href="${p.linkedin}" target="_blank" rel="noopener noreferrer"
-         class="inline-flex items-center gap-1 text-[10px] md:text-xs font-mono text-[#475569] bg-[#f1f5f9] border border-[#e2e8f0] rounded-full px-2.5 py-1.5 hover:border-[#0284c7] hover:text-[#0284c7] transition-colors">
-        ${ICONS.linkedin}<span>LinkedIn</span>
-      </a>
-      <a href="${p.github}" target="_blank" rel="noopener noreferrer"
-         class="inline-flex items-center gap-1 text-[10px] md:text-xs font-mono text-[#475569] bg-[#f1f5f9] border border-[#e2e8f0] rounded-full px-2.5 py-1.5 hover:border-[#0284c7] hover:text-[#0284c7] transition-colors">
-        ${ICONS.github}<span>GitHub</span>
-      </a>
-    `;
-    document.getElementById("hero-contacts").innerHTML = contactsHtml;
+  // ---------- STICKY HEADER ----------
+  const stickyHeader = document.getElementById("sticky-header");
+  function onScroll(){
+    if(window.scrollY > 100){
+      stickyHeader.classList.remove("-translate-y-full", "opacity-0");
+    } else {
+      stickyHeader.classList.add("-translate-y-full", "opacity-0");
+    }
   }
+  window.addEventListener("scroll", onScroll, { passive: true });
 
-  /* ==================================================
-     RENDER: PROJECTS
-  ================================================== */
-  const PROJECT_TABS = ["HardWare", "SoftWare", "HW+SW"];
+  // ---------- LANGUAGE SELECTOR ----------
+  const langSelect = document.getElementById("lang-select");
+  langSelect.addEventListener("change", function(){
+    state.lang = langSelect.value;
+    showToast("Language set to " + langSelect.options[langSelect.selectedIndex].text, "info");
+  });
 
-  function projectMatchesFilter(project, filter) {
-    if (filter === "HW+SW") return true;
-    if (filter === "HardWare") return project.category === "HardWare" || project.category === "HW+SW";
-    if (filter === "SoftWare") return project.category === "SoftWare" || project.category === "HW+SW";
+  // ---------- PROJECTS ----------
+  const projectsContainer = document.getElementById("projects-container");
+  const projectTabs = document.querySelectorAll(".proj-tab");
+
+  function matchesFilter(project, filter){
+    if(filter === "HW+SW") return true;
+    if(filter === "HardWare") return project.category === "HardWare" || project.category === "HW+SW";
+    if(filter === "SoftWare") return project.category === "SoftWare" || project.category === "HW+SW";
     return true;
   }
 
-  function renderProjectTabs() {
-    const track = document.getElementById("project-tabs");
-    track.innerHTML = PROJECT_TABS.map(tab => {
-      const active = state.projectFilter === tab;
-      const cls = active
-        ? "bg-[#0284c7] text-white border-[#0284c7]"
-        : "bg-white text-[#475569] border-[#e2e8f0] hover:border-[#0284c7] hover:text-[#0284c7]";
-      return `<button type="button" data-filter="${tab}"
-                class="tab-btn font-mono text-xs md:text-sm font-semibold border rounded-full px-4 py-1.5 ${cls}">
-                ${tab}
-              </button>`;
-    }).join("");
-
-    track.querySelectorAll("button[data-filter]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        state.projectFilter = btn.getAttribute("data-filter");
-        renderProjectTabs();
-        renderProjects();
-      });
-    });
-  }
-
-  function renderProjects() {
-    const wrap = document.getElementById("projects-track");
-    const filtered = PORTFOLIO_DATA.projects.filter(p => projectMatchesFilter(p, state.projectFilter));
-
-    wrap.innerHTML = filtered.map(project => `
-      <div class="w-[280px] md:w-[320px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between">
+  function renderProjects(){
+    projectsContainer.innerHTML = "";
+    const filtered = PORTFOLIO_DATA.projects.filter(p => matchesFilter(p, state.projectFilter));
+    filtered.forEach(project => {
+      const card = el("div", "w-[280px] md:w-[320px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between");
+      card.innerHTML = `
         <div>
-          <div class="aspect-video relative rounded bg-slate-900 overflow-hidden flex items-center justify-center cursor-pointer group"
-               data-video="${escapeHtml(project.videoUrl)}">
-            <span class="text-white/90 group-hover:text-white group-hover:scale-110 transition-transform">${ICONS.play}</span>
-            <span class="absolute top-2 left-2 font-mono text-[10px] tracking-wider text-white/90 bg-black/40 border border-white/20 rounded px-1.5 py-0.5">${escapeHtml(project.category)}</span>
+          <div class="aspect-video relative rounded bg-slate-900 overflow-hidden flex items-center justify-center cursor-pointer group video-trigger" data-video="${escapeHtml(project.videoUrl)}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-white/80 group-hover:text-white group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <span class="absolute bottom-2 right-2 font-mono text-[10px] text-white/70 bg-black/40 px-1.5 py-0.5 rounded">${escapeHtml(project.category)}</span>
           </div>
-          <h3 class="font-bold text-[#0f172a] text-base mt-3 mb-1 line-clamp-1">${escapeHtml(project.title)}</h3>
+          <h3 class="font-bold text-[#0f172a] mt-3 mb-1 line-clamp-1">${escapeHtml(project.title)}</h3>
           <p class="line-clamp-2 text-xs md:text-sm text-[#475569] mb-4">${escapeHtml(project.summary)}</p>
         </div>
-        <a href="${project.links.url}" target="_blank" rel="noopener noreferrer"
-           class="inline-flex items-center justify-center gap-1.5 w-full font-mono text-xs font-semibold text-white bg-[#0284c7] hover:bg-[#0369a1] rounded-lg px-3 py-2 transition-colors">
-          ${ICONS.external}<span>Visit / View Project</span>
-        </a>
-      </div>
-    `).join("");
-
-    wrap.querySelectorAll("[data-video]").forEach(el => {
-      el.addEventListener("click", () => openVideoModal(el.getAttribute("data-video")));
+        <a href="${escapeHtml(project.links.url)}" target="_blank" rel="noopener" class="w-full text-center bg-[#0284c7] hover:bg-[#0369a1] text-white font-semibold text-xs md:text-sm py-2.5 rounded-lg transition-colors">Visit / View Project</a>
+      `;
+      projectsContainer.appendChild(card);
     });
   }
 
-  /* ==================================================
-     RENDER: SKILLS
-  ================================================== */
-  function renderSkillTabs() {
-    const categories = Object.keys(PORTFOLIO_DATA.skills);
-    const track = document.getElementById("skill-tabs");
-    track.innerHTML = categories.map(cat => {
-      const active = state.skillCategory === cat;
-      const cls = active
-        ? "bg-[#0284c7] text-white border-[#0284c7]"
-        : "bg-white text-[#475569] border-[#e2e8f0] hover:border-[#0284c7] hover:text-[#0284c7]";
-      return `<button type="button" data-cat="${escapeHtml(cat)}"
-                class="tab-btn font-mono text-xs md:text-sm font-semibold border rounded-full px-4 py-1.5 shrink-0 ${cls}">
-                ${escapeHtml(cat)}
-              </button>`;
-    }).join("");
-
-    track.querySelectorAll("button[data-cat]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        state.skillCategory = btn.getAttribute("data-cat");
-        renderSkillTabs();
-        renderSkills();
-        document.getElementById("skills-container").scrollTop = 0;
+  projectTabs.forEach(btn => {
+    btn.addEventListener("click", function(){
+      state.projectFilter = btn.dataset.cat;
+      projectTabs.forEach(b => {
+        b.classList.remove("bg-[#0284c7]", "text-white", "border-[#0284c7]");
+        b.classList.add("border-[#e2e8f0]", "text-[#475569]");
       });
+      btn.classList.remove("border-[#e2e8f0]", "text-[#475569]");
+      btn.classList.add("bg-[#0284c7]", "text-white", "border-[#0284c7]");
+      renderProjects();
+    });
+  });
+
+  // ---------- VIDEO MODAL ----------
+  const videoModal = document.getElementById("video-modal");
+  const videoModalIframe = document.getElementById("video-modal-iframe");
+  const closeVideoModalBtn = document.getElementById("close-video-modal");
+
+  projectsContainer.addEventListener("click", function(e){
+    const trigger = e.target.closest(".video-trigger");
+    if(!trigger) return;
+    videoModalIframe.src = trigger.dataset.video + "?autoplay=1";
+    videoModal.classList.remove("hidden");
+    videoModal.classList.add("flex");
+  });
+
+  function closeVideoModal(){
+    videoModal.classList.add("hidden");
+    videoModal.classList.remove("flex");
+    videoModalIframe.src = "";
+  }
+  closeVideoModalBtn.addEventListener("click", closeVideoModal);
+  videoModal.addEventListener("click", function(e){
+    if(e.target === videoModal) closeVideoModal();
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape") closeVideoModal();
+  });
+
+  // ---------- SKILLS ----------
+  const skillsTabsContainer = document.getElementById("skills-tabs");
+  const skillsContainer = document.getElementById("skills-container");
+  const skillCategories = Object.keys(PORTFOLIO_DATA.skills);
+
+  function renderSkillTabs(){
+    skillsTabsContainer.innerHTML = "";
+    skillCategories.forEach(cat => {
+      const btn = el("button", "skill-tab tab-btn font-mono text-xs py-2 px-4 rounded-full border shrink-0 " +
+        (cat === state.skillCategory
+          ? "bg-[#0284c7] text-white border-[#0284c7]"
+          : "border-[#e2e8f0] text-[#475569]"), escapeHtml(cat));
+      btn.dataset.cat = cat;
+      btn.addEventListener("click", function(){
+        state.skillCategory = cat;
+        renderSkillTabs();
+        renderSkillsList();
+      });
+      skillsTabsContainer.appendChild(btn);
     });
   }
 
-  function renderSkills() {
-    const list = document.getElementById("skills-list");
-    const skills = PORTFOLIO_DATA.skills[state.skillCategory] || [];
-
-    list.innerHTML = skills.map(skill => `
-      <div>
-        <div class="flex items-center justify-between mb-1.5">
+  function renderSkillsList(){
+    skillsContainer.innerHTML = "";
+    const list = PORTFOLIO_DATA.skills[state.skillCategory] || [];
+    list.forEach(skill => {
+      const row = el("div", "mb-4 last:mb-0");
+      row.innerHTML = `
+        <div class="flex items-center justify-between mb-1">
           <span class="text-sm text-[#0f172a] font-medium">${escapeHtml(skill.name)}</span>
           <span class="font-mono text-xs text-[#0284c7] font-semibold">${skill.level}%</span>
         </div>
         <div class="h-2 rounded-full bg-[#f1f5f9] overflow-hidden">
           <div class="h-2 rounded-full bg-[#0284c7]" style="width:${skill.level}%"></div>
         </div>
-      </div>
-    `).join("");
-  }
-
-  /* ==================================================
-     RENDER: VALUE PROPS
-  ================================================== */
-  function renderValueProps() {
-    const track = document.getElementById("value-props-track");
-    track.innerHTML = PORTFOLIO_DATA.valueProps.map((vp, i) => `
-      <div class="shrink-0 w-[280px] snap-start bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-5 flex flex-col justify-between">
-        <div>
-          <h3 class="font-bold text-[#0f172a] text-base">Reason #${i + 1}: ${escapeHtml(vp.title)}</h3>
-          <p class="font-mono text-xs text-[#475569] mt-2">${escapeHtml(vp.text)}</p>
-        </div>
-      </div>
-    `).join("");
-  }
-
-  /* ==================================================
-     VIDEO MODAL
-  ================================================== */
-  function openVideoModal(url) {
-    const modal = document.getElementById("video-modal");
-    const frame = document.getElementById("video-modal-frame");
-    frame.src = url + (url.includes("?") ? "&" : "?") + "autoplay=1";
-    modal.classList.remove("hidden");
-    modal.classList.add("flex");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeVideoModal() {
-    const modal = document.getElementById("video-modal");
-    const frame = document.getElementById("video-modal-frame");
-    modal.classList.add("hidden");
-    modal.classList.remove("flex");
-    frame.src = "";
-    document.body.style.overflow = "";
-  }
-
-  /* ==================================================
-     DOCUMENT SELECTION + EMAIL SEND
-  ================================================== */
-  function updateDocCardUI() {
-    const cvCard = document.getElementById("cv-card");
-    const portfolioCard = document.getElementById("portfolio-card");
-
-    [
-      [cvCard, state.cvSelected],
-      [portfolioCard, state.portfolioSelected]
-    ].forEach(([card, selected]) => {
-      const check = card.querySelector(".doc-check");
-      if (selected) {
-        card.classList.add("border-2", "border-[#0284c7]", "bg-[#f0f9ff]");
-        card.classList.remove("border", "border-[#e2e8f0]", "bg-white");
-        check.classList.remove("hidden");
-      } else {
-        card.classList.remove("border-2", "border-[#0284c7]", "bg-[#f0f9ff]");
-        card.classList.add("border", "border-[#e2e8f0]", "bg-white");
-        check.classList.add("hidden");
-      }
+      `;
+      skillsContainer.appendChild(row);
     });
   }
 
-  function isValidEmail(value) {
+  // ---------- VALUE PROPS ----------
+  const valuePropsContainer = document.getElementById("valueprops-container");
+  function renderValueProps(){
+    valuePropsContainer.innerHTML = "";
+    PORTFOLIO_DATA.valueProps.forEach((vp, idx) => {
+      const card = el("div", "shrink-0 w-[280px] snap-start bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-5 flex flex-col justify-between");
+      card.innerHTML = `
+        <h3 class="font-bold text-[16px] text-[#0f172a]">Reason #${idx + 1}: ${escapeHtml(vp.title)}</h3>
+        <p class="font-mono text-xs text-[#475569] mt-2">${escapeHtml(vp.text)}</p>
+      `;
+      valuePropsContainer.appendChild(card);
+    });
+  }
+
+  // ---------- DOCUMENT SECTION ----------
+  const cvCard = document.getElementById("cv-card");
+  const portfolioCard = document.getElementById("portfolio-card");
+  const emailInput = document.getElementById("email-input");
+  const sendDocsBtn = document.getElementById("send-docs-btn");
+
+  function updateDocCard(cardEl, selected){
+    if(selected){
+      cardEl.classList.add("border-2", "border-[#0284c7]", "bg-[#f0f9ff]");
+      cardEl.classList.remove("border", "border-[#e2e8f0]");
+    } else {
+      cardEl.classList.remove("border-2", "border-[#0284c7]", "bg-[#f0f9ff]");
+      cardEl.classList.add("border", "border-[#e2e8f0]");
+    }
+  }
+
+  cvCard.addEventListener("click", function(){
+    state.cvSelected = !state.cvSelected;
+    updateDocCard(cvCard, state.cvSelected);
+  });
+
+  portfolioCard.addEventListener("click", function(){
+    state.portfolioSelected = !state.portfolioSelected;
+    updateDocCard(portfolioCard, state.portfolioSelected);
+  });
+
+  function isValidEmail(value){
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   }
 
-  function handleSendDocs() {
-    const emailInput = document.getElementById("email-input");
-    const email = emailInput.value.trim();
-
-    if (!state.cvSelected && !state.portfolioSelected) {
+  sendDocsBtn.addEventListener("click", function(){
+    if(!state.cvSelected && !state.portfolioSelected){
       showToast("Please select at least one document to send.", "warn");
       return;
     }
-    if (!email || !isValidEmail(email)) {
+    const emailVal = emailInput.value.trim();
+    if(!isValidEmail(emailVal)){
       showToast("Please enter a valid email address.", "warn");
       return;
     }
-
     const selectedItems = [];
-    if (state.cvSelected) selectedItems.push("CV Document");
-    if (state.portfolioSelected) selectedItems.push("Portfolio Document");
+    if(state.cvSelected) selectedItems.push("CV Document");
+    if(state.portfolioSelected) selectedItems.push("Portfolio Document");
 
-    showToast(`Notification: Dispatched ${selectedItems.join(" & ")} to ${email}`, "success");
+    showToast(`Notification: Dispatched ${selectedItems.join(" & ")} to ${emailVal}`, "success");
 
+    // reset form
     state.cvSelected = false;
     state.portfolioSelected = false;
-    updateDocCardUI();
+    updateDocCard(cvCard, false);
+    updateDocCard(portfolioCard, false);
     emailInput.value = "";
-  }
+  });
 
-  /* ==================================================
-     TOASTS
-  ================================================== */
-  function showToast(message, type) {
-    const container = document.getElementById("toast-container");
-    const toast = document.createElement("div");
-
-    const colorMap = {
-      success: "border-[#0d9488] text-[#0f766e]",
-      warn: "border-[#0284c7] text-[#0369a1]",
-      info: "border-[#e2e8f0] text-[#475569]"
+  // ---------- TOAST SYSTEM ----------
+  const toastContainer = document.getElementById("toast-container");
+  function showToast(message, type){
+    const colors = {
+      success: "bg-[#0d9488]",
+      warn: "bg-[#b45309]",
+      info: "bg-[#0284c7]"
     };
-    const colorCls = colorMap[type] || colorMap.info;
-
-    toast.className = `toast-item bg-white border ${colorCls} rounded-lg shadow-lg px-4 py-3 text-xs md:text-sm font-mono max-w-xs`;
-    toast.textContent = message;
-    container.appendChild(toast);
-
+    const bg = colors[type] || colors.info;
+    const toast = el("div", `toast-enter ${bg} text-white text-sm font-medium px-4 py-3 rounded-lg shadow-lg max-w-xs`, escapeHtml(message));
+    toastContainer.appendChild(toast);
     setTimeout(() => {
-      toast.classList.remove("toast-item");
-      toast.classList.add("toast-out");
-      setTimeout(() => toast.remove(), 220);
+      toast.classList.remove("toast-enter");
+      toast.classList.add("toast-leave");
+      setTimeout(() => toast.remove(), 250);
     }, 3200);
   }
 
-  /* ==================================================
-     STICKY HEADER SCROLL BEHAVIOR
-  ================================================== */
-  function bindScrollBehavior() {
-    const header = document.getElementById("sticky-header");
-    let ticking = false;
-
-    window.addEventListener("scroll", () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (window.scrollY > 100) {
-            header.classList.add("visible");
-          } else {
-            header.classList.remove("visible");
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    });
-  }
-
-  /* ==================================================
-     EVENT BINDING
-  ================================================== */
-  function bindStaticEvents() {
-    document.getElementById("video-modal-close").addEventListener("click", closeVideoModal);
-    document.getElementById("video-modal").addEventListener("click", (e) => {
-      if (e.target.id === "video-modal") closeVideoModal();
-    });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeVideoModal();
-    });
-
-    document.getElementById("cv-card").addEventListener("click", () => {
-      state.cvSelected = !state.cvSelected;
-      updateDocCardUI();
-    });
-    document.getElementById("portfolio-card").addEventListener("click", () => {
-      state.portfolioSelected = !state.portfolioSelected;
-      updateDocCardUI();
-    });
-    document.getElementById("send-docs-btn").addEventListener("click", handleSendDocs);
-
-    document.getElementById("language-select").addEventListener("change", (e) => {
-      state.language = e.target.value;
-      const labels = { en: "English", fr: "French", nl: "Dutch", de: "German" };
-      showToast(`Language set to ${labels[state.language] || state.language}`, "info");
-    });
-
-    document.querySelectorAll(".doc-icon").forEach(el => {
-      el.innerHTML = ICONS.document;
-    });
-  }
-
-  /* ==================================================
-     INIT
-  ================================================== */
-  function init() {
-    renderHero();
-    renderProjectTabs();
-    renderProjects();
-    renderSkillTabs();
-    renderSkills();
-    renderValueProps();
-    updateDocCardUI();
-    bindStaticEvents();
-    bindScrollBehavior();
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
+  // ---------- INIT ----------
+  renderProjects();
+  renderSkillTabs();
+  renderSkillsList();
+  renderValueProps();
 })();
 </script>
+
 </body>
 </html>
