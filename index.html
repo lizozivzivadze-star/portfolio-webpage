@@ -2,196 +2,116 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Lizi Zivzivadze — Electromechanical Design Engineer</title>
-<script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace']
+        },
+        colors: {
+          brand: {
+            blue: '#0284c7',
+            blueHover: '#0369a1',
+            teal: '#0d9488'
+          },
+          ink: {
+            900: '#0f172a',
+            600: '#475569'
+          }
+        }
+      }
+    }
+  };
+</script>
 <style>
-  :root {
-    --accent: #0284c7;
-    --accent-hover: #0369a1;
-    --teal: #0d9488;
-    --ink: #0f172a;
-    --muted: #475569;
-    --bg: #f8fafc;
-    --border: #e2e8f0;
+  html, body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
   }
-  html { scroll-behavior: smooth; }
+  * { box-sizing: border-box; }
   body {
-    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    background-color: var(--bg);
+    background-color: #f8fafc;
     background-image:
-      linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+      linear-gradient(to right, rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
     background-size: 24px 24px;
-    color: var(--ink);
+    overflow-x: hidden;
+    width: 100%;
+    -webkit-text-size-adjust: 100%;
   }
-  .font-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
-
-  .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+  .custom-scrollbar::-webkit-scrollbar { height: 8px; width: 8px; }
   .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
   .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 9999px; }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #94a3b8; }
   .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
 
   .shadow-xs { box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.04); }
 
-  .header-hidden { transform: translateY(-100%); opacity: 0; pointer-events: none; }
-  .header-visible { transform: translateY(0); opacity: 1; }
+  .snap-x { scroll-snap-type: x mandatory; }
+  .snap-start { scroll-snap-align: start; }
 
-  .skill-bar-track { background: #eef2f7; }
-  .skill-bar-fill { background: linear-gradient(90deg, var(--accent), var(--teal)); }
-
-  .tab-btn { transition: background-color .18s ease, color .18s ease, border-color .18s ease; }
-  .subtab-btn.active { background: var(--ink); color: #fff; }
-
-  .toast-enter { animation: toastIn .25s ease forwards; }
-  @keyframes toastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(12px); } }
-  .toast-exit { animation: toastOut .25s ease forwards; }
-
-  .modal-backdrop { background: rgba(15, 23, 42, 0.72); }
-
-  .online-dot {
-    box-shadow: 0 0 0 0 rgba(16,185,129,0.55);
-    animation: dotPulse 1.8s infinite;
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.55); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(34, 197, 94, 0); }
   }
-  @keyframes dotPulse {
-    0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.55); }
-    70% { box-shadow: 0 0 0 7px rgba(16,185,129,0); }
-    100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+  .pulse-dot { animation: pulseDot 1.8s ease-in-out infinite; }
+
+  .toast-enter {
+    animation: toastIn 0.25s ease-out forwards;
+  }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translate(-50%, 12px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
   }
 
-  .chip {
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  input:focus, button:focus, a:focus {
+    outline: 2px solid #0284c7;
+    outline-offset: 2px;
   }
-
-  ::selection { background: #bae6fd; color: var(--ink); }
 </style>
 </head>
-<body class="min-h-screen pb-24">
+<body class="text-ink-900 font-sans pb-24">
 
-<!-- STICKY HEADER (appears after 100px scroll) -->
-<header id="sticky-header" class="header-hidden fixed top-0 left-0 w-full h-14 bg-white/95 backdrop-blur border-b border-[#e2e8f0] z-50 transition-all duration-300">
+<!-- ================= STICKY HEADER ================= -->
+<header id="site-header" class="fixed top-0 left-0 w-full h-14 bg-white/95 backdrop-blur border-b border-[#e2e8f0] z-50 transition-all duration-300 opacity-0 -translate-y-full pointer-events-none">
   <div class="max-w-4xl mx-auto h-full px-4 flex items-center justify-between">
-    <div class="flex items-center gap-2 font-bold text-[#0f172a]">
+    <div class="flex items-center gap-2 font-bold text-[#0f172a] text-[16px]">
       <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" alt="Lizi Zivzivadze" class="w-8 h-8 rounded-full object-cover border border-[#e2e8f0]">
-      <span class="text-sm">Lizi Zivzivadze</span>
+      <span>Lizi Zivzivadze</span>
     </div>
-    <span class="font-mono text-[10px] md:text-xs font-semibold tracking-wider text-[#0369a1] bg-[#f0f9ff] border border-[#bae6fd] rounded-md px-2 py-1">ELECTROMECHANICAL ENGINEER</span>
+    <div class="text-[13px] font-mono text-[#0369a1] font-semibold tracking-wide">ELECTROMECHANICAL ENGINEER</div>
   </div>
 </header>
 
-<main class="px-3 md:px-4 pt-6">
+<main id="app" class="pt-4"></main>
 
-  <!-- HERO / PROFILE SECTION -->
-  <section class="w-full max-w-4xl mx-auto my-4 p-4 md:p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-    <div class="flex items-start gap-3 md:gap-4">
-      <img id="hero-avatar" src="" alt="Lizi Zivzivadze" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-[#0284c7] object-cover shrink-0">
-      <div class="min-w-0 flex-1">
-        <h1 id="hero-name" class="text-lg md:text-xl font-bold text-[#0f172a] break-words"></h1>
-        <p id="hero-title" class="font-mono text-[11px] md:text-xs text-[#0369a1] font-semibold tracking-wider mt-0.5"></p>
-        <div id="hero-contacts" class="flex items-center justify-between max-w-[280px] sm:max-w-xs mt-2.5"></div>
-      </div>
-    </div>
-    <p id="hero-statement" class="w-full text-xs md:text-sm text-[#0f172a] font-medium mt-3.5 pt-3 border-t border-slate-100 leading-relaxed"></p>
-  </section>
+<!-- ================= TOAST CONTAINER ================= -->
+<div id="toast-root" class="fixed bottom-24 left-1/2 z-[60]"></div>
 
-  <!-- PROJECTS SECTION -->
-  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
-    <div>
-      <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">PROJECTS</h2>
-      <div id="project-filter-tabs" class="flex items-center justify-center gap-2 mt-4 flex-wrap"></div>
-      <div id="project-cards" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 custom-scrollbar mt-5"></div>
-    </div>
-  </section>
-
-  <!-- SKILLS SECTION -->
-  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
-    <div>
-      <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">SKILLS</h2>
-      <div id="skill-category-tabs" class="flex items-center gap-2 mt-4 overflow-x-auto custom-scrollbar pb-1"></div>
-      <div id="skill-list" class="max-h-[280px] overflow-y-auto border border-[#e2e8f0] rounded-lg p-4 bg-white custom-scrollbar mt-4 space-y-3"></div>
-      <div class="text-center text-[#0284c7] animate-bounce text-xs font-mono mt-3">↓ Scroll for more skills ↓</div>
-    </div>
-  </section>
-
-  <!-- EVENTS SECTION -->
-  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
-    <div>
-      <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">EVENTS</h2>
-      <div id="event-cards" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 custom-scrollbar mt-5"></div>
-    </div>
-  </section>
-
-  <!-- WHAT DO I BRING TO THE TABLE -->
-  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
-    <div>
-      <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">WHAT DO I BRING TO THE TABLE?</h2>
-      <div id="value-props" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 custom-scrollbar mt-5"></div>
-    </div>
-  </section>
-
-  <!-- HELP YOURSELF (DOCUMENT SECTION) -->
-  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
-    <div>
-      <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">HELP YOURSELF</h2>
-      <div class="grid grid-cols-2 gap-3 mt-5">
-        <button id="cv-doc-card" data-selected="false" class="text-left border border-[#e2e8f0] rounded-lg p-4 transition-all duration-150">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#0284c7]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg>
-          <p class="font-bold text-sm text-[#0f172a] mt-2">CV Document</p>
-          <p class="text-xs text-[#475569] mt-0.5">Single-page resume PDF</p>
-        </button>
-        <button id="portfolio-doc-card" data-selected="false" class="text-left border border-[#e2e8f0] rounded-lg p-4 transition-all duration-150">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#0d9488]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M8 4v6"/></svg>
-          <p class="font-bold text-sm text-[#0f172a] mt-2">Portfolio Document</p>
-          <p class="text-xs text-[#475569] mt-0.5">Full project breakdown PDF</p>
-        </button>
-      </div>
-      <div class="mt-4 flex flex-col sm:flex-row gap-2">
-        <input id="doc-email-input" type="email" placeholder="your.email@example.com" class="flex-1 text-sm px-3 py-2.5 rounded-lg border border-[#e2e8f0] bg-white text-[#0f172a] placeholder-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#0284c7] focus:border-transparent">
-        <button id="send-docs-btn" class="text-sm font-semibold px-4 py-2.5 rounded-lg bg-[#0284c7] text-white hover:bg-[#0369a1] transition-colors">Send Copies Now</button>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<!-- STICKY FOOTER -->
-<footer class="fixed bottom-0 left-0 w-full bg-white border-t border-[#e2e8f0] py-3 text-center z-40 shadow-md">
-  <div class="font-mono text-[12px] leading-tight">
-    <p class="text-[#0f172a] font-semibold">2026 Lizi Zivzivadze</p>
-    <p class="flex items-center justify-center gap-1.5 text-[#475569] mt-0.5">
-      <span class="w-2 h-2 rounded-full bg-emerald-500 online-dot"></span>
-      Junior Engineer ready for deployment
-    </p>
+<!-- ================= STICKY FOOTER ================= -->
+<footer class="fixed bottom-0 left-0 w-full bg-white border-t border-[#e2e8f0] py-2.5 text-center z-40 shadow-md">
+  <div class="text-[13px] font-mono text-[#0f172a]">2026 Lizi Zivzivadze</div>
+  <div class="text-[13px] font-mono text-[#475569] flex items-center justify-center gap-1.5 mt-0.5">
+    <span class="inline-block w-2 h-2 rounded-full bg-green-500 pulse-dot"></span>
+    <span>Junior Engineer ready for deployment</span>
   </div>
 </footer>
 
-<!-- VIDEO MODAL -->
-<div id="video-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 modal-backdrop">
-  <div class="w-full max-w-2xl">
-    <div class="flex justify-end mb-2">
-      <button id="video-modal-close" class="text-white/90 hover:text-white text-sm font-mono border border-white/30 rounded-md px-3 py-1">✕ Close</button>
-    </div>
-    <div class="aspect-video rounded-lg overflow-hidden bg-black">
-      <iframe id="video-modal-iframe" class="w-full h-full" src="" title="Project video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST CONTAINER -->
-<div id="toast-container" class="fixed bottom-20 right-4 z-[70] flex flex-col gap-2 items-end"></div>
-
 <script>
-// ==================================================
-// SINGLE SOURCE OF TRUTH (IMMUTABLE DATA ENGINE)
-// ==================================================
+/* ==================================================
+   SINGLE SOURCE OF TRUTH (IMMUTABLE DATA ENGINE)
+   ================================================== */
 const PORTFOLIO_DATA = {
   personal: {
     name: "Lizi Zivzivadze",
-    title: "ELECTROMECHANICAL DESIGN ENGINEER",
+    title: "Electromechanical Design Engineer",
     statement: "Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.",
     avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
     email: "lizozivzivadze@gmail.com",
@@ -288,7 +208,7 @@ const PORTFOLIO_DATA = {
       { name: "SMD Soldering & Lab Instrumentation", level: 90 },
       { name: "Battery Management Systems (BMS)", level: 78 }
     ],
-    "Embedded Systems": [
+    "Embedded": [
       { name: "STM32 / ARM Cortex-M Firmware", level: 94 },
       { name: "Embedded C / Real-Time C++", level: 90 },
       { name: "FreeRTOS Task Scheduling & Mutexes", level: 85 },
@@ -298,7 +218,7 @@ const PORTFOLIO_DATA = {
       { name: "Bootloaders & OTA Updates", level: 78 },
       { name: "Hardware In-The-Loop (HIL) Testing", level: 82 }
     ],
-    "CAD": [
+    "Mechanical Design": [
       { name: "SolidWorks Parametric Modeling", level: 95 },
       { name: "Structural & Thermal FEA (ANSYS)", level: 88 },
       { name: "GD&T Tolerance Stack-Up Analysis", level: 90 },
@@ -308,21 +228,24 @@ const PORTFOLIO_DATA = {
       { name: "Rapid Prototyping (FDM / SLA / SLS)", level: 94 },
       { name: "Enclosure IP Ingress Protection Design", level: 80 }
     ],
-    "Software & AI": [
-      { name: "Python / Scientific Stack (NumPy, SciPy)", level: 90 },
+    "Robotics": [
       { name: "ROS2 (Robot Operating System)", level: 84 },
-      { name: "MATLAB / Simulink Model-Based Control", level: 88 },
-      { name: "OpenCV Computer Vision Pipelines", level: 80 },
       { name: "Closed-Loop PID / FOC Control Loops", level: 88 },
-      { name: "Linux System Administration & Bash", level: 82 },
-      { name: "Git Version Control & CI/CD Pipelines", level: 86 },
+      { name: "MATLAB / Simulink Model-Based Control", level: 88 },
       { name: "C++ Data Structures & Kinematics", level: 85 }
+    ],
+    "Programming": [
+      { name: "Python / Scientific Stack (NumPy, SciPy)", level: 90 },
+      { name: "OpenCV Computer Vision Pipelines", level: 80 },
+      { name: "Linux System Administration & Bash", level: 82 },
+      { name: "Git Version Control & CI/CD Pipelines", level: 86 }
     ]
   },
   events: [
     {
       id: "event-1",
       title: "European Agentic AI & Robotics Summit 2026",
+      category: "Conference",
       summary: "Presented work on hardware-in-the-loop edge AI for real-time mechatronic systems.",
       imageUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600",
       details: {
@@ -344,6 +267,7 @@ const PORTFOLIO_DATA = {
     {
       id: "event-2",
       title: "Benelux Mechatronics Engineering Hackathon",
+      category: "Hackathon",
       summary: "First place solution for high-speed dynamic sorting using custom vision feedback.",
       imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600",
       details: {
@@ -362,362 +286,468 @@ const PORTFOLIO_DATA = {
     }
   ],
   valueProps: [
-    { title: "Cross-Disciplinary Integration", text: "Practical Hardware Design" },
-    { title: "Rapid Functional Prototyping", text: "Embedded Software Skills" },
-    { title: "Closed-Loop Controls", text: "Manufacturing Experience" },
-    { title: "Production-Minded Execution", text: "Rapid Problem Solving" },
-    { title: "Data-Driven Verification", text: "Rigorous Test Validation" }
+    { title: "Cross-Disciplinary Integration", text: "Practical Hardware Design", image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=500" },
+    { title: "Rapid Functional Prototyping", text: "Embedded Software Skills", image: "https://images.unsplash.com/photo-1518057111178-44a106bad636?auto=format&fit=crop&q=80&w=500" },
+    { title: "Closed-Loop Controls", text: "Manufacturing Experience", image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=500" },
+    { title: "Production-Minded Execution", text: "Rapid Problem Solving", image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&q=80&w=500" },
+    { title: "Data-Driven Verification", text: "Rigorous Test Validation", image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=500" }
   ]
 };
 
-// ==================================================
-// ICONS (inline SVG, currentColor)
-// ==================================================
+/* ==================================================
+   ICONS (inline SVG, w-4 h-4)
+   ================================================== */
 const ICONS = {
-  phone: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
-  whatsapp: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.39 1.26 4.81L2 22l5.41-1.36a9.9 9.9 0 0 0 4.63 1.15h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.86 9.86 0 0 0 12.04 2zm0 1.67c2.19 0 4.24.85 5.79 2.4a8.19 8.19 0 0 1 2.4 5.84c0 4.55-3.71 8.25-8.27 8.25a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.09.79.83-3.02-.2-.31a8.18 8.18 0 0 1-1.26-4.37c0-4.56 3.72-8.25 8.29-8.25zm-4.6 4.5c-.16 0-.42.06-.64.3-.22.24-.85.83-.85 2.02 0 1.19.87 2.34.99 2.5.12.16 1.7 2.72 4.2 3.71 2.08.82 2.5.66 2.95.62.45-.04 1.45-.59 1.66-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28-.24-.12-1.45-.71-1.67-.79-.22-.08-.39-.12-.55.12-.16.24-.63.79-.77.95-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.11-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.33-.76-1.82-.2-.48-.4-.42-.55-.42h-.28z"/></svg>',
-  email: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
-  linkedin: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>',
-  github: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.09 3.29 9.4 7.86 10.93.58.1.79-.25.79-.56v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.72 1.27 3.39.97.1-.75.4-1.27.73-1.56-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.74.8 1.19 1.83 1.19 3.09 0 4.43-2.7 5.4-5.28 5.69.42.36.78 1.07.78 2.16v3.2c0 .32.21.67.8.56A10.51 10.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z"/></svg>',
-  location: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
-  play: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="11" fill="rgba(255,255,255,0.15)"/><path d="M9.5 7.5v9l8-4.5-8-4.5z" fill="#fff"/></svg>'
+  phone: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+  whatsapp: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M17.472 14.382c-.297-.149-1.758-.868-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.876 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.004 2.003c-5.523 0-10 4.477-10 10 0 1.76.463 3.484 1.343 5.003L2 22l5.117-1.34a9.965 9.965 0 0 0 4.887 1.255h.004c5.522 0 9.998-4.477 9.998-10 0-2.67-1.04-5.18-2.93-7.07a9.935 9.935 0 0 0-7.072-2.842zm5.848 15.848a8.279 8.279 0 0 1-5.85 2.42h-.003a8.284 8.284 0 0 1-4.222-1.155l-.303-.18-3.037.796.81-2.96-.197-.304a8.264 8.264 0 0 1-1.267-4.42c0-4.575 3.723-8.298 8.302-8.298a8.246 8.246 0 0 1 5.87 2.435 8.246 8.246 0 0 1 2.428 5.868c0 4.576-3.723 8.298-8.531 8.298z"/></svg>`,
+  gmail: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`,
+  linkedin: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.114 20.452H3.558V9h3.556v11.452z"/></svg>`,
+  github: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.11-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 2.9-.39c.98.01 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.08.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .3.2.66.79.55A10.52 10.52 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z"/></svg>`,
+  play: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-9 h-9"><path d="M8 5v14l11-7z"/></svg>`,
+  file: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>`
 };
 
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+/* ==================================================
+   HELPERS
+   ================================================== */
+function boldCaps(label) {
+  // Wrap uppercase letters in a bold span; everything else stays normal weight.
+  return label.split('').map(ch => {
+    if (ch >= 'A' && ch <= 'Z') return `<span class="font-bold">${ch}</span>`;
+    return ch;
+  }).join('');
 }
 
-// ==================================================
-// STICKY HEADER SCROLL BEHAVIOR
-// ==================================================
-const stickyHeader = document.getElementById('sticky-header');
+function el(html) {
+  const t = document.createElement('template');
+  t.innerHTML = html.trim();
+  return t.content.firstElementChild;
+}
+
+/* ==================================================
+   HEADER SCROLL BEHAVIOR
+   ================================================== */
+const header = document.getElementById('site-header');
 window.addEventListener('scroll', () => {
   if (window.scrollY > 100) {
-    stickyHeader.classList.remove('header-hidden');
-    stickyHeader.classList.add('header-visible');
+    header.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
+    header.classList.add('opacity-100', 'translate-y-0');
   } else {
-    stickyHeader.classList.add('header-hidden');
-    stickyHeader.classList.remove('header-visible');
+    header.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+    header.classList.remove('opacity-100', 'translate-y-0');
   }
 }, { passive: true });
 
-// ==================================================
-// RENDER: HERO / PROFILE
-// ==================================================
+/* ==================================================
+   SECTION: HERO / PROFILE
+   ================================================== */
 function renderHero() {
   const p = PORTFOLIO_DATA.personal;
-  document.getElementById('hero-avatar').src = p.avatarUrl;
-  document.getElementById('hero-name').textContent = p.name;
-  document.getElementById('hero-title').textContent = p.title;
-  document.getElementById('hero-statement').textContent = p.statement;
-
-  const contacts = document.getElementById('hero-contacts');
-  contacts.innerHTML = `
-    <a href="tel:${p.phone.replace(/\s+/g, '')}" title="Phone" class="text-[#475569] hover:text-[#0284c7] transition-colors w-4 h-4">${ICONS.phone}</a>
-    <a href="${p.whatsapp}" target="_blank" rel="noopener" title="WhatsApp" class="text-[#475569] hover:text-[#0d9488] transition-colors w-4 h-4">${ICONS.whatsapp}</a>
-    <a href="mailto:${p.email}" title="Email" class="text-[#475569] hover:text-[#0284c7] transition-colors w-4 h-4">${ICONS.email}</a>
-    <a href="${p.linkedin}" target="_blank" rel="noopener" title="LinkedIn" class="text-[#475569] hover:text-[#0284c7] transition-colors w-4 h-4">${ICONS.linkedin}</a>
-    <a href="${p.github}" target="_blank" rel="noopener" title="GitHub" class="text-[#475569] hover:text-[#0f172a] transition-colors w-4 h-4">${ICONS.github}</a>
-    <span title="Location" class="flex items-center gap-0.5 font-mono text-[10px] text-[#475569] shrink-0">${ICONS.location.replace('viewBox="0 0 24 24"', 'viewBox="0 0 24 24" style="width:12px;height:12px;display:inline-block"')}${p.location}</span>
-  `;
-  contacts.querySelectorAll('svg').forEach(svg => { svg.style.width = '16px'; svg.style.height = '16px'; });
+  return `
+  <section class="w-full max-w-4xl mx-auto my-4 p-4 md:p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <div class="flex items-start gap-4">
+      <img src="${p.avatarUrl}" alt="${p.name}" class="w-[80px] h-[80px] rounded-full border-2 border-[#0284c7] object-cover shrink-0">
+      <div class="flex flex-col gap-1.5 min-w-0">
+        <div class="text-[22px] font-bold text-[#0f172a] whitespace-nowrap overflow-hidden text-ellipsis">${p.name}</div>
+        <div class="font-mono text-[13px] text-[#0369a1] font-semibold tracking-wider whitespace-nowrap overflow-hidden text-ellipsis">${p.title}</div>
+        <div class="flex items-center gap-3.5 whitespace-nowrap text-[#475569]">
+          <a href="tel:${p.phone.replace(/\s+/g, '')}" aria-label="Phone" class="hover:text-[#0284c7] transition-colors">${ICONS.phone}</a>
+          <a href="${p.whatsapp}" target="_blank" rel="noopener" aria-label="WhatsApp" class="hover:text-[#0284c7] transition-colors">${ICONS.whatsapp}</a>
+          <a href="mailto:${p.email}" aria-label="Email" class="hover:text-[#0284c7] transition-colors">${ICONS.gmail}</a>
+          <a href="${p.linkedin}" target="_blank" rel="noopener" aria-label="LinkedIn" class="hover:text-[#0284c7] transition-colors">${ICONS.linkedin}</a>
+          <a href="${p.github}" target="_blank" rel="noopener" aria-label="GitHub" class="hover:text-[#0284c7] transition-colors">${ICONS.github}</a>
+        </div>
+        <div class="text-[14px] text-[#475569] font-medium whitespace-nowrap">${p.location}</div>
+      </div>
+    </div>
+    <p class="w-full text-[16px] text-[#0f172a] font-medium mt-3.5 pt-3 border-t border-slate-100 leading-relaxed">${p.statement}</p>
+  </section>`;
 }
 
-// ==================================================
-// RENDER: PROJECTS
-// ==================================================
-let activeProjectFilter = 'HW+SW';
-const projectFilters = ['HW+SW', 'HardWare', 'SoftWare'];
-const projectCardState = {}; // id -> active subtab
+/* ==================================================
+   SECTION: PROJECTS
+   ================================================== */
+const PROJECT_TABS = ["All", "SoftWare", "HardWare", "HW+SW"];
+let activeProjectTab = "All";
 
-function matchesProjectFilter(category, filter) {
-  if (filter === 'HW+SW') return true;
-  if (filter === 'HardWare') return category === 'HardWare' || category === 'HW+SW';
-  if (filter === 'SoftWare') return category === 'SoftWare' || category === 'HW+SW';
-  return true;
+function projectTabLabel(tab) {
+  return tab === "All" ? "All" : boldCaps(tab);
 }
 
-function renderProjectFilterTabs() {
-  const wrap = document.getElementById('project-filter-tabs');
-  wrap.innerHTML = projectFilters.map(f => `
-    <button data-filter="${f}" class="tab-btn font-mono text-[11px] font-semibold tracking-wide px-3 py-1.5 rounded-md border ${activeProjectFilter === f ? 'bg-[#0284c7] text-white border-[#0284c7]' : 'bg-white text-[#475569] border-[#e2e8f0] hover:border-[#0284c7]'}">${f}</button>
-  `).join('');
-  wrap.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      activeProjectFilter = btn.dataset.filter;
-      renderProjectFilterTabs();
-      renderProjectCards();
-    });
-  });
+function renderProjectCard(project) {
+  return `
+  <article class="w-[310px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-3.5 flex flex-col justify-between shadow-xs" data-project-id="${project.id}">
+    <div>
+      <div class="aspect-video rounded-md relative bg-slate-900 overflow-hidden group cursor-pointer" data-video-trigger data-video-url="${project.videoUrl}">
+        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover opacity-70" alt="${project.title} preview">
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="w-14 h-14 rounded-full bg-white/90 text-[#0284c7] flex items-center justify-center group-hover:scale-105 transition-transform">${ICONS.play}</div>
+        </div>
+      </div>
+      <div class="mt-2.5">
+        <div class="text-[16px] font-bold text-[#0f172a] leading-snug">${project.title}</div>
+        <div class="text-[14px] text-[#475569] font-sans mt-1 leading-snug">${project.summary}</div>
+      </div>
+      <div class="mt-2.5 min-h-[92px]" data-project-content></div>
+    </div>
+    <div class="flex items-center gap-1.5 mt-auto pt-2.5 border-t border-slate-100" data-project-subtabs>
+      ${['OVERVIEW', 'EQUIPMENT', 'URL'].map((t, i) => `
+        <button data-subtab="${t}" class="${i === 0 ? 'bg-[#0284c7] text-white border border-[#0284c7] font-bold' : 'bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7]'} rounded-md px-3 py-1.5 text-[13px] font-mono transition-colors">${t}</button>
+      `).join('')}
+    </div>
+  </article>`;
 }
 
-function projectSubtabContent(project, subtab) {
-  if (subtab === 'overview') {
+function projectSubtabContent(project, tab) {
+  if (tab === 'OVERVIEW') {
     const o = project.details.overview;
     return `
-      <div class="space-y-2 text-xs text-[#475569] leading-relaxed">
-        <p><span class="font-semibold text-[#0f172a]">Objective:</span> ${escapeHtml(o.objective)}</p>
-        <p><span class="font-semibold text-[#0f172a]">Contribution:</span> ${escapeHtml(o.contribution)}</p>
-        <p><span class="font-semibold text-[#0f172a]">Results:</span> ${escapeHtml(o.results)}</p>
+      <div class="text-[14px] font-sans text-[#0f172a] space-y-1.5">
+        <p><span class="font-mono text-[13px] font-bold text-[#0d9488]">OBJECTIVE — </span>${o.objective}</p>
+        <p><span class="font-mono text-[13px] font-bold text-[#0d9488]">CONTRIBUTION — </span>${o.contribution}</p>
+        <p><span class="font-mono text-[13px] font-bold text-[#0d9488]">RESULTS — </span>${o.results}</p>
       </div>`;
   }
-  if (subtab === 'equipment') {
-    return `<div class="flex flex-wrap gap-1.5">${project.details.equipment.map(e => `<span class="chip text-[10px] bg-[#f0f9ff] text-[#0369a1] border border-[#bae6fd] rounded px-2 py-1">${escapeHtml(e)}</span>`).join('')}</div>`;
+  if (tab === 'EQUIPMENT') {
+    return `
+      <div class="flex flex-wrap gap-1.5">
+        ${project.details.equipment.map(eq => `<span class="text-[13px] font-mono bg-[#f8fafc] border border-[#e2e8f0] text-[#0f172a] rounded-md px-2 py-1">${eq}</span>`).join('')}
+      </div>`;
   }
-  if (subtab === 'url') {
-    return `<div class="flex flex-col gap-1.5">${project.details.urls.map(u => `<a href="${u.url}" target="_blank" rel="noopener" class="text-xs font-semibold text-[#0284c7] hover:text-[#0369a1] hover:underline">${escapeHtml(u.label)} ↗</a>`).join('')}</div>`;
+  if (tab === 'URL') {
+    return `
+      <div class="flex flex-col gap-1.5">
+        ${project.details.urls.map(u => `<a href="${u.url}" target="_blank" rel="noopener" class="text-[14px] font-sans text-[#0284c7] hover:text-[#0369a1] hover:underline">${u.label}</a>`).join('')}
+      </div>`;
   }
   return '';
 }
 
-function renderProjectCards() {
-  const wrap = document.getElementById('project-cards');
-  const filtered = PORTFOLIO_DATA.projects.filter(p => matchesProjectFilter(p.category, activeProjectFilter));
-
-  wrap.innerHTML = filtered.map(project => {
-    if (!projectCardState[project.id]) projectCardState[project.id] = 'overview';
-    const activeSub = projectCardState[project.id];
-    return `
-    <div class="w-[280px] md:w-[320px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs">
-      <div>
-        <div class="aspect-video relative rounded-lg bg-slate-900 overflow-hidden cursor-pointer video-trigger" data-video="${project.videoUrl}">
-          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="${escapeHtml(project.title)} preview" class="w-full h-full object-cover opacity-80">
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-10 h-10">${ICONS.play}</div>
-          </div>
-          <span class="absolute top-2 right-2 chip text-[9px] font-semibold bg-black/60 text-white rounded px-1.5 py-0.5">${escapeHtml(project.category)}</span>
-        </div>
-        <h3 class="font-bold text-[#0f172a] mt-3 mb-1 leading-snug text-sm">${escapeHtml(project.title)}</h3>
-        <p class="text-xs text-[#475569] mb-3 leading-relaxed">${escapeHtml(project.summary)}</p>
-      </div>
-      <div>
-        <div class="flex items-center gap-1 border-b border-[#e2e8f0] pb-2 mb-2">
-          ${['overview','equipment','url'].map(st => `
-            <button data-project="${project.id}" data-subtab="${st}" class="subtab-btn ${activeSub === st ? 'active' : ''} font-mono text-[10px] font-semibold uppercase tracking-wide px-2 py-1 rounded ${activeSub === st ? '' : 'text-[#475569] hover:bg-slate-100'}">${st === 'url' ? 'URL' : st}</button>
-          `).join('')}
-        </div>
-        <div class="subtab-content min-h-[92px]">${projectSubtabContent(project, activeSub)}</div>
-      </div>
-    </div>`;
-  }).join('');
-
-  wrap.querySelectorAll('.subtab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      projectCardState[btn.dataset.project] = btn.dataset.subtab;
-      renderProjectCards();
-    });
-  });
-  wrap.querySelectorAll('.video-trigger').forEach(el => {
-    el.addEventListener('click', () => openVideoModal(el.dataset.video));
-  });
-}
-
-// ==================================================
-// RENDER: SKILLS
-// ==================================================
-const skillCategories = Object.keys(PORTFOLIO_DATA.skills);
-let activeSkillCategory = skillCategories[0];
-
-function renderSkillCategoryTabs() {
-  const wrap = document.getElementById('skill-category-tabs');
-  wrap.innerHTML = skillCategories.map(cat => `
-    <button data-cat="${cat}" class="tab-btn shrink-0 font-mono text-[11px] font-semibold tracking-wide px-3 py-1.5 rounded-md border whitespace-nowrap ${activeSkillCategory === cat ? 'bg-[#0284c7] text-white border-[#0284c7]' : 'bg-white text-[#475569] border-[#e2e8f0] hover:border-[#0284c7]'}">${cat}</button>
-  `).join('');
-  wrap.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      activeSkillCategory = btn.dataset.cat;
-      renderSkillCategoryTabs();
-      renderSkillList();
-    });
-  });
-}
-
-function renderSkillList() {
-  const wrap = document.getElementById('skill-list');
-  const skills = PORTFOLIO_DATA.skills[activeSkillCategory];
-  wrap.innerHTML = skills.map(s => `
+function renderProjectsSection() {
+  return `
+  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[435px] max-h-[435px]">
     <div>
-      <div class="flex items-center justify-between mb-1">
-        <span class="text-xs font-medium text-[#0f172a]">${escapeHtml(s.name)}</span>
-        <span class="font-mono text-[10px] text-[#0369a1] font-semibold">${s.level}%</span>
-      </div>
-      <div class="skill-bar-track w-full h-1.5 rounded-full overflow-hidden">
-        <div class="skill-bar-fill h-full rounded-full" style="width:${s.level}%"></div>
+      <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center">PROJECTS</h2>
+      <div class="flex flex-wrap justify-center gap-1.5 my-2.5" id="project-tabs">
+        ${PROJECT_TABS.map(tab => `
+          <button data-project-tab="${tab}" class="${tab === activeProjectTab ? 'bg-[#0284c7] text-white border border-[#0284c7] font-bold' : 'bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7]'} rounded-md px-3 py-1.5 text-[13px] font-mono transition-colors">${projectTabLabel(tab)}</button>
+        `).join('')}
       </div>
     </div>
-  `).join('');
+    <div id="project-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-3 custom-scrollbar flex-1"></div>
+  </section>`;
 }
 
-// ==================================================
-// RENDER: EVENTS
-// ==================================================
-const eventCardState = {};
+function projectsMatchingTab(tab) {
+  if (tab === "All") return PORTFOLIO_DATA.projects;
+  return PORTFOLIO_DATA.projects.filter(p => p.category === tab);
+}
 
-function eventSubtabContent(event, subtab) {
-  if (subtab === 'overview') {
+function mountProjects() {
+  const carousel = document.getElementById('project-carousel');
+  carousel.innerHTML = '';
+  const projects = projectsMatchingTab(activeProjectTab);
+  projects.forEach(project => {
+    const card = el(renderProjectCard(project));
+    carousel.appendChild(card);
+    const contentSlot = card.querySelector('[data-project-content]');
+    contentSlot.innerHTML = projectSubtabContent(project, 'OVERVIEW');
+
+    card.querySelectorAll('[data-subtab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.getAttribute('data-subtab');
+        card.querySelectorAll('[data-subtab]').forEach(b => {
+          const isActive = b === btn;
+          b.className = `${isActive ? 'bg-[#0284c7] text-white border border-[#0284c7] font-bold' : 'bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7]'} rounded-md px-3 py-1.5 text-[13px] font-mono transition-colors`;
+        });
+        contentSlot.innerHTML = projectSubtabContent(project, tab);
+      });
+    });
+
+    const videoTrigger = card.querySelector('[data-video-trigger]');
+    videoTrigger.addEventListener('click', () => {
+      const videoUrl = videoTrigger.getAttribute('data-video-url');
+      videoTrigger.outerHTML = `<div class="aspect-video rounded-md relative bg-slate-900 overflow-hidden"><iframe src="${videoUrl}?autoplay=1" class="w-full h-full border-0" allow="autoplay"></iframe></div>`;
+    });
+  });
+
+  document.querySelectorAll('[data-project-tab]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeProjectTab = btn.getAttribute('data-project-tab');
+      document.querySelectorAll('[data-project-tab]').forEach(b => {
+        const isActive = b.getAttribute('data-project-tab') === activeProjectTab;
+        b.className = `${isActive ? 'bg-[#0284c7] text-white border border-[#0284c7] font-bold' : 'bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7]'} rounded-md px-3 py-1.5 text-[13px] font-mono transition-colors`;
+      });
+      mountProjects();
+    });
+  });
+}
+
+/* ==================================================
+   SECTION: SKILLSETS
+   ================================================== */
+const SKILL_CATEGORIES = ["Electronics", "Embedded", "Mechanical Design", "Robotics", "Programming"];
+let activeSkillCategory = "Electronics";
+
+function renderSkillRow(skill) {
+  return `
+  <div class="mb-2.5 last:mb-0">
+    <div class="flex items-center justify-between mb-1">
+      <span class="text-[14px] font-sans text-[#0f172a]">${skill.name}</span>
+      <span class="text-[13px] font-mono text-[#475569]">${skill.level}%</span>
+    </div>
+    <div class="w-full h-1.5 rounded-full bg-[#e2e8f0] overflow-hidden">
+      <div class="h-full rounded-full bg-[#0284c7]" style="width:${skill.level}%"></div>
+    </div>
+  </div>`;
+}
+
+function renderSkillsSection() {
+  return `
+  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[435px] max-h-[435px]">
+    <div>
+      <h2 class="font-mono text-[22px] font-bold text-[#0f172a]">SKILLSETS</h2>
+      <div class="flex flex-wrap gap-2 my-2.5" id="skill-category-tabs">
+        ${SKILL_CATEGORIES.map(cat => `
+          <button data-skill-cat="${cat}" class="${cat === activeSkillCategory ? 'bg-[#0284c7] text-white border border-[#0284c7] font-bold' : 'bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7]'} rounded-md px-3 py-1.5 text-[13px] font-mono transition-colors">${cat}</button>
+        `).join('')}
+      </div>
+      <div class="font-sans text-[16px] font-bold text-[#0f172a]">Skills</div>
+    </div>
+    <div class="h-[210px] overflow-y-auto border border-[#e2e8f0] rounded-lg p-3 bg-white custom-scrollbar mt-2" id="skill-list"></div>
+  </section>`;
+}
+
+function mountSkills() {
+  const list = document.getElementById('skill-list');
+  list.innerHTML = PORTFOLIO_DATA.skills[activeSkillCategory].map(renderSkillRow).join('');
+
+  document.querySelectorAll('[data-skill-cat]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeSkillCategory = btn.getAttribute('data-skill-cat');
+      document.querySelectorAll('[data-skill-cat]').forEach(b => {
+        const isActive = b.getAttribute('data-skill-cat') === activeSkillCategory;
+        b.className = `${isActive ? 'bg-[#0284c7] text-white border border-[#0284c7] font-bold' : 'bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7]'} rounded-md px-3 py-1.5 text-[13px] font-mono transition-colors`;
+      });
+      mountSkills();
+    });
+  });
+}
+
+/* ==================================================
+   SECTION: EVENTS
+   ================================================== */
+const EVENT_TABS = ["All", "Conference", "Hackathon"];
+let activeEventTab = "All";
+
+function renderEventCard(event) {
+  return `
+  <article class="w-[310px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-3.5 flex flex-col justify-between shadow-xs" data-event-id="${event.id}">
+    <div>
+      <div class="aspect-video rounded-md overflow-hidden bg-slate-900">
+        <img src="${event.imageUrl}" alt="${event.title}" class="w-full h-full object-cover">
+      </div>
+      <div class="mt-2.5">
+        <div class="text-[16px] font-bold text-[#0f172a] leading-snug">${event.title}</div>
+        <div class="text-[14px] text-[#475569] font-sans mt-1 leading-snug">${event.summary}</div>
+      </div>
+      <div class="mt-2.5 min-h-[92px]" data-event-content></div>
+    </div>
+    <div class="flex items-center gap-1.5 mt-auto pt-2.5 border-t border-slate-100" data-event-subtabs>
+      ${['OVERVIEW', 'MEDIA', 'URL'].map((t, i) => `
+        <button data-esubtab="${t}" class="${i === 0 ? 'bg-[#0284c7] text-white border border-[#0284c7] font-bold' : 'bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7]'} rounded-md px-3 py-1.5 text-[13px] font-mono transition-colors">${t}</button>
+      `).join('')}
+    </div>
+  </article>`;
+}
+
+function eventSubtabContent(event, tab) {
+  if (tab === 'OVERVIEW') {
     const o = event.details.overview;
     return `
-      <div class="space-y-2 text-xs text-[#475569] leading-relaxed">
-        <p><span class="font-semibold text-[#0f172a]">Why It Mattered:</span> ${escapeHtml(o.whyMattered)}</p>
-        <p><span class="font-semibold text-[#0f172a]">Participation:</span> ${escapeHtml(o.participation)}</p>
-        <p><span class="font-semibold text-[#0f172a]">Outcomes:</span> ${escapeHtml(o.outcomes)}</p>
+      <div class="text-[14px] font-sans text-[#0f172a] space-y-1.5">
+        <p><span class="font-mono text-[13px] font-bold text-[#0d9488]">WHY IT MATTERED — </span>${o.whyMattered}</p>
+        <p><span class="font-mono text-[13px] font-bold text-[#0d9488]">PARTICIPATION — </span>${o.participation}</p>
+        <p><span class="font-mono text-[13px] font-bold text-[#0d9488]">OUTCOMES — </span>${o.outcomes}</p>
       </div>`;
   }
-  if (subtab === 'media') {
-    return `<div class="grid grid-cols-3 gap-1.5">${event.details.media.map(m => `<img src="${m}" alt="Event media" class="w-full h-14 object-cover rounded">`).join('')}</div>`;
+  if (tab === 'MEDIA') {
+    return `
+      <div class="grid grid-cols-2 gap-1.5">
+        ${event.details.media.map(m => `<img src="${m}" class="w-full h-16 object-cover rounded-md border border-[#e2e8f0]" alt="${event.title} media">`).join('')}
+      </div>`;
   }
-  if (subtab === 'url') {
-    return `<div class="flex flex-col gap-1.5">${event.details.urls.map(u => `<a href="${u.url}" target="_blank" rel="noopener" class="text-xs font-semibold text-[#0284c7] hover:text-[#0369a1] hover:underline">${escapeHtml(u.label)} ↗</a>`).join('')}</div>`;
+  if (tab === 'URL') {
+    return `
+      <div class="flex flex-col gap-1.5">
+        ${event.details.urls.map(u => `<a href="${u.url}" target="_blank" rel="noopener" class="text-[14px] font-sans text-[#0284c7] hover:text-[#0369a1] hover:underline">${u.label}</a>`).join('')}
+      </div>`;
   }
   return '';
 }
 
-function renderEventCards() {
-  const wrap = document.getElementById('event-cards');
-  wrap.innerHTML = PORTFOLIO_DATA.events.map(event => {
-    if (!eventCardState[event.id]) eventCardState[event.id] = 'overview';
-    const activeSub = eventCardState[event.id];
-    return `
-    <div class="w-[280px] md:w-[320px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs">
-      <div>
-        <div class="aspect-video relative rounded-lg bg-slate-900 overflow-hidden">
-          <img src="${event.imageUrl}" alt="${escapeHtml(event.title)}" class="w-full h-full object-cover">
-        </div>
-        <h3 class="font-bold text-[#0f172a] mt-3 mb-1 leading-snug text-sm">${escapeHtml(event.title)}</h3>
-        <p class="text-xs text-[#475569] mb-3 leading-relaxed">${escapeHtml(event.summary)}</p>
+function renderEventsSection() {
+  return `
+  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[435px] max-h-[435px]">
+    <div>
+      <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center">EVENTS</h2>
+      <div class="flex flex-wrap justify-center gap-1.5 mb-2.5" id="event-tabs">
+        ${EVENT_TABS.map(tab => `
+          <button data-event-tab="${tab}" class="${tab === activeEventTab ? 'bg-[#0284c7] text-white border border-[#0284c7] font-bold' : 'bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7]'} rounded-md px-3 py-1.5 text-[13px] font-mono transition-colors">${tab}</button>
+        `).join('')}
       </div>
-      <div>
-        <div class="flex items-center gap-1 border-b border-[#e2e8f0] pb-2 mb-2">
-          ${['overview','media','url'].map(st => `
-            <button data-event="${event.id}" data-subtab="${st}" class="subtab-btn ${activeSub === st ? 'active' : ''} font-mono text-[10px] font-semibold uppercase tracking-wide px-2 py-1 rounded ${activeSub === st ? '' : 'text-[#475569] hover:bg-slate-100'}">${st === 'url' ? 'URL' : st}</button>
-          `).join('')}
-        </div>
-        <div class="subtab-content min-h-[92px]">${eventSubtabContent(event, activeSub)}</div>
-      </div>
-    </div>`;
-  }).join('');
+    </div>
+    <div id="event-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-3 custom-scrollbar flex-1"></div>
+  </section>`;
+}
 
-  wrap.querySelectorAll('.subtab-btn').forEach(btn => {
+function eventsMatchingTab(tab) {
+  if (tab === "All") return PORTFOLIO_DATA.events;
+  return PORTFOLIO_DATA.events.filter(e => e.category === tab);
+}
+
+function mountEvents() {
+  const carousel = document.getElementById('event-carousel');
+  carousel.innerHTML = '';
+  const events = eventsMatchingTab(activeEventTab);
+  events.forEach(event => {
+    const card = el(renderEventCard(event));
+    carousel.appendChild(card);
+    const contentSlot = card.querySelector('[data-event-content]');
+    contentSlot.innerHTML = eventSubtabContent(event, 'OVERVIEW');
+
+    card.querySelectorAll('[data-esubtab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.getAttribute('data-esubtab');
+        card.querySelectorAll('[data-esubtab]').forEach(b => {
+          const isActive = b === btn;
+          b.className = `${isActive ? 'bg-[#0284c7] text-white border border-[#0284c7] font-bold' : 'bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7]'} rounded-md px-3 py-1.5 text-[13px] font-mono transition-colors`;
+        });
+        contentSlot.innerHTML = eventSubtabContent(event, tab);
+      });
+    });
+  });
+
+  document.querySelectorAll('[data-event-tab]').forEach(btn => {
     btn.addEventListener('click', () => {
-      eventCardState[btn.dataset.event] = btn.dataset.subtab;
-      renderEventCards();
+      activeEventTab = btn.getAttribute('data-event-tab');
+      document.querySelectorAll('[data-event-tab]').forEach(b => {
+        const isActive = b.getAttribute('data-event-tab') === activeEventTab;
+        b.className = `${isActive ? 'bg-[#0284c7] text-white border border-[#0284c7] font-bold' : 'bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7]'} rounded-md px-3 py-1.5 text-[13px] font-mono transition-colors`;
+      });
+      mountEvents();
     });
   });
 }
 
-// ==================================================
-// RENDER: WHAT DO I BRING TO THE TABLE
-// ==================================================
-function renderValueProps() {
-  const wrap = document.getElementById('value-props');
-  wrap.innerHTML = PORTFOLIO_DATA.valueProps.map(v => `
-    <div class="shrink-0 w-[280px] md:w-[300px] min-h-[220px] md:min-h-[240px] snap-start bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-5 flex flex-col justify-between shadow-xs">
-      <div class="w-9 h-9 rounded-md bg-[#0284c7]/10 flex items-center justify-center text-[#0284c7] font-mono text-xs font-bold">${escapeHtml(v.title.split(' ').map(w => w[0]).slice(0,2).join(''))}</div>
-      <div>
-        <p class="font-mono text-[10px] uppercase tracking-wider text-[#0d9488] font-semibold mb-2">${escapeHtml(v.title)}</p>
-        <p class="text-base font-bold text-[#0f172a] leading-snug">${escapeHtml(v.text)}</p>
-      </div>
+/* ==================================================
+   SECTION: WHAT DO I BRING TO THE TABLE
+   ================================================== */
+function renderValuePropsSection() {
+  return `
+  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center mb-2.5">WHAT DO I BRING TO THE TABLE?</h2>
+    <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-3 custom-scrollbar">
+      ${PORTFOLIO_DATA.valueProps.map(vp => `
+        <div class="w-[280px] shrink-0 snap-start bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between">
+          <div class="aspect-video rounded-md overflow-hidden bg-slate-100 mb-2.5">
+            <img src="${vp.image}" alt="${vp.title}" class="w-full h-full object-cover">
+          </div>
+          <div class="whitespace-nowrap overflow-hidden text-ellipsis text-[16px] font-bold text-[#0f172a]">${vp.title}</div>
+          <div class="text-[14px] font-sans text-[#475569] mt-1">${vp.text}</div>
+        </div>
+      `).join('')}
     </div>
-  `).join('');
+  </section>`;
 }
 
-// ==================================================
-// VIDEO MODAL
-// ==================================================
-const videoModal = document.getElementById('video-modal');
-const videoModalIframe = document.getElementById('video-modal-iframe');
+/* ==================================================
+   SECTION: HELP YOURSELF
+   ================================================== */
+const selectedDocs = new Set();
 
-function openVideoModal(url) {
-  videoModalIframe.src = url + (url.includes('?') ? '&' : '?') + 'autoplay=1';
-  videoModal.classList.remove('hidden');
-  videoModal.classList.add('flex');
-  document.body.style.overflow = 'hidden';
+function renderHelpYourselfSection() {
+  return `
+  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center mb-2.5">HELP YOURSELF</h2>
+    <div class="grid grid-cols-2 gap-3 mb-3">
+      <button id="doc-cv" data-doc="CV Document" class="border border-[#e2e8f0] rounded-lg p-4 flex flex-col items-center gap-2 text-[#0f172a] transition-colors">
+        <span class="text-[#0284c7]">${ICONS.file}</span>
+        <span class="text-[14px] font-mono font-bold">CV Document</span>
+      </button>
+      <button id="doc-portfolio" data-doc="Portfolio Document" class="border border-[#e2e8f0] rounded-lg p-4 flex flex-col items-center gap-2 text-[#0f172a] transition-colors">
+        <span class="text-[#0284c7]">${ICONS.file}</span>
+        <span class="text-[14px] font-mono font-bold">Portfolio Document</span>
+      </button>
+    </div>
+    <input id="email-input" type="email" placeholder="your.email@example.com" class="text-[14px] font-sans rounded-md border border-[#e2e8f0] px-3 py-2 w-full">
+    <button id="send-docs-btn" class="text-[14px] font-mono font-bold text-white bg-[#0284c7] hover:bg-[#0369a1] rounded-md px-4 py-2 w-full mt-2 transition-colors">Send Copies Now</button>
+  </section>`;
 }
-function closeVideoModal() {
-  videoModalIframe.src = '';
-  videoModal.classList.add('hidden');
-  videoModal.classList.remove('flex');
-  document.body.style.overflow = '';
-}
-document.getElementById('video-modal-close').addEventListener('click', closeVideoModal);
-videoModal.addEventListener('click', (e) => { if (e.target === videoModal) closeVideoModal(); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVideoModal(); });
 
-// ==================================================
-// HELP YOURSELF (DOCUMENT SECTION)
-// ==================================================
-const cvCard = document.getElementById('cv-doc-card');
-const portfolioCard = document.getElementById('portfolio-doc-card');
-const emailInput = document.getElementById('doc-email-input');
-const sendBtn = document.getElementById('send-docs-btn');
-let cvSelected = false;
-let portfolioSelected = false;
+function mountHelpYourself() {
+  const cvBtn = document.getElementById('doc-cv');
+  const portfolioBtn = document.getElementById('doc-portfolio');
+  const emailInput = document.getElementById('email-input');
+  const sendBtn = document.getElementById('send-docs-btn');
 
-function updateDocCardStyle(card, selected) {
-  if (selected) {
-    card.classList.add('border-2', 'border-[#0284c7]', 'bg-[#f0f9ff]');
-    card.classList.remove('border', 'border-[#e2e8f0]');
-  } else {
-    card.classList.remove('border-2', 'border-[#0284c7]', 'bg-[#f0f9ff]');
-    card.classList.add('border', 'border-[#e2e8f0]');
+  function refreshDocBtn(btn, key) {
+    const active = selectedDocs.has(key);
+    btn.className = `border rounded-lg p-4 flex flex-col items-center gap-2 text-[#0f172a] transition-colors ${active ? 'border-2 border-[#0284c7] bg-[#f0f9ff]' : 'border border-[#e2e8f0]'}`;
   }
-}
 
-cvCard.addEventListener('click', () => {
-  cvSelected = !cvSelected;
-  updateDocCardStyle(cvCard, cvSelected);
-});
-portfolioCard.addEventListener('click', () => {
-  portfolioSelected = !portfolioSelected;
-  updateDocCardStyle(portfolioCard, portfolioSelected);
-});
+  [ [cvBtn, 'CV Document'], [portfolioBtn, 'Portfolio Document'] ].forEach(([btn, key]) => {
+    refreshDocBtn(btn, key);
+    btn.addEventListener('click', () => {
+      if (selectedDocs.has(key)) selectedDocs.delete(key);
+      else selectedDocs.add(key);
+      refreshDocBtn(cvBtn, 'CV Document');
+      refreshDocBtn(portfolioBtn, 'Portfolio Document');
+    });
+  });
 
-function isValidEmail(v) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  sendBtn.addEventListener('click', () => {
+    const email = emailInput.value.trim();
+    if (selectedDocs.size === 0 || !email) {
+      showToast(`Select at least one item and enter a valid email to send copies`, true);
+      return;
+    }
+    const items = Array.from(selectedDocs).join(', ');
+    showToast(`Dispatched ${items} to ${email}`, false);
+  });
 }
 
 function showToast(message, isError) {
-  const container = document.getElementById('toast-container');
-  const toast = document.createElement('div');
-  toast.className = `toast-enter max-w-[280px] text-xs font-medium rounded-lg px-4 py-3 shadow-lg border ${isError ? 'bg-red-50 text-red-700 border-red-200' : 'bg-white text-[#0f172a] border-[#e2e8f0]'}`;
-  toast.textContent = message;
-  container.appendChild(toast);
-  setTimeout(() => {
-    toast.classList.remove('toast-enter');
-    toast.classList.add('toast-exit');
-    setTimeout(() => toast.remove(), 260);
-  }, 3200);
+  const root = document.getElementById('toast-root');
+  root.innerHTML = '';
+  const toast = el(`
+    <div class="toast-enter -translate-x-1/2 rounded-md px-4 py-2.5 text-[14px] font-sans shadow-lg border ${isError ? 'bg-red-50 border-red-200 text-red-700' : 'bg-[#0f172a] border-[#0f172a] text-white'}">
+      ${message}
+    </div>`);
+  root.appendChild(toast);
+  setTimeout(() => { toast.remove(); }, 3200);
 }
 
-sendBtn.addEventListener('click', () => {
-  const email = emailInput.value.trim();
-  const items = [];
-  if (cvSelected) items.push('CV Document');
-  if (portfolioSelected) items.push('Portfolio Document');
+/* ==================================================
+   APP MOUNT
+   ================================================== */
+function renderApp() {
+  const app = document.getElementById('app');
+  app.innerHTML =
+    renderHero() +
+    renderProjectsSection() +
+    renderSkillsSection() +
+    renderEventsSection() +
+    renderValuePropsSection() +
+    renderHelpYourselfSection();
 
-  if (items.length === 0) {
-    showToast('Select at least one document before sending.', true);
-    return;
-  }
-  if (!isValidEmail(email)) {
-    showToast('Enter a valid email address to continue.', true);
-    return;
-  }
-  showToast(`Dispatched ${items.join(' & ')} to ${email}`, false);
-});
+  mountProjects();
+  mountSkills();
+  mountEvents();
+  mountHelpYourself();
+}
 
-// ==================================================
-// INIT
-// ==================================================
-renderHero();
-renderProjectFilterTabs();
-renderProjectCards();
-renderSkillCategoryTabs();
-renderSkillList();
-renderEventCards();
-renderValueProps();
+renderApp();
 </script>
 </body>
 </html>
