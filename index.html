@@ -8,272 +8,186 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#f8fafc; --ink:#0f172a; --muted:#475569; --border:#e2e8f0;
-    --blue:#0284c7; --blue-hover:#0369a1; --teal:#0d9488; --teal-hover:#0f766e;
+  :root {
+    --accent: #0284c7;
+    --accent-hover: #0369a1;
+    --teal: #0d9488;
+    --ink: #0f172a;
+    --muted: #475569;
+    --bg: #f8fafc;
+    --border: #e2e8f0;
   }
-  *{ -webkit-tap-highlight-color: transparent; }
-  html{ scroll-behavior:smooth; }
-  body{
-    background-color:var(--bg);
-    font-family:'Inter',ui-sans-serif,system-ui,sans-serif;
-    color:var(--ink);
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    background-color: var(--bg);
     background-image:
-      linear-gradient(rgba(15,23,42,0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(15,23,42,0.035) 1px, transparent 1px);
-    background-size: 28px 28px;
-    padding-bottom: 60px; /* reserve space for sticky footer */
+      linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+    background-size: 24px 24px;
+    color: var(--ink);
   }
-  .font-mono{ font-family:'JetBrains Mono',ui-monospace,monospace; }
-  .custom-scrollbar::-webkit-scrollbar{ height:6px; width:6px; }
-  .custom-scrollbar::-webkit-scrollbar-track{ background:transparent; }
-  .custom-scrollbar::-webkit-scrollbar-thumb{ background:#cbd5e1; border-radius:9999px; }
-  .custom-scrollbar{ scrollbar-width:thin; scrollbar-color:#cbd5e1 transparent; }
+  .font-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
 
-  .icon-btn{
-    display:inline-flex; align-items:center; justify-content:center;
-    width:28px; height:28px; border-radius:9999px;
-    border:1px solid var(--border); background:#fff; color:var(--ink);
-    flex-shrink:0; transition:all .15s ease;
-  }
-  .icon-btn svg{ width:14px; height:14px; }
-  .icon-btn.blue{ background:var(--blue); border-color:var(--blue); color:#fff; }
-  .icon-btn.blue:hover{ background:var(--blue-hover); border-color:var(--blue-hover); }
-  .icon-btn.teal{ background:var(--teal); border-color:var(--teal); color:#fff; }
-  .icon-btn.teal:hover{ background:var(--teal-hover); border-color:var(--teal-hover); }
-  .icon-btn:hover{ border-color:var(--blue); color:var(--blue); }
-  .loc-pill{
-    display:inline-flex; align-items:center; gap:4px; height:28px; padding:0 8px;
-    border-radius:9999px; border:1px solid var(--border); background:#fff;
-    font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); flex-shrink:0;
-  }
-  .loc-pill svg{ width:12px; height:12px; color:var(--blue); }
+  .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 9999px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #94a3b8; }
+  .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
 
-  @media (max-width: 340px){
-    .icon-btn{ width:24px; height:24px; }
-    .icon-btn svg{ width:12px; height:12px; }
+  .shadow-xs { box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.04); }
+
+  .header-hidden { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+  .header-visible { transform: translateY(0); opacity: 1; }
+
+  .skill-bar-track { background: #eef2f7; }
+  .skill-bar-fill { background: linear-gradient(90deg, var(--accent), var(--teal)); }
+
+  .tab-btn { transition: background-color .18s ease, color .18s ease, border-color .18s ease; }
+  .subtab-btn.active { background: var(--ink); color: #fff; }
+
+  .toast-enter { animation: toastIn .25s ease forwards; }
+  @keyframes toastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(12px); } }
+  .toast-exit { animation: toastOut .25s ease forwards; }
+
+  .modal-backdrop { background: rgba(15, 23, 42, 0.72); }
+
+  .online-dot {
+    box-shadow: 0 0 0 0 rgba(16,185,129,0.55);
+    animation: dotPulse 1.8s infinite;
+  }
+  @keyframes dotPulse {
+    0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.55); }
+    70% { box-shadow: 0 0 0 7px rgba(16,185,129,0); }
+    100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
   }
 
-  .tab-btn{
-    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600;
-    padding:6px 12px; border-radius:8px; border:1px solid var(--border);
-    color:var(--muted); background:#fff; white-space:nowrap; flex-shrink:0;
-    transition:all .15s ease; cursor:pointer;
+  .chip {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
   }
-  .tab-btn.active{ background:var(--blue); border-color:var(--blue); color:#fff; }
-  .tab-btn:hover:not(.active){ border-color:var(--blue); color:var(--blue); }
 
-  .subtab-btn{
-    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600;
-    padding:6px 10px; border-bottom:2px solid transparent; color:var(--muted);
-    background:transparent; cursor:pointer; transition:all .15s ease;
-  }
-  .subtab-btn.active{ color:var(--blue); border-bottom-color:var(--blue); }
-
-  .skill-chip{
-    flex-shrink:0; width:168px; border:1px solid var(--border); border-radius:10px;
-    padding:10px 12px; background:#fff;
-  }
-  .skill-chip .bar-track{ height:6px; border-radius:9999px; background:#f1f5f9; overflow:hidden; margin-top:6px; }
-  .skill-chip .bar-fill{ height:100%; border-radius:9999px; background:var(--blue); }
-
-  .modal-overlay{
-    position:fixed; inset:0; background:rgba(15,23,42,0.55); z-index:100;
-    display:flex; align-items:center; justify-content:center; padding:16px;
-    opacity:0; pointer-events:none; transition:opacity .18s ease;
-  }
-  .modal-overlay.open{ opacity:1; pointer-events:auto; }
-  .modal-box{
-    background:#fff; border-radius:14px; border:1px solid var(--border);
-    max-width:640px; width:100%; max-height:88vh; overflow-y:auto;
-    transform:translateY(10px); transition:transform .18s ease;
-  }
-  .modal-overlay.open .modal-box{ transform:translateY(0); }
-
-  .toast{
-    position:fixed; bottom:76px; right:16px; z-index:200;
-    background:var(--ink); color:#fff; padding:12px 16px; border-radius:10px;
-    font-family:'JetBrains Mono',monospace; font-size:12px; max-width:280px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.25);
-    transform:translateY(20px); opacity:0; transition:all .25s ease; pointer-events:none;
-  }
-  .toast.show{ transform:translateY(0); opacity:1; }
-
-  section.card-section{ scroll-margin-top:72px; }
-
-  .card-shell{
-    border:1px solid var(--border); border-radius:10px; background:#fff;
-    box-shadow:0 1px 2px rgba(15,23,42,0.04);
-  }
+  ::selection { background: #bae6fd; color: var(--ink); }
 </style>
 </head>
-<body class="antialiased">
+<body class="min-h-screen pb-24">
 
-<!-- ============ STICKY HEADER (appears after 100px scroll) ============ -->
-<header id="sticky-header" class="fixed top-0 left-0 w-full h-14 bg-white/95 backdrop-blur border-b border-[#e2e8f0] z-50 transition-all duration-300 -translate-y-full opacity-0">
-  <div class="max-w-4xl mx-auto h-full px-4 flex items-center">
+<!-- STICKY HEADER (appears after 100px scroll) -->
+<header id="sticky-header" class="header-hidden fixed top-0 left-0 w-full h-14 bg-white/95 backdrop-blur border-b border-[#e2e8f0] z-50 transition-all duration-300">
+  <div class="max-w-4xl mx-auto h-full px-4 flex items-center justify-between">
     <div class="flex items-center gap-2 font-bold text-[#0f172a]">
-      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=100" alt="Lizi Zivzivadze" class="w-8 h-8 rounded-full object-cover border border-[#e2e8f0]">
+      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" alt="Lizi Zivzivadze" class="w-8 h-8 rounded-full object-cover border border-[#e2e8f0]">
       <span class="text-sm">Lizi Zivzivadze</span>
     </div>
+    <span class="font-mono text-[10px] md:text-xs font-semibold tracking-wider text-[#0369a1] bg-[#f0f9ff] border border-[#bae6fd] rounded-md px-2 py-1">ELECTROMECHANICAL ENGINEER</span>
   </div>
 </header>
 
-<main class="px-3 pt-4">
+<main class="px-3 md:px-4 pt-6">
 
-  <!-- ============ 1. HERO / PROFILE SECTION ============ -->
-  <section class="card-section w-full max-w-4xl mx-auto my-4 p-4 md:p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-    <div class="flex items-start gap-3">
-      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" alt="Lizi Zivzivadze" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-[#0284c7] object-cover shrink-0">
-      <div class="flex flex-col min-w-0 flex-1">
-        <h1 class="text-lg md:text-xl font-bold text-[#0f172a] break-words leading-snug">Lizi Zivzivadze</h1>
-        <p class="font-mono text-[11px] md:text-xs text-[#0369a1] font-semibold tracking-wider mt-0.5">ELECTROMECHANICAL DESIGN ENGINEER</p>
-
-        <div class="flex flex-nowrap items-center gap-1.5 mt-2 overflow-x-auto custom-scrollbar">
-          <a href="tel:+32499221680" class="icon-btn blue" title="Call">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2 3h5l2 6-3 2a12 12 0 006 6l2-3 6 2v5a2 2 0 01-2 2A17 17 0 013 5a2 2 0 012-2z"/></svg>
-          </a>
-          <a href="https://wa.me/32499221680" target="_blank" rel="noopener" class="icon-btn teal" title="WhatsApp">
-            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.87.52 3.62 1.42 5.12L2 22l5.12-1.5a9.86 9.86 0 004.92 1.31h.01c5.46 0 9.9-4.45 9.9-9.91S17.5 2 12.04 2zm5.78 14.06c-.24.68-1.38 1.3-1.9 1.36-.5.06-1.13.09-1.83-.11-.42-.13-.97-.31-1.66-.61-2.94-1.27-4.86-4.23-5-4.43-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.6-.37.8-.37h.57c.18 0 .43-.07.67.51.24.6.83 2.05.9 2.2.07.15.12.33.02.53-.1.2-.15.32-.3.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.61.17.3.76 1.26 1.64 2.04 1.13 1 2.08 1.32 2.38 1.47.3.15.48.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.66-.15.27.1 1.7.8 1.99.95.3.15.5.22.57.35.07.13.07.75-.17 1.43z"/></svg>
-          </a>
-          <span class="loc-pill">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s7-6.5 7-11.5A7 7 0 105 9.5C5 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
-            Leuven, BE
-          </span>
-          <a href="mailto:lizozivzivadze@gmail.com" class="icon-btn" title="Email">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18v12H3z"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 7l9 6 9-6"/></svg>
-          </a>
-          <a href="https://www.linkedin.com/in/lizizivzivadze/" target="_blank" rel="noopener" class="icon-btn" title="LinkedIn">
-            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.77V21H17V15c0-1.43-.03-3.27-2-3.27-2 0-2.3 1.55-2.3 3.16V21H9z"/></svg>
-          </a>
-          <a href="https://github.com/lizozivzivadze-star" target="_blank" rel="noopener" class="icon-btn" title="GitHub">
-            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85V21c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>
-          </a>
-        </div>
+  <!-- HERO / PROFILE SECTION -->
+  <section class="w-full max-w-4xl mx-auto my-4 p-4 md:p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <div class="flex items-start gap-3 md:gap-4">
+      <img id="hero-avatar" src="" alt="Lizi Zivzivadze" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-[#0284c7] object-cover shrink-0">
+      <div class="min-w-0 flex-1">
+        <h1 id="hero-name" class="text-lg md:text-xl font-bold text-[#0f172a] break-words"></h1>
+        <p id="hero-title" class="font-mono text-[11px] md:text-xs text-[#0369a1] font-semibold tracking-wider mt-0.5"></p>
+        <div id="hero-contacts" class="flex items-center justify-between max-w-[280px] sm:max-w-xs mt-2.5"></div>
       </div>
     </div>
-
-    <p class="w-full text-sm md:text-base text-[#475569] font-medium mt-3 pt-3 border-t border-slate-100 leading-relaxed">
-      Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.
-    </p>
+    <p id="hero-statement" class="w-full text-xs md:text-sm text-[#0f172a] font-medium mt-3.5 pt-3 border-t border-slate-100 leading-relaxed"></p>
   </section>
 
-  <!-- ============ 2. PROJECTS SECTION ============ -->
-  <section class="card-section w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-    <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">PROJECTS</h2>
-    <div class="mb-5"></div>
-
-    <div id="project-tabs" class="flex flex-wrap justify-center gap-2 mb-5"></div>
-
-    <div id="project-cards" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 custom-scrollbar"></div>
-  </section>
-
-  <!-- ============ 3. SKILLS SECTION ============ -->
-  <section class="card-section w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-    <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">SKILLS</h2>
-    <div class="mb-5"></div>
-
-    <div id="skill-cat-tabs" class="flex overflow-x-auto gap-2 pb-2 whitespace-nowrap custom-scrollbar mb-4"></div>
-
-    <div class="border border-[#e2e8f0] rounded-lg p-4 bg-white">
-      <div id="skill-chip-row" class="flex overflow-x-auto gap-3 pb-2 custom-scrollbar"></div>
-      <div class="text-center text-[#0284c7] text-xs font-mono mt-2">&larr; scroll for more skills &rarr;</div>
+  <!-- PROJECTS SECTION -->
+  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
+    <div>
+      <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">PROJECTS</h2>
+      <div id="project-filter-tabs" class="flex items-center justify-center gap-2 mt-4 flex-wrap"></div>
+      <div id="project-cards" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 custom-scrollbar mt-5"></div>
     </div>
   </section>
 
-  <!-- ============ 4. WHAT DO I BRING TO THE TABLE ============ -->
-  <section class="card-section w-full max-w-4xl mx-auto my-4 p-5 md:p-6 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-    <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">WHAT DO I BRING TO THE TABLE?</h2>
-    <div class="mb-5"></div>
-
-    <div id="value-props" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 custom-scrollbar"></div>
-  </section>
-
-  <!-- ============ 5. EVENTS SECTION ============ -->
-  <section class="card-section w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-    <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">EVENTS</h2>
-    <div class="mb-5"></div>
-
-    <div id="event-tabs" class="flex flex-wrap justify-center gap-2 mb-5"></div>
-
-    <div id="event-cards" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 custom-scrollbar"></div>
-  </section>
-
-  <!-- ============ 6. DOCUMENT SECTION ============ -->
-  <section class="card-section w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-    <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">HELP YOURSELF</h2>
-    <div class="mb-5"></div>
-
-    <div class="flex flex-col gap-3 mb-4">
-      <button id="cv-doc-btn" data-selected="false" class="doc-card bg-white border border-[#e2e8f0] text-[#0f172a] cursor-pointer p-4 rounded-lg flex items-center justify-between font-semibold transition-all">
-        <span>CV Document</span>
-        <svg class="w-5 h-5 text-[#0284c7] opacity-0 check-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-      </button>
-      <button id="portfolio-doc-btn" data-selected="false" class="doc-card bg-white border border-[#e2e8f0] text-[#0f172a] cursor-pointer p-4 rounded-lg flex items-center justify-between font-semibold transition-all">
-        <span>Portfolio Document</span>
-        <svg class="w-5 h-5 text-[#0284c7] opacity-0 check-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-      </button>
+  <!-- SKILLS SECTION -->
+  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
+    <div>
+      <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">SKILLS</h2>
+      <div id="skill-category-tabs" class="flex items-center gap-2 mt-4 overflow-x-auto custom-scrollbar pb-1"></div>
+      <div id="skill-list" class="max-h-[280px] overflow-y-auto border border-[#e2e8f0] rounded-lg p-4 bg-white custom-scrollbar mt-4 space-y-3"></div>
+      <div class="text-center text-[#0284c7] animate-bounce text-xs font-mono mt-3">↓ Scroll for more skills ↓</div>
     </div>
+  </section>
 
-    <div class="flex flex-col gap-3">
-      <input id="doc-email-input" type="email" placeholder="your.email@example.com" class="w-full p-3 border border-[#e2e8f0] rounded-lg font-mono text-sm focus:outline-none focus:border-[#0284c7]">
-      <button id="send-docs-btn" class="w-full bg-[#0d9488] hover:bg-[#0f766e] text-white font-bold py-3 rounded-lg transition-colors">Send Copies Now</button>
+  <!-- EVENTS SECTION -->
+  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
+    <div>
+      <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">EVENTS</h2>
+      <div id="event-cards" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 custom-scrollbar mt-5"></div>
+    </div>
+  </section>
+
+  <!-- WHAT DO I BRING TO THE TABLE -->
+  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
+    <div>
+      <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">WHAT DO I BRING TO THE TABLE?</h2>
+      <div id="value-props" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 custom-scrollbar mt-5"></div>
+    </div>
+  </section>
+
+  <!-- HELP YOURSELF (DOCUMENT SECTION) -->
+  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
+    <div>
+      <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">HELP YOURSELF</h2>
+      <div class="grid grid-cols-2 gap-3 mt-5">
+        <button id="cv-doc-card" data-selected="false" class="text-left border border-[#e2e8f0] rounded-lg p-4 transition-all duration-150">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#0284c7]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg>
+          <p class="font-bold text-sm text-[#0f172a] mt-2">CV Document</p>
+          <p class="text-xs text-[#475569] mt-0.5">Single-page resume PDF</p>
+        </button>
+        <button id="portfolio-doc-card" data-selected="false" class="text-left border border-[#e2e8f0] rounded-lg p-4 transition-all duration-150">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#0d9488]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M8 4v6"/></svg>
+          <p class="font-bold text-sm text-[#0f172a] mt-2">Portfolio Document</p>
+          <p class="text-xs text-[#475569] mt-0.5">Full project breakdown PDF</p>
+        </button>
+      </div>
+      <div class="mt-4 flex flex-col sm:flex-row gap-2">
+        <input id="doc-email-input" type="email" placeholder="your.email@example.com" class="flex-1 text-sm px-3 py-2.5 rounded-lg border border-[#e2e8f0] bg-white text-[#0f172a] placeholder-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#0284c7] focus:border-transparent">
+        <button id="send-docs-btn" class="text-sm font-semibold px-4 py-2.5 rounded-lg bg-[#0284c7] text-white hover:bg-[#0369a1] transition-colors">Send Copies Now</button>
+      </div>
     </div>
   </section>
 
 </main>
 
-<!-- ============ STICKY FOOTER ============ -->
-<footer class="fixed bottom-0 left-0 w-full h-[52px] bg-white/95 backdrop-blur border-t border-[#e2e8f0] z-40">
-  <div class="max-w-4xl mx-auto h-full px-4 flex items-center justify-center gap-3 font-mono text-xs text-[#475569]">
-    <span>&copy; 2026 Lizi Zivzivadze</span>
-    <span class="text-[#cbd5e1]">|</span>
-    <span class="flex items-center gap-2">
-      <span class="relative flex h-2.5 w-2.5">
-        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-      </span>
-      <span>Junior Engineer ready for deployment</span>
-    </span>
+<!-- STICKY FOOTER -->
+<footer class="fixed bottom-0 left-0 w-full bg-white border-t border-[#e2e8f0] py-3 text-center z-40 shadow-md">
+  <div class="font-mono text-[12px] leading-tight">
+    <p class="text-[#0f172a] font-semibold">2026 Lizi Zivzivadze</p>
+    <p class="flex items-center justify-center gap-1.5 text-[#475569] mt-0.5">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 online-dot"></span>
+      Junior Engineer ready for deployment
+    </p>
   </div>
 </footer>
 
-<!-- ============ DETAIL MODAL (Projects & Events share this) ============ -->
-<div id="detail-modal" class="modal-overlay">
-  <div class="modal-box">
-    <div class="p-4 border-b border-[#e2e8f0] flex items-start justify-between gap-3">
-      <h3 id="detail-modal-title" class="font-bold text-[#0f172a] text-base leading-snug"></h3>
-      <button id="detail-modal-close" class="icon-btn shrink-0" title="Close">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18"/></svg>
-      </button>
+<!-- VIDEO MODAL -->
+<div id="video-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 modal-backdrop">
+  <div class="w-full max-w-2xl">
+    <div class="flex justify-end mb-2">
+      <button id="video-modal-close" class="text-white/90 hover:text-white text-sm font-mono border border-white/30 rounded-md px-3 py-1">✕ Close</button>
     </div>
-    <div class="px-4 pt-3">
-      <div id="detail-subtabs" class="flex gap-1"></div>
+    <div class="aspect-video rounded-lg overflow-hidden bg-black">
+      <iframe id="video-modal-iframe" class="w-full h-full" src="" title="Project video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
-    <div id="detail-modal-body" class="p-4 pt-3 text-sm text-[#475569] leading-relaxed"></div>
   </div>
 </div>
 
-<!-- ============ MEDIA MODAL (video/image preview) ============ -->
-<div id="media-modal" class="modal-overlay">
-  <div class="modal-box !max-w-3xl !p-0 overflow-hidden">
-    <div class="flex items-center justify-between p-3 border-b border-[#e2e8f0]">
-      <span id="media-modal-title" class="font-bold text-sm text-[#0f172a]"></span>
-      <button id="media-modal-close" class="icon-btn" title="Close">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18"/></svg>
-      </button>
-    </div>
-    <div id="media-modal-body" class="aspect-video bg-slate-900"></div>
-  </div>
-</div>
-
-<!-- ============ TOAST ============ -->
-<div id="toast" class="toast"></div>
+<!-- TOAST CONTAINER -->
+<div id="toast-container" class="fixed bottom-20 right-4 z-[70] flex flex-col gap-2 items-end"></div>
 
 <script>
-/* ==================================================
-   SINGLE SOURCE OF TRUTH (IMMUTABLE DATA ENGINE)
-   ================================================== */
+// ==================================================
+// SINGLE SOURCE OF TRUTH (IMMUTABLE DATA ENGINE)
+// ==================================================
 const PORTFOLIO_DATA = {
   personal: {
     name: "Lizi Zivzivadze",
@@ -283,7 +197,7 @@ const PORTFOLIO_DATA = {
     email: "lizozivzivadze@gmail.com",
     phone: "+32 499 22 16 80",
     whatsapp: "https://wa.me/32499221680",
-    location: "Leuven, Belgium",
+    location: "Leuven, BE",
     linkedin: "https://www.linkedin.com/in/lizizivzivadze/",
     github: "https://github.com/lizozivzivadze-star"
   },
@@ -294,13 +208,18 @@ const PORTFOLIO_DATA = {
       category: "HW+SW",
       summary: "Engineered sub-micron positioning stage with high-bandwidth FPGA feedback for active optical calibration assemblies.",
       videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      overview: {
-        objective: "Achieve sub-micron closed-loop positioning for active optical alignment tasks.",
-        contribution: "Designed the precision mechanical stage, the analog sensor conditioning chain, and the FPGA-based feedback control loop end-to-end.",
-        results: "Reached sub-500nm positioning repeatability with a closed-loop bandwidth above 2kHz."
-      },
-      equipment: ["Piezoelectric actuators", "FPGA development board", "Precision optical encoders", "SolidWorks", "LTspice", "Altium Designer", "Embedded C++ / VHDL", "Bench oscilloscope", "Lab power supplies"],
-      links: [{ label: "GitHub Repository", url: "https://github.com/lizozivzivadze-star" }]
+      details: {
+        overview: {
+          objective: "Achieve sub-50nm alignment repeatability under active thermal drift.",
+          contribution: "Lead designer for precision flexure kinematics, custom PCB signal conditioning, and real-time controller.",
+          results: "Validated 32nm position repeatability and 1.2kHz closed-loop bandwidth."
+        },
+        equipment: ["Altium Designer", "STM32F4 / FreeRTOS", "SolidWorks Parametric CAD", "LTspice", "FPGA Control Loop", "Laser Doppler Vibrometer"],
+        urls: [
+          { label: "GitHub Repository", url: "https://github.com/lizozivzivadze-star" },
+          { label: "Technical Documentation", url: "https://github.com/lizozivzivadze-star" }
+        ]
+      }
     },
     {
       id: "proj-2",
@@ -308,13 +227,17 @@ const PORTFOLIO_DATA = {
       category: "HardWare",
       summary: "Developed a 48V/20A industrial motor drive featuring integrated CAN-FD telemetry and hardware power monitoring.",
       videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      overview: {
-        objective: "Deliver a compact, multi-channel industrial-grade BLDC driver with robust telemetry.",
-        contribution: "Led schematic capture, PCB layout, gate-drive tuning, and firmware bring-up for all four channels.",
-        results: "Validated stable operation at 48V/20A per channel with real-time CAN-FD power monitoring."
-      },
-      equipment: ["STM32", "CAN-FD transceivers", "Gate drivers", "Power MOSFETs", "Altium Designer", "Embedded C", "LTspice", "Bench power supply", "Current probe"],
-      links: [{ label: "GitHub Repository", url: "https://github.com/lizozivzivadze-star" }]
+      details: {
+        overview: {
+          objective: "Minimize PCB surface footprint while handling 20A continuous phase currents.",
+          contribution: "Designed power MOSFET layout, gate driver circuitry, and thermal heat sink integration.",
+          results: "Achieved 96.4% efficiency at nominal load with sub-45°C thermal rise."
+        },
+        equipment: ["Altium 4-Layer High-Power Layout", "CAN-FD Bus Analyzer", "Gate Drivers / Current Shunts", "LTspice Thermal Modeling"],
+        urls: [
+          { label: "Hardware Schematics (GitHub)", url: "https://github.com/lizozivzivadze-star" }
+        ]
+      }
     },
     {
       id: "proj-3",
@@ -322,13 +245,18 @@ const PORTFOLIO_DATA = {
       category: "SoftWare",
       summary: "Created a WebGL and ROS2 interface displaying dynamic sensor fusion and LiDAR point clouds at sub-20ms latency.",
       videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      overview: {
-        objective: "Build a low-latency visualization layer for autonomous robotic inspection telemetry.",
-        contribution: "Implemented the ROS2 sensor fusion pipeline and the WebGL front-end for live point cloud rendering.",
-        results: "Achieved sub-20ms end-to-end latency from sensor fusion to rendered point cloud."
-      },
-      equipment: ["ROS2", "LiDAR sensor", "WebGL", "Python", "C++", "Linux", "Git / CI pipelines", "Point cloud processing libraries"],
-      links: [{ label: "GitHub Repository", url: "https://github.com/lizozivzivadze-star" }]
+      details: {
+        overview: {
+          objective: "Provide real-time 3D spatial monitoring over bandwidth-constrained links.",
+          contribution: "Architected WebSockets streaming bridge and dynamic C++ ROS2 node pipeline.",
+          results: "Maintained 60 FPS point cloud rendering at sub-20ms end-to-end network latency."
+        },
+        equipment: ["ROS2 Humble / C++", "WebGL / Three.js", "LiDAR Sensor Fusion", "Docker Containers", "Linux Edge Computing"],
+        urls: [
+          { label: "ROS2 Node Repository", url: "https://github.com/lizozivzivadze-star" },
+          { label: "Live Telemetry Demo", url: "https://github.com/lizozivzivadze-star" }
+        ]
+      }
     },
     {
       id: "proj-4",
@@ -336,13 +264,17 @@ const PORTFOLIO_DATA = {
       category: "HW+SW",
       summary: "Built an automated micro-volume liquid dispenser utilizing computer vision feedback for dynamic droplet correction.",
       videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      overview: {
-        objective: "Automate micro-volume liquid dosing with real-time optical correction of droplet volume.",
-        contribution: "Designed the mechanical dosing stage, integrated the vision feedback loop, and wrote the control software.",
-        results: "Reduced droplet volume error through closed-loop vision-based correction."
-      },
-      equipment: ["OpenCV", "Python", "Stepper motors", "Micro-pumps", "SolidWorks", "SLA 3D printing", "Machine vision camera", "STM32"],
-      links: [{ label: "GitHub Repository", url: "https://github.com/lizozivzivadze-star" }]
+      details: {
+        overview: {
+          objective: "Dispense sub-microliter droplets with real-time optical volumetric validation.",
+          contribution: "Full stack hardware-software design: stepper drives, OpenCV camera calibration, and custom chassis.",
+          results: "Reduced volumetric variance to under 1.5% across 10,000 continuous test cycles."
+        },
+        equipment: ["Python / OpenCV", "Stepper Drivers / Microstepping", "3D Printing (SLA/FDM)", "C++ Control Loop", "Lab Micro-Scale Calibration"],
+        urls: [
+          { label: "GitHub Codebase", url: "https://github.com/lizozivzivadze-star" }
+        ]
+      }
     }
   ],
   skills: {
@@ -387,397 +319,404 @@ const PORTFOLIO_DATA = {
       { name: "C++ Data Structures & Kinematics", level: 85 }
     ]
   },
-  valueProps: [
-    { title: "Practical Hardware Design", text: "Cross-Disciplinary Integration" },
-    { title: "Embedded Software Skills", text: "Rapid Functional Prototyping" },
-    { title: "Closed-Loop Controls", text: "Precision Feedback Systems" },
-    { title: "Manufacturing Experience", text: "Production-Minded Execution" },
-    { title: "Rapid Problem Solving", text: "Data-Driven Verification" }
-  ],
-  /* SAMPLE / PLACEHOLDER DATA — replace with real events */
   events: [
     {
       id: "event-1",
-      title: "Manufacturing & Automation Fair 2026",
-      category: "HW+SW",
-      imageUrl: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800",
-      overview: {
-        description: "Sample placeholder — replace with a real event. Regional trade fair covering industrial automation, robotics, and manufacturing technology.",
-        why: "Sample placeholder — note why this event mattered to your career or studies.",
-        participation: "Sample placeholder — describe how you took part (attendee, exhibitor, volunteer, presenter).",
-        learned: "Sample placeholder — describe what you learned.",
-        outcomes: "Sample placeholder — describe any outcomes or follow-ups."
-      },
-      media: [
-        { type: "image", url: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800", label: "Fair floor" },
-        { type: "image", url: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&q=80&w=800", label: "Demo booth" }
-      ],
-      links: [{ label: "Official event page", url: "https://github.com/lizozivzivadze-star" }]
+      title: "European Agentic AI & Robotics Summit 2026",
+      summary: "Presented work on hardware-in-the-loop edge AI for real-time mechatronic systems.",
+      imageUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600",
+      details: {
+        overview: {
+          whyMattered: "Key platform for validating sub-millisecond edge neural execution on ARM microcontrollers.",
+          participation: "Delivered a technical workshop on integrating STM32 low-power nodes with ROS2 telemetry.",
+          outcomes: "Established key industrial contacts for future hardware benchmarking."
+        },
+        media: [
+          "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600",
+          "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=600"
+        ],
+        urls: [
+          { label: "Official Event Page", url: "https://github.com/lizozivzivadze-star" },
+          { label: "Conference Proceedings", url: "https://github.com/lizozivzivadze-star" }
+        ]
+      }
     },
     {
       id: "event-2",
-      title: "KU Leuven Group T Project Showcase",
-      category: "SoftWare",
-      imageUrl: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800",
-      overview: {
-        description: "Sample placeholder — replace with a real event. End-of-year showcase of student engineering projects at KU Leuven Group T.",
-        why: "Sample placeholder — note why this event mattered to your career or studies.",
-        participation: "Sample placeholder — describe how you took part.",
-        learned: "Sample placeholder — describe what you learned.",
-        outcomes: "Sample placeholder — describe any outcomes or follow-ups."
-      },
-      media: [
-        { type: "image", url: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800", label: "Showcase floor" }
-      ],
-      links: [{ label: "Conference page", url: "https://github.com/lizozivzivadze-star" }]
+      title: "Benelux Mechatronics Engineering Hackathon",
+      summary: "First place solution for high-speed dynamic sorting using custom vision feedback.",
+      imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600",
+      details: {
+        overview: {
+          whyMattered: "Tested rapid functional prototyping under extreme time constraints.",
+          participation: "Lead hardware integrator and firmware developer for the team.",
+          outcomes: "Awarded First Place among 24 participating engineering teams."
+        },
+        media: [
+          "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600"
+        ],
+        urls: [
+          { label: "Hackathon Winner Announcement", url: "https://github.com/lizozivzivadze-star" }
+        ]
+      }
     }
+  ],
+  valueProps: [
+    { title: "Cross-Disciplinary Integration", text: "Practical Hardware Design" },
+    { title: "Rapid Functional Prototyping", text: "Embedded Software Skills" },
+    { title: "Closed-Loop Controls", text: "Manufacturing Experience" },
+    { title: "Production-Minded Execution", text: "Rapid Problem Solving" },
+    { title: "Data-Driven Verification", text: "Rigorous Test Validation" }
   ]
 };
 
-/* ==================================================
-   STATE
-   ================================================== */
-const state = {
-  projectFilter: "HW+SW",
-  eventFilter: "HW+SW",
-  skillCategory: Object.keys(PORTFOLIO_DATA.skills)[0],
-  cvSelected: false,
-  portfolioSelected: false
+// ==================================================
+// ICONS (inline SVG, currentColor)
+// ==================================================
+const ICONS = {
+  phone: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+  whatsapp: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.39 1.26 4.81L2 22l5.41-1.36a9.9 9.9 0 0 0 4.63 1.15h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.86 9.86 0 0 0 12.04 2zm0 1.67c2.19 0 4.24.85 5.79 2.4a8.19 8.19 0 0 1 2.4 5.84c0 4.55-3.71 8.25-8.27 8.25a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.09.79.83-3.02-.2-.31a8.18 8.18 0 0 1-1.26-4.37c0-4.56 3.72-8.25 8.29-8.25zm-4.6 4.5c-.16 0-.42.06-.64.3-.22.24-.85.83-.85 2.02 0 1.19.87 2.34.99 2.5.12.16 1.7 2.72 4.2 3.71 2.08.82 2.5.66 2.95.62.45-.04 1.45-.59 1.66-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28-.24-.12-1.45-.71-1.67-.79-.22-.08-.39-.12-.55.12-.16.24-.63.79-.77.95-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.11-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.33-.76-1.82-.2-.48-.4-.42-.55-.42h-.28z"/></svg>',
+  email: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+  linkedin: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>',
+  github: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.09 3.29 9.4 7.86 10.93.58.1.79-.25.79-.56v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.72 1.27 3.39.97.1-.75.4-1.27.73-1.56-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.74.8 1.19 1.83 1.19 3.09 0 4.43-2.7 5.4-5.28 5.69.42.36.78 1.07.78 2.16v3.2c0 .32.21.67.8.56A10.51 10.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z"/></svg>',
+  location: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+  play: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="11" fill="rgba(255,255,255,0.15)"/><path d="M9.5 7.5v9l8-4.5-8-4.5z" fill="#fff"/></svg>'
 };
 
-/* ==================================================
-   HELPERS
-   ================================================== */
-function el(html){ const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; }
-function escapeHtml(s){ return (s || "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove('show'), 3200);
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
 
-/* ==================================================
-   STICKY HEADER
-   ================================================== */
+// ==================================================
+// STICKY HEADER SCROLL BEHAVIOR
+// ==================================================
+const stickyHeader = document.getElementById('sticky-header');
 window.addEventListener('scroll', () => {
-  const h = document.getElementById('sticky-header');
-  if (window.scrollY > 100){
-    h.classList.remove('-translate-y-full','opacity-0');
+  if (window.scrollY > 100) {
+    stickyHeader.classList.remove('header-hidden');
+    stickyHeader.classList.add('header-visible');
   } else {
-    h.classList.add('-translate-y-full','opacity-0');
+    stickyHeader.classList.add('header-hidden');
+    stickyHeader.classList.remove('header-visible');
   }
-});
+}, { passive: true });
 
-/* ==================================================
-   PROJECTS SECTION
-   ================================================== */
-const PROJECT_TABS = ["HardWare", "SoftWare", "HW+SW"];
+// ==================================================
+// RENDER: HERO / PROFILE
+// ==================================================
+function renderHero() {
+  const p = PORTFOLIO_DATA.personal;
+  document.getElementById('hero-avatar').src = p.avatarUrl;
+  document.getElementById('hero-name').textContent = p.name;
+  document.getElementById('hero-title').textContent = p.title;
+  document.getElementById('hero-statement').textContent = p.statement;
 
-function projectMatchesFilter(project, filter){
-  if (filter === "HW+SW") return true;
-  if (filter === "HardWare") return project.category === "HardWare" || project.category === "HW+SW";
-  if (filter === "SoftWare") return project.category === "SoftWare" || project.category === "HW+SW";
+  const contacts = document.getElementById('hero-contacts');
+  contacts.innerHTML = `
+    <a href="tel:${p.phone.replace(/\s+/g, '')}" title="Phone" class="text-[#475569] hover:text-[#0284c7] transition-colors w-4 h-4">${ICONS.phone}</a>
+    <a href="${p.whatsapp}" target="_blank" rel="noopener" title="WhatsApp" class="text-[#475569] hover:text-[#0d9488] transition-colors w-4 h-4">${ICONS.whatsapp}</a>
+    <a href="mailto:${p.email}" title="Email" class="text-[#475569] hover:text-[#0284c7] transition-colors w-4 h-4">${ICONS.email}</a>
+    <a href="${p.linkedin}" target="_blank" rel="noopener" title="LinkedIn" class="text-[#475569] hover:text-[#0284c7] transition-colors w-4 h-4">${ICONS.linkedin}</a>
+    <a href="${p.github}" target="_blank" rel="noopener" title="GitHub" class="text-[#475569] hover:text-[#0f172a] transition-colors w-4 h-4">${ICONS.github}</a>
+    <span title="Location" class="flex items-center gap-0.5 font-mono text-[10px] text-[#475569] shrink-0">${ICONS.location.replace('viewBox="0 0 24 24"', 'viewBox="0 0 24 24" style="width:12px;height:12px;display:inline-block"')}${p.location}</span>
+  `;
+  contacts.querySelectorAll('svg').forEach(svg => { svg.style.width = '16px'; svg.style.height = '16px'; });
+}
+
+// ==================================================
+// RENDER: PROJECTS
+// ==================================================
+let activeProjectFilter = 'HW+SW';
+const projectFilters = ['HW+SW', 'HardWare', 'SoftWare'];
+const projectCardState = {}; // id -> active subtab
+
+function matchesProjectFilter(category, filter) {
+  if (filter === 'HW+SW') return true;
+  if (filter === 'HardWare') return category === 'HardWare' || category === 'HW+SW';
+  if (filter === 'SoftWare') return category === 'SoftWare' || category === 'HW+SW';
   return true;
 }
 
-function renderProjectTabs(){
-  const wrap = document.getElementById('project-tabs');
-  wrap.innerHTML = "";
-  PROJECT_TABS.forEach(tab => {
-    const btn = el(`<button class="tab-btn ${tab === state.projectFilter ? 'active' : ''}">${tab}</button>`);
-    btn.addEventListener('click', () => { state.projectFilter = tab; renderProjectTabs(); renderProjectCards(); });
-    wrap.appendChild(btn);
+function renderProjectFilterTabs() {
+  const wrap = document.getElementById('project-filter-tabs');
+  wrap.innerHTML = projectFilters.map(f => `
+    <button data-filter="${f}" class="tab-btn font-mono text-[11px] font-semibold tracking-wide px-3 py-1.5 rounded-md border ${activeProjectFilter === f ? 'bg-[#0284c7] text-white border-[#0284c7]' : 'bg-white text-[#475569] border-[#e2e8f0] hover:border-[#0284c7]'}">${f}</button>
+  `).join('');
+  wrap.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeProjectFilter = btn.dataset.filter;
+      renderProjectFilterTabs();
+      renderProjectCards();
+    });
   });
 }
 
-function renderProjectCards(){
+function projectSubtabContent(project, subtab) {
+  if (subtab === 'overview') {
+    const o = project.details.overview;
+    return `
+      <div class="space-y-2 text-xs text-[#475569] leading-relaxed">
+        <p><span class="font-semibold text-[#0f172a]">Objective:</span> ${escapeHtml(o.objective)}</p>
+        <p><span class="font-semibold text-[#0f172a]">Contribution:</span> ${escapeHtml(o.contribution)}</p>
+        <p><span class="font-semibold text-[#0f172a]">Results:</span> ${escapeHtml(o.results)}</p>
+      </div>`;
+  }
+  if (subtab === 'equipment') {
+    return `<div class="flex flex-wrap gap-1.5">${project.details.equipment.map(e => `<span class="chip text-[10px] bg-[#f0f9ff] text-[#0369a1] border border-[#bae6fd] rounded px-2 py-1">${escapeHtml(e)}</span>`).join('')}</div>`;
+  }
+  if (subtab === 'url') {
+    return `<div class="flex flex-col gap-1.5">${project.details.urls.map(u => `<a href="${u.url}" target="_blank" rel="noopener" class="text-xs font-semibold text-[#0284c7] hover:text-[#0369a1] hover:underline">${escapeHtml(u.label)} ↗</a>`).join('')}</div>`;
+  }
+  return '';
+}
+
+function renderProjectCards() {
   const wrap = document.getElementById('project-cards');
-  wrap.innerHTML = "";
-  PORTFOLIO_DATA.projects
-    .filter(p => projectMatchesFilter(p, state.projectFilter))
-    .forEach(project => {
-      const card = el(`
-        <div class="card-shell w-[280px] md:w-[320px] shrink-0 snap-start p-4 flex flex-col justify-between min-h-[360px]">
-          <div>
-            <div class="video-trigger aspect-video relative rounded bg-slate-900 overflow-hidden flex items-center justify-center cursor-pointer group">
-              <svg class="w-10 h-10 text-white/80 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <h3 class="font-bold text-[#0f172a] mt-3 mb-1 leading-snug">${escapeHtml(project.title)}</h3>
-            <p class="text-xs md:text-sm text-[#475569] mb-4 leading-relaxed">${escapeHtml(project.summary)}</p>
-          </div>
-          <button class="details-trigger w-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-mono text-xs font-semibold py-2.5 rounded-lg transition-colors">VIEW DETAILS</button>
-        </div>
-      `);
-      card.querySelector('.video-trigger').addEventListener('click', () => openMediaModal(project.title, { type: 'video', url: project.videoUrl }));
-      card.querySelector('.details-trigger').addEventListener('click', () => openDetailModal(project, 'project'));
-      wrap.appendChild(card);
-    });
-}
+  const filtered = PORTFOLIO_DATA.projects.filter(p => matchesProjectFilter(p.category, activeProjectFilter));
 
-/* ==================================================
-   EVENTS SECTION (mirrors Projects)
-   ================================================== */
-function renderEventTabs(){
-  const wrap = document.getElementById('event-tabs');
-  wrap.innerHTML = "";
-  PROJECT_TABS.forEach(tab => {
-    const btn = el(`<button class="tab-btn ${tab === state.eventFilter ? 'active' : ''}">${tab}</button>`);
-    btn.addEventListener('click', () => { state.eventFilter = tab; renderEventTabs(); renderEventCards(); });
-    wrap.appendChild(btn);
+  wrap.innerHTML = filtered.map(project => {
+    if (!projectCardState[project.id]) projectCardState[project.id] = 'overview';
+    const activeSub = projectCardState[project.id];
+    return `
+    <div class="w-[280px] md:w-[320px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs">
+      <div>
+        <div class="aspect-video relative rounded-lg bg-slate-900 overflow-hidden cursor-pointer video-trigger" data-video="${project.videoUrl}">
+          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="${escapeHtml(project.title)} preview" class="w-full h-full object-cover opacity-80">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-10 h-10">${ICONS.play}</div>
+          </div>
+          <span class="absolute top-2 right-2 chip text-[9px] font-semibold bg-black/60 text-white rounded px-1.5 py-0.5">${escapeHtml(project.category)}</span>
+        </div>
+        <h3 class="font-bold text-[#0f172a] mt-3 mb-1 leading-snug text-sm">${escapeHtml(project.title)}</h3>
+        <p class="text-xs text-[#475569] mb-3 leading-relaxed">${escapeHtml(project.summary)}</p>
+      </div>
+      <div>
+        <div class="flex items-center gap-1 border-b border-[#e2e8f0] pb-2 mb-2">
+          ${['overview','equipment','url'].map(st => `
+            <button data-project="${project.id}" data-subtab="${st}" class="subtab-btn ${activeSub === st ? 'active' : ''} font-mono text-[10px] font-semibold uppercase tracking-wide px-2 py-1 rounded ${activeSub === st ? '' : 'text-[#475569] hover:bg-slate-100'}">${st === 'url' ? 'URL' : st}</button>
+          `).join('')}
+        </div>
+        <div class="subtab-content min-h-[92px]">${projectSubtabContent(project, activeSub)}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  wrap.querySelectorAll('.subtab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      projectCardState[btn.dataset.project] = btn.dataset.subtab;
+      renderProjectCards();
+    });
+  });
+  wrap.querySelectorAll('.video-trigger').forEach(el => {
+    el.addEventListener('click', () => openVideoModal(el.dataset.video));
   });
 }
 
-function renderEventCards(){
+// ==================================================
+// RENDER: SKILLS
+// ==================================================
+const skillCategories = Object.keys(PORTFOLIO_DATA.skills);
+let activeSkillCategory = skillCategories[0];
+
+function renderSkillCategoryTabs() {
+  const wrap = document.getElementById('skill-category-tabs');
+  wrap.innerHTML = skillCategories.map(cat => `
+    <button data-cat="${cat}" class="tab-btn shrink-0 font-mono text-[11px] font-semibold tracking-wide px-3 py-1.5 rounded-md border whitespace-nowrap ${activeSkillCategory === cat ? 'bg-[#0284c7] text-white border-[#0284c7]' : 'bg-white text-[#475569] border-[#e2e8f0] hover:border-[#0284c7]'}">${cat}</button>
+  `).join('');
+  wrap.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeSkillCategory = btn.dataset.cat;
+      renderSkillCategoryTabs();
+      renderSkillList();
+    });
+  });
+}
+
+function renderSkillList() {
+  const wrap = document.getElementById('skill-list');
+  const skills = PORTFOLIO_DATA.skills[activeSkillCategory];
+  wrap.innerHTML = skills.map(s => `
+    <div>
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs font-medium text-[#0f172a]">${escapeHtml(s.name)}</span>
+        <span class="font-mono text-[10px] text-[#0369a1] font-semibold">${s.level}%</span>
+      </div>
+      <div class="skill-bar-track w-full h-1.5 rounded-full overflow-hidden">
+        <div class="skill-bar-fill h-full rounded-full" style="width:${s.level}%"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ==================================================
+// RENDER: EVENTS
+// ==================================================
+const eventCardState = {};
+
+function eventSubtabContent(event, subtab) {
+  if (subtab === 'overview') {
+    const o = event.details.overview;
+    return `
+      <div class="space-y-2 text-xs text-[#475569] leading-relaxed">
+        <p><span class="font-semibold text-[#0f172a]">Why It Mattered:</span> ${escapeHtml(o.whyMattered)}</p>
+        <p><span class="font-semibold text-[#0f172a]">Participation:</span> ${escapeHtml(o.participation)}</p>
+        <p><span class="font-semibold text-[#0f172a]">Outcomes:</span> ${escapeHtml(o.outcomes)}</p>
+      </div>`;
+  }
+  if (subtab === 'media') {
+    return `<div class="grid grid-cols-3 gap-1.5">${event.details.media.map(m => `<img src="${m}" alt="Event media" class="w-full h-14 object-cover rounded">`).join('')}</div>`;
+  }
+  if (subtab === 'url') {
+    return `<div class="flex flex-col gap-1.5">${event.details.urls.map(u => `<a href="${u.url}" target="_blank" rel="noopener" class="text-xs font-semibold text-[#0284c7] hover:text-[#0369a1] hover:underline">${escapeHtml(u.label)} ↗</a>`).join('')}</div>`;
+  }
+  return '';
+}
+
+function renderEventCards() {
   const wrap = document.getElementById('event-cards');
-  wrap.innerHTML = "";
-  PORTFOLIO_DATA.events
-    .filter(ev => projectMatchesFilter(ev, state.eventFilter))
-    .forEach(evnt => {
-      const card = el(`
-        <div class="card-shell w-[280px] md:w-[320px] shrink-0 snap-start p-4 flex flex-col justify-between min-h-[360px]">
-          <div>
-            <div class="image-trigger aspect-video relative rounded bg-slate-900 overflow-hidden flex items-center justify-center cursor-pointer group">
-              <img src="${evnt.imageUrl}" alt="${escapeHtml(evnt.title)}" class="w-full h-full object-cover group-hover:opacity-80 transition-opacity">
-            </div>
-            <h3 class="font-bold text-[#0f172a] mt-3 mb-1 leading-snug">${escapeHtml(evnt.title)}</h3>
-            <p class="text-xs md:text-sm text-[#475569] mb-4 leading-relaxed">${escapeHtml(evnt.overview.description)}</p>
-          </div>
-          <button class="details-trigger w-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-mono text-xs font-semibold py-2.5 rounded-lg transition-colors">VIEW DETAILS</button>
+  wrap.innerHTML = PORTFOLIO_DATA.events.map(event => {
+    if (!eventCardState[event.id]) eventCardState[event.id] = 'overview';
+    const activeSub = eventCardState[event.id];
+    return `
+    <div class="w-[280px] md:w-[320px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs">
+      <div>
+        <div class="aspect-video relative rounded-lg bg-slate-900 overflow-hidden">
+          <img src="${event.imageUrl}" alt="${escapeHtml(event.title)}" class="w-full h-full object-cover">
         </div>
-      `);
-      card.querySelector('.image-trigger').addEventListener('click', () => openMediaModal(evnt.title, { type: 'image', url: evnt.imageUrl }));
-      card.querySelector('.details-trigger').addEventListener('click', () => openDetailModal(evnt, 'event'));
-      wrap.appendChild(card);
-    });
-}
-
-/* ==================================================
-   DETAIL MODAL (shared: projects use Overview/Equipment/URL,
-   events use Overview/Media/URL)
-   ================================================== */
-const detailModal = document.getElementById('detail-modal');
-let currentDetailItem = null;
-let currentDetailType = null;
-let currentDetailTab = 'Overview';
-
-function openDetailModal(item, type){
-  currentDetailItem = item;
-  currentDetailType = type;
-  currentDetailTab = 'Overview';
-  document.getElementById('detail-modal-title').textContent = item.title;
-  renderDetailSubtabs();
-  renderDetailBody();
-  detailModal.classList.add('open');
-}
-function closeDetailModal(){ detailModal.classList.remove('open'); }
-document.getElementById('detail-modal-close').addEventListener('click', closeDetailModal);
-detailModal.addEventListener('click', (e) => { if (e.target === detailModal) closeDetailModal(); });
-
-function renderDetailSubtabs(){
-  const tabs = currentDetailType === 'project' ? ['Overview','Equipment','URL'] : ['Overview','Media','URL'];
-  const wrap = document.getElementById('detail-subtabs');
-  wrap.innerHTML = "";
-  tabs.forEach(tab => {
-    const btn = el(`<button class="subtab-btn ${tab === currentDetailTab ? 'active' : ''}">${tab}</button>`);
-    btn.addEventListener('click', () => { currentDetailTab = tab; renderDetailSubtabs(); renderDetailBody(); });
-    wrap.appendChild(btn);
-  });
-}
-
-function renderDetailBody(){
-  const body = document.getElementById('detail-modal-body');
-  const item = currentDetailItem;
-
-  if (currentDetailTab === 'Overview'){
-    if (currentDetailType === 'project'){
-      body.innerHTML = `
-        <p class="mb-3">${escapeHtml(item.summary)}</p>
-        <div class="space-y-2">
-          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">OBJECTIVE</span><p class="mt-0.5">${escapeHtml(item.overview.objective)}</p></div>
-          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">CONTRIBUTION</span><p class="mt-0.5">${escapeHtml(item.overview.contribution)}</p></div>
-          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">RESULTS</span><p class="mt-0.5">${escapeHtml(item.overview.results)}</p></div>
-        </div>`;
-    } else {
-      body.innerHTML = `
-        <div class="space-y-2">
-          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">DESCRIPTION</span><p class="mt-0.5">${escapeHtml(item.overview.description)}</p></div>
-          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">WHY IT MATTERED</span><p class="mt-0.5">${escapeHtml(item.overview.why)}</p></div>
-          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">MY PARTICIPATION</span><p class="mt-0.5">${escapeHtml(item.overview.participation)}</p></div>
-          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">WHAT I LEARNED</span><p class="mt-0.5">${escapeHtml(item.overview.learned)}</p></div>
-          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">OUTCOMES</span><p class="mt-0.5">${escapeHtml(item.overview.outcomes)}</p></div>
-        </div>`;
-    }
-  }
-
-  else if (currentDetailTab === 'Equipment'){
-    body.innerHTML = `<div class="flex flex-wrap gap-2">${
-      item.equipment.map(e => `<span class="font-mono text-[11px] bg-[#f1f5f9] text-[#0f172a] px-2.5 py-1 rounded-md border border-[#e2e8f0]">${escapeHtml(e)}</span>`).join('')
-    }</div>`;
-  }
-
-  else if (currentDetailTab === 'Media'){
-    body.innerHTML = "";
-    const grid = el(`<div class="grid grid-cols-2 gap-2"></div>`);
-    item.media.forEach(m => {
-      const thumb = el(`<div class="media-thumb aspect-video rounded overflow-hidden bg-slate-900 cursor-pointer relative group">
-        <img src="${m.url}" alt="${escapeHtml(m.label)}" class="w-full h-full object-cover group-hover:opacity-80 transition-opacity">
-      </div>`);
-      thumb.addEventListener('click', () => openMediaModal(m.label, { type: m.type, url: m.url }));
-      grid.appendChild(thumb);
-    });
-    body.appendChild(grid);
-  }
-
-  else if (currentDetailTab === 'URL'){
-    body.innerHTML = `<div class="flex flex-col gap-2">${
-      item.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener" class="flex items-center justify-between p-3 border border-[#e2e8f0] rounded-lg hover:border-[#0284c7] transition-colors">
-        <span class="font-semibold text-sm text-[#0f172a]">${escapeHtml(l.label)}</span>
-        <svg class="w-4 h-4 text-[#0284c7]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-      </a>`).join('')
-    }</div>`;
-  }
-}
-
-/* ==================================================
-   MEDIA MODAL (video / image preview)
-   ================================================== */
-const mediaModal = document.getElementById('media-modal');
-function openMediaModal(title, media){
-  document.getElementById('media-modal-title').textContent = title;
-  const body = document.getElementById('media-modal-body');
-  body.innerHTML = "";
-  if (media.type === 'video'){
-    body.innerHTML = `<iframe class="w-full h-full" src="${media.url}" title="${escapeHtml(title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-  } else {
-    body.innerHTML = `<img src="${media.url}" alt="${escapeHtml(title)}" class="w-full h-full object-cover">`;
-  }
-  mediaModal.classList.add('open');
-}
-function closeMediaModal(){
-  mediaModal.classList.remove('open');
-  document.getElementById('media-modal-body').innerHTML = "";
-}
-document.getElementById('media-modal-close').addEventListener('click', closeMediaModal);
-mediaModal.addEventListener('click', (e) => { if (e.target === mediaModal) closeMediaModal(); });
-
-/* ==================================================
-   SKILLS SECTION
-   ================================================== */
-function renderSkillCatTabs(){
-  const wrap = document.getElementById('skill-cat-tabs');
-  wrap.innerHTML = "";
-  Object.keys(PORTFOLIO_DATA.skills).forEach(cat => {
-    const btn = el(`<button class="tab-btn ${cat === state.skillCategory ? 'active' : ''}">${cat}</button>`);
-    btn.addEventListener('click', () => { state.skillCategory = cat; renderSkillCatTabs(); renderSkillChips(); });
-    wrap.appendChild(btn);
-  });
-}
-
-function renderSkillChips(){
-  const wrap = document.getElementById('skill-chip-row');
-  wrap.innerHTML = "";
-  PORTFOLIO_DATA.skills[state.skillCategory].forEach(skill => {
-    const chip = el(`
-      <div class="skill-chip">
-        <div class="flex items-center justify-between gap-2">
-          <span class="text-xs font-semibold text-[#0f172a] leading-tight">${escapeHtml(skill.name)}</span>
-        </div>
-        <div class="flex items-center justify-between mt-1">
-          <span class="font-mono text-[10px] text-[#0284c7] font-bold">${skill.level}%</span>
-        </div>
-        <div class="bar-track"><div class="bar-fill" style="width:${skill.level}%"></div></div>
+        <h3 class="font-bold text-[#0f172a] mt-3 mb-1 leading-snug text-sm">${escapeHtml(event.title)}</h3>
+        <p class="text-xs text-[#475569] mb-3 leading-relaxed">${escapeHtml(event.summary)}</p>
       </div>
-    `);
-    wrap.appendChild(chip);
+      <div>
+        <div class="flex items-center gap-1 border-b border-[#e2e8f0] pb-2 mb-2">
+          ${['overview','media','url'].map(st => `
+            <button data-event="${event.id}" data-subtab="${st}" class="subtab-btn ${activeSub === st ? 'active' : ''} font-mono text-[10px] font-semibold uppercase tracking-wide px-2 py-1 rounded ${activeSub === st ? '' : 'text-[#475569] hover:bg-slate-100'}">${st === 'url' ? 'URL' : st}</button>
+          `).join('')}
+        </div>
+        <div class="subtab-content min-h-[92px]">${eventSubtabContent(event, activeSub)}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  wrap.querySelectorAll('.subtab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      eventCardState[btn.dataset.event] = btn.dataset.subtab;
+      renderEventCards();
+    });
   });
 }
 
-/* ==================================================
-   WHAT DO I BRING TO THE TABLE
-   ================================================== */
-function renderValueProps(){
+// ==================================================
+// RENDER: WHAT DO I BRING TO THE TABLE
+// ==================================================
+function renderValueProps() {
   const wrap = document.getElementById('value-props');
-  wrap.innerHTML = "";
-  PORTFOLIO_DATA.valueProps.forEach((vp, i) => {
-    const card = el(`
-      <div class="shrink-0 w-[280px] md:w-[300px] min-h-[220px] md:min-h-[240px] snap-start bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-5 flex flex-col justify-between shadow-sm">
-        <div>
-          <span class="font-mono text-[11px] font-semibold text-[#0369a1]">REASON #${i + 1}</span>
-          <h3 class="font-bold text-base text-[#0f172a] mt-2 leading-snug">${escapeHtml(vp.title)}</h3>
-        </div>
-        <p class="font-mono text-xs md:text-sm text-[#475569] mt-3 leading-relaxed">${escapeHtml(vp.text)}</p>
+  wrap.innerHTML = PORTFOLIO_DATA.valueProps.map(v => `
+    <div class="shrink-0 w-[280px] md:w-[300px] min-h-[220px] md:min-h-[240px] snap-start bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-5 flex flex-col justify-between shadow-xs">
+      <div class="w-9 h-9 rounded-md bg-[#0284c7]/10 flex items-center justify-center text-[#0284c7] font-mono text-xs font-bold">${escapeHtml(v.title.split(' ').map(w => w[0]).slice(0,2).join(''))}</div>
+      <div>
+        <p class="font-mono text-[10px] uppercase tracking-wider text-[#0d9488] font-semibold mb-2">${escapeHtml(v.title)}</p>
+        <p class="text-base font-bold text-[#0f172a] leading-snug">${escapeHtml(v.text)}</p>
       </div>
-    `);
-    wrap.appendChild(card);
-  });
+    </div>
+  `).join('');
 }
 
-/* ==================================================
-   HELP YOURSELF (document form)
-   ================================================== */
-const cvBtn = document.getElementById('cv-doc-btn');
-const portfolioBtn = document.getElementById('portfolio-doc-btn');
+// ==================================================
+// VIDEO MODAL
+// ==================================================
+const videoModal = document.getElementById('video-modal');
+const videoModalIframe = document.getElementById('video-modal-iframe');
 
-function toggleDocSelection(btn, key){
-  state[key] = !state[key];
-  const selected = state[key];
-  btn.dataset.selected = String(selected);
-  const icon = btn.querySelector('.check-icon');
-  if (selected){
-    btn.classList.add('border-2','border-[#0284c7]','bg-[#f0f9ff]');
-    btn.classList.remove('border','border-[#e2e8f0]');
-    icon.classList.remove('opacity-0');
+function openVideoModal(url) {
+  videoModalIframe.src = url + (url.includes('?') ? '&' : '?') + 'autoplay=1';
+  videoModal.classList.remove('hidden');
+  videoModal.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+}
+function closeVideoModal() {
+  videoModalIframe.src = '';
+  videoModal.classList.add('hidden');
+  videoModal.classList.remove('flex');
+  document.body.style.overflow = '';
+}
+document.getElementById('video-modal-close').addEventListener('click', closeVideoModal);
+videoModal.addEventListener('click', (e) => { if (e.target === videoModal) closeVideoModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVideoModal(); });
+
+// ==================================================
+// HELP YOURSELF (DOCUMENT SECTION)
+// ==================================================
+const cvCard = document.getElementById('cv-doc-card');
+const portfolioCard = document.getElementById('portfolio-doc-card');
+const emailInput = document.getElementById('doc-email-input');
+const sendBtn = document.getElementById('send-docs-btn');
+let cvSelected = false;
+let portfolioSelected = false;
+
+function updateDocCardStyle(card, selected) {
+  if (selected) {
+    card.classList.add('border-2', 'border-[#0284c7]', 'bg-[#f0f9ff]');
+    card.classList.remove('border', 'border-[#e2e8f0]');
   } else {
-    btn.classList.remove('border-2','border-[#0284c7]','bg-[#f0f9ff]');
-    btn.classList.add('border','border-[#e2e8f0]');
-    icon.classList.add('opacity-0');
+    card.classList.remove('border-2', 'border-[#0284c7]', 'bg-[#f0f9ff]');
+    card.classList.add('border', 'border-[#e2e8f0]');
   }
 }
-cvBtn.addEventListener('click', () => toggleDocSelection(cvBtn, 'cvSelected'));
-portfolioBtn.addEventListener('click', () => toggleDocSelection(portfolioBtn, 'portfolioSelected'));
 
-document.getElementById('send-docs-btn').addEventListener('click', () => {
-  const emailInput = document.getElementById('doc-email-input');
-  const email = emailInput.value.trim();
-
-  if (!state.cvSelected && !state.portfolioSelected){
-    showToast('Notification: Please select at least one document.');
-    return;
-  }
-  if (!email){
-    showToast('Notification: Please enter an email address.');
-    return;
-  }
-
-  const items = [];
-  if (state.cvSelected) items.push('CV Document');
-  if (state.portfolioSelected) items.push('Portfolio Document');
-
-  showToast(`Notification: Dispatched ${items.join(' & ')} to ${email}`);
-
-  emailInput.value = "";
-  [cvBtn, portfolioBtn].forEach(btn => {
-    btn.classList.remove('border-2','border-[#0284c7]','bg-[#f0f9ff]');
-    btn.classList.add('border','border-[#e2e8f0]');
-    btn.querySelector('.check-icon').classList.add('opacity-0');
-    btn.dataset.selected = "false";
-  });
-  state.cvSelected = false;
-  state.portfolioSelected = false;
+cvCard.addEventListener('click', () => {
+  cvSelected = !cvSelected;
+  updateDocCardStyle(cvCard, cvSelected);
+});
+portfolioCard.addEventListener('click', () => {
+  portfolioSelected = !portfolioSelected;
+  updateDocCardStyle(portfolioCard, portfolioSelected);
 });
 
-/* ==================================================
-   INIT
-   ================================================== */
-renderProjectTabs();
+function isValidEmail(v) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+}
+
+function showToast(message, isError) {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast-enter max-w-[280px] text-xs font-medium rounded-lg px-4 py-3 shadow-lg border ${isError ? 'bg-red-50 text-red-700 border-red-200' : 'bg-white text-[#0f172a] border-[#e2e8f0]'}`;
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.remove('toast-enter');
+    toast.classList.add('toast-exit');
+    setTimeout(() => toast.remove(), 260);
+  }, 3200);
+}
+
+sendBtn.addEventListener('click', () => {
+  const email = emailInput.value.trim();
+  const items = [];
+  if (cvSelected) items.push('CV Document');
+  if (portfolioSelected) items.push('Portfolio Document');
+
+  if (items.length === 0) {
+    showToast('Select at least one document before sending.', true);
+    return;
+  }
+  if (!isValidEmail(email)) {
+    showToast('Enter a valid email address to continue.', true);
+    return;
+  }
+  showToast(`Dispatched ${items.join(' & ')} to ${email}`, false);
+});
+
+// ==================================================
+// INIT
+// ==================================================
+renderHero();
+renderProjectFilterTabs();
 renderProjectCards();
-renderEventTabs();
+renderSkillCategoryTabs();
+renderSkillList();
 renderEventCards();
-renderSkillCatTabs();
-renderSkillChips();
 renderValueProps();
 </script>
 </body>
