@@ -1,776 +1,784 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lizi Zivzivadze - Electromechanical Design Engineer Portfolio</title>
-  
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Font Configuration (Inter & JetBrains Mono) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f8fafc;
-      background-image: linear-gradient(to right, rgba(15, 23, 42, 0.035) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
-      background-size: 24px 24px;
-      color: #0f172a;
-    }
-    .font-mono {
-      font-family: 'JetBrains Mono', monospace;
-    }
-    
-    /* Custom Scrollbar Styling */
-    .custom-scrollbar::-webkit-scrollbar {
-      height: 6px;
-      width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #f1f5f9;
-      border-radius: 4px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 4px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
-    
-    /* Smooth transition for active tabs & cards */
-    .tab-btn, .action-btn, .card-transition {
-      transition: all 0.2s ease-in-out;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lizi Zivzivadze — Electromechanical Design Engineer</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f8fafc; --ink:#0f172a; --muted:#475569; --border:#e2e8f0;
+    --blue:#0284c7; --blue-hover:#0369a1; --teal:#0d9488; --teal-hover:#0f766e;
+  }
+  *{ -webkit-tap-highlight-color: transparent; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background-color:var(--bg);
+    font-family:'Inter',ui-sans-serif,system-ui,sans-serif;
+    color:var(--ink);
+    background-image:
+      linear-gradient(rgba(15,23,42,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15,23,42,0.035) 1px, transparent 1px);
+    background-size: 28px 28px;
+    padding-bottom: 60px; /* reserve space for sticky footer */
+  }
+  .font-mono{ font-family:'JetBrains Mono',ui-monospace,monospace; }
+  .custom-scrollbar::-webkit-scrollbar{ height:6px; width:6px; }
+  .custom-scrollbar::-webkit-scrollbar-track{ background:transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb{ background:#cbd5e1; border-radius:9999px; }
+  .custom-scrollbar{ scrollbar-width:thin; scrollbar-color:#cbd5e1 transparent; }
+
+  .icon-btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:28px; height:28px; border-radius:9999px;
+    border:1px solid var(--border); background:#fff; color:var(--ink);
+    flex-shrink:0; transition:all .15s ease;
+  }
+  .icon-btn svg{ width:14px; height:14px; }
+  .icon-btn.blue{ background:var(--blue); border-color:var(--blue); color:#fff; }
+  .icon-btn.blue:hover{ background:var(--blue-hover); border-color:var(--blue-hover); }
+  .icon-btn.teal{ background:var(--teal); border-color:var(--teal); color:#fff; }
+  .icon-btn.teal:hover{ background:var(--teal-hover); border-color:var(--teal-hover); }
+  .icon-btn:hover{ border-color:var(--blue); color:var(--blue); }
+  .loc-pill{
+    display:inline-flex; align-items:center; gap:4px; height:28px; padding:0 8px;
+    border-radius:9999px; border:1px solid var(--border); background:#fff;
+    font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); flex-shrink:0;
+  }
+  .loc-pill svg{ width:12px; height:12px; color:var(--blue); }
+
+  @media (max-width: 340px){
+    .icon-btn{ width:24px; height:24px; }
+    .icon-btn svg{ width:12px; height:12px; }
+  }
+
+  .tab-btn{
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600;
+    padding:6px 12px; border-radius:8px; border:1px solid var(--border);
+    color:var(--muted); background:#fff; white-space:nowrap; flex-shrink:0;
+    transition:all .15s ease; cursor:pointer;
+  }
+  .tab-btn.active{ background:var(--blue); border-color:var(--blue); color:#fff; }
+  .tab-btn:hover:not(.active){ border-color:var(--blue); color:var(--blue); }
+
+  .subtab-btn{
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600;
+    padding:6px 10px; border-bottom:2px solid transparent; color:var(--muted);
+    background:transparent; cursor:pointer; transition:all .15s ease;
+  }
+  .subtab-btn.active{ color:var(--blue); border-bottom-color:var(--blue); }
+
+  .skill-chip{
+    flex-shrink:0; width:168px; border:1px solid var(--border); border-radius:10px;
+    padding:10px 12px; background:#fff;
+  }
+  .skill-chip .bar-track{ height:6px; border-radius:9999px; background:#f1f5f9; overflow:hidden; margin-top:6px; }
+  .skill-chip .bar-fill{ height:100%; border-radius:9999px; background:var(--blue); }
+
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(15,23,42,0.55); z-index:100;
+    display:flex; align-items:center; justify-content:center; padding:16px;
+    opacity:0; pointer-events:none; transition:opacity .18s ease;
+  }
+  .modal-overlay.open{ opacity:1; pointer-events:auto; }
+  .modal-box{
+    background:#fff; border-radius:14px; border:1px solid var(--border);
+    max-width:640px; width:100%; max-height:88vh; overflow-y:auto;
+    transform:translateY(10px); transition:transform .18s ease;
+  }
+  .modal-overlay.open .modal-box{ transform:translateY(0); }
+
+  .toast{
+    position:fixed; bottom:76px; right:16px; z-index:200;
+    background:var(--ink); color:#fff; padding:12px 16px; border-radius:10px;
+    font-family:'JetBrains Mono',monospace; font-size:12px; max-width:280px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+    transform:translateY(20px); opacity:0; transition:all .25s ease; pointer-events:none;
+  }
+  .toast.show{ transform:translateY(0); opacity:1; }
+
+  section.card-section{ scroll-margin-top:72px; }
+
+  .card-shell{
+    border:1px solid var(--border); border-radius:10px; background:#fff;
+    box-shadow:0 1px 2px rgba(15,23,42,0.04);
+  }
+</style>
 </head>
-<body class="pb-24 antialiased min-h-screen relative">
+<body class="antialiased">
 
-  <!-- 1. STICKY HEADER (Visible on scroll) -->
-  <header id="sticky-header" class="fixed top-0 left-0 w-full h-14 bg-white/95 backdrop-blur border-b border-[#e2e8f0] z-50 transition-all duration-300 transform -translate-y-full opacity-0">
-    <div class="max-w-4xl mx-auto h-full px-4 flex items-center justify-between">
-      <div class="flex items-center gap-2 font-bold text-[#0f172a]">
-        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" alt="Lizi Zivzivadze" class="w-8 h-8 rounded-full border border-[#0284c7] object-cover shrink-0">
-        <span class="text-sm md:text-base">Lizi Zivzivadze</span>
-      </div>
-      <div class="font-mono text-[10px] sm:text-xs bg-slate-100 text-[#0369a1] px-2.5 py-1 rounded border border-[#e2e8f0] font-semibold tracking-wider uppercase">
-        ELECTROMECHANICAL ENGINEER
-      </div>
-    </div>
-  </header>
-
-  <!-- MAIN CONTAINER -->
-  <main class="px-3 sm:px-4 pt-4 sm:pt-6">
-
-    <!-- 2. HERO / PROFILE SECTION -->
-    <section class="w-full max-w-4xl mx-auto my-4 p-4 md:p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-      <div class="flex items-center gap-3 md:gap-4">
-        <!-- Avatar -->
-        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" alt="Lizi Zivzivadze" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-[#0284c7] object-cover shrink-0">
-        
-        <!-- Header Metadata -->
-        <div class="flex-1 min-w-0">
-          <h1 class="text-lg md:text-xl font-bold text-[#0f172a] break-words leading-tight">Lizi Zivzivadze</h1>
-          <p class="font-mono text-[11px] md:text-xs text-[#0369a1] font-semibold tracking-wider uppercase mt-0.5 mb-2">ELECTROMECHANICAL DESIGN ENGINEER</p>
-          
-          <!-- Single-Row Contact Icons & Location -->
-          <div class="flex items-center justify-between max-w-[280px] sm:max-w-xs text-slate-600">
-            <!-- Phone -->
-            <a href="tel:+32499221680" title="Phone" class="hover:text-[#0284c7] transition-colors p-1">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-            </a>
-            <!-- WhatsApp -->
-            <a href="https://wa.me/32499221680" target="_blank" rel="noopener noreferrer" title="WhatsApp" class="hover:text-[#0d9488] transition-colors p-1">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 2c-5.514 0-9.999 4.486-9.999 10 0 1.763.462 3.486 1.336 5.007L2 22l5.123-1.343c1.46.797 3.111 1.214 4.887 1.214 5.513 0 10-4.486 10-10s-4.487-10-9.979-10zm5.82 14.376c-.246.691-1.228 1.264-1.7 1.296-.437.032-.988.18-3.238-.727-2.73-1.099-4.5-3.863-4.636-4.045-.136-.182-1.11-1.477-1.11-2.818 0-1.341.701-2.001.949-2.274.248-.273.543-.341.724-.341.182 0 .363.003.522.01.171.008.4.015.602.5.215.518.736 1.794.8 1.925.064.131.108.286.022.457-.086.171-.129.277-.258.423-.129.146-.271.327-.387.439-.129.124-.264.26-.114.518.15.258.666 1.099 1.43 1.78 1.001.892 1.839 1.168 2.102 1.298.263.13.418.109.571-.065.153-.174.653-.761.828-1.023.175-.262.35-.218.591-.129.241.088 1.532.723 1.794.854.263.13.438.196.503.305.065.109.065.633-.181 1.324z"/></svg>
-            </a>
-            <!-- Email -->
-            <a href="mailto:lizozivzivadze@gmail.com" title="Email" class="hover:text-[#0284c7] transition-colors p-1">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-            </a>
-            <!-- LinkedIn -->
-            <a href="https://www.linkedin.com/in/lizizivzivadze/" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="hover:text-[#0284c7] transition-colors p-1">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-            </a>
-            <!-- GitHub -->
-            <a href="https://github.com/lizozivzivadze-star" target="_blank" rel="noopener noreferrer" title="GitHub" class="hover:text-slate-900 transition-colors p-1">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-            </a>
-            <!-- Location Badge -->
-            <span class="font-mono text-[10px] bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-[#e2e8f0] font-semibold shrink-0">
-              Leuven, BE
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Personal Statement -->
-      <p class="w-full text-xs md:text-sm text-[#0f172a] font-medium mt-3.5 pt-3 border-t border-slate-100 leading-relaxed">
-        Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.
-      </p>
-    </section>
-
-    <!-- 3. PROJECTS SECTION -->
-    <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
-      <div>
-        <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center uppercase tracking-wide">PROJECTS</h2>
-        
-        <!-- Filter Tabs -->
-        <div class="flex justify-center gap-2 my-4">
-          <button onclick="filterProjects('HW+SW')" id="proj-filter-HW+SW" class="proj-filter-btn px-3 py-1 font-mono text-xs font-semibold rounded border border-[#e2e8f0] bg-[#0284c7] text-white">HW+SW</button>
-          <button onclick="filterProjects('HardWare')" id="proj-filter-HardWare" class="proj-filter-btn px-3 py-1 font-mono text-xs font-semibold rounded border border-[#e2e8f0] bg-slate-100 text-slate-700 hover:bg-slate-200">HardWare</button>
-          <button onclick="filterProjects('SoftWare')" id="proj-filter-SoftWare" class="proj-filter-btn px-3 py-1 font-mono text-xs font-semibold rounded border border-[#e2e8f0] bg-slate-100 text-slate-700 hover:bg-slate-200">SoftWare</button>
-        </div>
-
-        <!-- Carousel -->
-        <div id="projects-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 custom-scrollbar">
-          <!-- Rendered dynamically -->
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. SKILLS SECTION -->
-    <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
-      <div>
-        <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center uppercase tracking-wide">SKILLS</h2>
-        
-        <!-- Skill Category Tabs -->
-        <div id="skills-tabs" class="flex overflow-x-auto gap-2 my-4 pb-2 custom-scrollbar">
-          <!-- Rendered dynamically -->
-        </div>
-
-        <!-- Skill List Scroll Area -->
-        <div id="skills-container" class="max-h-[280px] overflow-y-auto border border-[#e2e8f0] rounded-lg p-4 bg-white custom-scrollbar space-y-3">
-          <!-- Rendered dynamically -->
-        </div>
-      </div>
-
-      <!-- Bounce Arrow Indicator -->
-      <div class="text-center text-[#0284c7] animate-bounce text-xs font-mono mt-3">
-        ↓ Scroll for more skills ↓
-      </div>
-    </section>
-
-    <!-- 5. EVENTS SECTION -->
-    <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
-      <div>
-        <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center uppercase tracking-wide">EVENTS</h2>
-        
-        <!-- Events Carousel -->
-        <div id="events-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-4 my-4 pb-4 custom-scrollbar">
-          <!-- Rendered dynamically -->
-        </div>
-      </div>
-    </section>
-
-    <!-- 6. WHAT DO I BRING TO THE TABLE SECTION -->
-    <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
-      <div>
-        <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center uppercase tracking-wide mb-4">WHAT DO I BRING TO THE TABLE?</h2>
-        
-        <!-- Value Props Carousel -->
-        <div id="value-props-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 custom-scrollbar">
-          <!-- Rendered dynamically -->
-        </div>
-      </div>
-    </section>
-
-    <!-- 7. HELP YOURSELF (DOCUMENT SECTION) -->
-    <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between min-h-[520px]">
-      <div>
-        <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center uppercase tracking-wide">HELP YOURSELF</h2>
-        <p class="text-xs text-center text-[#475569] mt-1 mb-6">Select documentation copies to be dispatched to your inbox.</p>
-
-        <!-- Document Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-          <!-- Card 1: CV -->
-          <div id="doc-card-cv" onclick="toggleDocSelection('cv')" class="cursor-pointer border border-[#e2e8f0] rounded-lg p-4 bg-white hover:border-[#0284c7] transition-all flex items-center gap-3">
-            <div id="doc-check-cv" class="w-5 h-5 rounded border border-[#cbd5e1] flex items-center justify-center text-white bg-white">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-            </div>
-            <div>
-              <h3 class="font-bold text-sm text-[#0f172a]">CV Document</h3>
-              <p class="text-xs text-[#475569] font-mono">PDF • Updated 2026</p>
-            </div>
-          </div>
-
-          <!-- Card 2: Portfolio -->
-          <div id="doc-card-portfolio" onclick="toggleDocSelection('portfolio')" class="cursor-pointer border border-[#e2e8f0] rounded-lg p-4 bg-white hover:border-[#0284c7] transition-all flex items-center gap-3">
-            <div id="doc-check-portfolio" class="w-5 h-5 rounded border border-[#cbd5e1] flex items-center justify-center text-white bg-white">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-            </div>
-            <div>
-              <h3 class="font-bold text-sm text-[#0f172a]">Portfolio Document</h3>
-              <p class="text-xs text-[#475569] font-mono">PDF • Extended Technical Version</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Input & Action Button -->
-        <div class="max-w-md mx-auto space-y-3">
-          <input type="email" id="doc-email-input" placeholder="your.email@example.com" class="w-full px-4 py-2.5 rounded-lg border border-[#e2e8f0] text-sm focus:outline-none focus:border-[#0284c7]">
-          <button id="send-docs-btn" onclick="dispatchDocuments()" class="w-full py-2.5 px-4 bg-[#0284c7] hover:bg-[#0369a1] text-white font-mono text-xs font-bold rounded-lg transition-colors uppercase tracking-wider">
-            Send Copies Now
-          </button>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- 8. STICKY FOOTER -->
-  <footer class="fixed bottom-0 left-0 w-full bg-white border-t border-[#e2e8f0] py-3 text-center z-40 shadow-md">
-    <div class="font-mono text-[12px] text-[#0f172a] space-y-0.5">
-      <div>2026 Lizi Zivzivadze</div>
-      <div class="flex items-center justify-center gap-1.5 text-[#475569]">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span>Junior Engineer ready for deployment</span>
-      </div>
-    </div>
-  </footer>
-
-  <!-- VIDEO MODAL IFRAME -->
-  <div id="video-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-black rounded-xl overflow-hidden w-full max-w-2xl border border-slate-700 relative">
-      <button onclick="closeVideoModal()" class="absolute top-2 right-2 text-white bg-slate-800/80 hover:bg-slate-700 w-8 h-8 rounded-full flex items-center justify-center z-10 font-bold">✕</button>
-      <div class="aspect-video w-full">
-        <iframe id="video-iframe" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      </div>
+<!-- ============ STICKY HEADER (appears after 100px scroll) ============ -->
+<header id="sticky-header" class="fixed top-0 left-0 w-full h-14 bg-white/95 backdrop-blur border-b border-[#e2e8f0] z-50 transition-all duration-300 -translate-y-full opacity-0">
+  <div class="max-w-4xl mx-auto h-full px-4 flex items-center">
+    <div class="flex items-center gap-2 font-bold text-[#0f172a]">
+      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=100" alt="Lizi Zivzivadze" class="w-8 h-8 rounded-full object-cover border border-[#e2e8f0]">
+      <span class="text-sm">Lizi Zivzivadze</span>
     </div>
   </div>
+</header>
 
-  <!-- TOAST NOTIFICATION -->
-  <div id="toast-notification" class="fixed bottom-16 right-4 bg-[#0f172a] text-white px-4 py-3 rounded-lg shadow-xl font-mono text-xs z-50 transform translate-y-10 opacity-0 transition-all duration-300 pointer-events-none border border-slate-700">
-    <span id="toast-message">Notification</span>
+<main class="px-3 pt-4">
+
+  <!-- ============ 1. HERO / PROFILE SECTION ============ -->
+  <section class="card-section w-full max-w-4xl mx-auto my-4 p-4 md:p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <div class="flex items-start gap-3">
+      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" alt="Lizi Zivzivadze" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-[#0284c7] object-cover shrink-0">
+      <div class="flex flex-col min-w-0 flex-1">
+        <h1 class="text-lg md:text-xl font-bold text-[#0f172a] break-words leading-snug">Lizi Zivzivadze</h1>
+        <p class="font-mono text-[11px] md:text-xs text-[#0369a1] font-semibold tracking-wider mt-0.5">ELECTROMECHANICAL DESIGN ENGINEER</p>
+
+        <div class="flex flex-nowrap items-center gap-1.5 mt-2 overflow-x-auto custom-scrollbar">
+          <a href="tel:+32499221680" class="icon-btn blue" title="Call">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2 3h5l2 6-3 2a12 12 0 006 6l2-3 6 2v5a2 2 0 01-2 2A17 17 0 013 5a2 2 0 012-2z"/></svg>
+          </a>
+          <a href="https://wa.me/32499221680" target="_blank" rel="noopener" class="icon-btn teal" title="WhatsApp">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.87.52 3.62 1.42 5.12L2 22l5.12-1.5a9.86 9.86 0 004.92 1.31h.01c5.46 0 9.9-4.45 9.9-9.91S17.5 2 12.04 2zm5.78 14.06c-.24.68-1.38 1.3-1.9 1.36-.5.06-1.13.09-1.83-.11-.42-.13-.97-.31-1.66-.61-2.94-1.27-4.86-4.23-5-4.43-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.6-.37.8-.37h.57c.18 0 .43-.07.67.51.24.6.83 2.05.9 2.2.07.15.12.33.02.53-.1.2-.15.32-.3.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.61.17.3.76 1.26 1.64 2.04 1.13 1 2.08 1.32 2.38 1.47.3.15.48.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.66-.15.27.1 1.7.8 1.99.95.3.15.5.22.57.35.07.13.07.75-.17 1.43z"/></svg>
+          </a>
+          <span class="loc-pill">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s7-6.5 7-11.5A7 7 0 105 9.5C5 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+            Leuven, BE
+          </span>
+          <a href="mailto:lizozivzivadze@gmail.com" class="icon-btn" title="Email">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18v12H3z"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 7l9 6 9-6"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/lizizivzivadze/" target="_blank" rel="noopener" class="icon-btn" title="LinkedIn">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.77V21H17V15c0-1.43-.03-3.27-2-3.27-2 0-2.3 1.55-2.3 3.16V21H9z"/></svg>
+          </a>
+          <a href="https://github.com/lizozivzivadze-star" target="_blank" rel="noopener" class="icon-btn" title="GitHub">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85V21c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <p class="w-full text-sm md:text-base text-[#475569] font-medium mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+      Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.
+    </p>
+  </section>
+
+  <!-- ============ 2. PROJECTS SECTION ============ -->
+  <section class="card-section w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">PROJECTS</h2>
+    <div class="mb-5"></div>
+
+    <div id="project-tabs" class="flex flex-wrap justify-center gap-2 mb-5"></div>
+
+    <div id="project-cards" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 custom-scrollbar"></div>
+  </section>
+
+  <!-- ============ 3. SKILLS SECTION ============ -->
+  <section class="card-section w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">SKILLS</h2>
+    <div class="mb-5"></div>
+
+    <div id="skill-cat-tabs" class="flex overflow-x-auto gap-2 pb-2 whitespace-nowrap custom-scrollbar mb-4"></div>
+
+    <div class="border border-[#e2e8f0] rounded-lg p-4 bg-white">
+      <div id="skill-chip-row" class="flex overflow-x-auto gap-3 pb-2 custom-scrollbar"></div>
+      <div class="text-center text-[#0284c7] text-xs font-mono mt-2">&larr; scroll for more skills &rarr;</div>
+    </div>
+  </section>
+
+  <!-- ============ 4. WHAT DO I BRING TO THE TABLE ============ -->
+  <section class="card-section w-full max-w-4xl mx-auto my-4 p-5 md:p-6 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">WHAT DO I BRING TO THE TABLE?</h2>
+    <div class="mb-5"></div>
+
+    <div id="value-props" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 custom-scrollbar"></div>
+  </section>
+
+  <!-- ============ 5. EVENTS SECTION ============ -->
+  <section class="card-section w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">EVENTS</h2>
+    <div class="mb-5"></div>
+
+    <div id="event-tabs" class="flex flex-wrap justify-center gap-2 mb-5"></div>
+
+    <div id="event-cards" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 custom-scrollbar"></div>
+  </section>
+
+  <!-- ============ 6. DOCUMENT SECTION ============ -->
+  <section class="card-section w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <h2 class="font-mono text-xl font-bold text-[#0f172a] text-center">HELP YOURSELF</h2>
+    <div class="mb-5"></div>
+
+    <div class="flex flex-col gap-3 mb-4">
+      <button id="cv-doc-btn" data-selected="false" class="doc-card bg-white border border-[#e2e8f0] text-[#0f172a] cursor-pointer p-4 rounded-lg flex items-center justify-between font-semibold transition-all">
+        <span>CV Document</span>
+        <svg class="w-5 h-5 text-[#0284c7] opacity-0 check-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+      </button>
+      <button id="portfolio-doc-btn" data-selected="false" class="doc-card bg-white border border-[#e2e8f0] text-[#0f172a] cursor-pointer p-4 rounded-lg flex items-center justify-between font-semibold transition-all">
+        <span>Portfolio Document</span>
+        <svg class="w-5 h-5 text-[#0284c7] opacity-0 check-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+      </button>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      <input id="doc-email-input" type="email" placeholder="your.email@example.com" class="w-full p-3 border border-[#e2e8f0] rounded-lg font-mono text-sm focus:outline-none focus:border-[#0284c7]">
+      <button id="send-docs-btn" class="w-full bg-[#0d9488] hover:bg-[#0f766e] text-white font-bold py-3 rounded-lg transition-colors">Send Copies Now</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ STICKY FOOTER ============ -->
+<footer class="fixed bottom-0 left-0 w-full h-[52px] bg-white/95 backdrop-blur border-t border-[#e2e8f0] z-40">
+  <div class="max-w-4xl mx-auto h-full px-4 flex items-center justify-center gap-3 font-mono text-xs text-[#475569]">
+    <span>&copy; 2026 Lizi Zivzivadze</span>
+    <span class="text-[#cbd5e1]">|</span>
+    <span class="flex items-center gap-2">
+      <span class="relative flex h-2.5 w-2.5">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+      </span>
+      <span>Junior Engineer ready for deployment</span>
+    </span>
   </div>
+</footer>
 
-  <!-- APPLICATION SCRIPT -->
-  <script>
-    // SINGLE SOURCE OF TRUTH (IMMUTABLE DATA ENGINE)
-    const PORTFOLIO_DATA = {
-      personal: {
-        name: "Lizi Zivzivadze",
-        title: "ELECTROMECHANICAL DESIGN ENGINEER",
-        statement: "Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.",
-        avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
-        email: "lizozivzivadze@gmail.com",
-        phone: "+32 499 22 16 80",
-        whatsapp: "https://wa.me/32499221680",
-        location: "Leuven, BE",
-        linkedin: "https://www.linkedin.com/in/lizizivzivadze/",
-        github: "https://github.com/lizozivzivadze-star"
+<!-- ============ DETAIL MODAL (Projects & Events share this) ============ -->
+<div id="detail-modal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="p-4 border-b border-[#e2e8f0] flex items-start justify-between gap-3">
+      <h3 id="detail-modal-title" class="font-bold text-[#0f172a] text-base leading-snug"></h3>
+      <button id="detail-modal-close" class="icon-btn shrink-0" title="Close">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="px-4 pt-3">
+      <div id="detail-subtabs" class="flex gap-1"></div>
+    </div>
+    <div id="detail-modal-body" class="p-4 pt-3 text-sm text-[#475569] leading-relaxed"></div>
+  </div>
+</div>
+
+<!-- ============ MEDIA MODAL (video/image preview) ============ -->
+<div id="media-modal" class="modal-overlay">
+  <div class="modal-box !max-w-3xl !p-0 overflow-hidden">
+    <div class="flex items-center justify-between p-3 border-b border-[#e2e8f0]">
+      <span id="media-modal-title" class="font-bold text-sm text-[#0f172a]"></span>
+      <button id="media-modal-close" class="icon-btn" title="Close">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div id="media-modal-body" class="aspect-video bg-slate-900"></div>
+  </div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div id="toast" class="toast"></div>
+
+<script>
+/* ==================================================
+   SINGLE SOURCE OF TRUTH (IMMUTABLE DATA ENGINE)
+   ================================================== */
+const PORTFOLIO_DATA = {
+  personal: {
+    name: "Lizi Zivzivadze",
+    title: "ELECTROMECHANICAL DESIGN ENGINEER",
+    statement: "Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.",
+    avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
+    email: "lizozivzivadze@gmail.com",
+    phone: "+32 499 22 16 80",
+    whatsapp: "https://wa.me/32499221680",
+    location: "Leuven, Belgium",
+    linkedin: "https://www.linkedin.com/in/lizizivzivadze/",
+    github: "https://github.com/lizozivzivadze-star"
+  },
+  projects: [
+    {
+      id: "proj-1",
+      title: "Closed-Loop Piezoelectric Micro-Actuator Rig",
+      category: "HW+SW",
+      summary: "Engineered sub-micron positioning stage with high-bandwidth FPGA feedback for active optical calibration assemblies.",
+      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      overview: {
+        objective: "Achieve sub-micron closed-loop positioning for active optical alignment tasks.",
+        contribution: "Designed the precision mechanical stage, the analog sensor conditioning chain, and the FPGA-based feedback control loop end-to-end.",
+        results: "Reached sub-500nm positioning repeatability with a closed-loop bandwidth above 2kHz."
       },
-      projects: [
-        {
-          id: "proj-1",
-          title: "Closed-Loop Piezoelectric Micro-Actuator Rig",
-          category: "HW+SW",
-          summary: "Engineered sub-micron positioning stage with high-bandwidth FPGA feedback for active optical calibration assemblies.",
-          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          details: {
-            overview: {
-              objective: "Achieve sub-50nm alignment repeatability under active thermal drift.",
-              contribution: "Lead designer for precision flexure kinematics, custom PCB signal conditioning, and real-time controller.",
-              results: "Validated 32nm position repeatability and 1.2kHz closed-loop bandwidth."
-            },
-            equipment: ["Altium Designer", "STM32F4 / FreeRTOS", "SolidWorks Parametric CAD", "LTspice", "FPGA Control Loop", "Laser Doppler Vibrometer"],
-            urls: [
-              { label: "GitHub Repository", url: "https://github.com/lizozivzivadze-star" },
-              { label: "Technical Documentation", url: "https://github.com/lizozivzivadze-star" }
-            ]
-          }
-        },
-        {
-          id: "proj-2",
-          title: "Compact 4-Channel Brushless Motor Driver (BLDC)",
-          category: "HardWare",
-          summary: "Developed a 48V/20A industrial motor drive featuring integrated CAN-FD telemetry and hardware power monitoring.",
-          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          details: {
-            overview: {
-              objective: "Minimize PCB surface footprint while handling 20A continuous phase currents.",
-              contribution: "Designed power MOSFET layout, gate driver circuitry, and thermal heat sink integration.",
-              results: "Achieved 96.4% efficiency at nominal load with sub-45°C thermal rise."
-            },
-            equipment: ["Altium 4-Layer High-Power Layout", "CAN-FD Bus Analyzer", "Gate Drivers / Current Shunts", "LTspice Thermal Modeling"],
-            urls: [
-              { label: "Hardware Schematics (GitHub)", url: "https://github.com/lizozivzivadze-star" }
-            ]
-          }
-        },
-        {
-          id: "proj-3",
-          title: "ROS2 Autonomous Robotic Inspection Telemetry",
-          category: "SoftWare",
-          summary: "Created a WebGL and ROS2 interface displaying dynamic sensor fusion and LiDAR point clouds at sub-20ms latency.",
-          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          details: {
-            overview: {
-              objective: "Provide real-time 3D spatial monitoring over bandwidth-constrained links.",
-              contribution: "Architected WebSockets streaming bridge and dynamic C++ ROS2 node pipeline.",
-              results: "Maintained 60 FPS point cloud rendering at sub-20ms end-to-end network latency."
-            },
-            equipment: ["ROS2 Humble / C++", "WebGL / Three.js", "LiDAR Sensor Fusion", "Docker Containers", "Linux Edge Computing"],
-            urls: [
-              { label: "ROS2 Node Repository", url: "https://github.com/lizozivzivadze-star" },
-              { label: "Live Telemetry Demo", url: "https://github.com/lizozivzivadze-star" }
-            ]
-          }
-        },
-        {
-          id: "proj-4",
-          title: "Precision Micro-Fluidic Dosing Station",
-          category: "HW+SW",
-          summary: "Built an automated micro-volume liquid dispenser utilizing computer vision feedback for dynamic droplet correction.",
-          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          details: {
-            overview: {
-              objective: "Dispense sub-microliter droplets with real-time optical volumetric validation.",
-              contribution: "Full stack hardware-software design: stepper drives, OpenCV camera calibration, and custom chassis.",
-              results: "Reduced volumetric variance to under 1.5% across 10,000 continuous test cycles."
-            },
-            equipment: ["Python / OpenCV", "Stepper Drivers / Microstepping", "3D Printing (SLA/FDM)", "C++ Control Loop", "Lab Micro-Scale Calibration"],
-            urls: [
-              { label: "GitHub Codebase", url: "https://github.com/lizozivzivadze-star" }
-            ]
-          }
-        }
-      ],
-      skills: {
-        "Electronics": [
-          { name: "PCB Layout (Altium Designer)", level: 92 },
-          { name: "Analog Signal Conditioning", level: 85 },
-          { name: "Power Electronics (DC-DC / Gate Drivers)", level: 82 },
-          { name: "High-Speed Bus Layout (CAN-FD, Ethernet)", level: 88 },
-          { name: "EMC/EMI Shielding & Noise Reduction", level: 80 },
-          { name: "Circuit Simulation (LTspice / Tina-TI)", level: 86 },
-          { name: "SMD Soldering & Lab Instrumentation", level: 90 },
-          { name: "Battery Management Systems (BMS)", level: 78 }
-        ],
-        "Embedded Systems": [
-          { name: "STM32 / ARM Cortex-M Firmware", level: 94 },
-          { name: "Embedded C / Real-Time C++", level: 90 },
-          { name: "FreeRTOS Task Scheduling & Mutexes", level: 85 },
-          { name: "Low-Level Bus Protocols (SPI, I2C, UART)", level: 95 },
-          { name: "DMA Telemetry & Hardware Interrupts", level: 88 },
-          { name: "Bare-Metal Microcontroller Architecture", level: 86 },
-          { name: "Bootloaders & OTA Updates", level: 78 },
-          { name: "Hardware In-The-Loop (HIL) Testing", level: 82 }
-        ],
-        "CAD": [
-          { name: "SolidWorks Parametric Modeling", level: 95 },
-          { name: "Structural & Thermal FEA (ANSYS)", level: 88 },
-          { name: "GD&T Tolerance Stack-Up Analysis", level: 90 },
-          { name: "Precision Flexure & Kinematic Design", level: 86 },
-          { name: "Design for Manufacturing (DFM / DFA)", level: 92 },
-          { name: "CNC Milling & Machining Toolpaths", level: 84 },
-          { name: "Rapid Prototyping (FDM / SLA / SLS)", level: 94 },
-          { name: "Enclosure IP Ingress Protection Design", level: 80 }
-        ],
-        "Software & AI": [
-          { name: "Python / Scientific Stack (NumPy, SciPy)", level: 90 },
-          { name: "ROS2 (Robot Operating System)", level: 84 },
-          { name: "MATLAB / Simulink Model-Based Control", level: 88 },
-          { name: "OpenCV Computer Vision Pipelines", level: 80 },
-          { name: "Closed-Loop PID / FOC Control Loops", level: 88 },
-          { name: "Linux System Administration & Bash", level: 82 },
-          { name: "Git Version Control & CI/CD Pipelines", level: 86 },
-          { name: "C++ Data Structures & Kinematics", level: 85 }
-        ]
+      equipment: ["Piezoelectric actuators", "FPGA development board", "Precision optical encoders", "SolidWorks", "LTspice", "Altium Designer", "Embedded C++ / VHDL", "Bench oscilloscope", "Lab power supplies"],
+      links: [{ label: "GitHub Repository", url: "https://github.com/lizozivzivadze-star" }]
+    },
+    {
+      id: "proj-2",
+      title: "Compact 4-Channel Brushless Motor Driver (BLDC)",
+      category: "HardWare",
+      summary: "Developed a 48V/20A industrial motor drive featuring integrated CAN-FD telemetry and hardware power monitoring.",
+      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      overview: {
+        objective: "Deliver a compact, multi-channel industrial-grade BLDC driver with robust telemetry.",
+        contribution: "Led schematic capture, PCB layout, gate-drive tuning, and firmware bring-up for all four channels.",
+        results: "Validated stable operation at 48V/20A per channel with real-time CAN-FD power monitoring."
       },
-      events: [
-        {
-          id: "event-1",
-          title: "European Agentic AI & Robotics Summit 2026",
-          summary: "Presented work on hardware-in-the-loop edge AI for real-time mechatronic systems.",
-          imageUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600",
-          details: {
-            overview: {
-              whyMattered: "Key platform for validating sub-millisecond edge neural execution on ARM microcontrollers.",
-              participation: "Delivered a technical workshop on integrating STM32 low-power nodes with ROS2 telemetry.",
-              outcomes: "Established key industrial contacts for future hardware benchmarking."
-            },
-            media: [
-              "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600",
-              "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=600"
-            ],
-            urls: [
-              { label: "Official Event Page", url: "https://github.com/lizozivzivadze-star" },
-              { label: "Conference Proceedings", url: "https://github.com/lizozivzivadze-star" }
-            ]
-          }
-        },
-        {
-          id: "event-2",
-          title: "Benelux Mechatronics Engineering Hackathon",
-          summary: "First place solution for high-speed dynamic sorting using custom vision feedback.",
-          imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600",
-          details: {
-            overview: {
-              whyMattered: "Tested rapid functional prototyping under extreme time constraints.",
-              participation: "Lead hardware integrator and firmware developer for the team.",
-              outcomes: "Awarded First Place among 24 participating engineering teams."
-            },
-            media: [
-              "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600"
-            ],
-            urls: [
-              { label: "Hackathon Winner Announcement", url: "https://github.com/lizozivzivadze-star" }
-            ]
-          }
-        }
+      equipment: ["STM32", "CAN-FD transceivers", "Gate drivers", "Power MOSFETs", "Altium Designer", "Embedded C", "LTspice", "Bench power supply", "Current probe"],
+      links: [{ label: "GitHub Repository", url: "https://github.com/lizozivzivadze-star" }]
+    },
+    {
+      id: "proj-3",
+      title: "ROS2 Autonomous Robotic Inspection Telemetry",
+      category: "SoftWare",
+      summary: "Created a WebGL and ROS2 interface displaying dynamic sensor fusion and LiDAR point clouds at sub-20ms latency.",
+      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      overview: {
+        objective: "Build a low-latency visualization layer for autonomous robotic inspection telemetry.",
+        contribution: "Implemented the ROS2 sensor fusion pipeline and the WebGL front-end for live point cloud rendering.",
+        results: "Achieved sub-20ms end-to-end latency from sensor fusion to rendered point cloud."
+      },
+      equipment: ["ROS2", "LiDAR sensor", "WebGL", "Python", "C++", "Linux", "Git / CI pipelines", "Point cloud processing libraries"],
+      links: [{ label: "GitHub Repository", url: "https://github.com/lizozivzivadze-star" }]
+    },
+    {
+      id: "proj-4",
+      title: "Precision Micro-Fluidic Dosing Station",
+      category: "HW+SW",
+      summary: "Built an automated micro-volume liquid dispenser utilizing computer vision feedback for dynamic droplet correction.",
+      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      overview: {
+        objective: "Automate micro-volume liquid dosing with real-time optical correction of droplet volume.",
+        contribution: "Designed the mechanical dosing stage, integrated the vision feedback loop, and wrote the control software.",
+        results: "Reduced droplet volume error through closed-loop vision-based correction."
+      },
+      equipment: ["OpenCV", "Python", "Stepper motors", "Micro-pumps", "SolidWorks", "SLA 3D printing", "Machine vision camera", "STM32"],
+      links: [{ label: "GitHub Repository", url: "https://github.com/lizozivzivadze-star" }]
+    }
+  ],
+  skills: {
+    "Electronics": [
+      { name: "PCB Layout (Altium Designer)", level: 92 },
+      { name: "Analog Signal Conditioning", level: 85 },
+      { name: "Power Electronics (DC-DC / Gate Drivers)", level: 82 },
+      { name: "High-Speed Bus Layout (CAN-FD, Ethernet)", level: 88 },
+      { name: "EMC/EMI Shielding & Noise Reduction", level: 80 },
+      { name: "Circuit Simulation (LTspice / Tina-TI)", level: 86 },
+      { name: "SMD Soldering & Lab Instrumentation", level: 90 },
+      { name: "Battery Management Systems (BMS)", level: 78 }
+    ],
+    "Embedded Systems": [
+      { name: "STM32 / ARM Cortex-M Firmware", level: 94 },
+      { name: "Embedded C / Real-Time C++", level: 90 },
+      { name: "FreeRTOS Task Scheduling & Mutexes", level: 85 },
+      { name: "Low-Level Bus Protocols (SPI, I2C, UART)", level: 95 },
+      { name: "DMA Telemetry & Hardware Interrupts", level: 88 },
+      { name: "Bare-Metal Microcontroller Architecture", level: 86 },
+      { name: "Bootloaders & OTA Updates", level: 78 },
+      { name: "Hardware In-The-Loop (HIL) Testing", level: 82 }
+    ],
+    "CAD": [
+      { name: "SolidWorks Parametric Modeling", level: 95 },
+      { name: "Structural & Thermal FEA (ANSYS)", level: 88 },
+      { name: "GD&T Tolerance Stack-Up Analysis", level: 90 },
+      { name: "Precision Flexure & Kinematic Design", level: 86 },
+      { name: "Design for Manufacturing (DFM / DFA)", level: 92 },
+      { name: "CNC Milling & Machining Toolpaths", level: 84 },
+      { name: "Rapid Prototyping (FDM / SLA / SLS)", level: 94 },
+      { name: "Enclosure IP Ingress Protection Design", level: 80 }
+    ],
+    "Software & AI": [
+      { name: "Python / Scientific Stack (NumPy, SciPy)", level: 90 },
+      { name: "ROS2 (Robot Operating System)", level: 84 },
+      { name: "MATLAB / Simulink Model-Based Control", level: 88 },
+      { name: "OpenCV Computer Vision Pipelines", level: 80 },
+      { name: "Closed-Loop PID / FOC Control Loops", level: 88 },
+      { name: "Linux System Administration & Bash", level: 82 },
+      { name: "Git Version Control & CI/CD Pipelines", level: 86 },
+      { name: "C++ Data Structures & Kinematics", level: 85 }
+    ]
+  },
+  valueProps: [
+    { title: "Practical Hardware Design", text: "Cross-Disciplinary Integration" },
+    { title: "Embedded Software Skills", text: "Rapid Functional Prototyping" },
+    { title: "Closed-Loop Controls", text: "Precision Feedback Systems" },
+    { title: "Manufacturing Experience", text: "Production-Minded Execution" },
+    { title: "Rapid Problem Solving", text: "Data-Driven Verification" }
+  ],
+  /* SAMPLE / PLACEHOLDER DATA — replace with real events */
+  events: [
+    {
+      id: "event-1",
+      title: "Manufacturing & Automation Fair 2026",
+      category: "HW+SW",
+      imageUrl: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800",
+      overview: {
+        description: "Sample placeholder — replace with a real event. Regional trade fair covering industrial automation, robotics, and manufacturing technology.",
+        why: "Sample placeholder — note why this event mattered to your career or studies.",
+        participation: "Sample placeholder — describe how you took part (attendee, exhibitor, volunteer, presenter).",
+        learned: "Sample placeholder — describe what you learned.",
+        outcomes: "Sample placeholder — describe any outcomes or follow-ups."
+      },
+      media: [
+        { type: "image", url: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800", label: "Fair floor" },
+        { type: "image", url: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&q=80&w=800", label: "Demo booth" }
       ],
-      valueProps: [
-        { title: "Cross-Disciplinary Integration", text: "Practical Hardware Design" },
-        { title: "Rapid Functional Prototyping", text: "Embedded Software Skills" },
-        { title: "Closed-Loop Controls", text: "Manufacturing Experience" },
-        { title: "Production-Minded Execution", text: "Rapid Problem Solving" },
-        { title: "Data-Driven Verification", text: "Rigorous Test Validation" }
-      ]
-    };
+      links: [{ label: "Official event page", url: "https://github.com/lizozivzivadze-star" }]
+    },
+    {
+      id: "event-2",
+      title: "KU Leuven Group T Project Showcase",
+      category: "SoftWare",
+      imageUrl: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800",
+      overview: {
+        description: "Sample placeholder — replace with a real event. End-of-year showcase of student engineering projects at KU Leuven Group T.",
+        why: "Sample placeholder — note why this event mattered to your career or studies.",
+        participation: "Sample placeholder — describe how you took part.",
+        learned: "Sample placeholder — describe what you learned.",
+        outcomes: "Sample placeholder — describe any outcomes or follow-ups."
+      },
+      media: [
+        { type: "image", url: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800", label: "Showcase floor" }
+      ],
+      links: [{ label: "Conference page", url: "https://github.com/lizozivzivadze-star" }]
+    }
+  ]
+};
 
-    // APPLICATION STATE
-    let currentProjFilter = 'HW+SW';
-    let currentSkillCategory = Object.keys(PORTFOLIO_DATA.skills)[0];
-    let projectTabState = {};
-    let eventTabState = {};
-    let docSelection = { cv: false, portfolio: false };
+/* ==================================================
+   STATE
+   ================================================== */
+const state = {
+  projectFilter: "HW+SW",
+  eventFilter: "HW+SW",
+  skillCategory: Object.keys(PORTFOLIO_DATA.skills)[0],
+  cvSelected: false,
+  portfolioSelected: false
+};
 
-    // INITIALIZATION
-    document.addEventListener('DOMContentLoaded', () => {
-      // Sticky header scroll observer
-      window.addEventListener('scroll', () => {
-        const header = document.getElementById('sticky-header');
-        if (window.scrollY > 100) {
-          header.classList.remove('-translate-y-full', 'opacity-0');
-          header.classList.add('translate-y-0', 'opacity-100');
-        } else {
-          header.classList.add('-translate-y-full', 'opacity-0');
-          header.classList.remove('translate-y-0', 'opacity-100');
-        }
-      });
+/* ==================================================
+   HELPERS
+   ================================================== */
+function el(html){ const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; }
+function escapeHtml(s){ return (s || "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-      // Initialize project/event tab tracking states
-      PORTFOLIO_DATA.projects.forEach(p => projectTabState[p.id] = 'overview');
-      PORTFOLIO_DATA.events.forEach(e => eventTabState[e.id] = 'overview');
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 3200);
+}
 
-      renderProjects();
-      renderSkills();
-      renderEvents();
-      renderValueProps();
+/* ==================================================
+   STICKY HEADER
+   ================================================== */
+window.addEventListener('scroll', () => {
+  const h = document.getElementById('sticky-header');
+  if (window.scrollY > 100){
+    h.classList.remove('-translate-y-full','opacity-0');
+  } else {
+    h.classList.add('-translate-y-full','opacity-0');
+  }
+});
+
+/* ==================================================
+   PROJECTS SECTION
+   ================================================== */
+const PROJECT_TABS = ["HardWare", "SoftWare", "HW+SW"];
+
+function projectMatchesFilter(project, filter){
+  if (filter === "HW+SW") return true;
+  if (filter === "HardWare") return project.category === "HardWare" || project.category === "HW+SW";
+  if (filter === "SoftWare") return project.category === "SoftWare" || project.category === "HW+SW";
+  return true;
+}
+
+function renderProjectTabs(){
+  const wrap = document.getElementById('project-tabs');
+  wrap.innerHTML = "";
+  PROJECT_TABS.forEach(tab => {
+    const btn = el(`<button class="tab-btn ${tab === state.projectFilter ? 'active' : ''}">${tab}</button>`);
+    btn.addEventListener('click', () => { state.projectFilter = tab; renderProjectTabs(); renderProjectCards(); });
+    wrap.appendChild(btn);
+  });
+}
+
+function renderProjectCards(){
+  const wrap = document.getElementById('project-cards');
+  wrap.innerHTML = "";
+  PORTFOLIO_DATA.projects
+    .filter(p => projectMatchesFilter(p, state.projectFilter))
+    .forEach(project => {
+      const card = el(`
+        <div class="card-shell w-[280px] md:w-[320px] shrink-0 snap-start p-4 flex flex-col justify-between min-h-[360px]">
+          <div>
+            <div class="video-trigger aspect-video relative rounded bg-slate-900 overflow-hidden flex items-center justify-center cursor-pointer group">
+              <svg class="w-10 h-10 text-white/80 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <h3 class="font-bold text-[#0f172a] mt-3 mb-1 leading-snug">${escapeHtml(project.title)}</h3>
+            <p class="text-xs md:text-sm text-[#475569] mb-4 leading-relaxed">${escapeHtml(project.summary)}</p>
+          </div>
+          <button class="details-trigger w-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-mono text-xs font-semibold py-2.5 rounded-lg transition-colors">VIEW DETAILS</button>
+        </div>
+      `);
+      card.querySelector('.video-trigger').addEventListener('click', () => openMediaModal(project.title, { type: 'video', url: project.videoUrl }));
+      card.querySelector('.details-trigger').addEventListener('click', () => openDetailModal(project, 'project'));
+      wrap.appendChild(card);
     });
+}
 
-    // 1. PROJECTS SECTION LOGIC
-    function filterProjects(category) {
-      currentProjFilter = category;
-      document.querySelectorAll('.proj-filter-btn').forEach(btn => {
-        btn.classList.remove('bg-[#0284c7]', 'text-white');
-        btn.classList.add('bg-slate-100', 'text-slate-700');
-      });
-      const activeBtn = document.getElementById(`proj-filter-${category}`);
-      if (activeBtn) {
-        activeBtn.classList.remove('bg-slate-100', 'text-slate-700');
-        activeBtn.classList.add('bg-[#0284c7]', 'text-white');
-      }
-      renderProjects();
-    }
+/* ==================================================
+   EVENTS SECTION (mirrors Projects)
+   ================================================== */
+function renderEventTabs(){
+  const wrap = document.getElementById('event-tabs');
+  wrap.innerHTML = "";
+  PROJECT_TABS.forEach(tab => {
+    const btn = el(`<button class="tab-btn ${tab === state.eventFilter ? 'active' : ''}">${tab}</button>`);
+    btn.addEventListener('click', () => { state.eventFilter = tab; renderEventTabs(); renderEventCards(); });
+    wrap.appendChild(btn);
+  });
+}
 
-    function setProjectTab(projId, tab) {
-      projectTabState[projId] = tab;
-      renderProjects();
-    }
-
-    function renderProjects() {
-      const carousel = document.getElementById('projects-carousel');
-      carousel.innerHTML = '';
-
-      const filtered = PORTFOLIO_DATA.projects.filter(p => {
-        if (currentProjFilter === 'HW+SW') return true;
-        return p.category === currentProjFilter || p.category === 'HW+SW';
-      });
-
-      filtered.forEach(p => {
-        const activeTab = projectTabState[p.id] || 'overview';
-        
-        let tabContentHtml = '';
-        if (activeTab === 'overview') {
-          tabContentHtml = `
-            <div class="space-y-1.5 text-xs text-[#0f172a]">
-              <div><span class="font-bold font-mono text-[11px] text-[#0284c7]">Objective:</span> ${p.details.overview.objective}</div>
-              <div><span class="font-bold font-mono text-[11px] text-[#0284c7]">Contribution:</span> ${p.details.overview.contribution}</div>
-              <div><span class="font-bold font-mono text-[11px] text-[#0284c7]">Results:</span> ${p.details.overview.results}</div>
-            </div>
-          `;
-        } else if (activeTab === 'equipment') {
-          tabContentHtml = `
-            <div class="flex flex-wrap gap-1.5">
-              ${p.details.equipment.map(eq => `<span class="font-mono text-[10px] bg-slate-100 border border-[#e2e8f0] px-2 py-0.5 rounded text-slate-700">${eq}</span>`).join('')}
-            </div>
-          `;
-        } else if (activeTab === 'url') {
-          tabContentHtml = `
-            <div class="space-y-1.5">
-              ${p.details.urls.map(u => `
-                <a href="${u.url}" target="_blank" rel="noopener noreferrer" class="font-mono text-xs text-[#0284c7] hover:underline flex items-center gap-1 font-medium">
-                  <span>${u.label}</span>
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                </a>
-              `).join('')}
-            </div>
-          `;
-        }
-
-        const card = document.createElement('div');
-        card.className = "w-[280px] md:w-[320px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs";
-        card.innerHTML = `
+function renderEventCards(){
+  const wrap = document.getElementById('event-cards');
+  wrap.innerHTML = "";
+  PORTFOLIO_DATA.events
+    .filter(ev => projectMatchesFilter(ev, state.eventFilter))
+    .forEach(evnt => {
+      const card = el(`
+        <div class="card-shell w-[280px] md:w-[320px] shrink-0 snap-start p-4 flex flex-col justify-between min-h-[360px]">
           <div>
-            <!-- Video Preview -->
-            <div onclick="openVideoModal('${p.videoUrl}')" class="aspect-video relative rounded-lg bg-slate-900 overflow-hidden cursor-pointer group flex items-center justify-center">
-              <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=600" alt="${p.title}" class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity">
-              <div class="absolute w-10 h-10 rounded-full bg-[#0284c7]/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                <svg class="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-              <span class="absolute bottom-2 left-2 font-mono text-[9px] bg-slate-900/80 text-white px-1.5 py-0.5 rounded border border-slate-700">${p.category}</span>
+            <div class="image-trigger aspect-video relative rounded bg-slate-900 overflow-hidden flex items-center justify-center cursor-pointer group">
+              <img src="${evnt.imageUrl}" alt="${escapeHtml(evnt.title)}" class="w-full h-full object-cover group-hover:opacity-80 transition-opacity">
             </div>
-
-            <!-- Title & Summary -->
-            <h3 class="font-bold text-[#0f172a] text-sm md:text-base mt-3 mb-1 leading-snug">${p.title}</h3>
-            <p class="text-xs text-[#475569] mb-3 leading-relaxed">${p.summary}</p>
+            <h3 class="font-bold text-[#0f172a] mt-3 mb-1 leading-snug">${escapeHtml(evnt.title)}</h3>
+            <p class="text-xs md:text-sm text-[#475569] mb-4 leading-relaxed">${escapeHtml(evnt.overview.description)}</p>
           </div>
+          <button class="details-trigger w-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-mono text-xs font-semibold py-2.5 rounded-lg transition-colors">VIEW DETAILS</button>
+        </div>
+      `);
+      card.querySelector('.image-trigger').addEventListener('click', () => openMediaModal(evnt.title, { type: 'image', url: evnt.imageUrl }));
+      card.querySelector('.details-trigger').addEventListener('click', () => openDetailModal(evnt, 'event'));
+      wrap.appendChild(card);
+    });
+}
 
-          <!-- Sub Tabs & Dynamic Content -->
-          <div class="mt-2 pt-2 border-t border-slate-100">
-            <div class="flex items-center gap-2 border-b border-[#e2e8f0] pb-1.5 mb-2 font-mono text-[11px]">
-              <button onclick="setProjectTab('${p.id}', 'overview')" class="${activeTab === 'overview' ? 'text-[#0284c7] font-bold border-b-2 border-[#0284c7]' : 'text-slate-500 hover:text-slate-800'}">Overview</button>
-              <span class="text-slate-300">|</span>
-              <button onclick="setProjectTab('${p.id}', 'equipment')" class="${activeTab === 'equipment' ? 'text-[#0284c7] font-bold border-b-2 border-[#0284c7]' : 'text-slate-500 hover:text-slate-800'}">Equipment</button>
-              <span class="text-slate-300">|</span>
-              <button onclick="setProjectTab('${p.id}', 'url')" class="${activeTab === 'url' ? 'text-[#0284c7] font-bold border-b-2 border-[#0284c7]' : 'text-slate-500 hover:text-slate-800'}">URL</button>
-            </div>
-            <div class="min-h-[90px]">
-              ${tabContentHtml}
-            </div>
-          </div>
-        `;
-        carousel.appendChild(card);
-      });
+/* ==================================================
+   DETAIL MODAL (shared: projects use Overview/Equipment/URL,
+   events use Overview/Media/URL)
+   ================================================== */
+const detailModal = document.getElementById('detail-modal');
+let currentDetailItem = null;
+let currentDetailType = null;
+let currentDetailTab = 'Overview';
+
+function openDetailModal(item, type){
+  currentDetailItem = item;
+  currentDetailType = type;
+  currentDetailTab = 'Overview';
+  document.getElementById('detail-modal-title').textContent = item.title;
+  renderDetailSubtabs();
+  renderDetailBody();
+  detailModal.classList.add('open');
+}
+function closeDetailModal(){ detailModal.classList.remove('open'); }
+document.getElementById('detail-modal-close').addEventListener('click', closeDetailModal);
+detailModal.addEventListener('click', (e) => { if (e.target === detailModal) closeDetailModal(); });
+
+function renderDetailSubtabs(){
+  const tabs = currentDetailType === 'project' ? ['Overview','Equipment','URL'] : ['Overview','Media','URL'];
+  const wrap = document.getElementById('detail-subtabs');
+  wrap.innerHTML = "";
+  tabs.forEach(tab => {
+    const btn = el(`<button class="subtab-btn ${tab === currentDetailTab ? 'active' : ''}">${tab}</button>`);
+    btn.addEventListener('click', () => { currentDetailTab = tab; renderDetailSubtabs(); renderDetailBody(); });
+    wrap.appendChild(btn);
+  });
+}
+
+function renderDetailBody(){
+  const body = document.getElementById('detail-modal-body');
+  const item = currentDetailItem;
+
+  if (currentDetailTab === 'Overview'){
+    if (currentDetailType === 'project'){
+      body.innerHTML = `
+        <p class="mb-3">${escapeHtml(item.summary)}</p>
+        <div class="space-y-2">
+          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">OBJECTIVE</span><p class="mt-0.5">${escapeHtml(item.overview.objective)}</p></div>
+          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">CONTRIBUTION</span><p class="mt-0.5">${escapeHtml(item.overview.contribution)}</p></div>
+          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">RESULTS</span><p class="mt-0.5">${escapeHtml(item.overview.results)}</p></div>
+        </div>`;
+    } else {
+      body.innerHTML = `
+        <div class="space-y-2">
+          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">DESCRIPTION</span><p class="mt-0.5">${escapeHtml(item.overview.description)}</p></div>
+          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">WHY IT MATTERED</span><p class="mt-0.5">${escapeHtml(item.overview.why)}</p></div>
+          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">MY PARTICIPATION</span><p class="mt-0.5">${escapeHtml(item.overview.participation)}</p></div>
+          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">WHAT I LEARNED</span><p class="mt-0.5">${escapeHtml(item.overview.learned)}</p></div>
+          <div><span class="font-mono text-[11px] font-semibold text-[#0369a1]">OUTCOMES</span><p class="mt-0.5">${escapeHtml(item.overview.outcomes)}</p></div>
+        </div>`;
     }
+  }
 
-    // 2. SKILLS SECTION LOGIC
-    function setSkillCategory(cat) {
-      currentSkillCategory = cat;
-      renderSkills();
-    }
+  else if (currentDetailTab === 'Equipment'){
+    body.innerHTML = `<div class="flex flex-wrap gap-2">${
+      item.equipment.map(e => `<span class="font-mono text-[11px] bg-[#f1f5f9] text-[#0f172a] px-2.5 py-1 rounded-md border border-[#e2e8f0]">${escapeHtml(e)}</span>`).join('')
+    }</div>`;
+  }
 
-    function renderSkills() {
-      const tabsContainer = document.getElementById('skills-tabs');
-      tabsContainer.innerHTML = '';
+  else if (currentDetailTab === 'Media'){
+    body.innerHTML = "";
+    const grid = el(`<div class="grid grid-cols-2 gap-2"></div>`);
+    item.media.forEach(m => {
+      const thumb = el(`<div class="media-thumb aspect-video rounded overflow-hidden bg-slate-900 cursor-pointer relative group">
+        <img src="${m.url}" alt="${escapeHtml(m.label)}" class="w-full h-full object-cover group-hover:opacity-80 transition-opacity">
+      </div>`);
+      thumb.addEventListener('click', () => openMediaModal(m.label, { type: m.type, url: m.url }));
+      grid.appendChild(thumb);
+    });
+    body.appendChild(grid);
+  }
 
-      Object.keys(PORTFOLIO_DATA.skills).forEach(cat => {
-        const isActive = cat === currentSkillCategory;
-        const btn = document.createElement('button');
-        btn.onclick = () => setSkillCategory(cat);
-        btn.className = `px-3 py-1 font-mono text-xs font-semibold rounded border border-[#e2e8f0] shrink-0 ${isActive ? 'bg-[#0284c7] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`;
-        btn.innerText = cat;
-        tabsContainer.appendChild(btn);
-      });
+  else if (currentDetailTab === 'URL'){
+    body.innerHTML = `<div class="flex flex-col gap-2">${
+      item.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener" class="flex items-center justify-between p-3 border border-[#e2e8f0] rounded-lg hover:border-[#0284c7] transition-colors">
+        <span class="font-semibold text-sm text-[#0f172a]">${escapeHtml(l.label)}</span>
+        <svg class="w-4 h-4 text-[#0284c7]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>`).join('')
+    }</div>`;
+  }
+}
 
-      const listContainer = document.getElementById('skills-container');
-      listContainer.innerHTML = '';
+/* ==================================================
+   MEDIA MODAL (video / image preview)
+   ================================================== */
+const mediaModal = document.getElementById('media-modal');
+function openMediaModal(title, media){
+  document.getElementById('media-modal-title').textContent = title;
+  const body = document.getElementById('media-modal-body');
+  body.innerHTML = "";
+  if (media.type === 'video'){
+    body.innerHTML = `<iframe class="w-full h-full" src="${media.url}" title="${escapeHtml(title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  } else {
+    body.innerHTML = `<img src="${media.url}" alt="${escapeHtml(title)}" class="w-full h-full object-cover">`;
+  }
+  mediaModal.classList.add('open');
+}
+function closeMediaModal(){
+  mediaModal.classList.remove('open');
+  document.getElementById('media-modal-body').innerHTML = "";
+}
+document.getElementById('media-modal-close').addEventListener('click', closeMediaModal);
+mediaModal.addEventListener('click', (e) => { if (e.target === mediaModal) closeMediaModal(); });
 
-      const skillItems = PORTFOLIO_DATA.skills[currentSkillCategory] || [];
-      skillItems.forEach(skill => {
-        const item = document.createElement('div');
-        item.className = "space-y-1";
-        item.innerHTML = `
-          <div class="flex justify-between text-xs font-medium text-[#0f172a]">
-            <span>${skill.name}</span>
-            <span class="font-mono text-slate-500 text-[11px]">${skill.level}%</span>
-          </div>
-          <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden border border-[#e2e8f0]">
-            <div class="h-full bg-[#0284c7] rounded-full transition-all duration-500" style="width: ${skill.level}%"></div>
-          </div>
-        `;
-        listContainer.appendChild(item);
-      });
-    }
+/* ==================================================
+   SKILLS SECTION
+   ================================================== */
+function renderSkillCatTabs(){
+  const wrap = document.getElementById('skill-cat-tabs');
+  wrap.innerHTML = "";
+  Object.keys(PORTFOLIO_DATA.skills).forEach(cat => {
+    const btn = el(`<button class="tab-btn ${cat === state.skillCategory ? 'active' : ''}">${cat}</button>`);
+    btn.addEventListener('click', () => { state.skillCategory = cat; renderSkillCatTabs(); renderSkillChips(); });
+    wrap.appendChild(btn);
+  });
+}
 
-    // 3. EVENTS SECTION LOGIC
-    function setEventTab(eventId, tab) {
-      eventTabState[eventId] = tab;
-      renderEvents();
-    }
+function renderSkillChips(){
+  const wrap = document.getElementById('skill-chip-row');
+  wrap.innerHTML = "";
+  PORTFOLIO_DATA.skills[state.skillCategory].forEach(skill => {
+    const chip = el(`
+      <div class="skill-chip">
+        <div class="flex items-center justify-between gap-2">
+          <span class="text-xs font-semibold text-[#0f172a] leading-tight">${escapeHtml(skill.name)}</span>
+        </div>
+        <div class="flex items-center justify-between mt-1">
+          <span class="font-mono text-[10px] text-[#0284c7] font-bold">${skill.level}%</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${skill.level}%"></div></div>
+      </div>
+    `);
+    wrap.appendChild(chip);
+  });
+}
 
-    function renderEvents() {
-      const carousel = document.getElementById('events-carousel');
-      carousel.innerHTML = '';
+/* ==================================================
+   WHAT DO I BRING TO THE TABLE
+   ================================================== */
+function renderValueProps(){
+  const wrap = document.getElementById('value-props');
+  wrap.innerHTML = "";
+  PORTFOLIO_DATA.valueProps.forEach((vp, i) => {
+    const card = el(`
+      <div class="shrink-0 w-[280px] md:w-[300px] min-h-[220px] md:min-h-[240px] snap-start bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-5 flex flex-col justify-between shadow-sm">
+        <div>
+          <span class="font-mono text-[11px] font-semibold text-[#0369a1]">REASON #${i + 1}</span>
+          <h3 class="font-bold text-base text-[#0f172a] mt-2 leading-snug">${escapeHtml(vp.title)}</h3>
+        </div>
+        <p class="font-mono text-xs md:text-sm text-[#475569] mt-3 leading-relaxed">${escapeHtml(vp.text)}</p>
+      </div>
+    `);
+    wrap.appendChild(card);
+  });
+}
 
-      PORTFOLIO_DATA.events.forEach(e => {
-        const activeTab = eventTabState[e.id] || 'overview';
+/* ==================================================
+   HELP YOURSELF (document form)
+   ================================================== */
+const cvBtn = document.getElementById('cv-doc-btn');
+const portfolioBtn = document.getElementById('portfolio-doc-btn');
 
-        let tabContentHtml = '';
-        if (activeTab === 'overview') {
-          tabContentHtml = `
-            <div class="space-y-1.5 text-xs text-[#0f172a]">
-              <div><span class="font-bold font-mono text-[11px] text-[#0284c7]">Why It Mattered:</span> ${e.details.overview.whyMattered}</div>
-              <div><span class="font-bold font-mono text-[11px] text-[#0284c7]">Participation:</span> ${e.details.overview.participation}</div>
-              <div><span class="font-bold font-mono text-[11px] text-[#0284c7]">Outcomes:</span> ${e.details.overview.outcomes}</div>
-            </div>
-          `;
-        } else if (activeTab === 'media') {
-          tabContentHtml = `
-            <div class="grid grid-cols-2 gap-1.5">
-              ${e.details.media.map(m => `<img src="${m}" alt="Event Media" class="w-full h-16 object-cover rounded border border-[#e2e8f0]">`).join('')}
-            </div>
-          `;
-        } else if (activeTab === 'url') {
-          tabContentHtml = `
-            <div class="space-y-1.5">
-              ${e.details.urls.map(u => `
-                <a href="${u.url}" target="_blank" rel="noopener noreferrer" class="font-mono text-xs text-[#0284c7] hover:underline flex items-center gap-1 font-medium">
-                  <span>${u.label}</span>
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                </a>
-              `).join('')}
-            </div>
-          `;
-        }
+function toggleDocSelection(btn, key){
+  state[key] = !state[key];
+  const selected = state[key];
+  btn.dataset.selected = String(selected);
+  const icon = btn.querySelector('.check-icon');
+  if (selected){
+    btn.classList.add('border-2','border-[#0284c7]','bg-[#f0f9ff]');
+    btn.classList.remove('border','border-[#e2e8f0]');
+    icon.classList.remove('opacity-0');
+  } else {
+    btn.classList.remove('border-2','border-[#0284c7]','bg-[#f0f9ff]');
+    btn.classList.add('border','border-[#e2e8f0]');
+    icon.classList.add('opacity-0');
+  }
+}
+cvBtn.addEventListener('click', () => toggleDocSelection(cvBtn, 'cvSelected'));
+portfolioBtn.addEventListener('click', () => toggleDocSelection(portfolioBtn, 'portfolioSelected'));
 
-        const card = document.createElement('div');
-        card.className = "w-[280px] md:w-[320px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs";
-        card.innerHTML = `
-          <div>
-            <!-- Image Preview -->
-            <div class="aspect-video relative rounded-lg bg-slate-900 overflow-hidden">
-              <img src="${e.imageUrl}" alt="${e.title}" class="w-full h-full object-cover">
-            </div>
+document.getElementById('send-docs-btn').addEventListener('click', () => {
+  const emailInput = document.getElementById('doc-email-input');
+  const email = emailInput.value.trim();
 
-            <!-- Title & Summary -->
-            <h3 class="font-bold text-[#0f172a] text-sm md:text-base mt-3 mb-1 leading-snug">${e.title}</h3>
-            <p class="text-xs text-[#475569] mb-3 leading-relaxed">${e.summary}</p>
-          </div>
+  if (!state.cvSelected && !state.portfolioSelected){
+    showToast('Notification: Please select at least one document.');
+    return;
+  }
+  if (!email){
+    showToast('Notification: Please enter an email address.');
+    return;
+  }
 
-          <!-- Sub Tabs & Dynamic Content -->
-          <div class="mt-2 pt-2 border-t border-slate-100">
-            <div class="flex items-center gap-2 border-b border-[#e2e8f0] pb-1.5 mb-2 font-mono text-[11px]">
-              <button onclick="setEventTab('${e.id}', 'overview')" class="${activeTab === 'overview' ? 'text-[#0284c7] font-bold border-b-2 border-[#0284c7]' : 'text-slate-500 hover:text-slate-800'}">Overview</button>
-              <span class="text-slate-300">|</span>
-              <button onclick="setEventTab('${e.id}', 'media')" class="${activeTab === 'media' ? 'text-[#0284c7] font-bold border-b-2 border-[#0284c7]' : 'text-slate-500 hover:text-slate-800'}">Media</button>
-              <span class="text-slate-300">|</span>
-              <button onclick="setEventTab('${e.id}', 'url')" class="${activeTab === 'url' ? 'text-[#0284c7] font-bold border-b-2 border-[#0284c7]' : 'text-slate-500 hover:text-slate-800'}">URL</button>
-            </div>
-            <div class="min-h-[90px]">
-              ${tabContentHtml}
-            </div>
-          </div>
-        `;
-        carousel.appendChild(card);
-      });
-    }
+  const items = [];
+  if (state.cvSelected) items.push('CV Document');
+  if (state.portfolioSelected) items.push('Portfolio Document');
 
-    // 4. WHAT DO I BRING TO THE TABLE LOGIC
-    function renderValueProps() {
-      const carousel = document.getElementById('value-props-carousel');
-      carousel.innerHTML = '';
+  showToast(`Notification: Dispatched ${items.join(' & ')} to ${email}`);
 
-      PORTFOLIO_DATA.valueProps.forEach(item => {
-        const card = document.createElement('div');
-        card.className = "shrink-0 w-[280px] md:w-[300px] min-h-[220px] md:min-h-[240px] snap-start bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-5 flex flex-col justify-between shadow-xs";
-        card.innerHTML = `
-          <div>
-            <div class="w-8 h-8 rounded-lg bg-sky-100 text-[#0284c7] flex items-center justify-center font-mono font-bold text-sm mb-3">
-              ⚡
-            </div>
-            <h3 class="font-bold text-sm md:text-base text-[#0f172a] mb-2">${item.title}</h3>
-          </div>
-          <div class="pt-3 border-t border-slate-200">
-            <span class="font-mono text-xs text-[#0369a1] font-semibold bg-sky-50 border border-sky-200 px-2.5 py-1 rounded-md inline-block">
-              ${item.text}
-            </span>
-          </div>
-        `;
-        carousel.appendChild(card);
-      });
-    }
+  emailInput.value = "";
+  [cvBtn, portfolioBtn].forEach(btn => {
+    btn.classList.remove('border-2','border-[#0284c7]','bg-[#f0f9ff]');
+    btn.classList.add('border','border-[#e2e8f0]');
+    btn.querySelector('.check-icon').classList.add('opacity-0');
+    btn.dataset.selected = "false";
+  });
+  state.cvSelected = false;
+  state.portfolioSelected = false;
+});
 
-    // 5. HELP YOURSELF / DOCUMENT LOGIC
-    function toggleDocSelection(type) {
-      docSelection[type] = !docSelection[type];
-      
-      const card = document.getElementById(`doc-card-${type}`);
-      const check = document.getElementById(`doc-check-${type}`);
-
-      if (docSelection[type]) {
-        card.className = "cursor-pointer border-2 border-[#0284c7] bg-[#f0f9ff] rounded-lg p-4 transition-all flex items-center gap-3";
-        check.className = "w-5 h-5 rounded border border-[#0284c7] flex items-center justify-center text-white bg-[#0284c7]";
-      } else {
-        card.className = "cursor-pointer border border-[#e2e8f0] rounded-lg p-4 bg-white hover:border-[#0284c7] transition-all flex items-center gap-3";
-        check.className = "w-5 h-5 rounded border border-[#cbd5e1] flex items-center justify-center text-white bg-white";
-      }
-    }
-
-    function dispatchDocuments() {
-      const emailInput = document.getElementById('doc-email-input');
-      const email = emailInput.value.trim();
-
-      const selected = [];
-      if (docSelection.cv) selected.push("CV");
-      if (docSelection.portfolio) selected.push("Portfolio");
-
-      if (selected.length === 0) {
-        showToast("Please select at least one document.", true);
-        return;
-      }
-
-      if (!email || !email.includes('@')) {
-        showToast("Please enter a valid email address.", true);
-        return;
-      }
-
-      showToast(`Dispatched ${selected.join(" & ")} to ${email}`);
-      emailInput.value = '';
-    }
-
-    // UTILITY: MODAL & TOAST
-    function openVideoModal(url) {
-      const modal = document.getElementById('video-modal');
-      const iframe = document.getElementById('video-iframe');
-      iframe.src = url + "?autoplay=1";
-      modal.classList.remove('hidden');
-    }
-
-    function closeVideoModal() {
-      const modal = document.getElementById('video-modal');
-      const iframe = document.getElementById('video-iframe');
-      iframe.src = "";
-      modal.classList.add('hidden');
-    }
-
-    function showToast(message, isError = false) {
-      const toast = document.getElementById('toast-notification');
-      const toastMsg = document.getElementById('toast-message');
-
-      toastMsg.innerText = message;
-      if (isError) {
-        toast.classList.remove('border-slate-700', 'bg-[#0f172a]');
-        toast.classList.add('border-red-600', 'bg-red-950');
-      } else {
-        toast.classList.remove('border-red-600', 'bg-red-950');
-        toast.classList.add('border-slate-700', 'bg-[#0f172a]');
-      }
-
-      toast.classList.remove('translate-y-10', 'opacity-0');
-      toast.classList.add('translate-y-0', 'opacity-100');
-
-      setTimeout(() => {
-        toast.classList.add('translate-y-10', 'opacity-0');
-        toast.classList.remove('translate-y-0', 'opacity-100');
-      }, 3500);
-    }
-  </script>
+/* ==================================================
+   INIT
+   ================================================== */
+renderProjectTabs();
+renderProjectCards();
+renderEventTabs();
+renderEventCards();
+renderSkillCatTabs();
+renderSkillChips();
+renderValueProps();
+</script>
 </body>
 </html>
