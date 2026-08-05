@@ -2,802 +2,1090 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Lizi Zivzivadze — Electromechanical Engineer</title>
+<meta name="description" content="Portfolio of Lizi Zivzivadze, Electromechanical Engineer specialized in embedded systems, mechatronic architecture, and real-time control workflows.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
 <style>
-  :root{
-    --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-mono: "JetBrains Mono", Consolas, Monaco, "Courier New", monospace;
-    --bg-main:#FAFAFA;
-    --bg-surface:#FFFFFF;
-    --text-primary:#0F172A;
-    --text-secondary:#475569;
-    --text-muted:#94A3B8;
-    --accent-primary:#2563EB;
-    --accent-success:#22C55E;
-    --border-color:#E2E8F0;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--bg-main);
-    font-family:var(--font-primary);
-    color:var(--text-primary);
-    -webkit-font-smoothing:antialiased;
-  }
-  a{color:inherit;}
-  button{font:inherit;}
+/* ============================================================
+   1. GLOBAL ARCHITECTURE & DESIGN TOKENS
+   ============================================================ */
+:root{
+  --bg-main:#FAFAFA;
+  --bg-surface:#FFFFFF;
+  --text-primary:#0F172A;
+  --text-secondary:#475569;
+  --text-muted:#64748B;
+  --border-color:#E2E8F0;
+  --accent-primary:#2563EB;
+  --accent-hover:#1D4ED8;
+  --accent-subtle:#EFF6FF;
+  --font-primary:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --font-mono:'JetBrains Mono','Fira Code','Courier New',monospace;
+  --header-height:44px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font-primary);
+  font-size:16px;
+  line-height:1.5;
+  background:var(--bg-main);
+  color:var(--text-primary);
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+}
+img{display:block;max-width:100%;}
+button{font:inherit;background:none;border:none;}
+a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--accent-primary);outline-offset:2px;}
 
-  /* ---------- App shell ---------- */
-  .app-shell{
-    max-width:430px;
-    margin:0 auto;
-    position:relative;
-    min-height:100vh;
-  }
-  .app-main{
-    padding:0 15px;
-    padding-top:15px;
-    padding-bottom:96px;
-    box-sizing:border-box;
-    width:100%;
-  }
+.app-shell{
+  max-width:430px;
+  margin:0 auto;
+  padding:15px 15px 96px;
+  position:relative;
+}
 
-  /* ---------- Section 2: Sticky header ---------- */
-  .sticky-header{
-    position:fixed; top:0; left:50%; transform:translate(-50%,-100%);
-    width:100%; max-width:430px; height:44px; min-height:44px; z-index:100;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:0 15px; box-sizing:border-box;
-    border-bottom:1px solid rgba(226,232,240,0.8);
-    background:rgba(255,255,255,0.85);
-    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
-    opacity:0; pointer-events:none;
-    transition:opacity .2s ease, transform .2s ease;
-  }
-  .sticky-header.visible{
-    opacity:1; transform:translate(-50%,0); pointer-events:auto;
-  }
-  .sticky-header-left{display:flex; align-items:center; gap:8px;}
-  .header-mini-avatar{
-    width:28px; height:28px; border-radius:50%; flex-shrink:0;
-    border:1px solid var(--border-color); overflow:hidden;
-  }
-  .header-mini-avatar svg{width:100%; height:100%; display:block;}
-  .header-full-name{
-    font-family:var(--font-primary); font-size:14px; font-weight:700;
-    color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  }
-  .sticky-header-right{margin-left:auto; height:100%; width:auto;}
+/* Hide scrollbars on carousels while keeping scroll functional */
+.no-scrollbar{scrollbar-width:none;-ms-overflow-style:none;}
+.no-scrollbar::-webkit-scrollbar{display:none;}
 
-  /* ---------- Section 3: Profile ---------- */
-  .profile-container{
-    display:flex; flex-direction:column; align-items:center; gap:12px;
-    padding-top:15px; margin-bottom:24px; width:100%; box-sizing:border-box;
-  }
-  .profile-avatar{
-    width:90px; height:90px; border-radius:50%;
-    border:1px solid var(--border-color); background:#F1F5F9; overflow:hidden;
-  }
-  .profile-avatar svg{width:100%; height:100%; display:block;}
-  .profile-name{
-    font-family:var(--font-primary); font-size:20px; font-weight:700;
-    color:var(--text-primary); margin:0; text-align:center;
-  }
-  .profile-title{
-    font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--text-secondary);
-    text-transform:uppercase; text-align:center; margin:0;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%;
-  }
-  .profile-action-row{display:flex; flex-direction:row; gap:8px; width:100%; box-sizing:border-box; margin-top:4px;}
-  .profile-btn{
-    height:38px; flex-grow:1; flex-basis:0;
-    font-family:var(--font-mono); font-size:11px; font-weight:600; text-transform:uppercase;
-    border-radius:6px; border:1px solid var(--border-color); background:var(--bg-surface); color:var(--text-primary);
-    cursor:pointer; display:flex; align-items:center; justify-content:center;
-    text-decoration:none; box-sizing:border-box; transition:background .2s ease;
-    letter-spacing:0.03em;
-  }
-  .profile-btn:hover{background:#F8FAFC;}
+/* ============================================================
+   2. PROFILE COMPONENT
+   ============================================================ */
+.profile-card{
+  background:var(--bg-surface);
+  border:1px solid var(--border-color);
+  border-radius:8px;
+  padding:15px;
+  margin-bottom:24px;
+  box-shadow:0 1px 3px 0 rgba(0,0,0,0.05);
+}
+.profile-top-row{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  flex-wrap:nowrap;
+  gap:16px;
+}
+.profile-photo-wrap{width:88px;height:88px;flex-shrink:0;}
+.profile-photo{
+  width:88px;height:88px;
+  object-fit:cover;
+  border-radius:50%;
+  border:1px solid var(--border-color);
+}
+.profile-content-col{
+  flex-grow:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  height:88px;
+}
+.profile-name{
+  font-family:var(--font-primary);
+  font-size:20px;
+  font-weight:700;
+  color:var(--text-primary);
+  text-transform:capitalize;
+  line-height:24px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.profile-title{
+  font-family:var(--font-mono);
+  font-size:13px;
+  font-weight:500;
+  color:var(--text-secondary);
+  line-height:18px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.profile-actions{
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:center;
+  width:100%;
+  height:24px;
+}
+.action-btn{
+  width:20px;height:20px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.action-btn svg{
+  width:20px;height:20px;
+  stroke:var(--text-secondary);
+  transition:stroke 0.2s ease;
+}
+.action-btn:hover svg{stroke:var(--accent-primary);}
+.personal-statement{
+  margin-top:15px;
+  padding-top:15px;
+  border-top:1px solid var(--border-color);
+  font-family:var(--font-primary);
+  font-size:14px;
+  font-weight:400;
+  color:var(--text-secondary);
+  line-height:20px;
+  max-height:60px;
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
 
-  /* ---------- Shared: section title ---------- */
-  .section-title{
-    font-family:var(--font-primary); font-size:20px; font-weight:700; color:var(--text-primary);
-    text-align:center; margin:0 0 16px 0; letter-spacing:0.05em; text-transform:uppercase;
-  }
-  .section-title.single-line-title{
-    font-size:clamp(13px,3.8vw,18px); letter-spacing:0.04em; margin-top:0;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;
-  }
-  section.app-section{margin-bottom:32px;}
+/* ============================================================
+   SHARED: section title / filter tabs / carousels / cards
+   ============================================================ */
+.section-title{
+  font-family:var(--font-primary);
+  font-size:20px;
+  font-weight:700;
+  color:var(--text-primary);
+  text-align:center;
+  margin-bottom:16px;
+  letter-spacing:0.05em;
+}
+.single-line-title{
+  font-size:clamp(13px,3.8vw,18px);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  width:100%;
+  letter-spacing:0.04em;
+}
 
-  /* ---------- Section 4.1 / 6.1: filter bars ---------- */
-  .projects-filter-bar{
-    display:grid; grid-template-columns:repeat(4,1fr); gap:6px; width:100%;
-    margin-bottom:16px; box-sizing:border-box;
-  }
-  .events-filter-bar{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:8px; width:100%;
-    margin-bottom:20px; box-sizing:border-box;
-  }
-  .filter-tab{
-    height:34px; font-family:var(--font-mono); font-size:10.5px; font-weight:600;
-    border-radius:6px; cursor:pointer; border:1px solid var(--border-color);
-    text-transform:uppercase; display:flex; align-items:center; justify-content:center;
-    background:var(--bg-main); color:var(--text-secondary);
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding:0 4px;
-  }
-  .events-filter-bar .filter-tab{height:36px; font-size:11px;}
-  .filter-tab.active{background:var(--accent-primary); color:#FFFFFF; border-color:var(--accent-primary);}
+.tab-bar{
+  display:flex;
+  flex-direction:row;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+.tab-btn{
+  font-family:var(--font-mono);
+  font-size:12px;
+  font-weight:600;
+  padding:6px 14px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:all 0.2s ease;
+  border:1px solid var(--border-color);
+  background:var(--bg-main);
+  color:var(--text-secondary);
+}
+.tab-btn.active{
+  background:var(--accent-primary);
+  color:#FFFFFF;
+  border-color:var(--accent-primary);
+}
+.events-filter-bar{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  width:100%;
+  margin-bottom:20px;
+  box-sizing:border-box;
+}
+.event-filter-btn{
+  height:36px;
+  padding:0 4px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-transform:uppercase;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
 
-  /* ---------- Section 4.2/4.3 & 6.2/6.3: carousels & cards ---------- */
-  .carousel-track{
-    display:flex; flex-direction:row; gap:12px; overflow-x:auto;
-    scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; padding:4px;
-  }
-  .carousel-track::-webkit-scrollbar{display:none;}
-  .carousel-card{
-    width:calc(100vw - 30px - 12px - 7px);
-    min-width:calc(100vw - 30px - 12px - 7px);
-    max-width:calc(100vw - 30px - 12px - 7px);
-    scroll-snap-align:start; flex-shrink:0;
-  }
-  @media (min-width:430px){
-    .carousel-card{
-      width:calc(430px - 30px - 12px - 7px);
-      min-width:calc(430px - 30px - 12px - 7px);
-      max-width:calc(430px - 30px - 12px - 7px);
-    }
-  }
+.carousel{
+  display:flex;
+  flex-direction:row;
+  gap:12px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  padding:4px;
+  margin:0 -4px;
+}
+.carousel-card{
+  flex-shrink:0;
+  scroll-snap-align:start;
+  width:calc(100vw - 30px - 12px - 7px);
+  max-width:381px; /* caps the peek formula inside the 430px app-shell on wide viewports */
+}
 
-  .project-card, .event-card{
-    height:400px; background:var(--bg-surface); border:1px solid var(--border-color);
-    border-radius:8px; padding:12px; display:flex; flex-direction:column;
-    overflow:hidden; box-sizing:border-box;
-  }
-  .card-media, .event-cover-photo-wrap{
-    width:100%; aspect-ratio:16/9; border-radius:6px; overflow:hidden;
-    margin-bottom:10px; background:#F1F5F9; position:relative; flex-shrink:0;
-  }
-  .card-media-placeholder{
-    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
-    color:#FFFFFF;
-  }
-  .card-media-placeholder svg{width:32px; height:32px;}
-  .event-cover-photo{width:100%; height:100%; object-fit:cover; display:block;}
+.card-shell{
+  height:400px;
+  background:var(--bg-surface);
+  border:1px solid var(--border-color);
+  border-radius:8px;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  box-sizing:border-box;
+}
+.card-media{
+  width:100%;
+  aspect-ratio:16/9;
+  border-radius:6px;
+  overflow:hidden;
+  margin-bottom:10px;
+  position:relative;
+  background:#000000;
+  flex-shrink:0;
+}
+.card-media img{width:100%;height:100%;object-fit:cover;}
+.card-media iframe{width:100%;height:100%;border:0;}
+.card-media.photo-media{background:#F1F5F9;}
+.video-placeholder{
+  width:100%;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  background:linear-gradient(135deg,#0F172A,#1E293B);
+  color:#94A3B8;
+}
+.video-placeholder svg{width:26px;height:26px;stroke:#64748B;}
+.video-placeholder span{font-family:var(--font-mono);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;}
 
-  .card-header-block{height:42px; flex-shrink:0;}
-  .card-title{
-    font-family:var(--font-primary); font-size:15px; font-weight:700; color:var(--text-primary);
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:18px; margin:0;
-  }
-  .card-description{
-    font-family:var(--font-primary); font-size:12px; font-weight:400; color:var(--text-secondary);
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:16px; margin-top:2px;
-  }
+.card-header{height:42px;flex-shrink:0;overflow:hidden;}
+.card-title{
+  font-family:var(--font-primary);
+  font-size:15px;font-weight:700;color:var(--text-primary);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:18px;
+}
+.card-description{
+  font-family:var(--font-primary);
+  font-size:12px;font-weight:400;color:var(--text-secondary);
+  margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:16px;
+}
 
-  .subtab-bar{
-    display:flex; flex-direction:row; gap:6px; width:100%;
-    margin-top:8px; margin-bottom:8px; padding-bottom:6px;
-    border-bottom:1px solid var(--border-color); flex-shrink:0;
-  }
-  .subtab-btn{
-    font-family:var(--font-mono); font-size:11px; font-weight:600; padding:4px 8px;
-    border-radius:4px; flex-grow:1; text-align:center; border:1px solid var(--border-color);
-    background:var(--bg-main); color:var(--text-secondary); cursor:pointer;
-    text-decoration:none; display:flex; align-items:center; justify-content:center;
-  }
-  .subtab-btn.active{background:var(--accent-primary); color:#FFFFFF; border-color:var(--accent-primary);}
-  .subtab-url-btn{background:#F1F5F9; color:var(--accent-primary); font-weight:700;}
+.card-subnav{
+  display:flex;flex-direction:row;gap:6px;width:100%;
+  margin-top:8px;margin-bottom:8px;padding-bottom:6px;
+  border-bottom:1px solid var(--border-color);
+  flex-shrink:0;
+}
+.subtab-btn{
+  font-family:var(--font-mono);font-size:11px;font-weight:600;
+  padding:4px 10px;border-radius:4px;cursor:pointer;flex-grow:1;text-align:center;
+  border:1px solid var(--border-color);
+  background:var(--bg-main);color:var(--text-secondary);
+}
+.subtab-btn.active{background:var(--accent-primary);color:#FFFFFF;border-color:var(--accent-primary);}
+.subtab-url-btn{background:var(--bg-main);color:var(--accent-primary);text-decoration:none;border-color:var(--border-color);}
 
-  .content-pane{flex-grow:1; width:100%; height:120px; overflow-y:auto; box-sizing:border-box;}
-  .pane{display:none;}
-  .pane.active{display:block;}
-  .pane-block{margin-bottom:8px;}
-  .pane-label{
-    font-family:var(--font-mono); font-size:10px; font-weight:700; color:var(--text-muted);
-    text-transform:uppercase; margin-bottom:2px; letter-spacing:0.04em;
-  }
-  .pane-text{
-    font-family:var(--font-primary); font-size:12.5px; color:var(--text-secondary); line-height:16px;
-    margin:0; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
-  }
-  .tech-pill-list{display:flex; flex-wrap:wrap; gap:6px;}
-  .tech-pill{
-    font-family:var(--font-mono); font-size:10px; background:#F1F5F9; border:1px solid var(--border-color);
-    border-radius:4px; padding:3px 8px; color:var(--text-secondary);
-  }
-  .pane-url-link{
-    display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono);
-    font-size:12px; font-weight:700; color:var(--accent-primary); text-decoration:none;
-  }
-  .media-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:6px;}
-  .media-thumb{
-    height:52px; border-radius:4px; cursor:pointer; display:flex; align-items:center; justify-content:center;
-    color:#fff;
-  }
-  .media-thumb svg{width:16px; height:16px;}
+.card-tab-content{
+  flex:1 1 auto;
+  min-height:0;
+  width:100%;
+  overflow-y:auto;
+  box-sizing:border-box;
+}
+.pane-line{font-family:var(--font-primary);font-size:12px;color:var(--text-secondary);line-height:16px;}
+.pane-line strong{color:var(--text-primary);}
+.truncated-2-lines{
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;
+}
+.tech-stack-wrap{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;}
+.tech-badge{
+  font-family:var(--font-mono);font-size:10.5px;font-weight:500;
+  background:var(--accent-subtle);color:var(--accent-primary);
+  border:1px solid #BFDBFE;padding:2px 7px;border-radius:4px;white-space:nowrap;
+  flex:0 1 calc(33.333% - 6px);text-align:center;box-sizing:border-box;
+}
+.media-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;width:100%;}
+.lightbox-thumb{
+  width:100%;height:52px;object-fit:cover;border-radius:4px;cursor:pointer;
+  border:1px solid var(--border-color);transition:transform 0.2s ease;
+}
+.lightbox-thumb:hover{transform:scale(1.03);}
 
-  /* ---------- Section 5: Skills ---------- */
-  .skills-tab-bar{
-    display:flex; flex-direction:row; gap:6px; overflow-x:auto; margin-bottom:16px; scrollbar-width:none;
-  }
-  .skills-tab-bar::-webkit-scrollbar{display:none;}
-  .skills-tab-bar .filter-tab{
-    flex-shrink:0; height:auto; padding:6px 12px; font-size:11px; white-space:nowrap;
-  }
-  .skills-panel{
-    height:400px; min-height:400px; max-height:400px; overflow-y:auto;
-    background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px;
-    padding:12px 16px; box-sizing:border-box;
-  }
-  .skill-row{
-    display:flex; align-items:center; justify-content:space-between; height:36px;
-    border-bottom:1px solid #F1F5F9;
-  }
-  .skill-row:last-child{border-bottom:none;}
-  .skill-name{font-family:var(--font-primary); font-size:13px; font-weight:600; color:var(--text-primary);}
-  .skill-bar-track{width:100px; height:6px; background:#F1F5F9; border-radius:3px; overflow:hidden; flex-shrink:0; margin-left:12px;}
-  .skill-bar-fill{background:var(--accent-primary); height:100%; border-radius:3px; transition:width .4s ease;}
+/* ============================================================
+   4. SKILLSETS + SKILLS
+   ============================================================ */
+.skills-card{
+  background:var(--bg-surface);
+  border:1px solid var(--border-color);
+  border-radius:8px;
+  padding:16px;
+  margin-bottom:24px;
+  box-shadow:0 1px 3px 0 rgba(0,0,0,0.05);
+}
+.skillset-tabs-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-bottom:20px;
+}
+.skill-tab{
+  height:36px;padding:0 8px;
+  font-family:var(--font-mono);font-size:11px;font-weight:600;
+  text-align:center;text-transform:uppercase;
+  border-radius:6px;cursor:pointer;transition:all 0.2s ease;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg-main);color:var(--text-secondary);border:1px solid var(--border-color);
+}
+.skill-tab.active{background:var(--accent-primary);color:#FFFFFF;border-color:var(--accent-primary);}
+.skills-inner-title{
+  font-family:var(--font-primary);font-size:16px;font-weight:600;color:var(--text-primary);
+  text-align:center;margin-bottom:12px;
+}
+.skills-display-box{
+  background:var(--bg-main);
+  border:1px solid var(--border-color);
+  border-radius:6px;
+  padding:16px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.skill-row{display:flex;flex-direction:column;gap:6px;width:100%;}
+.skill-meta-line{display:flex;justify-content:space-between;align-items:center;width:100%;}
+.skill-name{font-family:var(--font-primary);font-size:13px;font-weight:600;color:var(--text-primary);}
+.skill-percentage{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--accent-primary);}
+.progress-track{width:100%;height:8px;background:#E2E8F0;border-radius:4px;overflow:hidden;position:relative;}
+.progress-fill{
+  height:100%;width:0%;background:var(--accent-primary);border-radius:4px;
+  transition:width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
 
-  /* ---------- Section 7: Value cards ---------- */
-  .value-card{
-    height:220px; background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px;
-    padding:16px; display:flex; flex-direction:column; justify-content:flex-start;
-    overflow:hidden; box-sizing:border-box;
-  }
-  .value-card-header{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
-  .value-card-icon{
-    width:20px; height:20px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
-  }
-  .value-card-icon svg{width:20px; height:20px; stroke:var(--accent-primary); stroke-width:2px; fill:none;}
-  .value-card-title{
-    font-family:var(--font-primary); font-size:16px; font-weight:700; color:var(--text-primary); margin:0;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  }
-  .value-card-text{
-    font-family:var(--font-primary); font-size:13.5px; font-weight:400; color:var(--text-secondary);
-    line-height:20px; max-height:60px; margin:0;
-    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis;
-  }
+/* ============================================================
+   6. VALUE CARDS ("What do I bring to the table")
+   ============================================================ */
+.value-card{
+  height:220px;
+  background:var(--bg-surface);
+  border:1px solid var(--border-color);
+  border-radius:8px;
+  padding:16px;
+  display:flex;flex-direction:column;justify-content:flex-start;
+  overflow:hidden;box-sizing:border-box;
+}
+.value-card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.value-card-icon{
+  width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:var(--accent-primary);flex-shrink:0;
+}
+.value-card-icon svg{width:20px;height:20px;stroke:var(--accent-primary);}
+.value-card-title{
+  font-family:var(--font-primary);font-size:16px;font-weight:700;color:var(--text-primary);
+  line-height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.value-card-text{
+  font-family:var(--font-primary);font-size:13.5px;font-weight:400;color:var(--text-secondary);
+  line-height:20px;max-height:60px;margin:0;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;
+}
 
-  /* ---------- Section 8: Help Yourself ---------- */
-  .help-yourself-container{display:flex; flex-direction:column; gap:12px; width:100%; box-sizing:border-box;}
-  .file-select-box{
-    height:50px; min-height:50px; width:100%; display:flex; align-items:center;
-    padding:0 16px; border-radius:8px; box-sizing:border-box; cursor:pointer; user-select:none;
-    transition:all .2s ease; background:var(--bg-surface); border:1px solid var(--border-color); color:var(--text-secondary);
-  }
-  .file-select-box.selected{background:#EFF6FF; border:1.5px solid var(--accent-primary); color:var(--accent-primary);}
-  .file-checkbox{display:none;}
-  .file-box-content{display:flex; align-items:center; width:100%;}
-  .file-icon{width:20px; height:20px; flex-shrink:0; stroke:currentColor; stroke-width:2px; fill:none;}
-  .file-label{
-    font-family:var(--font-primary); font-size:14px; font-weight:600; text-transform:uppercase;
-    margin-left:12px; flex-grow:1;
-  }
-  .checkbox-indicator{
-    width:18px; height:18px; border-radius:4px; border:1.5px solid var(--border-color); flex-shrink:0;
-    display:flex; align-items:center; justify-content:center; transition:all .2s ease;
-  }
-  .file-select-box.selected .checkbox-indicator{background:var(--accent-primary); border-color:var(--accent-primary);}
-  .checkbox-indicator svg{width:12px; height:12px; stroke:#fff; stroke-width:3px; fill:none; display:none;}
-  .file-select-box.selected .checkbox-indicator svg{display:block;}
+/* ============================================================
+   7. HELP YOURSELF
+   ============================================================ */
+.help-yourself-container{display:flex;flex-direction:column;gap:12px;width:100%;box-sizing:border-box;}
+.file-select-box{
+  height:50px;min-height:50px;width:100%;
+  display:flex;align-items:center;
+  border-radius:8px;box-sizing:border-box;cursor:pointer;user-select:none;
+  transition:all 0.2s ease;
+  background:var(--bg-surface);border:1px solid var(--border-color);color:var(--text-secondary);
+}
+.file-select-box.selected,
+.file-select-box:has(:checked){
+  background:#EFF6FF;border:1.5px solid var(--accent-primary);color:var(--accent-primary);
+}
+.file-checkbox{position:absolute;opacity:0;width:0;height:0;}
+.file-box-content{display:flex;align-items:center;width:100%;padding:0 16px;}
+.file-icon{width:20px;height:20px;flex-shrink:0;stroke:currentColor;}
+.file-label{
+  font-family:var(--font-primary);font-size:14px;font-weight:600;
+  margin-left:12px;text-transform:uppercase;flex-grow:1;
+}
+.checkbox-indicator{
+  width:18px;height:18px;flex-shrink:0;border-radius:4px;
+  border:1.5px solid var(--border-color);
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s ease;
+}
+.file-select-box.selected .checkbox-indicator,
+.file-select-box:has(:checked) .checkbox-indicator{
+  background:#2563EB;border-color:#2563EB;
+}
+.checkbox-indicator svg{width:12px;height:12px;stroke:#fff;opacity:0;transition:opacity 0.15s ease;}
+.file-select-box.selected .checkbox-indicator svg,
+.file-select-box:has(:checked) .checkbox-indicator svg{opacity:1;}
 
-  #recipient-email{
-    height:50px; min-height:50px; width:100%; background:var(--bg-surface); border:1px solid var(--border-color);
-    border-radius:8px; padding:0 16px; box-sizing:border-box; font-family:var(--font-primary); font-size:14px;
-    color:var(--text-primary); outline:none;
-  }
-  #recipient-email:focus{border-color:var(--accent-primary); box-shadow:0 0 0 1px var(--accent-primary);}
-  #recipient-email::placeholder{color:var(--text-muted);}
+#recipient-email{
+  height:50px;min-height:50px;width:100%;
+  background:var(--bg-surface);border:1px solid var(--border-color);border-radius:8px;
+  padding:0 16px;box-sizing:border-box;
+  font-family:var(--font-primary);font-size:14px;color:var(--text-primary);
+}
+#recipient-email:focus{outline:1.5px solid var(--accent-primary);border-color:var(--accent-primary);}
+#recipient-email::placeholder{color:#94A3B8;font-family:var(--font-primary);}
 
-  .send-action-btn{
-    height:50px; min-height:50px; width:100%; background:var(--accent-primary); color:#FFFFFF; border:none;
-    border-radius:8px; font-family:var(--font-primary); font-size:15px; font-weight:700; letter-spacing:0.05em;
-    text-transform:uppercase; cursor:pointer; display:flex; align-items:center; justify-content:center;
-    transition:background .2s ease;
-  }
-  .send-action-btn:disabled{opacity:0.5; cursor:not-allowed;}
-  .send-action-btn.success{background:var(--accent-success);}
-  .form-hint{font-family:var(--font-mono); font-size:10.5px; color:var(--text-muted); text-align:center; margin:0;}
+.send-action-btn{
+  height:50px;min-height:50px;width:100%;
+  background:var(--accent-primary);color:#FFFFFF;border:none;border-radius:8px;
+  font-family:var(--font-primary);font-size:15px;font-weight:700;
+  letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
+  transition:background 0.2s ease;box-sizing:border-box;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.send-action-btn:hover:not(:disabled){background:var(--accent-hover);}
+.send-action-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.send-action-btn.is-success{background:#16A34A;}
+.spinner{
+  width:16px;height:16px;border-radius:50%;
+  border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;
+  animation:spin 0.7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
 
-  /* ---------- Section 9: Sticky footer ---------- */
-  .sticky-footer{
-    position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:430px;
-    height:auto; z-index:90; background:rgba(255,255,255,0.90);
-    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
-    border-top:1px solid var(--border-color); padding:8px 15px;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; box-sizing:border-box;
-  }
-  .footer-line-1, .footer-line-2{display:flex; align-items:center; justify-content:center; gap:6px; width:100%;}
-  .verified-icon{width:14px; height:14px; fill:var(--accent-primary); flex-shrink:0;}
-  .footer-copyright-text{font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--text-primary); text-align:center;}
-  .status-pulse-dot{
-    width:8px; height:8px; border-radius:50%; background:var(--accent-success); position:relative;
-    flex-shrink:0; animation:status-pulse 2s infinite;
-  }
-  @keyframes status-pulse{
-    0%{box-shadow:0 0 0 0 rgba(34,197,94,0.7);}
-    70%{box-shadow:0 0 0 6px rgba(34,197,94,0);}
-    100%{box-shadow:0 0 0 0 rgba(34,197,94,0);}
-  }
-  .footer-status-text{
-    font-family:var(--font-mono); font-size:11px; font-weight:500; color:var(--text-secondary);
-    text-transform:uppercase; letter-spacing:0.04em; text-align:center;
-  }
+/* ============================================================
+   8. STICKY HEADER
+   ============================================================ */
+.sticky-header{
+  position:fixed;top:0;left:0;width:100%;height:var(--header-height);min-height:var(--header-height);
+  z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 15px;box-sizing:border-box;
+  border-bottom:1px solid rgba(226,232,240,0.8);
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  opacity:0;transform:translateY(-100%);pointer-events:none;
+  transition:opacity 0.2s ease,transform 0.2s ease;
+}
+.sticky-header.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+.sticky-header-left{display:flex;align-items:center;gap:8px;min-width:0;}
+.header-mini-avatar{
+  width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid var(--border-color);
+}
+.header-full-name{
+  font-family:var(--font-primary);font-size:14px;font-weight:700;color:var(--text-primary);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.sticky-header-right{margin-left:auto;display:flex;align-items:center;height:100%;width:auto;}
 
-  /* ---------- Lightbox ---------- */
-  #lightbox-modal{
-    position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15,23,42,0.85);
-    display:none; align-items:center; justify-content:center; z-index:9999; padding:24px; box-sizing:border-box;
-  }
-  #lightbox-modal.open{display:flex;}
-  .lightbox-content{
-    max-width:90vw; max-height:80vh; width:280px; aspect-ratio:4/3; border-radius:8px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; color:#fff;
-  }
-  .lightbox-close{
-    position:absolute; top:20px; right:20px; width:36px; height:36px; border-radius:50%;
-    background:rgba(255,255,255,0.15); border:none; color:#fff; font-size:20px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-  }
+/* ============================================================
+   9. STICKY FOOTER
+   ============================================================ */
+.sticky-footer{
+  position:fixed;bottom:0;left:0;width:100%;height:auto;z-index:90;
+  background:rgba(255,255,255,0.90);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-top:1px solid var(--border-color);
+  padding:8px 15px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  box-sizing:border-box;
+}
+.footer-line-1,.footer-line-2{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;}
+.footer-copyright-text{
+  font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--text-primary);text-align:center;
+}
+.status-pulse-dot{
+  width:8px;height:8px;border-radius:50%;background:#22C55E;position:relative;flex-shrink:0;
+  animation:status-pulse 2s infinite;
+}
+@keyframes status-pulse{
+  0%{box-shadow:0 0 0 0 rgba(34,197,94,0.7);}
+  70%{box-shadow:0 0 0 6px rgba(34,197,94,0);}
+  100%{box-shadow:0 0 0 0 rgba(34,197,94,0);}
+}
+.footer-status-text{
+  font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--text-secondary);
+  text-transform:uppercase;letter-spacing:0.04em;text-align:center;
+}
 
-  @media (prefers-reduced-motion: reduce){
-    .status-pulse-dot{animation:none;}
-    *{transition-duration:0.01ms !important;}
-  }
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
+.lightbox-overlay{
+  position:fixed;top:0;left:0;width:100vw;height:100vh;
+  background:rgba(15,23,42,0.85);display:none;align-items:center;justify-content:center;z-index:9999;
+  padding:24px;box-sizing:border-box;
+}
+.lightbox-overlay.open{display:flex;}
+#lightbox-img{max-width:90vw;max-height:80vh;border-radius:8px;box-shadow:0 10px 25px rgba(0,0,0,0.5);}
+
+section{margin-bottom:32px;}
+section:last-of-type{margin-bottom:8px;}
 </style>
 </head>
 <body>
 
 <header id="sticky-header" class="sticky-header">
   <div class="sticky-header-left">
-    <span class="header-mini-avatar" id="header-mini-avatar"></span>
+    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=80" alt="Lizi Zivzivadze mini avatar" class="header-mini-avatar">
     <span class="header-full-name">Lizi Zivzivadze</span>
   </div>
   <div class="sticky-header-right"></div>
 </header>
 
 <div class="app-shell">
-<main class="app-main">
 
-  <!-- SECTION 3: PROFILE -->
-  <section id="profile-section" class="profile-container">
-    <span class="profile-avatar" id="profile-avatar"></span>
-    <h1 class="profile-name">Lizi Zivzivadze</h1>
-    <p class="profile-title">Electromechanical Engineer</p>
-    <div class="profile-action-row">
-      <a href="mailto:lizozivzivadze@gmail.com" class="profile-btn">Contact</a>
-      <a href="#" id="cv-btn" class="profile-btn">CV</a>
-      <a href="https://github.com/lizozivzivadze-star" target="_blank" rel="noopener" class="profile-btn">GitHub</a>
+  <!-- ============ SECTION 2: PROFILE ============ -->
+  <section id="profile-section" class="profile-card">
+    <div class="profile-top-row">
+      <div class="profile-photo-wrap">
+        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80" alt="Lizi Zivzivadze Profile Photo" class="profile-photo">
+      </div>
+      <div class="profile-content-col">
+        <h1 class="profile-name">Lizi Zivzivadze</h1>
+        <p class="profile-title">Electromechanical Engineer</p>
+        <nav class="profile-actions" aria-label="Contact links">
+          <a href="tel:+32499221680" title="Call Lizi Zivzivadze" target="_self" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </a>
+          <a href="https://wa.me/32499221680" title="WhatsApp Chat" target="_blank" rel="noopener noreferrer" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/></svg>
+          </a>
+          <a href="mailto:lizozivzivadze@gmail.com" title="Email Lizi Zivzivadze" target="_self" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/lizizivzivadze/" title="LinkedIn Profile" target="_blank" rel="noopener noreferrer" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="https://github.com/lizozivzivadze-star" title="GitHub Profile" target="_blank" rel="noopener noreferrer" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          </a>
+        </nav>
+      </div>
     </div>
+    <p class="personal-statement">Electromechanical engineer specialized in embedded systems, mechatronic architecture, and real-time control workflows. Focused on delivering robust, production-grade hardware-software integration for complex technical challenges.</p>
   </section>
 
-  <!-- SECTION 4: PROJECTS -->
-  <section class="app-section" id="projects-section">
-    <h2 class="section-title">Projects</h2>
-    <nav class="projects-filter-bar" data-target="projects-carousel">
-      <button class="filter-tab active" data-filter="all">All</button>
-      <button class="filter-tab" data-filter="hardware">Hardware</button>
-      <button class="filter-tab" data-filter="embedded">Embedded</button>
-      <button class="filter-tab" data-filter="automation">Automation</button>
+  <!-- ============ SECTION 3: PROJECTS ============ -->
+  <section id="projects-section">
+    <h2 class="section-title">PROJECTS</h2>
+    <nav class="tab-bar" id="projects-filter-bar">
+      <button class="tab-btn active" data-filter="all">ALL</button>
+      <button class="tab-btn" data-filter="hw-sw">HW+SW</button>
+      <button class="tab-btn" data-filter="hw"><b>H</b>ard<b>W</b>are</button>
+      <button class="tab-btn" data-filter="sw"><b>S</b>oft<b>W</b>are</button>
     </nav>
-    <div class="carousel-track" id="projects-carousel"></div>
+    <div class="carousel no-scrollbar" id="projects-carousel"></div>
   </section>
 
-  <!-- SECTION 5: SKILLSETS + SKILLS -->
-  <section class="app-section" id="skills-section">
-    <h2 class="section-title">Skillsets + Skills</h2>
-    <nav class="skills-tab-bar" data-target="skills-panel">
-      <button class="filter-tab active" data-filter="all">All</button>
-      <button class="filter-tab" data-filter="hardware">Hardware</button>
-      <button class="filter-tab" data-filter="software">Software</button>
-      <button class="filter-tab" data-filter="mechatronics">Mechatronics</button>
-    </nav>
-    <div class="skills-panel" id="skills-panel"></div>
+  <!-- ============ SECTION 4: SKILLSETS ============ -->
+  <section id="skills-section" class="skills-card">
+    <h2 class="section-title">SKILLSETS</h2>
+    <nav class="skillset-tabs-grid" id="skillset-tabs"></nav>
+    <h3 class="skills-inner-title">Skills</h3>
+    <div class="skills-display-box" id="skills-display-box"></div>
   </section>
 
-  <!-- SECTION 6: EVENTS -->
-  <section class="app-section" id="events-section">
-    <h2 class="section-title">Events</h2>
-    <nav class="events-filter-bar" data-target="events-carousel">
-      <button class="filter-tab active" data-filter="all">All</button>
-      <button class="filter-tab" data-filter="hackathon">Hackathon</button>
-      <button class="filter-tab" data-filter="conference">Conference</button>
-      <button class="filter-tab" data-filter="expo">Expo</button>
-      <button class="filter-tab" data-filter="meetup">Meetup</button>
-    </nav>
-    <div class="carousel-track" id="events-carousel"></div>
+  <!-- ============ SECTION 5: EVENTS ============ -->
+  <section id="events-section">
+    <h2 class="section-title">EVENTS</h2>
+    <nav class="events-filter-bar" id="events-filter-bar"></nav>
+    <div class="carousel no-scrollbar" id="events-carousel"></div>
   </section>
 
-  <!-- SECTION 7: WHAT DO I BRING TO THE TABLE -->
-  <section class="app-section" id="value-section">
-    <h2 class="section-title single-line-title">What Do I Bring to the Table?</h2>
-    <div class="carousel-track" id="value-carousel"></div>
+  <!-- ============ SECTION 6: WHAT DO I BRING TO THE TABLE ============ -->
+  <section id="value-section">
+    <h2 class="section-title single-line-title">WHAT DO I BRING TO THE TABLE?</h2>
+    <div class="carousel no-scrollbar" id="value-carousel"></div>
   </section>
 
-  <!-- SECTION 8: HELP YOURSELF -->
-  <section class="app-section" id="help-yourself-section">
-    <h2 class="section-title">Help Yourself</h2>
+  <!-- ============ SECTION 7: HELP YOURSELF ============ -->
+  <section id="help-section">
+    <h2 class="section-title">HELP YOURSELF</h2>
     <form id="help-yourself-form" class="help-yourself-container">
-      <label class="file-select-box" data-box>
+      <label class="file-select-box" data-box="cv">
         <input type="checkbox" name="selected_files" value="cv" class="file-checkbox">
         <span class="file-box-content">
-          <svg class="file-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
           <span class="file-label">CV</span>
-          <span class="checkbox-indicator"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="checkbox-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
         </span>
       </label>
-      <label class="file-select-box" data-box>
+      <label class="file-select-box" data-box="portfolio">
         <input type="checkbox" name="selected_files" value="portfolio" class="file-checkbox">
         <span class="file-box-content">
-          <svg class="file-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
           <span class="file-label">Portfolio</span>
-          <span class="checkbox-indicator"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="checkbox-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
         </span>
       </label>
       <input type="email" id="recipient-email" name="user_email" placeholder="your.email@example.com" required>
-      <button type="submit" id="send-pdf-btn" class="send-action-btn">Send</button>
-      <p class="form-hint">Sends a request to Lizi — no server required</p>
+      <button type="submit" id="send-pdf-btn" class="send-action-btn" disabled>
+        <span class="btn-label">SEND</span>
+      </button>
     </form>
   </section>
 
-</main>
 </div>
 
 <footer id="sticky-footer" class="sticky-footer">
   <div class="footer-line-1">
-    <svg class="verified-icon" viewBox="0 0 24 24"><path d="M12 1l2.9 2.1 3.5-.4 1.1 3.4 3 2-1.3 3.3 1.3 3.3-3 2-1.1 3.4-3.5-.4L12 23l-2.9-2.1-3.5.4-1.1-3.4-3-2 1.3-3.3L1.5 9.3l3-2 1.1-3.4 3.5.4z"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg class="verified-icon" width="14" height="14" viewBox="0 0 24 24" fill="#2563EB"><path d="M12 1l2.9 2.1 3.6-.2 1 3.5 3.1 1.9-1.2 3.5 1.2 3.5-3.1 1.9-1 3.5-3.6-.2L12 23l-2.9-2.1-3.6.2-1-3.5-3.1-1.9 1.2-3.5-1.2-3.5 3.1-1.9 1-3.5 3.6.2z"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <span class="footer-copyright-text">© 2026 Lizi Zivzivadze</span>
   </div>
   <div class="footer-line-2">
     <span class="status-pulse-dot"></span>
-    <span class="footer-status-text">Junior Engineer Ready for Deployment</span>
+    <span class="footer-status-text">Junior Engineer Ready For Deployment</span>
   </div>
 </footer>
 
-<div id="lightbox-modal">
-  <button class="lightbox-close" id="lightbox-close">&times;</button>
-  <div class="lightbox-content" id="lightbox-content"></div>
+<div id="lightbox-modal" class="lightbox-overlay" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="Enlarged Media">
 </div>
 
 <script>
-/* ============================================================
-   DATA
-   ============================================================ */
-const AVATAR_SVG = `
-  <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
-    <rect width="90" height="90" fill="#2563EB"/>
-    <text x="45" y="55" font-family="Inter, sans-serif" font-size="30" font-weight="700"
-          fill="#FFFFFF" text-anchor="middle">LZ</text>
-  </svg>`;
+/* ================================================================
+   DATA — replace/extend freely. This is the single source of truth
+   for Projects, Skillsets, Events and Value cards.
+   ================================================================ */
+const PORTFOLIO_DATA = {
 
-const ICONS = {
-  wrench: `<path d="M14.7 6.3a4 4 0 1 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.8 2.8-2-2z"/>`,
-  layers: `<path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>`,
-  eye: `<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>`,
-  zap: `<path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/>`,
-  check: `<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>`,
-  camera: `<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>`,
-  video: `<path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>`,
-  cpu: `<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/>`,
-  cog: `<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>`
+  projects: [
+    {
+      id:'dcbench', category:'hw-sw',
+      title:'DCBench — DC Machines Lab Sim',
+      description:'Browser sim of the KU Leuven DC machines test bench',
+      videoId:'', // paste a YouTube ID here to enable the inline demo video
+      liveUrl:'https://github.com/lizozivzivadze-star',
+      objective:'Recreate the university\'s coupled DC motor/generator test bench (Machine 1 & 2) as an interactive, zero-dependency browser simulation for remote lab practice.',
+      results:'Shipped 5 milestones — physics core, SVG wiring, fault engine + data logger, and an n8n-orchestrated AI tutor backed by 13 workflows and a PostgreSQL schema.',
+      stack:['JavaScript','SVG','Canvas','n8n','PostgreSQL','OpenAPI','CSS3']
+    },
+    {
+      id:'tactical-field-unit', category:'hw',
+      title:'AI Tactical Field Unit',
+      description:'ESP32 voice assistant chaining Whisper + Claude + TTS',
+      videoId:'',
+      liveUrl:'https://github.com/lizozivzivadze-star',
+      objective:'Build a portable, voice-activated field assistant on ESP32 hardware capable of natural conversation without a host PC.',
+      results:'Chained Groq Whisper, Claude Sonnet, and ElevenLabs TTS over HTTP streaming; solved I2S audio capture, PCM/WAV handling, and ESP32 heap constraints.',
+      stack:['ESP32','C++','I2S','INMP441','MAX98357','SSD1306','Whisper API','Claude API','ElevenLabs']
+    },
+    {
+      id:'argus', category:'sw',
+      title:'ARGUS — ISR Vision App',
+      description:'Single-file ISR tool powered by Claude Vision',
+      videoId:'',
+      liveUrl:'https://github.com/lizozivzivadze-star',
+      objective:'Deliver a single-file browser ISR (Intelligence, Surveillance, Reconnaissance) tool turning a webcam feed into structured, timestamped threat reporting.',
+      results:'Built a tactical amber HUD with ARM/DISARM control and configurable auto-analysis intervals, generating NATO SALUTE-format reports with threat-level scoring.',
+      stack:['HTML/CSS/JS','Claude Vision API','Canvas','WebRTC']
+    },
+    {
+      id:'ghostlens', category:'sw',
+      title:'GhostLens — Multispectral Sim',
+      description:'Simulated NIR / UV / LWIR / X-ray imaging in-browser',
+      videoId:'',
+      liveUrl:'https://github.com/lizozivzivadze-star',
+      objective:'Simulate multispectral sensor behavior (NIR, UV, LWIR, X-ray) purely client-side so spectral-imaging concepts are explorable without lab hardware.',
+      results:'Shipped a dependency-free single HTML file using Canvas-based filter pipelines across four distinct imaging modes.',
+      stack:['HTML5 Canvas','Vanilla JS']
+    }
+  ],
+
+  skillsets: [
+    { id:'mechatronics', label:'MECHATRONICS' },
+    { id:'embedded', label:'EMBEDDED' },
+    { id:'software', label:'SOFTWARE' },
+    { id:'cad-cam', label:'CAD / CAM' },
+    { id:'controls', label:'CONTROLS' },
+    { id:'prototyping', label:'PROTOTYPING' }
+  ],
+  skills: [
+    { category:'mechatronics', name:'Sensor Integration', pct:85 },
+    { category:'mechatronics', name:'Actuator & Motor Control', pct:80 },
+    { category:'mechatronics', name:'System Architecture', pct:78 },
+    { category:'embedded', name:'ESP32 / Microcontrollers', pct:82 },
+    { category:'embedded', name:'I2S / Audio Protocols', pct:75 },
+    { category:'embedded', name:'Firmware (C/C++)', pct:78 },
+    { category:'software', name:'JavaScript (Vanilla / ES Modules)', pct:88 },
+    { category:'software', name:'Python', pct:75 },
+    { category:'software', name:'REST API Integration', pct:85 },
+    { category:'cad-cam', name:'NX CAD Modeling', pct:80 },
+    { category:'cad-cam', name:'Moldflow Analysis', pct:72 },
+    { category:'cad-cam', name:'Injection Mold Design', pct:70 },
+    { category:'controls', name:'Automation & Industry 4.0', pct:78 },
+    { category:'controls', name:'OPC UA / Digital Twin', pct:70 },
+    { category:'controls', name:'DC Machine Theory', pct:82 },
+    { category:'prototyping', name:'Rapid Browser Prototyping', pct:90 },
+    { category:'prototyping', name:'Single-File Deployment', pct:88 },
+    { category:'prototyping', name:'Hardware Breadboarding', pct:76 }
+  ],
+
+  eventFilters:[
+    { id:'all', label:'ALL' },
+    { id:'hackathon', label:'HACKATHON' },
+    { id:'conference', label:'CONFERENCE' },
+    { id:'expo', label:'EXPO' },
+    { id:'meetup', label:'MEETUP' }
+  ],
+  events: [
+    {
+      id:'event-1', category:'expo',
+      title:'KU Leuven Group T Open Day',
+      description:'Presented mechatronic project builds to visitors',
+      coverUrl:'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80',
+      summaryUrl:'https://www.groept.be/',
+      participation:'Presented hands-on hardware demos on the engineering showcase floor, walking visitors through embedded systems builds.',
+      outcomes:'Fielded technical questions from prospective students and faculty; refined how project work is explained to non-specialist audiences.',
+      media:[
+        'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?auto=format&fit=crop&w=300&q=80'
+      ]
+    },
+    {
+      id:'event-2', category:'hackathon',
+      title:'Campus Hardware Hackathon',
+      description:'Team build sprint on an embedded systems challenge',
+      coverUrl:'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80',
+      summaryUrl:'https://github.com/lizozivzivadze-star',
+      participation:'Joined a small team building a rapid embedded-systems prototype against a fixed deadline.',
+      outcomes:'Delivered a working demo within the time limit and picked up practical lessons on hardware debugging under pressure.',
+      media:[
+        'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=300&q=80',
+        'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=300&q=80'
+      ]
+    }
+  ],
+
+  values: [
+    {
+      title:'Hardware/Software Integration',
+      icon:`<path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 9h6v6H9z"/>`,
+      text:'Bridging the gap between electromechanical hardware and real-time software. Experienced in developing embedded control logic, sensor pipelines, and automated firmware interfaces.'
+    },
+    {
+      title:'Robust System Design',
+      icon:`<path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5z"/><path d="m9 12 2 2 4-4"/>`,
+      text:'Designing clean, maintainable mechatronic architectures with emphasis on deterministic execution, thorough testing protocols, and production-ready component selection.'
+    },
+    {
+      title:'Rapid Prototype Execution',
+      icon:`<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>`,
+      text:'Accelerating project lifecycles through rapid iteration, custom CAD modeling, micro-controller programming, and hands-on laboratory assembly.'
+    }
+  ]
 };
 
-const PROJECTS = [
-  {
-    id:'tactical-unit', category:'embedded', color:'#2563EB', icon:'cpu',
-    title:'AI Tactical Field Unit',
-    description:'Portable ESP32 voice assistant chaining Whisper, Claude & ElevenLabs',
-    objective:'Build a portable ESP32 voice assistant that chains speech-to-text, an LLM, and text-to-speech into one field-ready device.',
-    results:'Working perfboard prototype: I2S mic capture, HTTP streaming to Whisper/Claude/ElevenLabs, and live OLED status feedback.',
-    stack:['ESP32','I2S Protocol','INMP441 Mic','MAX98357 Amp','SSD1306 OLED','Groq Whisper','Claude API','ElevenLabs TTS'],
-    url:'https://github.com/lizozivzivadze-star'
-  },
-  {
-    id:'argus', category:'hardware', color:'#0F172A', icon:'eye',
-    title:'ARGUS',
-    description:'Single-file HTML ISR app powered by the Claude Vision API',
-    objective:'Turn a live webcam feed into an automated ISR analyst that produces structured, actionable threat reports.',
-    results:'Single-file app generating NATO SALUTE reports with threat scoring, configurable auto-analysis intervals, and an event log.',
-    stack:['Claude Vision API','JavaScript','getUserMedia','HTML5 Canvas','NATO SALUTE Format'],
-    url:'https://github.com/lizozivzivadze-star'
-  },
-  {
-    id:'dcbench', category:'automation', color:'#2563EB', icon:'cog',
-    title:'DCBench',
-    description:'Browser simulation of the KU Leuven DC machines lab bench',
-    objective:'Recreate the university DC Machines Lab Test Bench in-browser for realistic, zero-dependency practice.',
-    results:'Five milestones shipped: physics core, SVG wiring layer, fault engine, data logger, and an n8n-backed AI tutor.',
-    stack:['Vanilla JS (ESM)','SVG / Canvas','n8n','PostgreSQL','OpenAPI'],
-    url:'https://github.com/lizozivzivadze-star'
-  },
-  {
-    id:'conveyor-classifier', category:'automation', color:'#0F172A', icon:'cog',
-    title:'Conveyor Classifier Demo',
-    description:'Interactive vision-based sorting line simulator',
-    objective:'Simulate a vision-based sorting line to explore classification logic, timing, and automation trade-offs.',
-    results:'Interactive demo with procedurally generated CIFAR-style items, three classifier modes, and an animated sort arm.',
-    stack:['JavaScript','HTML5 Canvas','Procedural Generation'],
-    url:'https://github.com/lizozivzivadze-star'
-  }
-];
-
-const SKILLS = [
-  {category:'hardware', name:'ESP32 & Embedded Firmware', level:82},
-  {category:'hardware', name:'PCB & Perfboard Prototyping', level:75},
-  {category:'hardware', name:'NX CAD Modeling', level:70},
-  {category:'hardware', name:'Moldflow Injection Mold Analysis', level:65},
-  {category:'hardware', name:'Soldering & Circuit Assembly', level:78},
-  {category:'software', name:'Vanilla JavaScript & Canvas/SVG', level:85},
-  {category:'software', name:'Python', level:70},
-  {category:'software', name:'FFmpeg Media Pipelines', level:68},
-  {category:'software', name:'n8n Workflow Automation', level:72},
-  {category:'software', name:'REST APIs & LLM Integration', level:80},
-  {category:'mechatronics', name:'Vision Systems & Camera Calibration', level:75},
-  {category:'mechatronics', name:'DC Machine Theory (Motor/Generator)', level:78},
-  {category:'mechatronics', name:'Automation & Industry 4.0', level:70},
-  {category:'mechatronics', name:'Line Balancing & Production Systems', level:72},
-  {category:'mechatronics', name:'Control Systems Fundamentals', level:65}
-];
-
-const EVENTS = [
-  {
-    id:'showcase', category:'expo', color:'#2563EB', icon:'camera',
-    title:'Group T Engineering Showcase',
-    description:'KU Leuven end-of-year engineering exhibition',
-    participation:'Presented the AI Tactical Field Unit prototype and vision-systems demos to peers and faculty.',
-    outcomes:'Got hands-on feedback on hardware ruggedization and added the project to a public portfolio.',
-    media:4,
-    url:'https://github.com/lizozivzivadze-star'
-  },
-  {
-    id:'meetup', category:'meetup', color:'#0F172A', icon:'cog',
-    title:'Benelux Robotics & Automation Meetup',
-    description:'Regional gathering of automation & robotics engineers',
-    participation:'Attended talks on industrial automation and networked with working automation engineers.',
-    outcomes:'Came away with ideas that shaped the DCBench fault-simulation engine.',
-    media:4,
-    url:'https://github.com/lizozivzivadze-star'
-  }
-];
-
-const VALUES = [
-  {icon:'wrench', title:'Hands-On Builder', text:'Ships working hardware-and-software prototypes end to end — from perfboard and firmware to a polished browser UI.'},
-  {icon:'layers', title:'Systems Thinker', text:'Bridges mechanical (CAD, Moldflow), electrical (embedded firmware), and software (web apps, APIs) domains on the same project.'},
-  {icon:'eye', title:'Vision & Automation Literacy', text:'Coursework in vision systems, line balancing, and Industry 4.0 architecture (RAMI 4.0, OPC UA, digital twins).'},
-  {icon:'zap', title:'Fast, Independent Learner', text:'Picks up new protocols mid-project — I2S audio, OPC UA, n8n orchestration — whatever the milestone requires.'},
-  {icon:'check', title:'Documentation Discipline', text:'Delivers structured, testable milestones: folder trees, test procedures, and known limitations, not just working code.'}
-];
-
-/* ============================================================
-   RENDER HELPERS
-   ============================================================ */
-function mediaPlaceholder(color, iconKey){
-  return `<div class="card-media-placeholder" style="background:${color}">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[iconKey]}</svg>
-  </div>`;
+/* ================================================================
+   RENDERING
+   ================================================================ */
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-function renderProjectCard(p){
-  return `
-  <article class="carousel-card project-card" data-category="${p.category}">
-    <div class="card-media">${mediaPlaceholder(p.color, p.icon)}</div>
-    <div class="card-header-block">
-      <h3 class="card-title">${p.title}</h3>
-      <p class="card-description">${p.description}</p>
-    </div>
-    <nav class="subtab-bar" data-card="${p.id}">
-      <button class="subtab-btn active" data-tab="overview">Overview</button>
-      <button class="subtab-btn" data-tab="techstack">Tech Stack</button>
-      <a href="${p.url}" target="_blank" rel="noopener" class="subtab-btn subtab-url-btn">URL ↗</a>
-    </nav>
-    <div class="content-pane" data-card-pane="${p.id}">
-      <div class="pane active" data-tab="overview">
-        <div class="pane-block">
-          <div class="pane-label">Objective</div>
-          <p class="pane-text">${p.objective}</p>
+function renderProjects(){
+  const carousel = document.getElementById('projects-carousel');
+  carousel.innerHTML = PORTFOLIO_DATA.projects.map(p => `
+    <article class="carousel-card">
+      <article class="project-card card-shell" data-category="${p.category}">
+        <div class="card-media">
+          ${p.videoId
+            ? `<iframe class="project-video" src="https://www.youtube-nocookie.com/embed/${p.videoId}?enablejsapi=1" title="${escapeHtml(p.title)} demo video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+            : `<div class="video-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><span>Demo video coming soon</span></div>`
+          }
         </div>
-        <div class="pane-block">
-          <div class="pane-label">Results</div>
-          <p class="pane-text">${p.results}</p>
+        <div class="card-header">
+          <h3 class="card-title">${escapeHtml(p.title)}</h3>
+          <p class="card-description">${escapeHtml(p.description)}</p>
         </div>
-      </div>
-      <div class="pane" data-tab="techstack">
-        <div class="tech-pill-list">
-          ${p.stack.map(s => `<span class="tech-pill">${s}</span>`).join('')}
+        <nav class="card-subnav">
+          <button class="subtab-btn active" data-tab="overview">OVERVIEW</button>
+          <button class="subtab-btn" data-tab="techstack">TECH STACK</button>
+          <a href="${p.liveUrl}" target="_blank" rel="noopener noreferrer" class="subtab-btn subtab-url-btn">URL ↗</a>
+        </nav>
+        <div class="card-tab-content">
+          <div class="pane-overview" data-pane="overview">
+            <p class="pane-line"><strong>Objective:</strong> <span class="truncated-2-lines">${escapeHtml(p.objective)}</span></p>
+            <p class="pane-line" style="margin-top:6px;"><strong>Results:</strong> <span class="truncated-2-lines">${escapeHtml(p.results)}</span></p>
+          </div>
+          <div class="pane-techstack tech-stack-wrap" data-pane="techstack" style="display:none;">
+            ${p.stack.map(t => `<span class="tech-badge">${escapeHtml(t)}</span>`).join('')}
+          </div>
         </div>
-      </div>
-    </div>
-  </article>`;
+      </article>
+    </article>
+  `).join('');
 }
 
-function renderEventCard(e){
-  const thumbs = Array.from({length: e.media}).map((_,i) =>
-    `<div class="media-thumb" style="background:${e.color}" data-lightbox-color="${e.color}" data-lightbox-icon="${e.icon}">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[e.icon]}</svg>
-    </div>`
+function renderSkillsets(){
+  const tabsNav = document.getElementById('skillset-tabs');
+  tabsNav.innerHTML = PORTFOLIO_DATA.skillsets.map((s,i) =>
+    `<button class="skill-tab${i===0?' active':''}" data-skillset="${s.id}">${escapeHtml(s.label)}</button>`
   ).join('');
-  return `
-  <article class="carousel-card event-card" data-category="${e.category}">
-    <div class="event-cover-photo-wrap">${mediaPlaceholder(e.color, e.icon)}</div>
-    <div class="card-header-block">
-      <h3 class="card-title">${e.title}</h3>
-      <p class="card-description">${e.description}</p>
-    </div>
-    <nav class="subtab-bar" data-card="${e.id}">
-      <button class="subtab-btn active" data-tab="overview">Overview</button>
-      <button class="subtab-btn" data-tab="media">Media</button>
-      <a href="${e.url}" target="_blank" rel="noopener" class="subtab-btn subtab-url-btn">URL ↗</a>
-    </nav>
-    <div class="content-pane" data-card-pane="${e.id}">
-      <div class="pane active" data-tab="overview">
-        <div class="pane-block">
-          <div class="pane-label">Participation</div>
-          <p class="pane-text">${e.participation}</p>
-        </div>
-        <div class="pane-block">
-          <div class="pane-label">Outcomes</div>
-          <p class="pane-text">${e.outcomes}</p>
-        </div>
+
+  const box = document.getElementById('skills-display-box');
+  const firstCategory = PORTFOLIO_DATA.skillsets[0].id;
+  box.innerHTML = PORTFOLIO_DATA.skills.map(sk => `
+    <div class="skill-row" data-category="${sk.category}" style="${sk.category===firstCategory?'':'display:none;'}">
+      <div class="skill-meta-line">
+        <span class="skill-name">${escapeHtml(sk.name)}</span>
+        <span class="skill-percentage">${sk.pct}%</span>
       </div>
-      <div class="pane" data-tab="media">
-        <div class="media-grid">${thumbs}</div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width:0%;" data-target-width="${sk.pct}%"></div>
       </div>
     </div>
-  </article>`;
+  `).join('');
+
+  animateVisibleFills();
 }
 
-function renderValueCard(v){
-  return `
-  <article class="carousel-card value-card">
-    <div class="value-card-header">
-      <span class="value-card-icon">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">${ICONS[v.icon]}</svg>
-      </span>
-      <h3 class="value-card-title">${v.title}</h3>
-    </div>
-    <p class="value-card-text">${v.text}</p>
-  </article>`;
+function animateVisibleFills(){
+  const box = document.getElementById('skills-display-box');
+  const visibleFills = box.querySelectorAll('.skill-row:not([style*="display: none"]) .progress-fill');
+  visibleFills.forEach(f => f.style.width = '0%');
+  setTimeout(() => {
+    visibleFills.forEach(f => { f.style.width = f.dataset.targetWidth; });
+  }, 50);
 }
 
-function renderSkillRow(s){
-  return `
-  <div class="skill-row" data-category="${s.category}">
-    <span class="skill-name">${s.name}</span>
-    <div class="skill-bar-track"><div class="skill-bar-fill" style="width:${s.level}%;"></div></div>
-  </div>`;
+function renderEvents(){
+  const filterBar = document.getElementById('events-filter-bar');
+  filterBar.innerHTML = PORTFOLIO_DATA.eventFilters.map((f,i) =>
+    `<button class="tab-btn event-filter-btn${i===0?' active':''}" data-filter="${f.id}">${escapeHtml(f.label)}</button>`
+  ).join('');
+
+  const carousel = document.getElementById('events-carousel');
+  carousel.innerHTML = PORTFOLIO_DATA.events.map(e => `
+    <article class="carousel-card">
+      <article class="event-card card-shell" data-category="${e.category}">
+        <div class="card-media photo-media">
+          <img src="${e.coverUrl}" alt="${escapeHtml(e.title)} photo" class="event-cover-photo">
+        </div>
+        <div class="card-header">
+          <h3 class="card-title">${escapeHtml(e.title)}</h3>
+          <p class="card-description">${escapeHtml(e.description)}</p>
+        </div>
+        <nav class="card-subnav">
+          <button class="event-subtab-btn subtab-btn active" data-tab="overview">OVERVIEW</button>
+          <button class="event-subtab-btn subtab-btn" data-tab="media">MEDIA</button>
+          <a href="${e.summaryUrl}" target="_blank" rel="noopener noreferrer" class="event-subtab-btn subtab-btn subtab-url-btn">URL ↗</a>
+        </nav>
+        <div class="card-tab-content">
+          <div class="event-pane-overview" data-pane="overview">
+            <p class="pane-line"><strong>Participation:</strong> <span class="truncated-2-lines">${escapeHtml(e.participation)}</span></p>
+            <p class="pane-line" style="margin-top:6px;"><strong>Outcomes:</strong> <span class="truncated-2-lines">${escapeHtml(e.outcomes)}</span></p>
+          </div>
+          <div class="event-pane-media media-grid" data-pane="media" style="display:none;">
+            ${e.media.map(src => `<img src="${src}" alt="${escapeHtml(e.title)} media" class="lightbox-thumb" onclick="openLightbox(this.src)">`).join('')}
+          </div>
+        </div>
+      </article>
+    </article>
+  `).join('');
 }
 
-/* ============================================================
-   MOUNT DATA
-   ============================================================ */
-document.getElementById('header-mini-avatar').innerHTML = AVATAR_SVG;
-document.getElementById('profile-avatar').innerHTML = AVATAR_SVG;
+function renderValueCards(){
+  const carousel = document.getElementById('value-carousel');
+  carousel.innerHTML = PORTFOLIO_DATA.values.map(v => `
+    <article class="carousel-card">
+      <article class="value-card">
+        <div class="value-card-header">
+          <span class="value-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${v.icon}</svg></span>
+          <h3 class="value-card-title">${escapeHtml(v.title)}</h3>
+        </div>
+        <p class="value-card-text">${escapeHtml(v.text)}</p>
+      </article>
+    </article>
+  `).join('');
+}
 
-document.getElementById('projects-carousel').innerHTML = PROJECTS.map(renderProjectCard).join('');
-document.getElementById('events-carousel').innerHTML = EVENTS.map(renderEventCard).join('');
-document.getElementById('value-carousel').innerHTML = VALUES.map(renderValueCard).join('');
-document.getElementById('skills-panel').innerHTML = SKILLS.map(renderSkillRow).join('');
+/* ================================================================
+   INTERACTIONS
+   ================================================================ */
+function initProjectFilters(){
+  const bar = document.getElementById('projects-filter-bar');
+  bar.addEventListener('click', e => {
+    const btn = e.target.closest('.tab-btn');
+    if(!btn) return;
+    bar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('#projects-carousel .project-card').forEach(card => {
+      const wrap = card.closest('.carousel-card');
+      const match = filter === 'all' || card.dataset.category === filter;
+      wrap.style.display = match ? 'block' : 'none';
+    });
+  });
+}
 
-/* ============================================================
-   STICKY HEADER — IntersectionObserver
-   ============================================================ */
-const stickyHeader = document.getElementById('sticky-header');
-const profileSection = document.getElementById('profile-section');
-const headerObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if(!entry.isIntersecting){
-      stickyHeader.classList.add('visible');
-    } else {
-      stickyHeader.classList.remove('visible');
+function initEventFilters(){
+  const bar = document.getElementById('events-filter-bar');
+  bar.addEventListener('click', e => {
+    const btn = e.target.closest('.tab-btn');
+    if(!btn) return;
+    bar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('#events-carousel .event-card').forEach(card => {
+      const wrap = card.closest('.carousel-card');
+      const match = filter === 'all' || card.dataset.category === filter;
+      wrap.style.display = match ? 'block' : 'none';
+    });
+  });
+}
+
+function initCardSubtabs(carouselId, subtabSelector, paneAttr){
+  const carousel = document.getElementById(carouselId);
+  carousel.addEventListener('click', e => {
+    const btn = e.target.closest(subtabSelector);
+    if(!btn || btn.classList.contains('subtab-url-btn')) return;
+    const card = btn.closest('.card-shell');
+    card.querySelectorAll(subtabSelector + ':not(.subtab-url-btn)').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const target = btn.dataset.tab;
+    card.querySelectorAll(`[${paneAttr}]`).forEach(pane => {
+      pane.style.display = pane.getAttribute(paneAttr) === target ? '' : 'none';
+    });
+  });
+}
+
+function initSkillTabs(){
+  const nav = document.getElementById('skillset-tabs');
+  nav.addEventListener('click', e => {
+    const btn = e.target.closest('.skill-tab');
+    if(!btn) return;
+    nav.querySelectorAll('.skill-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const category = btn.dataset.skillset;
+    document.querySelectorAll('#skills-display-box .skill-row').forEach(row => {
+      row.style.display = row.dataset.category === category ? 'flex' : 'none';
+    });
+    animateVisibleFills();
+  });
+}
+
+function openLightbox(src){
+  const modal = document.getElementById('lightbox-modal');
+  document.getElementById('lightbox-img').src = src;
+  modal.classList.add('open');
+}
+function closeLightbox(){
+  document.getElementById('lightbox-modal').classList.remove('open');
+}
+
+/* ---- Help Yourself form ---- */
+function initHelpYourselfForm(){
+  const form = document.getElementById('help-yourself-form');
+  const checkboxes = form.querySelectorAll('.file-checkbox');
+  const emailInput = document.getElementById('recipient-email');
+  const sendBtn = document.getElementById('send-pdf-btn');
+  const btnLabel = sendBtn.querySelector('.btn-label');
+
+  function isValidEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+  function updateBoxState(cb){
+    const box = cb.closest('.file-select-box');
+    box.classList.toggle('selected', cb.checked);
+  }
+  function validate(){
+    const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+    sendBtn.disabled = !(anyChecked && isValidEmail(emailInput.value.trim()));
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', () => { updateBoxState(cb); validate(); }));
+  emailInput.addEventListener('input', validate);
+  validate();
+
+  // Configure these to enable real dispatch via EmailJS (https://www.emailjs.com/).
+  // Left unconfigured, the form runs in demo mode: it shows the full loading/success
+  // states but does not contact a server.
+  const EMAIL_CONFIG = {
+    serviceId:'YOUR_EMAILJS_SERVICE_ID',
+    templateId:'YOUR_EMAILJS_TEMPLATE_ID',
+    publicKey:'YOUR_EMAILJS_PUBLIC_KEY',
+    ownerEmail:'lizozivzivadze@gmail.com'
+  };
+  const isConfigured = !EMAIL_CONFIG.serviceId.startsWith('YOUR_')
+    && !EMAIL_CONFIG.templateId.startsWith('YOUR_')
+    && !EMAIL_CONFIG.publicKey.startsWith('YOUR_');
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if(sendBtn.disabled) return;
+
+    const selectedFiles = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+    const userEmail = emailInput.value.trim();
+
+    sendBtn.disabled = true;
+    btnLabel.innerHTML = '<span class="spinner"></span><span>SENDING...</span>';
+
+    const finishSuccess = () => {
+      sendBtn.classList.add('is-success');
+      btnLabel.textContent = 'SENT ✓';
+      setTimeout(() => {
+        form.reset();
+        checkboxes.forEach(cb => updateBoxState(cb));
+        sendBtn.classList.remove('is-success');
+        btnLabel.textContent = 'SEND';
+        validate();
+      }, 4000);
+    };
+
+    try{
+      if(isConfigured && window.emailjs){
+        await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, {
+          to_email:userEmail, requested_files:selectedFiles.join(', '), timestamp:new Date().toISOString()
+        });
+        await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, {
+          to_email:EMAIL_CONFIG.ownerEmail,
+          subject:'Portfolio Alert: Asset Requested',
+          message:`User ${userEmail} requested ${selectedFiles.join(', ')} at ${new Date().toLocaleString()}.`
+        });
+      } else {
+        console.info('[Help Yourself] EmailJS is not configured — running in demo mode. Set EMAIL_CONFIG in index.html to enable real dispatch.');
+        await new Promise(r => setTimeout(r, 900));
+      }
+      finishSuccess();
+    } catch(err){
+      console.error('[Help Yourself] Send failed, falling back to mailto:', err);
+      window.location.href = `mailto:${EMAIL_CONFIG.ownerEmail}?subject=${encodeURIComponent('Portfolio Alert: Asset Requested')}&body=${encodeURIComponent(`User ${userEmail} requested ${selectedFiles.join(', ')}.`)}`;
+      finishSuccess();
     }
   });
-}, {threshold:0});
-headerObserver.observe(profileSection);
-
-/* ============================================================
-   FILTER TABS (projects / events / skills)
-   ============================================================ */
-function wireFilterBar(navEl){
-  const targetId = navEl.getAttribute('data-target');
-  const targetEl = document.getElementById(targetId);
-  const tabs = navEl.querySelectorAll('.filter-tab');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      const filter = tab.getAttribute('data-filter');
-      const items = targetEl.querySelectorAll('[data-category]');
-      items.forEach(item => {
-        const show = filter === 'all' || item.getAttribute('data-category') === filter;
-        item.style.display = show ? '' : 'none';
-      });
-    });
-  });
 }
-document.querySelectorAll('.projects-filter-bar, .events-filter-bar, .skills-tab-bar').forEach(wireFilterBar);
 
-/* ============================================================
-   CARD SUBTABS (overview / techstack / media)
-   ============================================================ */
-document.querySelectorAll('.subtab-bar').forEach(bar => {
-  const cardId = bar.getAttribute('data-card');
-  const paneWrap = document.querySelector(`[data-card-pane="${cardId}"]`);
-  const buttons = bar.querySelectorAll('.subtab-btn:not(.subtab-url-btn)');
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      buttons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const tab = btn.getAttribute('data-tab');
-      paneWrap.querySelectorAll('.pane').forEach(p => {
-        p.classList.toggle('active', p.getAttribute('data-tab') === tab);
-      });
-    });
-  });
-});
+/* ---- Sticky header visibility ---- */
+function initStickyHeader(){
+  const header = document.getElementById('sticky-header');
+  const profileSection = document.getElementById('profile-section');
+  const observer = new IntersectionObserver(([entry]) => {
+    header.classList.toggle('visible', !entry.isIntersecting);
+  }, { threshold: 0 });
+  observer.observe(profileSection);
+}
 
-/* ============================================================
-   LIGHTBOX
-   ============================================================ */
-const lightboxModal = document.getElementById('lightbox-modal');
-const lightboxContent = document.getElementById('lightbox-content');
-document.addEventListener('click', (e) => {
-  const thumb = e.target.closest('.media-thumb');
-  if(thumb){
-    const color = thumb.getAttribute('data-lightbox-color');
-    const iconKey = thumb.getAttribute('data-lightbox-icon');
-    lightboxContent.style.background = color;
-    lightboxContent.innerHTML = `<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[iconKey]}</svg>`;
-    lightboxModal.classList.add('open');
-  }
-});
-document.getElementById('lightbox-close').addEventListener('click', () => lightboxModal.classList.remove('open'));
-lightboxModal.addEventListener('click', (e) => { if(e.target === lightboxModal) lightboxModal.classList.remove('open'); });
+/* ================================================================
+   BOOT
+   ================================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  renderProjects();
+  renderSkillsets();
+  renderEvents();
+  renderValueCards();
 
-/* ============================================================
-   CV BUTTON (no CV file provided yet)
-   ============================================================ */
-document.getElementById('cv-btn').addEventListener('click', (e) => {
-  e.preventDefault();
-  window.location.href = 'mailto:lizozivzivadze@gmail.com?subject=CV%20request&body=Hi%20Lizi%2C%20could%20you%20send%20over%20your%20CV%3F';
-});
-
-/* ============================================================
-   HELP YOURSELF — file toggle boxes + dual-dispatch (client-only)
-   ============================================================ */
-document.querySelectorAll('.file-select-box').forEach(box => {
-  const checkbox = box.querySelector('.file-checkbox');
-  checkbox.addEventListener('change', () => {
-    box.classList.toggle('selected', checkbox.checked);
-  });
-});
-
-const helpForm = document.getElementById('help-yourself-form');
-const sendBtn = document.getElementById('send-pdf-btn');
-helpForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const email = document.getElementById('recipient-email').value.trim();
-  const selected = Array.from(helpForm.querySelectorAll('input[name="selected_files"]:checked')).map(i => i.value);
-  if(!email || selected.length === 0){
-    sendBtn.textContent = selected.length === 0 ? 'Pick a file first' : 'Enter your email';
-    setTimeout(() => { sendBtn.textContent = 'Send'; }, 1800);
-    return;
-  }
-  sendBtn.disabled = true;
-  // No backend on a static portfolio: notify the owner via mailto with the
-  // requester's address and selected files, then confirm to the requester locally.
-  const subject = encodeURIComponent('Portfolio file request');
-  const body = encodeURIComponent(`Requested: ${selected.join(', ')}\nFrom: ${email}`);
-  window.location.href = `mailto:lizozivzivadze@gmail.com?subject=${subject}&body=${body}`;
-  sendBtn.classList.add('success');
-  sendBtn.textContent = 'Sent ✓';
-  setTimeout(() => {
-    sendBtn.disabled = false;
-    sendBtn.classList.remove('success');
-    sendBtn.textContent = 'Send';
-  }, 3000);
+  initProjectFilters();
+  initEventFilters();
+  initCardSubtabs('projects-carousel', '.subtab-btn', 'data-pane');
+  initCardSubtabs('events-carousel', '.event-subtab-btn', 'data-pane');
+  initSkillTabs();
+  initHelpYourselfForm();
+  initStickyHeader();
 });
 </script>
 </body>
