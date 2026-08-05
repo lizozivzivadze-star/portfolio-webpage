@@ -2,158 +2,164 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Lizi Zivzivadze — Electromechanical Design Engineer</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+        },
+        boxShadow: {
+          xs: '0 1px 2px 0 rgba(15, 23, 42, 0.04)',
+        }
+      }
+    }
+  }
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root { --app-height: 100%; }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html { height: -webkit-fill-available; }
+  html {
+    height: -webkit-fill-available;
+  }
   body {
     min-height: 100vh;
-    min-height: var(--app-height);
     min-height: -webkit-fill-available;
     background-color: #f8fafc;
     background-image:
-      linear-gradient(rgba(15,23,42,0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(15,23,42,0.035) 1px, transparent 1px);
+      linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
     background-size: 24px 24px;
-    font-family: 'Inter', sans-serif;
-    color: #0f172a;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     overflow-x: hidden;
+    box-sizing: border-box;
   }
-  .font-mono { font-family: 'JetBrains Mono', monospace; }
-  .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
-  .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
-  .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-  .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #cbd5e1 #f1f5f9; }
-  #site-header { transform: translateY(-100%); opacity: 0; }
-  #site-header.visible { transform: translateY(0); opacity: 1; }
-  .toast-item { transition: opacity 0.3s ease, transform 0.3s ease; }
-  .pulse-dot { position: relative; }
-  .pulse-dot::after {
-    content: ""; position: absolute; inset: 0; border-radius: 9999px;
-    background: #22c55e; animation: pulse-ring 2s ease-out infinite;
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
   }
-  @keyframes pulse-ring {
-    0% { transform: scale(1); opacity: 0.6; }
-    100% { transform: scale(2.4); opacity: 0; }
+  .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
   }
-  .icon-btn {
-    width: 34px; height: 34px; border-radius: 9999px;
-    display: flex; align-items: center; justify-content: center;
-    border: 1px solid #e2e8f0; background: #ffffff; color: #475569;
-    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
-    flex-shrink: 0;
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
   }
-  .icon-btn:hover { border-color: #0284c7; color: #0284c7; background: #f0f9ff; }
-  .icon-btn svg { width: 16px; height: 16px; }
-  .doc-card { background: #ffffff; }
-  input:focus, button:focus-visible {
-    outline: 2px solid #0284c7; outline-offset: 2px;
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 9999px;
+  }
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+  }
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  #sticky-header {
+    will-change: transform, opacity;
+  }
+  @keyframes toast-in {
+    from { opacity: 0; transform: translate(-50%, 8px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+  }
+  .toast-anim {
+    animation: toast-in 0.25s ease-out;
+  }
+  .doc-check {
+    transition: all 0.15s ease;
   }
 </style>
 </head>
-<body class="pb-24">
+<body class="antialiased">
 
-<header id="site-header" class="fixed top-0 left-0 w-full h-14 bg-white/95 backdrop-blur border-b border-[#e2e8f0] z-50 transition-all duration-300">
-  <div class="max-w-4xl mx-auto h-full flex items-center justify-between px-4">
-    <div class="flex items-center gap-2 font-bold text-[#0f172a] text-[18px]">
-      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" class="w-8 h-8 rounded-full object-cover border border-[#e2e8f0]" alt="Lizi Zivzivadze">
+<!-- ================= STICKY HEADER ================= -->
+<header id="sticky-header" class="fixed top-0 left-0 w-full h-14 bg-white/95 backdrop-blur border-b border-[#e2e8f0] z-50 transition-all duration-300 -translate-y-full opacity-0">
+  <div class="max-w-4xl mx-auto h-full flex items-center px-4">
+    <div class="flex items-center gap-2 font-bold text-[#0f172a] text-[16px]">
+      <img id="header-avatar" src="" alt="Lizi Zivzivadze" class="w-8 h-8 rounded-full object-cover border border-[#e2e8f0]">
       <span>Lizi Zivzivadze</span>
     </div>
-    <div id="header-icons" class="flex items-center gap-2"></div>
   </div>
 </header>
 
-<main class="max-w-4xl mx-auto px-4 pt-4">
+<main id="app" class="pb-24 pt-2">
 
-  <!-- Hero / Profile -->
-  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between">
-    <div class="flex items-start gap-4 sm:gap-5">
-      <img id="hero-avatar" src="" alt="Lizi Zivzivadze" class="w-[80px] h-[80px] rounded-full border-1 border-[#0284c7] object-cover shrink-0">
-      <div class="min-w-0 flex-1">
-        <p id="hero-name" class="text-[22px] sm:text-[24px] font-bold text-[#0f172a] whitespace-nowrap"></p>
-        <p id="hero-title" class="font-mono text-[13.5px] sm:text-[15px] text-[#0369a1] font-semibold tracking-wide whitespace-nowrap mt-1"></p>
-        <div id="hero-icons" class="flex items-center gap-3.5 py-1 whitespace-nowrap mt-2"></div>
-        <p id="hero-location" class="text-[15px] sm:text-[16px] text-[#475569] font-medium whitespace-nowrap mt-1"></p>
-      </div>
-    </div>
-    <p id="hero-statement" class="w-full text-[16px] sm:text-[18px] text-[#0f172a] font-medium mt-3.5 pt-3 border-t border-slate-100 leading-snug"></p>
+  <!-- ================= HERO / PROFILE ================= -->
+  <section id="hero-section" class="w-full max-w-4xl mx-auto my-4 p-4 md:p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between">
+    <div id="hero-content"></div>
   </section>
 
-  <!-- Projects -->
-  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between h-[400px] min-h-[400px] max-h-[400px]">
-    <h2 class="font-mono text-[24px] font-bold text-[#0f172a] text-center mx-auto">PROJECTS</h2>
-    <div id="project-category-tabs" class="flex flex-wrap justify-center gap-2 my-2"></div>
-    <div id="project-carousel" class="flex-1 min-h-0 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 custom-scrollbar"></div>
+  <!-- ================= PROJECTS ================= -->
+  <section id="projects-section" class="h-[550px] min-h-[550px] max-h-[550px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center shrink-0">PROJECTS</h2>
+    <div id="project-tabs" class="flex flex-wrap justify-center gap-1.5 my-3 shrink-0"></div>
+    <div id="projects-carousel-container" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-3 custom-scrollbar flex-1 min-h-0"></div>
   </section>
 
-  <!-- Skillsets -->
-  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between h-[400px] min-h-[400px] max-h-[400px]">
-    <h2 class="font-mono text-[24px] font-bold text-[#0f172a] text-center mx-auto">SKILLSETS</h2>
-    <div id="skill-category-tabs" class="flex flex-wrap justify-center gap-2 my-2"></div>
-    <h3 class="font-sans text-[18px] font-bold text-[#0f172a] text-center mx-auto my-1.5">Skills</h3>
-    <div id="skills-list" class="h-[180px] overflow-y-auto border border-[#e2e8f0] rounded-lg p-3 bg-white custom-scrollbar"></div>
+  <!-- ================= SKILLSETS + SKILLS ================= -->
+  <section id="skills-section" class="h-[550px] min-h-[550px] max-h-[550px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <h2 class="font-mono text-[22px] font-bold text-[#0f172a] shrink-0">SKILLSETS</h2>
+    <div id="skill-categories" class="flex flex-wrap gap-2 my-3 shrink-0"></div>
+    <h3 class="font-sans text-[16px] font-bold text-[#0f172a] mb-2 shrink-0">Skills</h3>
+    <div id="skills-list" class="h-[260px] overflow-y-auto border border-[#e2e8f0] rounded-lg p-3 bg-white custom-scrollbar"></div>
   </section>
 
-  <!-- Events -->
-  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between h-[400px] min-h-[400px] max-h-[400px]">
-    <h2 class="font-mono text-[24px] font-bold text-[#0f172a] text-center mx-auto">EVENTS</h2>
-    <div id="event-category-tabs" class="flex flex-wrap justify-center gap-1.5 mb-2"></div>
-    <div id="event-carousel" class="flex-1 min-h-0 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 custom-scrollbar"></div>
+  <!-- ================= EVENTS ================= -->
+  <section id="events-section" class="h-[550px] min-h-[550px] max-h-[550px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center shrink-0">EVENTS</h2>
+    <div id="event-tabs" class="flex flex-wrap justify-center gap-1.5 mb-2.5 shrink-0"></div>
+    <div id="events-carousel-container" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-3 custom-scrollbar flex-1 min-h-0"></div>
   </section>
 
-  <!-- What Do I Bring To The Table -->
-  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm min-h-[290px] flex flex-col justify-between">
-    <h2 class="font-mono text-[20px] sm:text-[24px] font-bold text-[#0f172a] text-center mx-auto whitespace-nowrap">WHAT DO I BRING TO THE TABLE?</h2>
-    <div id="value-props-carousel" class="flex-1 flex items-stretch overflow-x-auto snap-x snap-mandatory gap-4 pb-2 pt-3 custom-scrollbar"></div>
+  <!-- ================= WHAT DO I BRING TO THE TABLE ================= -->
+  <section id="value-props-section" class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <h2 class="font-mono text-[18px] sm:text-[22px] font-bold text-[#0f172a] text-center whitespace-nowrap overflow-hidden text-ellipsis w-full mb-3">WHAT DO I BRING TO THE TABLE?</h2>
+    <div id="value-props-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-3 custom-scrollbar"></div>
   </section>
 
-  <!-- Help Yourself -->
-  <section class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm min-h-[380px] flex flex-col justify-between">
-    <h2 class="font-mono text-[24px] font-bold text-[#0f172a] text-center mx-auto">HELP YOURSELF</h2>
-    <div class="flex flex-col gap-3 my-3">
-      <div id="cv-card" data-doc="cv" class="doc-card border border-[#e2e8f0] rounded-lg p-4 cursor-pointer transition-colors">
-        <p class="text-[18px] font-bold text-[#0f172a]">CV Document</p>
-        <p class="text-[16px] text-[#475569]">One-page resume, PDF format</p>
-      </div>
-      <div id="portfolio-card" data-doc="portfolio" class="doc-card border border-[#e2e8f0] rounded-lg p-4 cursor-pointer transition-colors">
-        <p class="text-[18px] font-bold text-[#0f172a]">Portfolio Document</p>
-        <p class="text-[16px] text-[#475569]">Full project breakdown, PDF format</p>
-      </div>
-    </div>
-    <div>
-      <input type="email" id="email-input" placeholder="your.email@example.com" class="text-[16px] font-sans rounded-md border border-[#e2e8f0] px-3 py-2 w-full">
-      <button id="send-docs-btn" type="button" class="text-[16px] font-mono font-bold text-white bg-[#0284c7] hover:bg-[#0369a1] rounded-md px-4 py-2 w-full mt-2 transition-colors">Send Copies Now</button>
-    </div>
+  <!-- ================= HELP YOURSELF ================= -->
+  <section id="help-yourself-section" class="w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+    <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center mb-3">HELP YOURSELF</h2>
+    <div id="doc-cards" class="flex flex-col gap-3 mb-3"></div>
+    <input type="email" id="user-email-input" placeholder="your.email@example.com" class="text-[14px] font-sans rounded-md border border-[#e2e8f0] px-3 py-2 w-full focus:outline-none focus:border-[#0284c7]">
+    <button id="send-docs-btn" data-action="send-docs" class="text-[14px] font-mono font-bold text-white bg-[#0284c7] hover:bg-[#0369a1] rounded-md px-4 py-2 w-full mt-2 transition-colors">Send Copies Now</button>
   </section>
 
 </main>
 
+<!-- ================= STICKY FOOTER ================= -->
 <footer class="fixed bottom-0 left-0 w-full bg-white border-t border-[#e2e8f0] py-2.5 text-center z-40 shadow-md">
-  <p class="text-[15px] font-mono text-[#0f172a]">© 2026 Lizi Zivzivadze</p>
-  <p class="text-[15px] font-mono text-[#475569] flex items-center justify-center gap-1.5 mt-0.5">
-    <span class="inline-block w-2 h-2 rounded-full bg-green-500 pulse-dot"></span>
+  <p class="text-[13px] font-mono text-[#0f172a]">2026 Lizi Zivzivadze</p>
+  <p class="text-[13px] font-mono text-[#475569] flex items-center justify-center gap-1.5 mt-0.5">
+    <span class="relative flex h-2 w-2">
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+      <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+    </span>
     Junior Engineer ready for deployment
   </p>
 </footer>
 
-<div id="toast-container" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] flex flex-col items-center gap-2 px-4 w-full max-w-sm"></div>
-
 <script>
 /* ==================================================
    SINGLE SOURCE OF TRUTH (IMMUTABLE DATA ENGINE)
-================================================== */
+   ================================================== */
 const PORTFOLIO_DATA = {
   personal: {
     name: "Lizi Zivzivadze",
     title: "Electromechanical Design Engineer",
-    statement: "Integrating precision kinematics, custom embedded systems, and test rigs for mechatronics.",
+    statement: "Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for next-generation mechatronics.",
     avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
     email: "lizozivzivadze@gmail.com",
     phone: "+32 499 22 16 80",
@@ -167,13 +173,13 @@ const PORTFOLIO_DATA = {
       id: "proj-1",
       title: "Closed-Loop Piezoelectric Micro-Actuator Rig",
       category: "HW+SW",
-      summary: "Engineered sub-micron stage with high-bandwidth FPGA feedback for optics.",
+      summary: "Engineered sub-micron positioning stage with high-bandwidth FPGA feedback for active optical calibration assemblies.",
       videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
       details: {
         overview: {
-          objective: "Achieve sub-50nm alignment repeatability under thermal drift.",
-          contribution: "Lead designer for precision flexures, custom PCB, and controller.",
-          results: "Validated 32nm position repeatability and 1.2kHz bandwidth."
+          objective: "Achieve sub-50nm alignment repeatability under active thermal drift.",
+          contribution: "Lead designer for precision flexure kinematics, custom PCB signal conditioning, and real-time controller.",
+          results: "Validated 32nm position repeatability and 1.2kHz closed-loop bandwidth."
         },
         equipment: ["Altium Designer", "STM32F4 / FreeRTOS", "SolidWorks Parametric CAD", "LTspice", "FPGA Control Loop", "Laser Doppler Vibrometer"],
         urls: [
@@ -186,13 +192,13 @@ const PORTFOLIO_DATA = {
       id: "proj-2",
       title: "Compact 4-Channel Brushless Motor Driver (BLDC)",
       category: "HardWare",
-      summary: "Developed 48V/20A motor drive with CAN-FD telemetry and power monitor.",
+      summary: "Developed a 48V/20A industrial motor drive featuring integrated CAN-FD telemetry and hardware power monitoring.",
       videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
       details: {
         overview: {
-          objective: "Minimize PCB footprint handling 20A continuous phase currents.",
-          contribution: "Designed MOSFET layout, gate driver circuits, and thermal sink.",
-          results: "Achieved 96.4% efficiency at load with sub-45°C thermal rise."
+          objective: "Minimize PCB surface footprint while handling 20A continuous phase currents.",
+          contribution: "Designed power MOSFET layout, gate driver circuitry, and thermal heat sink integration.",
+          results: "Achieved 96.4% efficiency at nominal load with sub-45°C thermal rise."
         },
         equipment: ["Altium 4-Layer High-Power Layout", "CAN-FD Bus Analyzer", "Gate Drivers / Current Shunts", "LTspice Thermal Modeling"],
         urls: [
@@ -204,13 +210,13 @@ const PORTFOLIO_DATA = {
       id: "proj-3",
       title: "ROS2 Autonomous Robotic Inspection Telemetry",
       category: "SoftWare",
-      summary: "Created WebGL and ROS2 interface for sensor fusion and LiDAR clouds.",
+      summary: "Created a WebGL and ROS2 interface displaying dynamic sensor fusion and LiDAR point clouds at sub-20ms latency.",
       videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
       details: {
         overview: {
-          objective: "Provide real-time 3D spatial monitoring over web links.",
-          contribution: "Architected WebSockets bridge and dynamic C++ ROS2 pipeline.",
-          results: "Maintained 60 FPS point cloud rendering at sub-20ms latency."
+          objective: "Provide real-time 3D spatial monitoring over bandwidth-constrained links.",
+          contribution: "Architected WebSockets streaming bridge and dynamic C++ ROS2 node pipeline.",
+          results: "Maintained 60 FPS point cloud rendering at sub-20ms end-to-end network latency."
         },
         equipment: ["ROS2 Humble / C++", "WebGL / Three.js", "LiDAR Sensor Fusion", "Docker Containers", "Linux Edge Computing"],
         urls: [
@@ -223,13 +229,13 @@ const PORTFOLIO_DATA = {
       id: "proj-4",
       title: "Precision Micro-Fluidic Dosing Station",
       category: "HW+SW",
-      summary: "Built automated liquid dispenser using vision feedback for correction.",
+      summary: "Built an automated micro-volume liquid dispenser utilizing computer vision feedback for dynamic droplet correction.",
       videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
       details: {
         overview: {
-          objective: "Dispense sub-microliter droplets with optical validation.",
-          contribution: "Full stack design: steppers, OpenCV calibration, chassis.",
-          results: "Reduced volumetric variance to under 1.5% across test cycles."
+          objective: "Dispense sub-microliter droplets with real-time optical volumetric validation.",
+          contribution: "Full stack hardware-software design: stepper drives, OpenCV camera calibration, and custom chassis.",
+          results: "Reduced volumetric variance to under 1.5% across 10,000 continuous test cycles."
         },
         equipment: ["Python / OpenCV", "Stepper Drivers / Microstepping", "3D Printing (SLA/FDM)", "C++ Control Loop", "Lab Micro-Scale Calibration"],
         urls: [
@@ -287,9 +293,14 @@ const PORTFOLIO_DATA = {
       id: "event-1",
       title: "European Agentic AI & Robotics Summit 2026",
       category: "Conference",
-      summary: "Presented work on hardware edge AI for mechatronic systems.",
+      summary: "Presented work on hardware-in-the-loop edge AI for real-time mechatronic systems.",
       imageUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600",
       details: {
+        overview: {
+          whyMattered: "Key platform for validating sub-millisecond edge neural execution on ARM microcontrollers.",
+          participation: "Delivered a technical workshop on integrating STM32 low-power nodes with ROS2 telemetry.",
+          outcomes: "Established key industrial contacts for future hardware benchmarking."
+        },
         media: [
           "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600",
           "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=600"
@@ -304,9 +315,14 @@ const PORTFOLIO_DATA = {
       id: "event-2",
       title: "Benelux Mechatronics Engineering Hackathon",
       category: "Hackathon",
-      summary: "First place solution for sorting using custom vision feedback.",
+      summary: "First place solution for high-speed dynamic sorting using custom vision feedback.",
       imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600",
       details: {
+        overview: {
+          whyMattered: "Tested rapid functional prototyping under extreme time constraints.",
+          participation: "Lead hardware integrator and firmware developer for the team.",
+          outcomes: "Awarded First Place among 24 participating engineering teams."
+        },
         media: [
           "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600"
         ],
@@ -326,340 +342,427 @@ const PORTFOLIO_DATA = {
 };
 
 /* ==================================================
-   ICONS (generic, non-branded glyphs)
-================================================== */
+   GLOBAL STATE
+   ================================================== */
+const APP_STATE = {
+  activeProjectTab: "All",
+  projectSubTabs: {},
+  activeSkillCategory: "Electronics",
+  activeEventTab: "All",
+  eventSubTabs: {},
+  selectedDocs: { cv: false, portfolio: false }
+};
+
+/* ==================================================
+   ICONS (generic, functional — not brand marks)
+   ================================================== */
 const ICONS = {
-  phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
-  message: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
-  mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>',
-  network: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8.2 7.2 10.5 16M15.8 7.2 13.5 16M8.5 6h7"/></svg>',
-  code: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>',
-  pin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>'
+  phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+  chat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
+  mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 6-10 7L2 6"></path></svg>',
+  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>',
+  code: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>'
 };
 
-function contactIconLinks(size) {
-  const p = PORTFOLIO_DATA.personal;
-  const cls = size === 'sm' ? 'icon-btn' : 'icon-btn';
-  const links = [
-    { href: `tel:${p.phone.replace(/\s+/g, '')}`, icon: ICONS.phone, label: 'Call Lizi' },
-    { href: p.whatsapp, icon: ICONS.message, label: 'Message on WhatsApp' },
-    { href: `mailto:${p.email}`, icon: ICONS.mail, label: 'Email Lizi' },
-    { href: p.linkedin, icon: ICONS.network, label: 'LinkedIn profile' },
-    { href: p.github, icon: ICONS.code, label: 'GitHub profile' }
-  ];
-  return links.map(l => `<a href="${l.href}" target="_blank" rel="noopener" aria-label="${l.label}" title="${l.label}" class="${cls}">${l.icon}</a>`).join('');
+/* ==================================================
+   HELPERS
+   ================================================== */
+function extractVideoId(url) {
+  const match = url.match(/embed\/([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : '';
 }
 
-/* ==================================================
-   STATE
-================================================== */
-const state = {
-  projectFilter: 'All',
-  eventFilter: 'All',
-  skillCategory: Object.keys(PORTFOLIO_DATA.skills)[0],
-  projectSubTab: {},
-  eventSubTab: {},
-  cvSelected: false,
-  portfolioSelected: false
-};
-PORTFOLIO_DATA.projects.forEach(p => { state.projectSubTab[p.id] = 'overview'; });
-PORTFOLIO_DATA.events.forEach(e => { state.eventSubTab[e.id] = 'media'; });
-
-const TAB_ACTIVE = "bg-[#0284c7] text-white border border-[#0284c7] font-bold rounded-md px-3 py-1.5 text-[15px] font-mono transition-colors";
-const TAB_INACTIVE = "bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7] rounded-md px-3 py-1.5 text-[15px] font-mono transition-colors";
-const SUBTAB_ACTIVE = "bg-[#0284c7] text-white border border-[#0284c7] font-bold rounded-md px-2.5 py-1 text-[13px] font-mono transition-colors";
-const SUBTAB_INACTIVE = "bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7] rounded-md px-2.5 py-1 text-[13px] font-mono transition-colors";
-
-/* ==================================================
-   RENDER: HEADER + HERO
-================================================== */
-function renderHeaderAndHero() {
-  document.getElementById('header-icons').innerHTML = contactIconLinks('sm');
-  const p = PORTFOLIO_DATA.personal;
-  document.getElementById('hero-avatar').src = p.avatarUrl;
-  document.getElementById('hero-name').textContent = p.name;
-  document.getElementById('hero-title').textContent = p.title;
-  document.getElementById('hero-icons').innerHTML = contactIconLinks('md');
-  document.getElementById('hero-location').innerHTML = `${ICONS.pin.replace('<svg ', '<svg style="width:14px;height:14px;display:inline-block;margin-right:4px;vertical-align:-2px;" ')}${p.location}`;
-  document.getElementById('hero-statement').textContent = p.statement;
+function subTabStyle(isActive) {
+  return isActive
+    ? 'bg-[#0284c7] text-white border border-[#0284c7] font-bold rounded-md px-3 py-1.5 text-[13px] font-mono'
+    : 'bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7] rounded-md px-3 py-1.5 text-[13px] font-mono';
 }
 
-/* ==================================================
-   RENDER: PROJECTS
-================================================== */
-function renderProjectTabs() {
-  const cats = ['All', 'SoftWare', 'HardWare', 'HW+SW'];
-  document.getElementById('project-category-tabs').innerHTML = cats.map(cat => {
-    const active = state.projectFilter === cat;
-    return `<button type="button" class="project-tab ${active ? TAB_ACTIVE : TAB_INACTIVE}" data-cat="${cat}">${cat}</button>`;
+function renderTabLabel(label) {
+  return label.split('').map(function (ch) {
+    if (ch !== ch.toLowerCase() && ch === ch.toUpperCase()) {
+      return '<span class="font-bold">' + ch + '</span>';
+    }
+    return ch;
   }).join('');
 }
 
-function projectSubNav(p) {
-  const sub = state.projectSubTab[p.id];
-  const btn = (key, label) => `<button type="button" class="project-subtab ${sub === key ? SUBTAB_ACTIVE : SUBTAB_INACTIVE}" data-pid="${p.id}" data-sub="${key}">${label}</button>`;
-  return `<div class="flex gap-1.5 my-2">${btn('overview', 'OVERVIEW')}${btn('equipment', 'EQUIPMENT')}${btn('url', 'URL')}</div>`;
-}
-
-function projectSubContent(p) {
-  const sub = state.projectSubTab[p.id];
-  if (sub === 'overview') {
-    const o = p.details.overview;
-    return `<div class="space-y-1.5 h-full overflow-y-auto custom-scrollbar pr-1">
-      <p class="text-[14px] text-[#0f172a] leading-snug"><span class="font-mono font-bold text-[#0284c7]">OBJ&nbsp;·&nbsp;</span>${o.objective}</p>
-      <p class="text-[14px] text-[#0f172a] leading-snug"><span class="font-mono font-bold text-[#0d9488]">ROLE&nbsp;·&nbsp;</span>${o.contribution}</p>
-      <p class="text-[14px] text-[#0f172a] leading-snug"><span class="font-mono font-bold text-[#0369a1]">RESULT&nbsp;·&nbsp;</span>${o.results}</p>
-    </div>`;
-  }
-  if (sub === 'equipment') {
-    return `<div class="flex flex-wrap gap-1.5 h-full overflow-y-auto custom-scrollbar pr-1 content-start">
-      ${p.details.equipment.map(e => `<span class="whitespace-nowrap px-2 py-1 rounded-md border border-[#e2e8f0] bg-[#f8fafc] text-[12.5px] font-mono text-[#0f172a]">${e}</span>`).join('')}
-    </div>`;
-  }
-  return `<div class="space-y-1.5 h-full overflow-y-auto custom-scrollbar pr-1">
-    ${p.details.urls.map(u => `<a href="${u.url}" target="_blank" rel="noopener" class="block text-[14px] text-[#0284c7] hover:text-[#0369a1] font-medium underline underline-offset-2">${u.label}</a>`).join('')}
-  </div>`;
-}
-
-function projectCardHTML(p) {
-  return `
-  <div class="w-[calc(100%-20px)] sm:w-[336px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-3.5 flex flex-col justify-between shadow-xs">
-    <div>
-      <h3 class="text-[18px] font-bold text-[#0f172a] leading-tight">${p.title}</h3>
-      <p class="text-[15px] text-[#475569] leading-tight mt-0.5 line-clamp-1">${p.summary}</p>
-    </div>
-    ${projectSubNav(p)}
-    <div class="flex-1 min-h-0">${projectSubContent(p)}</div>
-  </div>`;
-}
-
-function renderProjects() {
-  const list = state.projectFilter === 'All'
-    ? PORTFOLIO_DATA.projects
-    : PORTFOLIO_DATA.projects.filter(p => p.category === state.projectFilter);
-  document.getElementById('project-carousel').innerHTML = list.map(projectCardHTML).join('');
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
 
 /* ==================================================
-   RENDER: SKILLSETS
-================================================== */
-function renderSkillTabs() {
+   HERO RENDER
+   ================================================== */
+function renderHero() {
+  const p = PORTFOLIO_DATA.personal;
+  document.getElementById('header-avatar').src = p.avatarUrl;
+
+  document.getElementById('hero-content').innerHTML = `
+    <div class="flex flex-col items-center md:flex-row md:items-start gap-4">
+      <img src="${p.avatarUrl}" alt="${p.name}" class="w-[80px] h-[80px] rounded-full border-2 border-[#0284c7] object-cover shrink-0 mx-auto md:mx-0">
+      <div class="flex-1 flex flex-col items-center w-full">
+        <h1 class="text-[22px] font-bold text-[#0f172a] whitespace-nowrap text-center">${p.name}</h1>
+        <p class="font-mono font-semibold tracking-wider text-[#0369a1] text-center text-[12px] sm:text-[13px] whitespace-nowrap overflow-hidden text-ellipsis w-full mt-0.5">${p.title}</p>
+        <div class="flex items-center justify-center gap-3.5 whitespace-nowrap mt-2.5 text-[#475569]">
+          <a href="tel:${p.phone.replace(/\s+/g, '')}" title="Phone" aria-label="Phone" class="hover:text-[#0284c7] transition-colors">${ICONS.phone}</a>
+          <a href="${p.whatsapp}" target="_blank" rel="noopener noreferrer" title="WhatsApp" aria-label="WhatsApp" class="hover:text-[#0284c7] transition-colors">${ICONS.chat}</a>
+          <a href="mailto:${p.email}" title="Email" aria-label="Email" class="hover:text-[#0284c7] transition-colors">${ICONS.mail}</a>
+          <a href="${p.linkedin}" target="_blank" rel="noopener noreferrer" title="LinkedIn" aria-label="LinkedIn" class="hover:text-[#0284c7] transition-colors">${ICONS.link}</a>
+          <a href="${p.github}" target="_blank" rel="noopener noreferrer" title="GitHub" aria-label="GitHub" class="hover:text-[#0284c7] transition-colors">${ICONS.code}</a>
+        </div>
+        <p class="text-[14px] text-[#475569] font-medium text-center whitespace-nowrap mt-1.5">${p.location}</p>
+      </div>
+    </div>
+    <p class="w-full text-[15px] sm:text-[16px] text-[#0f172a] font-medium mt-3.5 pt-3 border-t border-slate-100 leading-relaxed line-clamp-3 overflow-hidden text-ellipsis">${p.statement}</p>
+  `;
+}
+
+/* ==================================================
+   PROJECTS
+   ================================================== */
+function renderProjectSubTabContent(project, tab) {
+  if (tab === 'equipment') {
+    return '<div class="flex flex-wrap gap-1.5">' +
+      project.details.equipment.map(function (e) {
+        return '<span class="px-2 py-1 rounded-md border border-[#e2e8f0] bg-[#f8fafc] text-[#475569] text-[12px] font-mono">' + e + '</span>';
+      }).join('') +
+      '</div>';
+  }
+  if (tab === 'urls') {
+    return '<div class="flex flex-col gap-2">' +
+      project.details.urls.map(function (u) {
+        return '<a href="' + u.url + '" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:text-[#0369a1] hover:underline text-[14px] font-medium flex items-center gap-1.5">&rarr; ' + u.label + '</a>';
+      }).join('') +
+      '</div>';
+  }
+  const o = project.details.overview;
+  return `
+    <div class="space-y-1.5">
+      <div><span class="font-mono text-[11px] font-bold text-[#0d9488] uppercase tracking-wide">Objective</span><p class="text-[13px] text-[#0f172a] leading-snug mt-0.5">${o.objective}</p></div>
+      <div><span class="font-mono text-[11px] font-bold text-[#0d9488] uppercase tracking-wide">Contribution</span><p class="text-[13px] text-[#0f172a] leading-snug mt-0.5">${o.contribution}</p></div>
+      <div><span class="font-mono text-[11px] font-bold text-[#0d9488] uppercase tracking-wide">Results</span><p class="text-[13px] text-[#0f172a] leading-snug mt-0.5">${o.results}</p></div>
+    </div>
+  `;
+}
+
+function renderProjectCard(project) {
+  const currentSubTab = APP_STATE.projectSubTabs[project.id] || 'overview';
+  return `
+  <div class="w-[88vw] max-w-[340px] md:w-[350px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs">
+    <div>
+      <div class="aspect-video rounded-md relative bg-slate-900 overflow-hidden" id="media-${project.id}">
+        <img src="https://img.youtube.com/vi/${extractVideoId(project.videoUrl)}/hqdefault.jpg" class="w-full h-full object-cover" alt="${project.title}">
+        <button data-action="play-video" data-id="${project.id}" class="absolute inset-0 flex items-center justify-center bg-black/40 hover:bg-black/20 text-white transition-colors">
+          <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+      <h3 class="text-[18px] font-bold text-[#0f172a] mt-2 mb-1 leading-snug">${project.title}</h3>
+      <p class="text-[14px] text-[#475569] mb-3 leading-relaxed">${project.summary}</p>
+
+      <div class="flex gap-1.5 mb-3 border-b border-[#e2e8f0] pb-2">
+        <button data-action="project-subtab" data-id="${project.id}" data-tab="overview" class="${subTabStyle(currentSubTab === 'overview')}">OVERVIEW</button>
+        <button data-action="project-subtab" data-id="${project.id}" data-tab="equipment" class="${subTabStyle(currentSubTab === 'equipment')}">EQUIPMENT</button>
+        <button data-action="project-subtab" data-id="${project.id}" data-tab="urls" class="${subTabStyle(currentSubTab === 'urls')}">URL</button>
+      </div>
+
+      <div id="content-${project.id}" class="text-[14px] text-[#0f172a]">
+        ${renderProjectSubTabContent(project, currentSubTab)}
+      </div>
+    </div>
+  </div>
+  `;
+}
+
+function renderProjectTabs() {
+  const tabs = ["All", "SoftWare", "HardWare", "HW+SW"];
+  document.getElementById('project-tabs').innerHTML = tabs.map(function (tab) {
+    const isActive = APP_STATE.activeProjectTab === tab;
+    return '<button data-action="select-project-tab" data-value="' + tab + '" class="' + subTabStyle(isActive) + '">' + renderTabLabel(tab) + '</button>';
+  }).join('');
+}
+
+function renderProjectsCarousel() {
+  const filtered = APP_STATE.activeProjectTab === 'All'
+    ? PORTFOLIO_DATA.projects
+    : PORTFOLIO_DATA.projects.filter(function (p) { return p.category === APP_STATE.activeProjectTab; });
+  document.getElementById('projects-carousel-container').innerHTML = filtered.map(renderProjectCard).join('');
+}
+
+function renderProjectCardContent(id) {
+  const project = PORTFOLIO_DATA.projects.find(function (p) { return p.id === id; });
+  if (!project) return;
+  const tab = APP_STATE.projectSubTabs[id] || 'overview';
+  const contentEl = document.getElementById('content-' + id);
+  if (contentEl) contentEl.innerHTML = renderProjectSubTabContent(project, tab);
+  document.querySelectorAll('[data-action="project-subtab"][data-id="' + id + '"]').forEach(function (btn) {
+    btn.className = subTabStyle(btn.dataset.tab === tab);
+  });
+}
+
+/* ==================================================
+   SKILLS
+   ================================================== */
+function renderSkillCategories() {
   const cats = Object.keys(PORTFOLIO_DATA.skills);
-  document.getElementById('skill-category-tabs').innerHTML = cats.map(cat => {
-    const active = state.skillCategory === cat;
-    const cls = active
-      ? "whitespace-nowrap px-2.5 py-1 rounded-md border text-[14px] font-mono bg-[#0284c7] text-white border-[#0284c7] font-bold transition-colors"
-      : "whitespace-nowrap px-2.5 py-1 rounded-md border text-[14px] font-mono bg-white text-[#475569] border-[#e2e8f0] hover:border-[#0284c7] transition-colors";
-    return `<button type="button" class="skill-cat-tab ${cls}" data-cat="${cat}">${cat}</button>`;
+  document.getElementById('skill-categories').innerHTML = cats.map(function (cat) {
+    const isActive = APP_STATE.activeSkillCategory === cat;
+    const activeClass = 'bg-[#0284c7] text-white border-[#0284c7] font-bold';
+    const inactiveClass = 'bg-white text-[#475569] border-[#e2e8f0] hover:border-[#0284c7]';
+    return '<button data-action="select-skill-category" data-value="' + cat + '" class="px-3 py-1.5 rounded-md border text-[13px] font-mono whitespace-nowrap transition-colors ' + (isActive ? activeClass : inactiveClass) + '">' + cat + '</button>';
   }).join('');
 }
 
 function renderSkillsList() {
-  const skills = PORTFOLIO_DATA.skills[state.skillCategory];
-  document.getElementById('skills-list').innerHTML = skills.map(s => `
-    <div class="mb-2.5 last:mb-0">
-      <div class="flex items-center justify-between mb-1 gap-2">
-        <span class="text-[16px] font-sans text-[#0f172a] leading-tight">${s.name}</span>
-        <span class="text-[13px] font-mono text-[#475569] shrink-0">${s.level}%</span>
+  const skills = PORTFOLIO_DATA.skills[APP_STATE.activeSkillCategory] || [];
+  document.getElementById('skills-list').innerHTML = skills.map(function (skill) {
+    return `
+      <div class="mb-3 last:mb-0">
+        <div class="flex justify-between items-center mb-1">
+          <span class="text-[14px] font-sans text-[#0f172a] font-medium">${skill.name}</span>
+          <span class="text-[12px] font-mono text-[#475569] shrink-0 ml-2">${skill.level}%</span>
+        </div>
+        <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+          <div class="h-full bg-[#0284c7] rounded-full" style="width:${skill.level}%"></div>
+        </div>
       </div>
-      <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-        <div class="h-full bg-[#0284c7] rounded-full" style="width:${s.level}%"></div>
-      </div>
-    </div>
-  `).join('');
-}
-
-/* ==================================================
-   RENDER: EVENTS
-================================================== */
-function renderEventTabs() {
-  const cats = ['All', 'Conference', 'Hackathon'];
-  document.getElementById('event-category-tabs').innerHTML = cats.map(cat => {
-    const active = state.eventFilter === cat;
-    return `<button type="button" class="event-tab ${active ? TAB_ACTIVE : TAB_INACTIVE}" data-cat="${cat}">${cat}</button>`;
+    `;
   }).join('');
 }
 
-function eventSubNav(e) {
-  const sub = state.eventSubTab[e.id];
-  const btn = (key, label) => `<button type="button" class="event-subtab ${sub === key ? SUBTAB_ACTIVE : SUBTAB_INACTIVE}" data-eid="${e.id}" data-sub="${key}">${label}</button>`;
-  return `<div class="flex gap-1.5 my-2">${btn('media', 'MEDIA')}${btn('url', 'URL')}</div>`;
-}
-
-function eventSubContent(e) {
-  const sub = state.eventSubTab[e.id];
-  if (sub === 'media') {
-    return `<div class="grid grid-cols-2 gap-1.5 h-full overflow-y-auto custom-scrollbar pr-1 content-start">
-      ${e.details.media.map(m => `<img src="${m}" loading="lazy" class="w-full h-20 object-cover rounded-md border border-[#e2e8f0]">`).join('')}
-    </div>`;
+/* ==================================================
+   EVENTS
+   ================================================== */
+function renderEventSubTabContent(event, tab) {
+  if (tab === 'media') {
+    return '<div class="grid grid-cols-2 gap-1.5">' +
+      event.details.media.map(function (m) {
+        return '<div class="aspect-video rounded-md overflow-hidden bg-slate-100"><img src="' + m + '" class="w-full h-full object-cover" alt="' + event.title + '"></div>';
+      }).join('') +
+      '</div>';
   }
-  return `<div class="space-y-1.5 h-full overflow-y-auto custom-scrollbar pr-1">
-    ${e.details.urls.map(u => `<a href="${u.url}" target="_blank" rel="noopener" class="block text-[14px] text-[#0284c7] hover:text-[#0369a1] font-medium underline underline-offset-2">${u.label}</a>`).join('')}
-  </div>`;
-}
-
-function eventCardHTML(e) {
+  if (tab === 'urls') {
+    return '<div class="flex flex-col gap-2">' +
+      event.details.urls.map(function (u) {
+        return '<a href="' + u.url + '" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:text-[#0369a1] hover:underline text-[14px] font-medium flex items-center gap-1.5">&rarr; ' + u.label + '</a>';
+      }).join('') +
+      '</div>';
+  }
+  const o = event.details.overview;
   return `
-  <div class="w-[calc(100%-20px)] sm:w-[336px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-3.5 flex flex-col justify-between shadow-xs">
+    <div class="space-y-1.5">
+      <div><span class="font-mono text-[11px] font-bold text-[#0d9488] uppercase tracking-wide">Why It Mattered</span><p class="text-[13px] text-[#0f172a] leading-snug mt-0.5">${o.whyMattered}</p></div>
+      <div><span class="font-mono text-[11px] font-bold text-[#0d9488] uppercase tracking-wide">Participation</span><p class="text-[13px] text-[#0f172a] leading-snug mt-0.5">${o.participation}</p></div>
+      <div><span class="font-mono text-[11px] font-bold text-[#0d9488] uppercase tracking-wide">Outcomes</span><p class="text-[13px] text-[#0f172a] leading-snug mt-0.5">${o.outcomes}</p></div>
+    </div>
+  `;
+}
+
+function renderEventCard(event) {
+  const currentSubTab = APP_STATE.eventSubTabs[event.id] || 'overview';
+  return `
+  <div class="w-[88vw] max-w-[340px] md:w-[350px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs">
     <div>
-      <img src="${e.imageUrl}" loading="lazy" class="w-full h-20 object-cover rounded-md mb-2 border border-[#e2e8f0]">
-      <h3 class="text-[18px] font-bold text-[#0f172a] leading-tight">${e.title}</h3>
-      <p class="text-[15px] text-[#475569] leading-tight mt-0.5 line-clamp-1">${e.summary}</p>
-    </div>
-    ${eventSubNav(e)}
-    <div class="flex-1 min-h-0">${eventSubContent(e)}</div>
-  </div>`;
-}
-
-function renderEvents() {
-  const list = state.eventFilter === 'All'
-    ? PORTFOLIO_DATA.events
-    : PORTFOLIO_DATA.events.filter(e => e.category === state.eventFilter);
-  document.getElementById('event-carousel').innerHTML = list.map(eventCardHTML).join('');
-}
-
-/* ==================================================
-   RENDER: VALUE PROPS
-================================================== */
-const VALUE_ICONS = [ICONS.network, ICONS.code, ICONS.phone, ICONS.mail, ICONS.pin];
-function renderValueProps() {
-  document.getElementById('value-props-carousel').innerHTML = PORTFOLIO_DATA.valueProps.map((v, i) => `
-    <div class="w-[260px] shrink-0 snap-start bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs">
-      <div class="aspect-video rounded-md overflow-hidden bg-white border border-[#e2e8f0] mb-3 flex items-center justify-center text-[#0d9488]" style="width:56px;height:56px;">
-        <div style="width:26px;height:26px;">${VALUE_ICONS[i % VALUE_ICONS.length]}</div>
+      <div class="aspect-video rounded-md relative bg-slate-900 overflow-hidden" id="media-${event.id}">
+        <img src="${event.imageUrl}" class="w-full h-full object-cover" alt="${event.title}">
       </div>
-      <p class="text-[16px] sm:text-[18px] font-bold text-[#0f172a] whitespace-nowrap" title="${v.title}">${v.text}</p>
+      <h3 class="text-[18px] font-bold text-[#0f172a] mt-2 mb-1 leading-snug">${event.title}</h3>
+      <p class="text-[14px] text-[#475569] mb-3 leading-relaxed">${event.summary}</p>
+
+      <div class="flex gap-1.5 mb-3 border-b border-[#e2e8f0] pb-2">
+        <button data-action="event-subtab" data-id="${event.id}" data-tab="overview" class="${subTabStyle(currentSubTab === 'overview')}">OVERVIEW</button>
+        <button data-action="event-subtab" data-id="${event.id}" data-tab="media" class="${subTabStyle(currentSubTab === 'media')}">MEDIA</button>
+        <button data-action="event-subtab" data-id="${event.id}" data-tab="urls" class="${subTabStyle(currentSubTab === 'urls')}">URL</button>
+      </div>
+
+      <div id="content-${event.id}" class="text-[14px] text-[#0f172a]">
+        ${renderEventSubTabContent(event, currentSubTab)}
+      </div>
     </div>
-  `).join('');
+  </div>
+  `;
+}
+
+function renderEventTabs() {
+  const tabs = ["All", "Conference", "Hackathon"];
+  document.getElementById('event-tabs').innerHTML = tabs.map(function (tab) {
+    const isActive = APP_STATE.activeEventTab === tab;
+    return '<button data-action="select-event-tab" data-value="' + tab + '" class="' + subTabStyle(isActive) + '">' + tab.toUpperCase() + '</button>';
+  }).join('');
+}
+
+function renderEventsCarousel() {
+  const filtered = APP_STATE.activeEventTab === 'All'
+    ? PORTFOLIO_DATA.events
+    : PORTFOLIO_DATA.events.filter(function (e) { return e.category === APP_STATE.activeEventTab; });
+  document.getElementById('events-carousel-container').innerHTML = filtered.map(renderEventCard).join('');
+}
+
+function renderEventCardContent(id) {
+  const event = PORTFOLIO_DATA.events.find(function (e) { return e.id === id; });
+  if (!event) return;
+  const tab = APP_STATE.eventSubTabs[id] || 'overview';
+  const contentEl = document.getElementById('content-' + id);
+  if (contentEl) contentEl.innerHTML = renderEventSubTabContent(event, tab);
+  document.querySelectorAll('[data-action="event-subtab"][data-id="' + id + '"]').forEach(function (btn) {
+    btn.className = subTabStyle(btn.dataset.tab === tab);
+  });
 }
 
 /* ==================================================
-   HELP YOURSELF
-================================================== */
+   VALUE PROPS
+   ================================================== */
+function renderValueProps() {
+  document.getElementById('value-props-carousel').innerHTML = PORTFOLIO_DATA.valueProps.map(function (vp, i) {
+    return `
+      <div class="w-[280px] shrink-0 snap-start bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between">
+        <div class="aspect-video rounded-md overflow-hidden mb-2.5 flex items-center justify-center bg-gradient-to-br from-[#0284c7]/10 to-[#0d9488]/10">
+          <span class="font-mono text-[28px] font-bold text-[#0284c7]/40">0${i + 1}</span>
+        </div>
+        <p class="whitespace-nowrap overflow-hidden text-ellipsis text-[15px] sm:text-[16px] font-bold text-[#0f172a]">${vp.title}</p>
+        <p class="whitespace-nowrap overflow-hidden text-ellipsis text-[13px] text-[#475569] font-mono mt-0.5">${vp.text}</p>
+      </div>
+    `;
+  }).join('');
+}
+
+/* ==================================================
+   HELP YOURSELF / DOC CARDS
+   ================================================== */
 function renderDocCards() {
-  document.getElementById('cv-card').className = `doc-card border rounded-lg p-4 cursor-pointer transition-colors ${state.cvSelected ? 'border-2 border-[#0284c7] bg-[#f0f9ff]' : 'border-[#e2e8f0] bg-white'}`;
-  document.getElementById('portfolio-card').className = `doc-card border rounded-lg p-4 cursor-pointer transition-colors ${state.portfolioSelected ? 'border-2 border-[#0284c7] bg-[#f0f9ff]' : 'border-[#e2e8f0] bg-white'}`;
+  const docs = [
+    { id: 'cv', label: 'CV — PDF Document' },
+    { id: 'portfolio', label: 'Portfolio — PDF Document' }
+  ];
+  document.getElementById('doc-cards').innerHTML = docs.map(function (doc) {
+    const isSelected = APP_STATE.selectedDocs[doc.id];
+    const cardClass = isSelected
+      ? 'border-2 border-[#0284c7] bg-[#f0f9ff]'
+      : 'border border-[#e2e8f0] bg-white';
+    const checkClass = isSelected
+      ? 'bg-[#0284c7] border-[#0284c7]'
+      : 'bg-white border-[#e2e8f0]';
+    const checkMark = isSelected
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+      : '';
+    return `
+      <div data-action="toggle-doc" data-id="${doc.id}" class="doc-check cursor-pointer rounded-lg p-3 flex items-center justify-between ${cardClass}">
+        <span class="text-[14px] font-mono font-bold text-[#0f172a]">${doc.label}</span>
+        <span class="doc-check w-5 h-5 rounded border flex items-center justify-center ${checkClass}">${checkMark}</span>
+      </div>
+    `;
+  }).join('');
 }
 
-function showToast(msg, isError) {
-  const container = document.getElementById('toast-container');
+function showToast(message, isError) {
+  const existing = document.getElementById('toast-notification');
+  if (existing) existing.remove();
   const toast = document.createElement('div');
-  toast.className = `toast-item w-full text-center px-4 py-2.5 rounded-lg shadow-lg text-[15px] font-mono ${isError ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-[#0f172a] text-white'}`;
-  toast.textContent = msg;
-  container.appendChild(toast);
-  setTimeout(() => {
+  toast.id = 'toast-notification';
+  toast.className = 'toast-anim fixed bottom-20 left-1/2 -translate-x-1/2 z-[60] px-4 py-2.5 rounded-lg shadow-lg text-[13px] font-mono font-medium text-white max-w-[90vw] text-center ' + (isError ? 'bg-red-500' : 'bg-[#0d9488]');
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(function () {
+    toast.style.transition = 'opacity 0.3s ease';
     toast.style.opacity = '0';
-    toast.style.transform = 'translateY(10px)';
-    setTimeout(() => toast.remove(), 300);
-  }, 2800);
+    setTimeout(function () { toast.remove(); }, 300);
+  }, 3000);
 }
 
-function isValidEmail(v) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+function handleSendDocs() {
+  const emailInput = document.getElementById('user-email-input');
+  const email = emailInput.value.trim();
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const selected = [];
+  if (APP_STATE.selectedDocs.cv) selected.push('CV');
+  if (APP_STATE.selectedDocs.portfolio) selected.push('Portfolio');
+
+  if (selected.length === 0) {
+    showToast('Select at least one document to send', true);
+    return;
+  }
+  if (!email || !emailPattern.test(email)) {
+    showToast('Enter a valid email address', true);
+    return;
+  }
+  showToast('Dispatched ' + selected.join(' & ') + ' to ' + email, false);
 }
 
 /* ==================================================
-   EVENT WIRING
-================================================== */
-function wireEvents() {
-  document.getElementById('project-category-tabs').addEventListener('click', (ev) => {
-    const btn = ev.target.closest('.project-tab');
-    if (!btn) return;
-    state.projectFilter = btn.dataset.cat;
+   EVENT DELEGATION
+   ================================================== */
+document.body.addEventListener('click', function (e) {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const action = btn.dataset.action;
+
+  if (action === 'select-project-tab') {
+    APP_STATE.activeProjectTab = btn.dataset.value;
     renderProjectTabs();
-    renderProjects();
-  });
-
-  document.getElementById('project-carousel').addEventListener('click', (ev) => {
-    const btn = ev.target.closest('.project-subtab');
-    if (!btn) return;
-    state.projectSubTab[btn.dataset.pid] = btn.dataset.sub;
-    renderProjects();
-  });
-
-  document.getElementById('skill-category-tabs').addEventListener('click', (ev) => {
-    const btn = ev.target.closest('.skill-cat-tab');
-    if (!btn) return;
-    state.skillCategory = btn.dataset.cat;
-    renderSkillTabs();
+    renderProjectsCarousel();
+  } else if (action === 'project-subtab') {
+    APP_STATE.projectSubTabs[btn.dataset.id] = btn.dataset.tab;
+    renderProjectCardContent(btn.dataset.id);
+  } else if (action === 'play-video') {
+    const project = PORTFOLIO_DATA.projects.find(function (p) { return p.id === btn.dataset.id; });
+    if (project) {
+      document.getElementById('media-' + btn.dataset.id).innerHTML =
+        '<iframe src="' + project.videoUrl + '?autoplay=1" class="w-full h-full border-0" allow="autoplay"></iframe>';
+    }
+  } else if (action === 'select-skill-category') {
+    APP_STATE.activeSkillCategory = btn.dataset.value;
+    renderSkillCategories();
     renderSkillsList();
-  });
-
-  document.getElementById('event-category-tabs').addEventListener('click', (ev) => {
-    const btn = ev.target.closest('.event-tab');
-    if (!btn) return;
-    state.eventFilter = btn.dataset.cat;
+  } else if (action === 'select-event-tab') {
+    APP_STATE.activeEventTab = btn.dataset.value;
     renderEventTabs();
-    renderEvents();
-  });
-
-  document.getElementById('event-carousel').addEventListener('click', (ev) => {
-    const btn = ev.target.closest('.event-subtab');
-    if (!btn) return;
-    state.eventSubTab[btn.dataset.eid] = btn.dataset.sub;
-    renderEvents();
-  });
-
-  document.getElementById('cv-card').addEventListener('click', () => {
-    state.cvSelected = !state.cvSelected;
+    renderEventsCarousel();
+  } else if (action === 'event-subtab') {
+    APP_STATE.eventSubTabs[btn.dataset.id] = btn.dataset.tab;
+    renderEventCardContent(btn.dataset.id);
+  } else if (action === 'toggle-doc') {
+    APP_STATE.selectedDocs[btn.dataset.id] = !APP_STATE.selectedDocs[btn.dataset.id];
     renderDocCards();
-  });
-  document.getElementById('portfolio-card').addEventListener('click', () => {
-    state.portfolioSelected = !state.portfolioSelected;
-    renderDocCards();
-  });
-
-  document.getElementById('send-docs-btn').addEventListener('click', () => {
-    const emailInput = document.getElementById('email-input');
-    const email = emailInput.value.trim();
-    const items = [];
-    if (state.cvSelected) items.push('CV');
-    if (state.portfolioSelected) items.push('Portfolio');
-
-    if (items.length === 0) {
-      showToast('Select at least one document first.', true);
-      return;
-    }
-    if (!isValidEmail(email)) {
-      showToast('Enter a valid email address.', true);
-      return;
-    }
-    showToast(`Dispatched ${items.join(' & ')} to ${email}`, false);
-  });
-
-  const header = document.getElementById('site-header');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) header.classList.add('visible');
-    else header.classList.remove('visible');
-  }, { passive: true });
-}
+  } else if (action === 'send-docs') {
+    handleSendDocs();
+  }
+});
 
 /* ==================================================
-   VIEWPORT HEIGHT FIX (mobile webviews)
-================================================== */
-function setAppHeight() {
-  document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
-}
-window.addEventListener('resize', setAppHeight);
-window.addEventListener('orientationchange', setAppHeight);
-setAppHeight();
+   STICKY HEADER SCROLL BEHAVIOR
+   ================================================== */
+window.addEventListener('scroll', function () {
+  const header = document.getElementById('sticky-header');
+  if (window.scrollY > 100) {
+    header.classList.remove('-translate-y-full', 'opacity-0');
+    header.classList.add('translate-y-0', 'opacity-100');
+  } else {
+    header.classList.add('-translate-y-full', 'opacity-0');
+    header.classList.remove('translate-y-0', 'opacity-100');
+  }
+});
 
 /* ==================================================
    INIT
-================================================== */
-function init() {
-  renderHeaderAndHero();
+   ================================================== */
+function initApp() {
+  PORTFOLIO_DATA.projects.forEach(function (p) { APP_STATE.projectSubTabs[p.id] = 'overview'; });
+  PORTFOLIO_DATA.events.forEach(function (e) { APP_STATE.eventSubTabs[e.id] = 'overview'; });
+
+  renderHero();
   renderProjectTabs();
-  renderProjects();
-  renderSkillTabs();
+  renderProjectsCarousel();
+  renderSkillCategories();
   renderSkillsList();
   renderEventTabs();
-  renderEvents();
+  renderEventsCarousel();
   renderValueProps();
   renderDocCards();
-  wireEvents();
 }
-init();
+
+document.addEventListener('DOMContentLoaded', initApp);
 </script>
 </body>
 </html>
