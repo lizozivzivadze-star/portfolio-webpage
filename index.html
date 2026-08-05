@@ -4,766 +4,801 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Lizi Zivzivadze — Electromechanical Engineer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        fontFamily: {
-          sans: ['Inter', 'sans-serif'],
-          mono: ['JetBrains Mono', 'monospace']
-        }
-      }
+<style>
+  :root{
+    --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "JetBrains Mono", Consolas, Monaco, "Courier New", monospace;
+    --bg-main:#FAFAFA;
+    --bg-surface:#FFFFFF;
+    --text-primary:#0F172A;
+    --text-secondary:#475569;
+    --text-muted:#94A3B8;
+    --accent-primary:#2563EB;
+    --accent-success:#22C55E;
+    --border-color:#E2E8F0;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg-main);
+    font-family:var(--font-primary);
+    color:var(--text-primary);
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  button{font:inherit;}
+
+  /* ---------- App shell ---------- */
+  .app-shell{
+    max-width:430px;
+    margin:0 auto;
+    position:relative;
+    min-height:100vh;
+  }
+  .app-main{
+    padding:0 15px;
+    padding-top:15px;
+    padding-bottom:96px;
+    box-sizing:border-box;
+    width:100%;
+  }
+
+  /* ---------- Section 2: Sticky header ---------- */
+  .sticky-header{
+    position:fixed; top:0; left:50%; transform:translate(-50%,-100%);
+    width:100%; max-width:430px; height:44px; min-height:44px; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 15px; box-sizing:border-box;
+    border-bottom:1px solid rgba(226,232,240,0.8);
+    background:rgba(255,255,255,0.85);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    opacity:0; pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+  }
+  .sticky-header.visible{
+    opacity:1; transform:translate(-50%,0); pointer-events:auto;
+  }
+  .sticky-header-left{display:flex; align-items:center; gap:8px;}
+  .header-mini-avatar{
+    width:28px; height:28px; border-radius:50%; flex-shrink:0;
+    border:1px solid var(--border-color); overflow:hidden;
+  }
+  .header-mini-avatar svg{width:100%; height:100%; display:block;}
+  .header-full-name{
+    font-family:var(--font-primary); font-size:14px; font-weight:700;
+    color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .sticky-header-right{margin-left:auto; height:100%; width:auto;}
+
+  /* ---------- Section 3: Profile ---------- */
+  .profile-container{
+    display:flex; flex-direction:column; align-items:center; gap:12px;
+    padding-top:15px; margin-bottom:24px; width:100%; box-sizing:border-box;
+  }
+  .profile-avatar{
+    width:90px; height:90px; border-radius:50%;
+    border:1px solid var(--border-color); background:#F1F5F9; overflow:hidden;
+  }
+  .profile-avatar svg{width:100%; height:100%; display:block;}
+  .profile-name{
+    font-family:var(--font-primary); font-size:20px; font-weight:700;
+    color:var(--text-primary); margin:0; text-align:center;
+  }
+  .profile-title{
+    font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--text-secondary);
+    text-transform:uppercase; text-align:center; margin:0;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%;
+  }
+  .profile-action-row{display:flex; flex-direction:row; gap:8px; width:100%; box-sizing:border-box; margin-top:4px;}
+  .profile-btn{
+    height:38px; flex-grow:1; flex-basis:0;
+    font-family:var(--font-mono); font-size:11px; font-weight:600; text-transform:uppercase;
+    border-radius:6px; border:1px solid var(--border-color); background:var(--bg-surface); color:var(--text-primary);
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    text-decoration:none; box-sizing:border-box; transition:background .2s ease;
+    letter-spacing:0.03em;
+  }
+  .profile-btn:hover{background:#F8FAFC;}
+
+  /* ---------- Shared: section title ---------- */
+  .section-title{
+    font-family:var(--font-primary); font-size:20px; font-weight:700; color:var(--text-primary);
+    text-align:center; margin:0 0 16px 0; letter-spacing:0.05em; text-transform:uppercase;
+  }
+  .section-title.single-line-title{
+    font-size:clamp(13px,3.8vw,18px); letter-spacing:0.04em; margin-top:0;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;
+  }
+  section.app-section{margin-bottom:32px;}
+
+  /* ---------- Section 4.1 / 6.1: filter bars ---------- */
+  .projects-filter-bar{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:6px; width:100%;
+    margin-bottom:16px; box-sizing:border-box;
+  }
+  .events-filter-bar{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:8px; width:100%;
+    margin-bottom:20px; box-sizing:border-box;
+  }
+  .filter-tab{
+    height:34px; font-family:var(--font-mono); font-size:10.5px; font-weight:600;
+    border-radius:6px; cursor:pointer; border:1px solid var(--border-color);
+    text-transform:uppercase; display:flex; align-items:center; justify-content:center;
+    background:var(--bg-main); color:var(--text-secondary);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding:0 4px;
+  }
+  .events-filter-bar .filter-tab{height:36px; font-size:11px;}
+  .filter-tab.active{background:var(--accent-primary); color:#FFFFFF; border-color:var(--accent-primary);}
+
+  /* ---------- Section 4.2/4.3 & 6.2/6.3: carousels & cards ---------- */
+  .carousel-track{
+    display:flex; flex-direction:row; gap:12px; overflow-x:auto;
+    scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; padding:4px;
+  }
+  .carousel-track::-webkit-scrollbar{display:none;}
+  .carousel-card{
+    width:calc(100vw - 30px - 12px - 7px);
+    min-width:calc(100vw - 30px - 12px - 7px);
+    max-width:calc(100vw - 30px - 12px - 7px);
+    scroll-snap-align:start; flex-shrink:0;
+  }
+  @media (min-width:430px){
+    .carousel-card{
+      width:calc(430px - 30px - 12px - 7px);
+      min-width:calc(430px - 30px - 12px - 7px);
+      max-width:calc(430px - 30px - 12px - 7px);
     }
   }
-</script>
-<style>
-  html, body {
-    height: -webkit-fill-available;
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
+
+  .project-card, .event-card{
+    height:400px; background:var(--bg-surface); border:1px solid var(--border-color);
+    border-radius:8px; padding:12px; display:flex; flex-direction:column;
+    overflow:hidden; box-sizing:border-box;
   }
-  * { box-sizing: border-box; }
-  body {
-    background-color: #f8fafc;
-    background-image:
-      linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
-    background-size: 24px 24px;
-    overflow-x: hidden;
-    -webkit-text-size-adjust: 100%;
+  .card-media, .event-cover-photo-wrap{
+    width:100%; aspect-ratio:16/9; border-radius:6px; overflow:hidden;
+    margin-bottom:10px; background:#F1F5F9; position:relative; flex-shrink:0;
   }
-  .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
-  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-  .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 9999px; }
-  .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
-  img, iframe { -webkit-user-drag: none; user-drag: none; }
-  [data-action] { -webkit-tap-highlight-color: transparent; }
+  .card-media-placeholder{
+    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+    color:#FFFFFF;
+  }
+  .card-media-placeholder svg{width:32px; height:32px;}
+  .event-cover-photo{width:100%; height:100%; object-fit:cover; display:block;}
+
+  .card-header-block{height:42px; flex-shrink:0;}
+  .card-title{
+    font-family:var(--font-primary); font-size:15px; font-weight:700; color:var(--text-primary);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:18px; margin:0;
+  }
+  .card-description{
+    font-family:var(--font-primary); font-size:12px; font-weight:400; color:var(--text-secondary);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:16px; margin-top:2px;
+  }
+
+  .subtab-bar{
+    display:flex; flex-direction:row; gap:6px; width:100%;
+    margin-top:8px; margin-bottom:8px; padding-bottom:6px;
+    border-bottom:1px solid var(--border-color); flex-shrink:0;
+  }
+  .subtab-btn{
+    font-family:var(--font-mono); font-size:11px; font-weight:600; padding:4px 8px;
+    border-radius:4px; flex-grow:1; text-align:center; border:1px solid var(--border-color);
+    background:var(--bg-main); color:var(--text-secondary); cursor:pointer;
+    text-decoration:none; display:flex; align-items:center; justify-content:center;
+  }
+  .subtab-btn.active{background:var(--accent-primary); color:#FFFFFF; border-color:var(--accent-primary);}
+  .subtab-url-btn{background:#F1F5F9; color:var(--accent-primary); font-weight:700;}
+
+  .content-pane{flex-grow:1; width:100%; height:120px; overflow-y:auto; box-sizing:border-box;}
+  .pane{display:none;}
+  .pane.active{display:block;}
+  .pane-block{margin-bottom:8px;}
+  .pane-label{
+    font-family:var(--font-mono); font-size:10px; font-weight:700; color:var(--text-muted);
+    text-transform:uppercase; margin-bottom:2px; letter-spacing:0.04em;
+  }
+  .pane-text{
+    font-family:var(--font-primary); font-size:12.5px; color:var(--text-secondary); line-height:16px;
+    margin:0; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  .tech-pill-list{display:flex; flex-wrap:wrap; gap:6px;}
+  .tech-pill{
+    font-family:var(--font-mono); font-size:10px; background:#F1F5F9; border:1px solid var(--border-color);
+    border-radius:4px; padding:3px 8px; color:var(--text-secondary);
+  }
+  .pane-url-link{
+    display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono);
+    font-size:12px; font-weight:700; color:var(--accent-primary); text-decoration:none;
+  }
+  .media-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:6px;}
+  .media-thumb{
+    height:52px; border-radius:4px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    color:#fff;
+  }
+  .media-thumb svg{width:16px; height:16px;}
+
+  /* ---------- Section 5: Skills ---------- */
+  .skills-tab-bar{
+    display:flex; flex-direction:row; gap:6px; overflow-x:auto; margin-bottom:16px; scrollbar-width:none;
+  }
+  .skills-tab-bar::-webkit-scrollbar{display:none;}
+  .skills-tab-bar .filter-tab{
+    flex-shrink:0; height:auto; padding:6px 12px; font-size:11px; white-space:nowrap;
+  }
+  .skills-panel{
+    height:400px; min-height:400px; max-height:400px; overflow-y:auto;
+    background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px;
+    padding:12px 16px; box-sizing:border-box;
+  }
+  .skill-row{
+    display:flex; align-items:center; justify-content:space-between; height:36px;
+    border-bottom:1px solid #F1F5F9;
+  }
+  .skill-row:last-child{border-bottom:none;}
+  .skill-name{font-family:var(--font-primary); font-size:13px; font-weight:600; color:var(--text-primary);}
+  .skill-bar-track{width:100px; height:6px; background:#F1F5F9; border-radius:3px; overflow:hidden; flex-shrink:0; margin-left:12px;}
+  .skill-bar-fill{background:var(--accent-primary); height:100%; border-radius:3px; transition:width .4s ease;}
+
+  /* ---------- Section 7: Value cards ---------- */
+  .value-card{
+    height:220px; background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px;
+    padding:16px; display:flex; flex-direction:column; justify-content:flex-start;
+    overflow:hidden; box-sizing:border-box;
+  }
+  .value-card-header{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+  .value-card-icon{
+    width:20px; height:20px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  }
+  .value-card-icon svg{width:20px; height:20px; stroke:var(--accent-primary); stroke-width:2px; fill:none;}
+  .value-card-title{
+    font-family:var(--font-primary); font-size:16px; font-weight:700; color:var(--text-primary); margin:0;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .value-card-text{
+    font-family:var(--font-primary); font-size:13.5px; font-weight:400; color:var(--text-secondary);
+    line-height:20px; max-height:60px; margin:0;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis;
+  }
+
+  /* ---------- Section 8: Help Yourself ---------- */
+  .help-yourself-container{display:flex; flex-direction:column; gap:12px; width:100%; box-sizing:border-box;}
+  .file-select-box{
+    height:50px; min-height:50px; width:100%; display:flex; align-items:center;
+    padding:0 16px; border-radius:8px; box-sizing:border-box; cursor:pointer; user-select:none;
+    transition:all .2s ease; background:var(--bg-surface); border:1px solid var(--border-color); color:var(--text-secondary);
+  }
+  .file-select-box.selected{background:#EFF6FF; border:1.5px solid var(--accent-primary); color:var(--accent-primary);}
+  .file-checkbox{display:none;}
+  .file-box-content{display:flex; align-items:center; width:100%;}
+  .file-icon{width:20px; height:20px; flex-shrink:0; stroke:currentColor; stroke-width:2px; fill:none;}
+  .file-label{
+    font-family:var(--font-primary); font-size:14px; font-weight:600; text-transform:uppercase;
+    margin-left:12px; flex-grow:1;
+  }
+  .checkbox-indicator{
+    width:18px; height:18px; border-radius:4px; border:1.5px solid var(--border-color); flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; transition:all .2s ease;
+  }
+  .file-select-box.selected .checkbox-indicator{background:var(--accent-primary); border-color:var(--accent-primary);}
+  .checkbox-indicator svg{width:12px; height:12px; stroke:#fff; stroke-width:3px; fill:none; display:none;}
+  .file-select-box.selected .checkbox-indicator svg{display:block;}
+
+  #recipient-email{
+    height:50px; min-height:50px; width:100%; background:var(--bg-surface); border:1px solid var(--border-color);
+    border-radius:8px; padding:0 16px; box-sizing:border-box; font-family:var(--font-primary); font-size:14px;
+    color:var(--text-primary); outline:none;
+  }
+  #recipient-email:focus{border-color:var(--accent-primary); box-shadow:0 0 0 1px var(--accent-primary);}
+  #recipient-email::placeholder{color:var(--text-muted);}
+
+  .send-action-btn{
+    height:50px; min-height:50px; width:100%; background:var(--accent-primary); color:#FFFFFF; border:none;
+    border-radius:8px; font-family:var(--font-primary); font-size:15px; font-weight:700; letter-spacing:0.05em;
+    text-transform:uppercase; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease;
+  }
+  .send-action-btn:disabled{opacity:0.5; cursor:not-allowed;}
+  .send-action-btn.success{background:var(--accent-success);}
+  .form-hint{font-family:var(--font-mono); font-size:10.5px; color:var(--text-muted); text-align:center; margin:0;}
+
+  /* ---------- Section 9: Sticky footer ---------- */
+  .sticky-footer{
+    position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:430px;
+    height:auto; z-index:90; background:rgba(255,255,255,0.90);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    border-top:1px solid var(--border-color); padding:8px 15px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; box-sizing:border-box;
+  }
+  .footer-line-1, .footer-line-2{display:flex; align-items:center; justify-content:center; gap:6px; width:100%;}
+  .verified-icon{width:14px; height:14px; fill:var(--accent-primary); flex-shrink:0;}
+  .footer-copyright-text{font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--text-primary); text-align:center;}
+  .status-pulse-dot{
+    width:8px; height:8px; border-radius:50%; background:var(--accent-success); position:relative;
+    flex-shrink:0; animation:status-pulse 2s infinite;
+  }
+  @keyframes status-pulse{
+    0%{box-shadow:0 0 0 0 rgba(34,197,94,0.7);}
+    70%{box-shadow:0 0 0 6px rgba(34,197,94,0);}
+    100%{box-shadow:0 0 0 0 rgba(34,197,94,0);}
+  }
+  .footer-status-text{
+    font-family:var(--font-mono); font-size:11px; font-weight:500; color:var(--text-secondary);
+    text-transform:uppercase; letter-spacing:0.04em; text-align:center;
+  }
+
+  /* ---------- Lightbox ---------- */
+  #lightbox-modal{
+    position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15,23,42,0.85);
+    display:none; align-items:center; justify-content:center; z-index:9999; padding:24px; box-sizing:border-box;
+  }
+  #lightbox-modal.open{display:flex;}
+  .lightbox-content{
+    max-width:90vw; max-height:80vh; width:280px; aspect-ratio:4/3; border-radius:8px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; color:#fff;
+  }
+  .lightbox-close{
+    position:absolute; top:20px; right:20px; width:36px; height:36px; border-radius:50%;
+    background:rgba(255,255,255,0.15); border:none; color:#fff; font-size:20px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .status-pulse-dot{animation:none;}
+    *{transition-duration:0.01ms !important;}
+  }
 </style>
 </head>
-<body class="font-sans text-[#0f172a] antialiased">
+<body>
 
-  <!-- STICKY HEADER -->
-  <header id="sticky-header" class="fixed top-0 left-0 w-full h-14 bg-white/95 backdrop-blur border-b border-[#e2e8f0] z-50 transition-all duration-300 opacity-0 -translate-y-2 pointer-events-none">
-    <div class="max-w-4xl mx-auto h-full flex items-center px-4">
-      <div class="flex items-center gap-2 font-bold text-[#0f172a] text-[16px]">
-        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" class="w-8 h-8 rounded-full object-cover" draggable="false" style="-webkit-user-drag:none;" alt="Lizi Zivzivadze">
-        <span>Lizi Zivzivadze</span>
-      </div>
+<header id="sticky-header" class="sticky-header">
+  <div class="sticky-header-left">
+    <span class="header-mini-avatar" id="header-mini-avatar"></span>
+    <span class="header-full-name">Lizi Zivzivadze</span>
+  </div>
+  <div class="sticky-header-right"></div>
+</header>
+
+<div class="app-shell">
+<main class="app-main">
+
+  <!-- SECTION 3: PROFILE -->
+  <section id="profile-section" class="profile-container">
+    <span class="profile-avatar" id="profile-avatar"></span>
+    <h1 class="profile-name">Lizi Zivzivadze</h1>
+    <p class="profile-title">Electromechanical Engineer</p>
+    <div class="profile-action-row">
+      <a href="mailto:lizozivzivadze@gmail.com" class="profile-btn">Contact</a>
+      <a href="#" id="cv-btn" class="profile-btn">CV</a>
+      <a href="https://github.com/lizozivzivadze-star" target="_blank" rel="noopener" class="profile-btn">GitHub</a>
     </div>
-  </header>
+  </section>
 
-  <main class="px-3 pb-20 pt-4">
+  <!-- SECTION 4: PROJECTS -->
+  <section class="app-section" id="projects-section">
+    <h2 class="section-title">Projects</h2>
+    <nav class="projects-filter-bar" data-target="projects-carousel">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="hardware">Hardware</button>
+      <button class="filter-tab" data-filter="embedded">Embedded</button>
+      <button class="filter-tab" data-filter="automation">Automation</button>
+    </nav>
+    <div class="carousel-track" id="projects-carousel"></div>
+  </section>
 
-    <!-- HERO / PROFILE SECTION -->
-    <section class="w-full max-w-4xl mx-auto my-4 p-4 md:p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between">
-      <div class="flex flex-row items-center gap-4">
-        <img id="hero-avatar" src="" alt="Lizi Zivzivadze" class="w-[80px] h-[80px] rounded-full border-2 border-[#0284c7] object-cover shrink-0" draggable="false" style="-webkit-user-drag:none;">
-        <div class="flex flex-col items-start min-w-0">
-          <h1 id="hero-name" class="text-[20px] sm:text-[22px] font-bold text-[#0f172a] whitespace-nowrap text-left"></h1>
-          <p id="hero-title" class="font-mono font-semibold tracking-wider text-[#0369a1] text-[12px] sm:text-[13px] whitespace-nowrap overflow-hidden text-left w-full"></p>
-          <div id="hero-contact-icons" class="flex items-center gap-3.5 whitespace-nowrap mt-1"></div>
-          <p id="hero-location" class="text-[14px] text-[#475569] font-medium text-left whitespace-nowrap mt-1"></p>
-        </div>
-      </div>
-      <p id="hero-statement" class="w-full text-[14px] sm:text-[15px] text-[#0f172a] font-medium mt-3.5 pt-3 border-t border-slate-100 leading-relaxed"></p>
-    </section>
+  <!-- SECTION 5: SKILLSETS + SKILLS -->
+  <section class="app-section" id="skills-section">
+    <h2 class="section-title">Skillsets + Skills</h2>
+    <nav class="skills-tab-bar" data-target="skills-panel">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="hardware">Hardware</button>
+      <button class="filter-tab" data-filter="software">Software</button>
+      <button class="filter-tab" data-filter="mechatronics">Mechatronics</button>
+    </nav>
+    <div class="skills-panel" id="skills-panel"></div>
+  </section>
 
-    <!-- PROJECTS SECTION -->
-    <section class="h-[640px] min-h-[640px] max-h-[640px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm overflow-hidden">
-      <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center w-full">PROJECTS</h2>
-      <div id="project-tabs" class="flex flex-wrap gap-1.5 justify-center my-2"></div>
-      <div id="projects-carousel-container" class="flex overflow-x-auto overflow-y-visible snap-x snap-mandatory gap-2 py-2 my-1 custom-scrollbar flex-nowrap flex-1"></div>
-    </section>
+  <!-- SECTION 6: EVENTS -->
+  <section class="app-section" id="events-section">
+    <h2 class="section-title">Events</h2>
+    <nav class="events-filter-bar" data-target="events-carousel">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="hackathon">Hackathon</button>
+      <button class="filter-tab" data-filter="conference">Conference</button>
+      <button class="filter-tab" data-filter="expo">Expo</button>
+      <button class="filter-tab" data-filter="meetup">Meetup</button>
+    </nav>
+    <div class="carousel-track" id="events-carousel"></div>
+  </section>
 
-    <!-- SKILLSETS + SKILLS SECTION -->
-    <section class="h-[540px] min-h-[540px] max-h-[540px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-      <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center w-full mt-[3px] mb-[3px]">SKILLSETS</h2>
-      <div id="skill-category-tabs" class="flex flex-wrap gap-1.5 my-[3px]"></div>
-      <h3 class="font-sans text-[16px] font-bold text-[#0f172a] text-center w-full my-[3px]">Skills</h3>
-      <div id="skills-list-container" class="h-[318px] overflow-y-auto border border-[#e2e8f0] rounded-lg p-3 bg-white custom-scrollbar mt-[3px] mb-0"></div>
-    </section>
+  <!-- SECTION 7: WHAT DO I BRING TO THE TABLE -->
+  <section class="app-section" id="value-section">
+    <h2 class="section-title single-line-title">What Do I Bring to the Table?</h2>
+    <div class="carousel-track" id="value-carousel"></div>
+  </section>
 
-    <!-- EVENTS SECTION -->
-    <section class="h-[640px] min-h-[640px] max-h-[640px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm overflow-hidden">
-      <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center w-full">EVENTS</h2>
-      <div id="event-tabs" class="flex flex-wrap gap-1.5 justify-center my-2"></div>
-      <div id="events-carousel-container" class="flex overflow-x-auto overflow-y-visible snap-x snap-mandatory gap-2 py-2 my-1 custom-scrollbar flex-nowrap flex-1"></div>
-    </section>
+  <!-- SECTION 8: HELP YOURSELF -->
+  <section class="app-section" id="help-yourself-section">
+    <h2 class="section-title">Help Yourself</h2>
+    <form id="help-yourself-form" class="help-yourself-container">
+      <label class="file-select-box" data-box>
+        <input type="checkbox" name="selected_files" value="cv" class="file-checkbox">
+        <span class="file-box-content">
+          <svg class="file-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          <span class="file-label">CV</span>
+          <span class="checkbox-indicator"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+        </span>
+      </label>
+      <label class="file-select-box" data-box>
+        <input type="checkbox" name="selected_files" value="portfolio" class="file-checkbox">
+        <span class="file-box-content">
+          <svg class="file-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          <span class="file-label">Portfolio</span>
+          <span class="checkbox-indicator"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+        </span>
+      </label>
+      <input type="email" id="recipient-email" name="user_email" placeholder="your.email@example.com" required>
+      <button type="submit" id="send-pdf-btn" class="send-action-btn">Send</button>
+      <p class="form-hint">Sends a request to Lizi — no server required</p>
+    </form>
+  </section>
 
-    <!-- WHAT DO I BRING TO THE TABLE SECTION -->
-    <section class="h-[290px] min-h-[290px] max-h-[290px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-      <h2 class="font-mono text-[18px] sm:text-[22px] font-bold text-[#0f172a] text-center w-full whitespace-nowrap overflow-hidden text-ellipsis">WHAT DO I BRING TO THE TABLE?</h2>
-      <div id="value-props-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-2 custom-scrollbar flex-nowrap mt-2"></div>
-    </section>
+</main>
+</div>
 
-    <!-- HELP YOURSELF SECTION -->
-    <section class="h-[365px] min-h-[365px] max-h-[365px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-      <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center w-full">HELP YOURSELF</h2>
-      <div class="flex flex-col gap-3 flex-1 justify-center">
-        <div class="flex flex-col gap-3">
-          <div id="doc-card-cv" data-action="toggle-doc" data-doc="cv" class="p-3.5 rounded-lg border border-[#e2e8f0] bg-white cursor-pointer flex items-center justify-center gap-2 text-center select-none">
-            <svg class="w-4 h-4 text-[#0284c7] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            <span class="text-[14px] font-mono font-bold text-[#0f172a]">CV.pdf</span>
-          </div>
-          <div id="doc-card-portfolio" data-action="toggle-doc" data-doc="portfolio" class="p-3.5 rounded-lg border border-[#e2e8f0] bg-white cursor-pointer flex items-center justify-center gap-2 text-center select-none">
-            <svg class="w-4 h-4 text-[#0284c7] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            <span class="text-[14px] font-mono font-bold text-[#0f172a]">Portfolio.pdf</span>
-          </div>
-        </div>
-        <input type="email" id="user-email-input" placeholder="your.email@example.com" class="text-[14px] font-sans rounded-md border border-[#e2e8f0] px-3 py-[9px] w-full h-[40px] focus:outline-none focus:ring-2 focus:ring-[#0284c7] focus:border-[#0284c7]">
-        <button id="send-docs-btn" data-action="send-docs" class="text-[14px] font-mono font-bold text-white bg-[#0284c7] hover:bg-[#0369a1] rounded-md px-4 py-[11px] h-[42px] w-full transition-colors">Send</button>
-      </div>
-    </section>
+<footer id="sticky-footer" class="sticky-footer">
+  <div class="footer-line-1">
+    <svg class="verified-icon" viewBox="0 0 24 24"><path d="M12 1l2.9 2.1 3.5-.4 1.1 3.4 3 2-1.3 3.3 1.3 3.3-3 2-1.1 3.4-3.5-.4L12 23l-2.9-2.1-3.5.4-1.1-3.4-3-2 1.3-3.3L1.5 9.3l3-2 1.1-3.4 3.5.4z"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="footer-copyright-text">© 2026 Lizi Zivzivadze</span>
+  </div>
+  <div class="footer-line-2">
+    <span class="status-pulse-dot"></span>
+    <span class="footer-status-text">Junior Engineer Ready for Deployment</span>
+  </div>
+</footer>
 
-  </main>
-
-  <!-- TOAST -->
-  <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 bg-[#0f172a] text-white text-[13px] font-mono px-4 py-2.5 rounded-lg shadow-lg z-[60] opacity-0 pointer-events-none transition-opacity duration-300"></div>
-
-  <!-- STICKY FOOTER -->
-  <footer class="fixed bottom-0 left-0 w-full h-14 bg-white border-t border-[#e2e8f0] flex flex-col justify-center items-center text-center z-40 shadow-md">
-    <p class="text-[12px] font-mono text-[#0f172a]">2026 Lizi Zivzivadze</p>
-    <p class="text-[12px] font-mono text-[#475569] flex items-center gap-1.5">
-      <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block"></span>
-      Junior Engineer ready for deployment
-    </p>
-  </footer>
+<div id="lightbox-modal">
+  <button class="lightbox-close" id="lightbox-close">&times;</button>
+  <div class="lightbox-content" id="lightbox-content"></div>
+</div>
 
 <script>
-(function () {
-  "use strict";
+/* ============================================================
+   DATA
+   ============================================================ */
+const AVATAR_SVG = `
+  <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+    <rect width="90" height="90" fill="#2563EB"/>
+    <text x="45" y="55" font-family="Inter, sans-serif" font-size="30" font-weight="700"
+          fill="#FFFFFF" text-anchor="middle">LZ</text>
+  </svg>`;
 
-  // ==================================================
-  // SINGLE SOURCE OF TRUTH (IMMUTABLE DATA ENGINE)
-  // ==================================================
-  const PORTFOLIO_DATA = {
-    personal: {
-      name: "Lizi Zivzivadze",
-      title: "Electromechanical Engineer",
-      statement: "Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for mechatronics.",
-      avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
-      email: "lizozivzivadze@gmail.com",
-      phone: "+32 499 22 16 80",
-      whatsapp: "https://wa.me/32499221680",
-      location: "Leuven, BE",
-      linkedin: "https://www.linkedin.com/in/lizizivzivadze/",
-      github: "https://github.com/lizozivzivadze-star"
-    },
-    projects: [
-      {
-        id: "proj-1",
-        title: "Piezo Actuator Rig",
-        category: "HW+SW",
-        summary: "Sub-micron positioning stage with high-bandwidth FPGA feedback for active optical calibration.",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        details: {
-          overview: {
-            objective: "Achieve sub-50nm alignment repeatability under active thermal drift.",
-            results: "Validated 32nm position repeatability and 1.2kHz closed-loop bandwidth."
-          },
-          equipment: ["Altium Designer", "STM32F4 / FreeRTOS", "SolidWorks Parametric CAD", "LTspice", "FPGA Control Loop", "Laser Doppler Vibrometer"],
-          urls: [
-            { label: "Test Yourself", url: "https://github.com/lizozivzivadze-star" }
-          ]
-        }
-      },
-      {
-        id: "proj-2",
-        title: "BLDC Motor Driver",
-        category: "HardWare",
-        summary: "Industrial 48V/20A motor drive featuring integrated CAN-FD telemetry and power monitoring.",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        details: {
-          overview: {
-            objective: "Minimize PCB surface footprint while handling 20A continuous phase currents.",
-            results: "Achieved 96.4% efficiency at nominal load with sub-45°C thermal rise."
-          },
-          equipment: ["Altium 4-Layer High-Power Layout", "CAN-FD Bus Analyzer", "Gate Drivers / Current Shunts", "LTspice Thermal Modeling"],
-          urls: [
-            { label: "Test Yourself", url: "https://github.com/lizozivzivadze-star" }
-          ]
-        }
-      },
-      {
-        id: "proj-3",
-        title: "ROS2 Inspection Robot",
-        category: "SoftWare",
-        summary: "WebGL and ROS2 interface displaying dynamic sensor fusion and LiDAR clouds at sub-20ms latency.",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        details: {
-          overview: {
-            objective: "Provide real-time 3D spatial monitoring over bandwidth-constrained links.",
-            results: "Maintained 60 FPS point cloud rendering at sub-20ms end-to-end network latency."
-          },
-          equipment: ["ROS2 Humble / C++", "WebGL / Three.js", "LiDAR Sensor Fusion", "Docker Containers", "Linux Edge Computing"],
-          urls: [
-            { label: "Test Yourself", url: "https://github.com/lizozivzivadze-star" }
-          ]
-        }
-      },
-      {
-        id: "proj-4",
-        title: "Micro-Fluidic Dosing Station",
-        category: "HW+SW",
-        summary: "Automated micro-volume liquid dispenser utilizing computer vision feedback for droplet correction.",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        details: {
-          overview: {
-            objective: "Dispense sub-microliter droplets with real-time optical volumetric validation.",
-            results: "Reduced volumetric variance to under 1.5% across 10,000 continuous test cycles."
-          },
-          equipment: ["Python / OpenCV", "Stepper Drivers / Microstepping", "3D Printing (SLA/FDM)", "C++ Control Loop", "Lab Micro-Scale Calibration"],
-          urls: [
-            { label: "Test Yourself", url: "https://github.com/lizozivzivadze-star" }
-          ]
-        }
-      }
-    ],
-    skills: {
-      "Electronics": [
-        { name: "PCB Layout (Altium Designer)", level: 92 },
-        { name: "Analog Signal Conditioning", level: 85 },
-        { name: "Power Electronics (DC-DC / Gate Drivers)", level: 82 },
-        { name: "High-Speed Bus Layout (CAN-FD, Ethernet)", level: 88 },
-        { name: "EMC/EMI Shielding & Noise Reduction", level: 80 },
-        { name: "Circuit Simulation (LTspice / Tina-TI)", level: 86 },
-        { name: "SMD Soldering & Lab Instrumentation", level: 90 },
-        { name: "Battery Management Systems (BMS)", level: 78 }
-      ],
-      "Embedded": [
-        { name: "STM32 / ARM Cortex-M Firmware", level: 94 },
-        { name: "Embedded C / Real-Time C++", level: 90 },
-        { name: "FreeRTOS Task Scheduling & Mutexes", level: 85 },
-        { name: "Low-Level Bus Protocols (SPI, I2C, UART)", level: 95 },
-        { name: "DMA Telemetry & Hardware Interrupts", level: 88 },
-        { name: "Bare-Metal Microcontroller Architecture", level: 86 },
-        { name: "Bootloaders & OTA Updates", level: 78 },
-        { name: "Hardware In-The-Loop (HIL) Testing", level: 82 }
-      ],
-      "Mechanical Design": [
-        { name: "SolidWorks Parametric Modeling", level: 95 },
-        { name: "Structural & Thermal FEA (ANSYS)", level: 88 },
-        { name: "GD&T Tolerance Stack-Up Analysis", level: 90 },
-        { name: "Precision Flexure & Kinematic Design", level: 86 },
-        { name: "Design for Manufacturing (DFM / DFA)", level: 92 },
-        { name: "CNC Milling & Machining Toolpaths", level: 84 },
-        { name: "Rapid Prototyping (FDM / SLA / SLS)", level: 94 },
-        { name: "Enclosure IP Ingress Protection Design", level: 80 }
-      ],
-      "Robotics": [
-        { name: "ROS2 (Robot Operating System)", level: 84 },
-        { name: "Closed-Loop PID / FOC Control Loops", level: 88 },
-        { name: "MATLAB / Simulink Model-Based Control", level: 88 },
-        { name: "C++ Data Structures & Kinematics", level: 85 }
-      ],
-      "Programming": [
-        { name: "Python / Scientific Stack (NumPy, SciPy)", level: 90 },
-        { name: "OpenCV Computer Vision Pipelines", level: 80 },
-        { name: "Linux System Administration & Bash", level: 82 },
-        { name: "Git Version Control & CI/CD Pipelines", level: 86 }
-      ]
-    },
-    events: [
-      {
-        id: "event-1",
-        title: "European Agentic AI Summit 2026",
-        category: "Conference",
-        summary: "Presented work on hardware-in-the-loop edge AI for real-time mechatronic systems.",
-        imageUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600",
-        details: {
-          overview: {
-            participation: "Delivered a technical workshop on integrating STM32 low-power nodes with ROS2 telemetry.",
-            outcomes: "Established key industrial contacts for future hardware benchmarking."
-          },
-          media: [
-            "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600",
-            "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=600"
-          ],
-          urls: [
-            { label: "Demo Link", url: "https://github.com/lizozivzivadze-star" }
-          ]
-        }
-      },
-      {
-        id: "event-2",
-        title: "Benelux Mechatronics Hackathon",
-        category: "Hackathon",
-        summary: "First place solution for high-speed dynamic sorting using custom vision feedback.",
-        imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600",
-        details: {
-          overview: {
-            participation: "Lead hardware integrator and firmware developer for the team.",
-            outcomes: "Awarded First Place among 24 participating engineering teams."
-          },
-          media: [
-            "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600"
-          ],
-          urls: [
-            { label: "Demo Link", url: "https://github.com/lizozivzivadze-star" }
-          ]
-        }
-      }
-    ],
-    valueProps: [
-      { label: "Rapid Prototyping", imageUrl: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=600" },
-      { label: "Embedded Systems", imageUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=600" },
-      { label: "Industrial Automation", imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=600" },
-      { label: "PCB Design", imageUrl: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&q=80&w=600" },
-      { label: "Precision Manufacturing", imageUrl: "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&q=80&w=600" },
-      { label: "Robotics Integration", imageUrl: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=600" },
-      { label: "System Validation", imageUrl: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&q=80&w=600" },
-      { label: "Motion Control", imageUrl: "https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&q=80&w=600" }
-    ]
-  };
+const ICONS = {
+  wrench: `<path d="M14.7 6.3a4 4 0 1 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.8 2.8-2-2z"/>`,
+  layers: `<path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>`,
+  eye: `<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>`,
+  zap: `<path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/>`,
+  check: `<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>`,
+  camera: `<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>`,
+  video: `<path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>`,
+  cpu: `<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/>`,
+  cog: `<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>`
+};
 
-  // ==================================================
-  // GLOBAL STATE
-  // ==================================================
-  const APP_STATE = {
-    activeProjectTab: "All",
-    projectSubTabs: {},
-    activeSkillCategory: "Electronics",
-    activeEventTab: "All",
-    eventSubTabs: {},
-    selectedDocs: { cv: false, portfolio: false }
-  };
-
-  // ==================================================
-  // ICON LIBRARY (24x24 viewBox, w-4 h-4)
-  // ==================================================
-  const ICONS = {
-    phone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
-    whatsapp: `<svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.45 1.29 4.89L2 22l5.36-1.4a9.9 9.9 0 0 0 4.68 1.19h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.51 2 12.04 2zm5.8 14.03c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.11.11-1.79-.11-.41-.13-.94-.3-1.62-.59-2.85-1.23-4.71-4.1-4.85-4.29-.14-.19-1.16-1.54-1.16-2.94 0-1.4.73-2.08.99-2.37.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.82 2.01.89 2.16.07.15.12.32.02.51-.1.19-.15.31-.29.48-.14.17-.3.37-.43.5-.14.14-.29.29-.13.57.17.29.75 1.24 1.62 2.01 1.11 1 2.05 1.31 2.34 1.46.29.14.46.12.63-.07.17-.19.72-.84.91-1.13.19-.29.38-.24.63-.14.26.1 1.65.78 1.93.92.29.14.48.22.55.34.07.12.07.7-.17 1.38z"/></svg>`,
-    mail: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>`,
-    linkedin: `<svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>`,
-    github: `<svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.48 2 2 6.58 2 12.17c0 4.49 2.87 8.3 6.84 9.64.5.1.68-.22.68-.49v-1.7c-2.78.62-3.37-1.36-3.37-1.36-.46-1.18-1.11-1.5-1.11-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.55 2.34 1.1 2.91.84.09-.66.35-1.1.63-1.35-2.22-.26-4.56-1.14-4.56-5.05 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.72 0 0 .84-.27 2.75 1.05a9.4 9.4 0 0 1 5 0c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.46.1 2.72.64.72 1.03 1.63 1.03 2.75 0 3.92-2.34 4.79-4.57 5.04.36.32.68.94.68 1.9v2.82c0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.17C22 6.58 17.52 2 12 2z"/></svg>`,
-    play: `<svg class="w-12 h-12 pointer-events-none" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`
-  };
-
-  // ==================================================
-  // HELPERS
-  // ==================================================
-  function escapeHtml(str) {
-    return String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const PROJECTS = [
+  {
+    id:'tactical-unit', category:'embedded', color:'#2563EB', icon:'cpu',
+    title:'AI Tactical Field Unit',
+    description:'Portable ESP32 voice assistant chaining Whisper, Claude & ElevenLabs',
+    objective:'Build a portable ESP32 voice assistant that chains speech-to-text, an LLM, and text-to-speech into one field-ready device.',
+    results:'Working perfboard prototype: I2S mic capture, HTTP streaming to Whisper/Claude/ElevenLabs, and live OLED status feedback.',
+    stack:['ESP32','I2S Protocol','INMP441 Mic','MAX98357 Amp','SSD1306 OLED','Groq Whisper','Claude API','ElevenLabs TTS'],
+    url:'https://github.com/lizozivzivadze-star'
+  },
+  {
+    id:'argus', category:'hardware', color:'#0F172A', icon:'eye',
+    title:'ARGUS',
+    description:'Single-file HTML ISR app powered by the Claude Vision API',
+    objective:'Turn a live webcam feed into an automated ISR analyst that produces structured, actionable threat reports.',
+    results:'Single-file app generating NATO SALUTE reports with threat scoring, configurable auto-analysis intervals, and an event log.',
+    stack:['Claude Vision API','JavaScript','getUserMedia','HTML5 Canvas','NATO SALUTE Format'],
+    url:'https://github.com/lizozivzivadze-star'
+  },
+  {
+    id:'dcbench', category:'automation', color:'#2563EB', icon:'cog',
+    title:'DCBench',
+    description:'Browser simulation of the KU Leuven DC machines lab bench',
+    objective:'Recreate the university DC Machines Lab Test Bench in-browser for realistic, zero-dependency practice.',
+    results:'Five milestones shipped: physics core, SVG wiring layer, fault engine, data logger, and an n8n-backed AI tutor.',
+    stack:['Vanilla JS (ESM)','SVG / Canvas','n8n','PostgreSQL','OpenAPI'],
+    url:'https://github.com/lizozivzivadze-star'
+  },
+  {
+    id:'conveyor-classifier', category:'automation', color:'#0F172A', icon:'cog',
+    title:'Conveyor Classifier Demo',
+    description:'Interactive vision-based sorting line simulator',
+    objective:'Simulate a vision-based sorting line to explore classification logic, timing, and automation trade-offs.',
+    results:'Interactive demo with procedurally generated CIFAR-style items, three classifier modes, and an animated sort arm.',
+    stack:['JavaScript','HTML5 Canvas','Procedural Generation'],
+    url:'https://github.com/lizozivzivadze-star'
   }
+];
 
-  function extractVideoId(url) {
-    const parts = url.split("/");
-    return parts[parts.length - 1].split("?")[0];
+const SKILLS = [
+  {category:'hardware', name:'ESP32 & Embedded Firmware', level:82},
+  {category:'hardware', name:'PCB & Perfboard Prototyping', level:75},
+  {category:'hardware', name:'NX CAD Modeling', level:70},
+  {category:'hardware', name:'Moldflow Injection Mold Analysis', level:65},
+  {category:'hardware', name:'Soldering & Circuit Assembly', level:78},
+  {category:'software', name:'Vanilla JavaScript & Canvas/SVG', level:85},
+  {category:'software', name:'Python', level:70},
+  {category:'software', name:'FFmpeg Media Pipelines', level:68},
+  {category:'software', name:'n8n Workflow Automation', level:72},
+  {category:'software', name:'REST APIs & LLM Integration', level:80},
+  {category:'mechatronics', name:'Vision Systems & Camera Calibration', level:75},
+  {category:'mechatronics', name:'DC Machine Theory (Motor/Generator)', level:78},
+  {category:'mechatronics', name:'Automation & Industry 4.0', level:70},
+  {category:'mechatronics', name:'Line Balancing & Production Systems', level:72},
+  {category:'mechatronics', name:'Control Systems Fundamentals', level:65}
+];
+
+const EVENTS = [
+  {
+    id:'showcase', category:'expo', color:'#2563EB', icon:'camera',
+    title:'Group T Engineering Showcase',
+    description:'KU Leuven end-of-year engineering exhibition',
+    participation:'Presented the AI Tactical Field Unit prototype and vision-systems demos to peers and faculty.',
+    outcomes:'Got hands-on feedback on hardware ruggedization and added the project to a public portfolio.',
+    media:4,
+    url:'https://github.com/lizozivzivadze-star'
+  },
+  {
+    id:'meetup', category:'meetup', color:'#0F172A', icon:'cog',
+    title:'Benelux Robotics & Automation Meetup',
+    description:'Regional gathering of automation & robotics engineers',
+    participation:'Attended talks on industrial automation and networked with working automation engineers.',
+    outcomes:'Came away with ideas that shaped the DCBench fault-simulation engine.',
+    media:4,
+    url:'https://github.com/lizozivzivadze-star'
   }
+];
 
-  function subTabStyle(isActive) {
-    return isActive
-      ? "bg-[#0284c7] text-white border border-[#0284c7] font-bold rounded-md px-3 py-1.5 text-[13px] font-mono"
-      : "bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7] rounded-md px-3 py-1.5 text-[13px] font-mono";
-  }
+const VALUES = [
+  {icon:'wrench', title:'Hands-On Builder', text:'Ships working hardware-and-software prototypes end to end — from perfboard and firmware to a polished browser UI.'},
+  {icon:'layers', title:'Systems Thinker', text:'Bridges mechanical (CAD, Moldflow), electrical (embedded firmware), and software (web apps, APIs) domains on the same project.'},
+  {icon:'eye', title:'Vision & Automation Literacy', text:'Coursework in vision systems, line balancing, and Industry 4.0 architecture (RAMI 4.0, OPC UA, digital twins).'},
+  {icon:'zap', title:'Fast, Independent Learner', text:'Picks up new protocols mid-project — I2S audio, OPC UA, n8n orchestration — whatever the milestone requires.'},
+  {icon:'check', title:'Documentation Discipline', text:'Delivers structured, testable milestones: folder trees, test procedures, and known limitations, not just working code.'}
+];
 
-  function mainTabStyle(isActive) {
-    return isActive
-      ? "bg-[#0284c7] text-white border border-[#0284c7] font-bold rounded-md px-3 py-1.5 text-[13px] font-mono"
-      : "bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7] rounded-md px-3 py-1.5 text-[13px] font-mono";
-  }
+/* ============================================================
+   RENDER HELPERS
+   ============================================================ */
+function mediaPlaceholder(color, iconKey){
+  return `<div class="card-media-placeholder" style="background:${color}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[iconKey]}</svg>
+  </div>`;
+}
 
-  function showToast(message) {
-    const toast = document.getElementById("toast");
-    toast.textContent = message;
-    toast.classList.remove("opacity-0", "pointer-events-none");
-    toast.classList.add("opacity-100");
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => {
-      toast.classList.remove("opacity-100");
-      toast.classList.add("opacity-0", "pointer-events-none");
-    }, 2600);
-  }
-
-  // ==================================================
-  // HERO RENDERING
-  // ==================================================
-  function renderHero() {
-    const p = PORTFOLIO_DATA.personal;
-    document.getElementById("hero-avatar").src = p.avatarUrl;
-    document.getElementById("hero-name").textContent = p.name;
-    document.getElementById("hero-title").textContent = p.title;
-    document.getElementById("hero-location").textContent = p.location;
-    document.getElementById("hero-statement").textContent = p.statement;
-
-    const iconLinkClass = "text-[#0284c7] hover:text-[#0369a1] transition-colors";
-    document.getElementById("hero-contact-icons").innerHTML = `
-      <a href="tel:${p.phone.replace(/\s+/g, "")}" class="${iconLinkClass}" aria-label="Call">${ICONS.phone}</a>
-      <a href="${p.whatsapp}" target="_blank" rel="noopener noreferrer" class="${iconLinkClass}" aria-label="WhatsApp">${ICONS.whatsapp}</a>
-      <a href="mailto:${p.email}" class="${iconLinkClass}" aria-label="Email">${ICONS.mail}</a>
-      <a href="${p.linkedin}" target="_blank" rel="noopener noreferrer" class="${iconLinkClass}" aria-label="LinkedIn">${ICONS.linkedin}</a>
-      <a href="${p.github}" target="_blank" rel="noopener noreferrer" class="${iconLinkClass}" aria-label="GitHub">${ICONS.github}</a>
-    `;
-
-    document.getElementById("sticky-header").querySelector("span").textContent = p.name;
-  }
-
-  // ==================================================
-  // PROJECTS RENDERING
-  // ==================================================
-  function getProjectCategories() {
-    const cats = [];
-    PORTFOLIO_DATA.projects.forEach((p) => {
-      if (!cats.includes(p.category)) cats.push(p.category);
-    });
-    return ["All", ...cats];
-  }
-
-  function renderProjectTabs() {
-    const cats = getProjectCategories();
-    document.getElementById("project-tabs").innerHTML = cats
-      .map((c) => `<button data-action="select-project-tab" data-value="${escapeHtml(c)}" class="${mainTabStyle(APP_STATE.activeProjectTab === c)}">${escapeHtml(c)}</button>`)
-      .join("");
-  }
-
-  function updateProjectTabStyles() {
-    const container = document.getElementById("project-tabs");
-    container.querySelectorAll("button[data-action='select-project-tab']").forEach((btn) => {
-      btn.className = mainTabStyle(btn.dataset.value === APP_STATE.activeProjectTab);
-    });
-  }
-
-  function renderProjectSubTabContent(project, tab) {
-    if (tab === "equipment") {
-      return project.details.equipment
-        .map((eq) => `<span class="font-mono text-[12px] bg-slate-100 text-[#0f172a] px-2 py-1 rounded border border-[#e2e8f0]">${escapeHtml(eq)}</span>`)
-        .join("");
-    }
-    if (tab === "urls") {
-      return project.details.urls
-        .map((u) => `<a href="${u.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-mono font-bold text-[13px] rounded-md px-3 py-2 transition-colors">${escapeHtml(u.label)}</a>`)
-        .join("");
-    }
-    // overview
-    const ov = project.details.overview;
-    return `
-      <div class="w-full flex flex-col gap-2">
-        <p class="leading-relaxed"><span class="font-mono font-bold text-[#0369a1]">Objective:</span> ${escapeHtml(ov.objective)}</p>
-        <p class="leading-relaxed"><span class="font-mono font-bold text-[#0d9488]">Results:</span> ${escapeHtml(ov.results)}</p>
-      </div>
-    `;
-  }
-
-  function renderProjectCard(project) {
-    const currentSubTab = APP_STATE.projectSubTabs[project.id] || "overview";
-    const contentWrapClass = currentSubTab === "equipment"
-      ? "text-[14px] text-[#0f172a] flex flex-wrap gap-1.5 break-words"
-      : (currentSubTab === "urls" ? "text-[14px] text-[#0f172a] flex flex-col gap-1.5 break-words" : "text-[14px] text-[#0f172a] flex flex-col gap-1.5 break-words");
-
-    return `
-      <div class="w-[calc(100vw-34px)] max-w-[327px] md:w-[327px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs h-auto min-h-fit overflow-visible select-none touch-pan-x">
-        <div>
-          <div class="aspect-video rounded-md relative bg-slate-900 overflow-hidden select-none" id="media-${project.id}">
-            <img src="https://img.youtube.com/vi/${extractVideoId(project.videoUrl)}/hqdefault.jpg" class="w-full h-full object-cover pointer-events-none" draggable="false" style="-webkit-user-drag: none;" alt="${escapeHtml(project.title)}">
-            <button data-action="play-video" data-id="${project.id}" class="absolute inset-0 flex items-center justify-center bg-black/40 hover:bg-black/20 text-white transition-colors">
-              ${ICONS.play}
-            </button>
-          </div>
-          <h3 class="text-[18px] font-bold text-[#0f172a] mt-2 mb-1 leading-snug">${escapeHtml(project.title)}</h3>
-          <p class="text-[14px] text-[#475569] mb-3 leading-relaxed">${escapeHtml(project.summary)}</p>
-
-          <div id="subtabs-${project.id}" class="flex gap-1.5 mb-3 border-b border-[#e2e8f0] pb-2">
-            <button data-action="project-subtab" data-id="${project.id}" data-tab="overview" class="${subTabStyle(currentSubTab === "overview")}">OVERVIEW</button>
-            <button data-action="project-subtab" data-id="${project.id}" data-tab="equipment" class="${subTabStyle(currentSubTab === "equipment")}">EQUIPMENT</button>
-            <button data-action="project-subtab" data-id="${project.id}" data-tab="urls" class="${subTabStyle(currentSubTab === "urls")}">URL</button>
-          </div>
-
-          <div id="content-${project.id}" class="${contentWrapClass}">
-            ${renderProjectSubTabContent(project, currentSubTab)}
-          </div>
+function renderProjectCard(p){
+  return `
+  <article class="carousel-card project-card" data-category="${p.category}">
+    <div class="card-media">${mediaPlaceholder(p.color, p.icon)}</div>
+    <div class="card-header-block">
+      <h3 class="card-title">${p.title}</h3>
+      <p class="card-description">${p.description}</p>
+    </div>
+    <nav class="subtab-bar" data-card="${p.id}">
+      <button class="subtab-btn active" data-tab="overview">Overview</button>
+      <button class="subtab-btn" data-tab="techstack">Tech Stack</button>
+      <a href="${p.url}" target="_blank" rel="noopener" class="subtab-btn subtab-url-btn">URL ↗</a>
+    </nav>
+    <div class="content-pane" data-card-pane="${p.id}">
+      <div class="pane active" data-tab="overview">
+        <div class="pane-block">
+          <div class="pane-label">Objective</div>
+          <p class="pane-text">${p.objective}</p>
+        </div>
+        <div class="pane-block">
+          <div class="pane-label">Results</div>
+          <p class="pane-text">${p.results}</p>
         </div>
       </div>
-    `;
-  }
-
-  function renderProjectsCarousel() {
-    const filtered = APP_STATE.activeProjectTab === "All"
-      ? PORTFOLIO_DATA.projects
-      : PORTFOLIO_DATA.projects.filter((p) => p.category === APP_STATE.activeProjectTab);
-    document.getElementById("projects-carousel-container").innerHTML = filtered.map(renderProjectCard).join("");
-  }
-
-  // ==================================================
-  // SKILLS RENDERING
-  // ==================================================
-  function renderSkillCategoryTabs() {
-    const cats = Object.keys(PORTFOLIO_DATA.skills);
-    document.getElementById("skill-category-tabs").innerHTML = cats
-      .map((c) => `<button data-action="select-skill-category" data-value="${escapeHtml(c)}" class="px-2 py-1 rounded-md border text-[12px] font-mono whitespace-nowrap ${APP_STATE.activeSkillCategory === c ? "bg-[#0284c7] text-white border-[#0284c7] font-bold" : "bg-white text-[#475569] border-[#e2e8f0] hover:border-[#0284c7]"}">${escapeHtml(c)}</button>`)
-      .join("");
-  }
-
-  function updateSkillCategoryTabStyles() {
-    document.querySelectorAll("#skill-category-tabs button[data-action='select-skill-category']").forEach((btn) => {
-      const active = btn.dataset.value === APP_STATE.activeSkillCategory;
-      btn.className = `px-2 py-1 rounded-md border text-[12px] font-mono whitespace-nowrap ${active ? "bg-[#0284c7] text-white border-[#0284c7] font-bold" : "bg-white text-[#475569] border-[#e2e8f0] hover:border-[#0284c7]"}`;
-    });
-  }
-
-  function renderSkillsList() {
-    const skills = PORTFOLIO_DATA.skills[APP_STATE.activeSkillCategory] || [];
-    document.getElementById("skills-list-container").innerHTML = skills
-      .map((s) => `
-        <div class="mb-3 last:mb-0">
-          <div class="flex justify-between items-baseline text-[13px] font-mono mb-1 gap-2">
-            <span class="text-[#0f172a] truncate">${escapeHtml(s.name)}</span>
-            <span class="text-[#0284c7] font-bold shrink-0">${s.level}%</span>
-          </div>
-          <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-            <div class="h-full bg-[#0284c7] rounded-full" style="width:${s.level}%"></div>
-          </div>
-        </div>
-      `)
-      .join("");
-  }
-
-  // ==================================================
-  // EVENTS RENDERING
-  // ==================================================
-  function getEventCategories() {
-    const cats = [];
-    PORTFOLIO_DATA.events.forEach((e) => {
-      if (!cats.includes(e.category)) cats.push(e.category);
-    });
-    return ["All", ...cats];
-  }
-
-  function renderEventTabs() {
-    const cats = getEventCategories();
-    document.getElementById("event-tabs").innerHTML = cats
-      .map((c) => `<button data-action="select-event-tab" data-value="${escapeHtml(c)}" class="${mainTabStyle(APP_STATE.activeEventTab === c)}">${escapeHtml(c)}</button>`)
-      .join("");
-  }
-
-  function updateEventTabStyles() {
-    document.querySelectorAll("#event-tabs button[data-action='select-event-tab']").forEach((btn) => {
-      btn.className = mainTabStyle(btn.dataset.value === APP_STATE.activeEventTab);
-    });
-  }
-
-  function renderEventSubTabContent(event, tab) {
-    if (tab === "media") {
-      return event.details.media
-        .map((src) => `<div class="w-full aspect-video rounded-md overflow-hidden bg-slate-900"><img src="${src}" class="w-full h-full object-cover pointer-events-none" draggable="false" style="-webkit-user-drag:none;" alt="${escapeHtml(event.title)}"></div>`)
-        .join("");
-    }
-    if (tab === "urls") {
-      return event.details.urls
-        .map((u) => `<a href="${u.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-mono font-bold text-[13px] rounded-md px-3 py-2 transition-colors">${escapeHtml(u.label)}</a>`)
-        .join("");
-    }
-    const ov = event.details.overview;
-    return `
-      <p class="leading-relaxed"><span class="font-mono font-bold text-[#0369a1]">Participation:</span> ${escapeHtml(ov.participation)}</p>
-      <p class="leading-relaxed"><span class="font-mono font-bold text-[#0d9488]">Outcomes:</span> ${escapeHtml(ov.outcomes)}</p>
-    `;
-  }
-
-  function renderEventCard(event) {
-    const currentSubTab = APP_STATE.eventSubTabs[event.id] || "overview";
-    return `
-      <div class="w-[calc(100vw-34px)] max-w-[327px] md:w-[327px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs h-auto min-h-fit overflow-visible select-none touch-pan-x">
-        <div>
-          <div class="aspect-video rounded-md relative bg-slate-900 overflow-hidden mb-2 select-none">
-            <img src="${event.imageUrl}" class="w-full h-full object-cover pointer-events-none" draggable="false" style="-webkit-user-drag: none;" alt="${escapeHtml(event.title)}">
-          </div>
-          <h3 class="text-[18px] font-bold text-[#0f172a] mb-1 leading-snug">${escapeHtml(event.title)}</h3>
-          <p class="text-[14px] text-[#475569] mb-3 leading-relaxed">${escapeHtml(event.summary)}</p>
-
-          <div id="event-subtabs-${event.id}" class="flex gap-1.5 mb-3 border-b border-[#e2e8f0] pb-2">
-            <button data-action="event-subtab" data-id="${event.id}" data-tab="overview" class="${subTabStyle(currentSubTab === "overview")}">OVERVIEW</button>
-            <button data-action="event-subtab" data-id="${event.id}" data-tab="media" class="${subTabStyle(currentSubTab === "media")}">MEDIA</button>
-            <button data-action="event-subtab" data-id="${event.id}" data-tab="urls" class="${subTabStyle(currentSubTab === "urls")}">URL</button>
-          </div>
-
-          <div id="event-content-${event.id}" class="text-[14px] text-[#0f172a] flex flex-col gap-1.5 break-words">
-            ${renderEventSubTabContent(event, currentSubTab)}
-          </div>
+      <div class="pane" data-tab="techstack">
+        <div class="tech-pill-list">
+          ${p.stack.map(s => `<span class="tech-pill">${s}</span>`).join('')}
         </div>
       </div>
-    `;
-  }
+    </div>
+  </article>`;
+}
 
-  function renderEventsCarousel() {
-    const filtered = APP_STATE.activeEventTab === "All"
-      ? PORTFOLIO_DATA.events
-      : PORTFOLIO_DATA.events.filter((e) => e.category === APP_STATE.activeEventTab);
-    document.getElementById("events-carousel-container").innerHTML = filtered.map(renderEventCard).join("");
-  }
-
-  // ==================================================
-  // VALUE PROPS RENDERING
-  // ==================================================
-  function renderValueProps() {
-    document.getElementById("value-props-carousel").innerHTML = PORTFOLIO_DATA.valueProps
-      .map((v) => `
-        <div class="w-[220px] shrink-0 snap-start bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-2.5 flex flex-col justify-between h-[195px] select-none touch-pan-x">
-          <div class="aspect-[4/3] rounded-md overflow-hidden bg-slate-100 mb-2 w-full h-[135px] pointer-events-none">
-            <img src="${v.imageUrl}" class="w-full h-full object-cover pointer-events-none" draggable="false" style="-webkit-user-drag: none;" alt="${escapeHtml(v.label)}">
-          </div>
-          <p class="text-[13px] font-mono font-bold text-[#0f172a] text-center whitespace-nowrap overflow-hidden text-ellipsis w-full mt-1">${escapeHtml(v.label)}</p>
+function renderEventCard(e){
+  const thumbs = Array.from({length: e.media}).map((_,i) =>
+    `<div class="media-thumb" style="background:${e.color}" data-lightbox-color="${e.color}" data-lightbox-icon="${e.icon}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[e.icon]}</svg>
+    </div>`
+  ).join('');
+  return `
+  <article class="carousel-card event-card" data-category="${e.category}">
+    <div class="event-cover-photo-wrap">${mediaPlaceholder(e.color, e.icon)}</div>
+    <div class="card-header-block">
+      <h3 class="card-title">${e.title}</h3>
+      <p class="card-description">${e.description}</p>
+    </div>
+    <nav class="subtab-bar" data-card="${e.id}">
+      <button class="subtab-btn active" data-tab="overview">Overview</button>
+      <button class="subtab-btn" data-tab="media">Media</button>
+      <a href="${e.url}" target="_blank" rel="noopener" class="subtab-btn subtab-url-btn">URL ↗</a>
+    </nav>
+    <div class="content-pane" data-card-pane="${e.id}">
+      <div class="pane active" data-tab="overview">
+        <div class="pane-block">
+          <div class="pane-label">Participation</div>
+          <p class="pane-text">${e.participation}</p>
         </div>
-      `)
-      .join("");
-  }
+        <div class="pane-block">
+          <div class="pane-label">Outcomes</div>
+          <p class="pane-text">${e.outcomes}</p>
+        </div>
+      </div>
+      <div class="pane" data-tab="media">
+        <div class="media-grid">${thumbs}</div>
+      </div>
+    </div>
+  </article>`;
+}
 
-  // ==================================================
-  // HELP YOURSELF RENDERING
-  // ==================================================
-  function updateDocCardStyles() {
-    const cvCard = document.getElementById("doc-card-cv");
-    const portfolioCard = document.getElementById("doc-card-portfolio");
-    const base = "p-3.5 rounded-lg border border-[#e2e8f0] bg-white cursor-pointer flex items-center justify-center gap-2 text-center select-none";
-    const activeExtra = " border-2 border-[#0284c7] bg-[#f0f9ff]";
-    cvCard.className = base + (APP_STATE.selectedDocs.cv ? activeExtra : "");
-    portfolioCard.className = base + (APP_STATE.selectedDocs.portfolio ? activeExtra : "");
-  }
+function renderValueCard(v){
+  return `
+  <article class="carousel-card value-card">
+    <div class="value-card-header">
+      <span class="value-card-icon">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">${ICONS[v.icon]}</svg>
+      </span>
+      <h3 class="value-card-title">${v.title}</h3>
+    </div>
+    <p class="value-card-text">${v.text}</p>
+  </article>`;
+}
 
-  // ==================================================
-  // EVENT DELEGATION
-  // ==================================================
-  function handleClick(e) {
-    const el = e.target.closest("[data-action]");
-    if (!el) return;
-    const action = el.dataset.action;
+function renderSkillRow(s){
+  return `
+  <div class="skill-row" data-category="${s.category}">
+    <span class="skill-name">${s.name}</span>
+    <div class="skill-bar-track"><div class="skill-bar-fill" style="width:${s.level}%;"></div></div>
+  </div>`;
+}
 
-    switch (action) {
-      case "select-project-tab": {
-        APP_STATE.activeProjectTab = el.dataset.value;
-        renderProjectsCarousel();
-        updateProjectTabStyles();
-        break;
-      }
-      case "project-subtab": {
-        const id = el.dataset.id;
-        const tab = el.dataset.tab;
-        APP_STATE.projectSubTabs[id] = tab;
-        const project = PORTFOLIO_DATA.projects.find((p) => p.id === id);
-        if (project) {
-          const contentEl = document.getElementById(`content-${id}`);
-          contentEl.className = tab === "equipment"
-            ? "text-[14px] text-[#0f172a] flex flex-wrap gap-1.5 break-words"
-            : "text-[14px] text-[#0f172a] flex flex-col gap-1.5 break-words";
-          contentEl.innerHTML = renderProjectSubTabContent(project, tab);
-          const subtabsEl = document.getElementById(`subtabs-${id}`);
-          subtabsEl.querySelectorAll("button[data-action='project-subtab']").forEach((btn) => {
-            btn.className = subTabStyle(btn.dataset.tab === tab);
-          });
-        }
-        break;
-      }
-      case "play-video": {
-        const id = el.dataset.id;
-        const project = PORTFOLIO_DATA.projects.find((p) => p.id === id);
-        if (project) {
-          document.getElementById(`media-${id}`).innerHTML = `<iframe src="${project.videoUrl}?autoplay=1" class="w-full h-full border-0" allow="autoplay" draggable="false"></iframe>`;
-        }
-        break;
-      }
-      case "select-skill-category": {
-        APP_STATE.activeSkillCategory = el.dataset.value;
-        renderSkillsList();
-        updateSkillCategoryTabStyles();
-        break;
-      }
-      case "select-event-tab": {
-        APP_STATE.activeEventTab = el.dataset.value;
-        renderEventsCarousel();
-        updateEventTabStyles();
-        break;
-      }
-      case "event-subtab": {
-        const id = el.dataset.id;
-        const tab = el.dataset.tab;
-        APP_STATE.eventSubTabs[id] = tab;
-        const event = PORTFOLIO_DATA.events.find((ev) => ev.id === id);
-        if (event) {
-          document.getElementById(`event-content-${id}`).innerHTML = renderEventSubTabContent(event, tab);
-          const subtabsEl = document.getElementById(`event-subtabs-${id}`);
-          subtabsEl.querySelectorAll("button[data-action='event-subtab']").forEach((btn) => {
-            btn.className = subTabStyle(btn.dataset.tab === tab);
-          });
-        }
-        break;
-      }
-      case "toggle-doc": {
-        const doc = el.dataset.doc;
-        APP_STATE.selectedDocs[doc] = !APP_STATE.selectedDocs[doc];
-        updateDocCardStyles();
-        break;
-      }
-      case "send-docs": {
-        const emailInput = document.getElementById("user-email-input");
-        const email = emailInput.value.trim();
-        const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        const anyDocSelected = APP_STATE.selectedDocs.cv || APP_STATE.selectedDocs.portfolio;
+/* ============================================================
+   MOUNT DATA
+   ============================================================ */
+document.getElementById('header-mini-avatar').innerHTML = AVATAR_SVG;
+document.getElementById('profile-avatar').innerHTML = AVATAR_SVG;
 
-        if (!emailValid) {
-          showToast("Please enter a valid email address.");
-          return;
-        }
-        if (!anyDocSelected) {
-          showToast("Select at least one document first.");
-          return;
-        }
-        showToast("Sent! Check your inbox shortly.");
-        emailInput.value = "";
-        APP_STATE.selectedDocs.cv = false;
-        APP_STATE.selectedDocs.portfolio = false;
-        updateDocCardStyles();
-        break;
-      }
-      default:
-        break;
-    }
-  }
+document.getElementById('projects-carousel').innerHTML = PROJECTS.map(renderProjectCard).join('');
+document.getElementById('events-carousel').innerHTML = EVENTS.map(renderEventCard).join('');
+document.getElementById('value-carousel').innerHTML = VALUES.map(renderValueCard).join('');
+document.getElementById('skills-panel').innerHTML = SKILLS.map(renderSkillRow).join('');
 
-  // ==================================================
-  // STICKY HEADER SCROLL BEHAVIOR
-  // ==================================================
-  function handleScroll() {
-    const header = document.getElementById("sticky-header");
-    if (window.scrollY > 100) {
-      header.classList.remove("opacity-0", "-translate-y-2", "pointer-events-none");
-      header.classList.add("opacity-100", "translate-y-0");
+/* ============================================================
+   STICKY HEADER — IntersectionObserver
+   ============================================================ */
+const stickyHeader = document.getElementById('sticky-header');
+const profileSection = document.getElementById('profile-section');
+const headerObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(!entry.isIntersecting){
+      stickyHeader.classList.add('visible');
     } else {
-      header.classList.add("opacity-0", "-translate-y-2", "pointer-events-none");
-      header.classList.remove("opacity-100", "translate-y-0");
+      stickyHeader.classList.remove('visible');
     }
-  }
+  });
+}, {threshold:0});
+headerObserver.observe(profileSection);
 
-  // ==================================================
-  // INIT
-  // ==================================================
-  function initApp() {
-    PORTFOLIO_DATA.projects.forEach((p) => {
-      APP_STATE.projectSubTabs[p.id] = "overview";
+/* ============================================================
+   FILTER TABS (projects / events / skills)
+   ============================================================ */
+function wireFilterBar(navEl){
+  const targetId = navEl.getAttribute('data-target');
+  const targetEl = document.getElementById(targetId);
+  const tabs = navEl.querySelectorAll('.filter-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.getAttribute('data-filter');
+      const items = targetEl.querySelectorAll('[data-category]');
+      items.forEach(item => {
+        const show = filter === 'all' || item.getAttribute('data-category') === filter;
+        item.style.display = show ? '' : 'none';
+      });
     });
-    PORTFOLIO_DATA.events.forEach((e) => {
-      APP_STATE.eventSubTabs[e.id] = "overview";
+  });
+}
+document.querySelectorAll('.projects-filter-bar, .events-filter-bar, .skills-tab-bar').forEach(wireFilterBar);
+
+/* ============================================================
+   CARD SUBTABS (overview / techstack / media)
+   ============================================================ */
+document.querySelectorAll('.subtab-bar').forEach(bar => {
+  const cardId = bar.getAttribute('data-card');
+  const paneWrap = document.querySelector(`[data-card-pane="${cardId}"]`);
+  const buttons = bar.querySelectorAll('.subtab-btn:not(.subtab-url-btn)');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.getAttribute('data-tab');
+      paneWrap.querySelectorAll('.pane').forEach(p => {
+        p.classList.toggle('active', p.getAttribute('data-tab') === tab);
+      });
     });
+  });
+});
 
-    renderHero();
-    renderProjectTabs();
-    renderProjectsCarousel();
-    renderSkillCategoryTabs();
-    renderSkillsList();
-    renderEventTabs();
-    renderEventsCarousel();
-    renderValueProps();
-    updateDocCardStyles();
-
-    document.body.addEventListener("click", handleClick);
-    window.addEventListener("scroll", handleScroll, { passive: true });
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
+const lightboxModal = document.getElementById('lightbox-modal');
+const lightboxContent = document.getElementById('lightbox-content');
+document.addEventListener('click', (e) => {
+  const thumb = e.target.closest('.media-thumb');
+  if(thumb){
+    const color = thumb.getAttribute('data-lightbox-color');
+    const iconKey = thumb.getAttribute('data-lightbox-icon');
+    lightboxContent.style.background = color;
+    lightboxContent.innerHTML = `<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[iconKey]}</svg>`;
+    lightboxModal.classList.add('open');
   }
+});
+document.getElementById('lightbox-close').addEventListener('click', () => lightboxModal.classList.remove('open'));
+lightboxModal.addEventListener('click', (e) => { if(e.target === lightboxModal) lightboxModal.classList.remove('open'); });
 
-  document.addEventListener("DOMContentLoaded", initApp);
-})();
+/* ============================================================
+   CV BUTTON (no CV file provided yet)
+   ============================================================ */
+document.getElementById('cv-btn').addEventListener('click', (e) => {
+  e.preventDefault();
+  window.location.href = 'mailto:lizozivzivadze@gmail.com?subject=CV%20request&body=Hi%20Lizi%2C%20could%20you%20send%20over%20your%20CV%3F';
+});
+
+/* ============================================================
+   HELP YOURSELF — file toggle boxes + dual-dispatch (client-only)
+   ============================================================ */
+document.querySelectorAll('.file-select-box').forEach(box => {
+  const checkbox = box.querySelector('.file-checkbox');
+  checkbox.addEventListener('change', () => {
+    box.classList.toggle('selected', checkbox.checked);
+  });
+});
+
+const helpForm = document.getElementById('help-yourself-form');
+const sendBtn = document.getElementById('send-pdf-btn');
+helpForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = document.getElementById('recipient-email').value.trim();
+  const selected = Array.from(helpForm.querySelectorAll('input[name="selected_files"]:checked')).map(i => i.value);
+  if(!email || selected.length === 0){
+    sendBtn.textContent = selected.length === 0 ? 'Pick a file first' : 'Enter your email';
+    setTimeout(() => { sendBtn.textContent = 'Send'; }, 1800);
+    return;
+  }
+  sendBtn.disabled = true;
+  // No backend on a static portfolio: notify the owner via mailto with the
+  // requester's address and selected files, then confirm to the requester locally.
+  const subject = encodeURIComponent('Portfolio file request');
+  const body = encodeURIComponent(`Requested: ${selected.join(', ')}\nFrom: ${email}`);
+  window.location.href = `mailto:lizozivzivadze@gmail.com?subject=${subject}&body=${body}`;
+  sendBtn.classList.add('success');
+  sendBtn.textContent = 'Sent ✓';
+  setTimeout(() => {
+    sendBtn.disabled = false;
+    sendBtn.classList.remove('success');
+    sendBtn.textContent = 'Send';
+  }, 3000);
+});
 </script>
 </body>
 </html>
