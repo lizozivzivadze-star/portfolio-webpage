@@ -4,755 +4,850 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Lizi Zivzivadze — Electromechanical Engineer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        fontFamily: {
-          sans: ['Inter', 'ui-sans-serif', 'sans-serif'],
-          mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
-        }
-      }
-    }
-  }
-</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
-  *, *::before, *::after { box-sizing: border-box; }
-  html, body {
-    height: 100%;
-    height: -webkit-fill-available;
-    overflow-x: hidden;
-    max-width: 100vw;
-  }
+  * { box-sizing: border-box; -webkit-user-drag: none; }
+  html { height: -webkit-fill-available; }
   body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    font-family: 'Inter', sans-serif;
     background-color: #f8fafc;
     background-image:
       linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
       linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
     background-size: 24px 24px;
-    font-family: 'Inter', ui-sans-serif, sans-serif;
-    -webkit-text-size-adjust: 100%;
+    color: #0f172a;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    margin: 0;
   }
-  .min-h-screen-safe {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-  }
-  /* Custom subtle scrollbar */
-  .custom-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: #cbd5e1 transparent;
-  }
-  .custom-scrollbar::-webkit-scrollbar {
-    height: 6px;
-    width: 6px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #cbd5e1;
-    border-radius: 3px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: #94a3b8;
-  }
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  #toast {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+  .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
+  .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+  img, iframe { -webkit-user-drag: none; }
+  .select-none { -webkit-user-select: none; user-select: none; }
+  #sticky-header, #sticky-footer { will-change: transform, opacity; }
+  #sticky-header.header-hidden { opacity: 0; transform: translateY(-100%); pointer-events: none; }
+  #sticky-header.header-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  #toast.toast-hidden { opacity: 0; transform: translate(-50%, 10px); pointer-events: none; }
+  #toast.toast-visible { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+  @keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .pulse-dot { animation: pulseDot 1.8s ease-in-out infinite; }
 </style>
 </head>
-<body class="min-h-screen-safe">
+<body class="antialiased">
 
-  <!-- Sticky Header -->
-  <header id="sticky-header" class="fixed top-0 left-0 w-full h-14 bg-white/95 backdrop-blur border-b border-[#e2e8f0] z-50 transition-all duration-300 flex items-center px-4 opacity-0 -translate-y-full pointer-events-none"></header>
+  <!-- ================= STICKY HEADER ================= -->
+  <header id="sticky-header" class="header-hidden fixed top-0 left-0 w-full h-14 bg-white/95 backdrop-blur border-b border-[#e2e8f0] z-50 transition-all duration-300">
+    <div class="max-w-4xl mx-auto h-full flex items-center px-4">
+      <div class="flex items-center gap-2 font-bold text-[#0f172a] text-[16px]">
+        <img id="header-avatar" src="" alt="Lizi Zivzivadze" class="w-8 h-8 rounded-full object-cover pointer-events-none" draggable="false" style="-webkit-user-drag:none;" />
+        <span id="header-name"></span>
+      </div>
+    </div>
+  </header>
 
   <main class="w-full pb-20 pt-2">
 
-    <!-- Hero / Profile Section -->
-    <section id="hero-section" class="w-full max-w-4xl mx-auto my-4 p-4 md:p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between"></section>
-
-    <!-- Projects Section -->
-    <section class="h-[595px] min-h-[595px] max-h-[595px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-      <div>
-        <h2 class="text-[22px] font-mono font-bold text-[#0f172a] mb-2">PROJECTS</h2>
-        <div id="project-tabs" class="flex flex-wrap gap-1.5 mb-3"></div>
+    <!-- ================= HERO / PROFILE ================= -->
+    <section class="w-full max-w-4xl mx-auto mt-6 mb-4 p-4 md:p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col justify-between">
+      <div class="flex flex-row items-center gap-4">
+        <img id="hero-avatar" src="" alt="Lizi Zivzivadze" class="w-[80px] h-[80px] rounded-full border-2 border-[#0284c7] object-cover shrink-0 pointer-events-none" draggable="false" style="-webkit-user-drag:none;" />
+        <div class="flex flex-col items-start min-w-0 flex-1">
+          <h1 id="hero-name" class="text-[20px] sm:text-[22px] font-bold text-[#0f172a] whitespace-nowrap text-left"></h1>
+          <p id="hero-title" class="font-mono font-semibold tracking-wider text-[#0369a1] text-[12px] sm:text-[13px] whitespace-nowrap overflow-hidden text-left w-full"></p>
+          <div id="hero-contacts" class="flex items-center gap-3.5 whitespace-nowrap mt-1"></div>
+          <p id="hero-location" class="text-[14px] text-[#475569] font-medium text-left whitespace-nowrap mt-1"></p>
+        </div>
       </div>
-      <div id="projects-carousel-container" class="flex overflow-x-auto snap-x snap-mandatory gap-2.5 pb-3 custom-scrollbar flex-nowrap flex-1"></div>
+      <p id="hero-statement" class="w-full text-[14px] sm:text-[15px] text-[#0f172a] font-medium mt-3.5 pt-3 border-t border-slate-100 leading-relaxed"></p>
     </section>
 
-    <!-- Skillsets + Skills Section -->
-    <section class="h-[555px] min-h-[555px] max-h-[555px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-      <div>
-        <h2 class="font-mono text-[22px] font-bold text-[#0f172a]">SKILLSETS</h2>
-        <div id="skill-categories" class="flex flex-wrap gap-1.5 mt-2 mb-1"></div>
-        <h3 class="font-sans text-[16px] font-bold text-[#0f172a] mt-1 mb-1">Skills</h3>
-      </div>
-      <div id="skills-list" class="h-[325px] overflow-y-auto border border-[#e2e8f0] rounded-lg p-3 bg-white custom-scrollbar"></div>
+    <!-- ================= PROJECTS ================= -->
+    <section class="h-[640px] min-h-[640px] max-h-[640px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm overflow-hidden">
+      <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center w-full">PROJECTS</h2>
+      <div id="project-tabs" class="flex flex-wrap gap-1.5 justify-center my-2"></div>
+      <div id="projects-carousel-container" class="flex-1 overflow-x-auto overflow-y-auto snap-x snap-mandatory gap-2 pb-3 custom-scrollbar flex flex-nowrap"></div>
     </section>
 
-    <!-- Events Section -->
-    <section class="h-[595px] min-h-[595px] max-h-[595px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-      <div>
-        <h2 class="text-[22px] font-mono font-bold text-[#0f172a] mb-2">EVENTS</h2>
-        <div id="event-tabs" class="flex flex-wrap gap-1.5 mb-3"></div>
-      </div>
-      <div id="events-carousel-container" class="flex overflow-x-auto snap-x snap-mandatory gap-2.5 pb-3 custom-scrollbar flex-nowrap flex-1"></div>
+    <!-- ================= SKILLSETS + SKILLS ================= -->
+    <section class="h-[540px] min-h-[540px] max-h-[540px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+      <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center w-full">SKILLSETS</h2>
+      <div id="skill-category-tabs" class="flex flex-wrap gap-1.5 my-[5px]"></div>
+      <h3 class="font-sans text-[16px] font-bold text-[#0f172a] my-[5px]">Skills</h3>
+      <div id="skills-list" class="h-[310px] overflow-y-auto border border-[#e2e8f0] rounded-lg p-3 bg-white custom-scrollbar"></div>
     </section>
 
-    <!-- What Do I Bring To The Table Section -->
+    <!-- ================= EVENTS ================= -->
+    <section class="h-[640px] min-h-[640px] max-h-[640px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm overflow-hidden">
+      <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center w-full">EVENTS</h2>
+      <div id="event-tabs" class="flex flex-wrap gap-1.5 justify-center my-2"></div>
+      <div id="events-carousel-container" class="flex-1 overflow-x-auto overflow-y-auto snap-x snap-mandatory gap-2 pb-3 custom-scrollbar flex flex-nowrap"></div>
+    </section>
+
+    <!-- ================= WHAT DO I BRING TO THE TABLE ================= -->
     <section class="h-[290px] min-h-[290px] max-h-[290px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-      <h2 class="font-mono text-[18px] sm:text-[22px] font-bold text-[#0f172a] text-center whitespace-nowrap overflow-hidden text-ellipsis w-full">WHAT DO I BRING TO THE TABLE?</h2>
-      <div id="value-props-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-2 custom-scrollbar flex-nowrap"></div>
+      <h2 class="font-mono text-[18px] sm:text-[22px] font-bold text-[#0f172a] text-center w-full whitespace-nowrap overflow-hidden text-ellipsis">WHAT DO I BRING TO THE TABLE?</h2>
+      <div id="value-props-container" class="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-2 custom-scrollbar flex-nowrap"></div>
     </section>
 
-    <!-- Help Yourself Section -->
-    <section class="h-[365px] min-h-[365px] max-h-[365px] flex flex-col w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
-      <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center mb-2">HELP YOURSELF</h2>
-      <div id="doc-cards" class="flex flex-col gap-2"></div>
-      <input type="email" id="email-input" placeholder="your.email@example.com" class="w-full text-[14px] font-sans text-[#0f172a] border border-[#e2e8f0] rounded-md px-3 py-2.5 focus:outline-none focus:border-[#0284c7] mt-2" />
-      <button id="send-docs-btn" data-action="send-docs" class="text-[14px] font-mono font-bold text-white bg-[#0284c7] hover:bg-[#0369a1] rounded-md px-4 py-2.5 w-full mt-2">Send</button>
+    <!-- ================= HELP YOURSELF ================= -->
+    <section class="h-[365px] min-h-[365px] max-h-[365px] flex flex-col justify-between w-full max-w-4xl mx-auto my-4 p-5 rounded-xl bg-white border border-[#e2e8f0] shadow-sm">
+      <h2 class="font-mono text-[22px] font-bold text-[#0f172a] text-center w-full">HELP YOURSELF</h2>
+      <div class="flex flex-col gap-[10px] flex-1 justify-center">
+        <div id="doc-cv-card" data-action="toggle-doc" data-doc="cv" class="p-3 rounded-lg border border-[#e2e8f0] bg-white cursor-pointer flex items-center gap-3 select-none">
+          <svg class="w-5 h-5 text-[#0284c7] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <div class="flex flex-col min-w-0">
+            <span class="text-[14px] font-mono font-bold text-[#0f172a]">CV.pdf</span>
+            <span class="text-[12px] font-sans text-[#475569]">Curriculum Vitae</span>
+          </div>
+          <svg id="doc-cv-check" class="w-4 h-4 text-[#0284c7] ml-auto hidden shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div id="doc-portfolio-card" data-action="toggle-doc" data-doc="portfolio" class="p-3 rounded-lg border border-[#e2e8f0] bg-white cursor-pointer flex items-center gap-3 select-none">
+          <svg class="w-5 h-5 text-[#0d9488] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <div class="flex flex-col min-w-0">
+            <span class="text-[14px] font-mono font-bold text-[#0f172a]">Portfolio.pdf</span>
+            <span class="text-[12px] font-sans text-[#475569]">Full Project Portfolio</span>
+          </div>
+          <svg id="doc-portfolio-check" class="w-4 h-4 text-[#0d9488] ml-auto hidden shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <input id="email-input" type="email" placeholder="you@example.com" class="text-[14px] font-sans rounded-md border border-[#e2e8f0] px-3 py-2 w-full outline-none focus:border-[#0284c7]" />
+        <button id="send-docs-btn" data-action="send-docs" class="text-[14px] font-mono font-bold text-white bg-[#0284c7] hover:bg-[#0369a1] rounded-md px-4 py-2 w-full transition-colors">Send</button>
+      </div>
     </section>
 
   </main>
 
-  <!-- Sticky Footer -->
+  <!-- ================= TOAST ================= -->
+  <div id="toast" class="toast-hidden fixed left-1/2 bottom-20 z-[60] transition-all duration-300 px-4 py-2.5 rounded-lg shadow-lg text-[13px] font-mono font-semibold whitespace-nowrap"></div>
+
+  <!-- ================= STICKY FOOTER ================= -->
   <footer class="fixed bottom-0 left-0 w-full h-14 bg-white border-t border-[#e2e8f0] flex flex-col justify-center items-center text-center z-40 shadow-md">
-    <span class="text-[12px] font-mono text-[#0f172a]">© 2026 Lizi Zivzivadze</span>
-    <span class="text-[12px] font-mono text-[#475569] flex items-center gap-1.5">
-      <span class="relative flex h-2 w-2">
-        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-      </span>
+    <p class="text-[12px] font-mono text-[#0f172a]" id="footer-year-line">2026 Lizi Zivzivadze</p>
+    <p class="text-[12px] font-mono text-[#475569] flex items-center gap-1.5">
+      <span class="w-2 h-2 rounded-full bg-green-500 inline-block pulse-dot"></span>
       Junior Engineer ready for deployment
-    </span>
+    </p>
   </footer>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-[60] px-4 py-2 rounded-md text-[13px] font-mono text-white shadow-lg bg-[#0d9488]"></div>
-
 <script>
-/* ==================================================
-   SINGLE SOURCE OF TRUTH (IMMUTABLE DATA ENGINE)
-================================================== */
-const PORTFOLIO_DATA = {
-  personal: {
-    name: "Lizi Zivzivadze",
-    title: "Electromechanical Engineer",
-    statement: "Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for mechatronics.",
-    avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
-    email: "lizozivzivadze@gmail.com",
-    phone: "+32 499 22 16 80",
-    whatsapp: "https://wa.me/32499221680",
-    location: "Leuven, BE",
-    linkedin: "https://www.linkedin.com/in/lizizivzivadze/",
-    github: "https://github.com/lizozivzivadze-star"
-  },
-  projects: [
-    {
-      id: "proj-1",
-      title: "Piezo Actuator Rig",
-      category: "HW+SW",
-      summary: "Sub-micron positioning stage with high-bandwidth FPGA feedback for active optical calibration.",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      details: {
-        overview: {
-          objective: "Achieve sub-50nm alignment repeatability under active thermal drift.",
-          results: "Validated 32nm position repeatability and 1.2kHz closed-loop bandwidth."
-        },
-        equipment: ["Altium Designer", "STM32F4 / FreeRTOS", "SolidWorks Parametric CAD", "LTspice", "FPGA Control Loop", "Laser Doppler Vibrometer"],
-        urls: [
-          { label: "Try Project", url: "https://github.com/lizozivzivadze-star" },
-          { label: "Live Demo", url: "https://github.com/lizozivzivadze-star" }
-        ]
-      }
+(function () {
+  "use strict";
+
+  // ============================================================
+  // SINGLE SOURCE OF TRUTH
+  // ============================================================
+  const PORTFOLIO_DATA = {
+    personal: {
+      name: "Lizi Zivzivadze",
+      title: "Electromechanical Engineer",
+      statement: "Integrating high-precision mechanical kinematics, custom embedded control electronics, and automated testing rigs for mechatronics.",
+      avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
+      email: "lizozivzivadze@gmail.com",
+      phone: "+32 499 22 16 80",
+      whatsapp: "https://wa.me/32499221680",
+      location: "Leuven, BE",
+      linkedin: "https://www.linkedin.com/in/lizizivzivadze/",
+      github: "https://github.com/lizozivzivadze-star"
     },
-    {
-      id: "proj-2",
-      title: "BLDC Motor Driver",
-      category: "HardWare",
-      summary: "Industrial 48V/20A motor drive featuring integrated CAN-FD telemetry and power monitoring.",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      details: {
-        overview: {
-          objective: "Minimize PCB surface footprint while handling 20A continuous phase currents.",
-          results: "Achieved 96.4% efficiency at nominal load with sub-45°C thermal rise."
-        },
-        equipment: ["Altium 4-Layer High-Power Layout", "CAN-FD Bus Analyzer", "Gate Drivers / Current Shunts", "LTspice Thermal Modeling"],
-        urls: [
-          { label: "Live Demo", url: "https://github.com/lizozivzivadze-star" }
-        ]
+    projects: [
+      {
+        id: "proj-1",
+        title: "Piezo Actuator Rig",
+        category: "HW+SW",
+        summary: "Sub-micron positioning stage with high-bandwidth FPGA feedback for active optical calibration.",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        details: {
+          overview: {
+            objective: "Achieve sub-50nm alignment repeatability under active thermal drift.",
+            results: "Validated 32nm position repeatability and 1.2kHz closed-loop bandwidth."
+          },
+          equipment: ["Altium Designer", "STM32F4 / FreeRTOS", "SolidWorks Parametric CAD", "LTspice", "FPGA Control Loop", "Laser Doppler Vibrometer"],
+          urls: [
+            { label: "Try Project", url: "https://github.com/lizozivzivadze-star" },
+            { label: "Live Demo", url: "https://github.com/lizozivzivadze-star" }
+          ]
+        }
+      },
+      {
+        id: "proj-2",
+        title: "BLDC Motor Driver",
+        category: "HardWare",
+        summary: "Industrial 48V/20A motor drive featuring integrated CAN-FD telemetry and power monitoring.",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        details: {
+          overview: {
+            objective: "Minimize PCB surface footprint while handling 20A continuous phase currents.",
+            results: "Achieved 96.4% efficiency at nominal load with sub-45°C thermal rise."
+          },
+          equipment: ["Altium 4-Layer High-Power Layout", "CAN-FD Bus Analyzer", "Gate Drivers / Current Shunts", "LTspice Thermal Modeling"],
+          urls: [
+            { label: "Live Demo", url: "https://github.com/lizozivzivadze-star" }
+          ]
+        }
+      },
+      {
+        id: "proj-3",
+        title: "ROS2 Inspection Robot",
+        category: "SoftWare",
+        summary: "WebGL and ROS2 interface displaying dynamic sensor fusion and LiDAR clouds at sub-20ms latency.",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        details: {
+          overview: {
+            objective: "Provide real-time 3D spatial monitoring over bandwidth-constrained links.",
+            results: "Maintained 60 FPS point cloud rendering at sub-20ms end-to-end network latency."
+          },
+          equipment: ["ROS2 Humble / C++", "WebGL / Three.js", "LiDAR Sensor Fusion", "Docker Containers", "Linux Edge Computing"],
+          urls: [
+            { label: "Try Project", url: "https://github.com/lizozivzivadze-star" },
+            { label: "Live Demo", url: "https://github.com/lizozivzivadze-star" }
+          ]
+        }
+      },
+      {
+        id: "proj-4",
+        title: "Micro-Fluidic Dosing Station",
+        category: "HW+SW",
+        summary: "Automated micro-volume liquid dispenser utilizing computer vision feedback for droplet correction.",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        details: {
+          overview: {
+            objective: "Dispense sub-microliter droplets with real-time optical volumetric validation.",
+            results: "Reduced volumetric variance to under 1.5% across 10,000 continuous test cycles."
+          },
+          equipment: ["Python / OpenCV", "Stepper Drivers / Microstepping", "3D Printing (SLA/FDM)", "C++ Control Loop", "Lab Micro-Scale Calibration"],
+          urls: [
+            { label: "Live Demo", url: "https://github.com/lizozivzivadze-star" }
+          ]
+        }
       }
+    ],
+    skills: {
+      "Electronics": [
+        { name: "PCB Layout (Altium Designer)", level: 92 },
+        { name: "Analog Signal Conditioning", level: 85 },
+        { name: "Power Electronics (DC-DC / Gate Drivers)", level: 82 },
+        { name: "High-Speed Bus Layout (CAN-FD, Ethernet)", level: 88 },
+        { name: "EMC/EMI Shielding & Noise Reduction", level: 80 },
+        { name: "Circuit Simulation (LTspice / Tina-TI)", level: 86 },
+        { name: "SMD Soldering & Lab Instrumentation", level: 90 },
+        { name: "Battery Management Systems (BMS)", level: 78 }
+      ],
+      "Embedded": [
+        { name: "STM32 / ARM Cortex-M Firmware", level: 94 },
+        { name: "Embedded C / Real-Time C++", level: 90 },
+        { name: "FreeRTOS Task Scheduling & Mutexes", level: 85 },
+        { name: "Low-Level Bus Protocols (SPI, I2C, UART)", level: 95 },
+        { name: "DMA Telemetry & Hardware Interrupts", level: 88 },
+        { name: "Bare-Metal Microcontroller Architecture", level: 86 },
+        { name: "Bootloaders & OTA Updates", level: 78 },
+        { name: "Hardware In-The-Loop (HIL) Testing", level: 82 }
+      ],
+      "Mechanical Design": [
+        { name: "SolidWorks Parametric Modeling", level: 95 },
+        { name: "Structural & Thermal FEA (ANSYS)", level: 88 },
+        { name: "GD&T Tolerance Stack-Up Analysis", level: 90 },
+        { name: "Precision Flexure & Kinematic Design", level: 86 },
+        { name: "Design for Manufacturing (DFM / DFA)", level: 92 },
+        { name: "CNC Milling & Machining Toolpaths", level: 84 },
+        { name: "Rapid Prototyping (FDM / SLA / SLS)", level: 94 },
+        { name: "Enclosure IP Ingress Protection Design", level: 80 }
+      ],
+      "Robotics": [
+        { name: "ROS2 (Robot Operating System)", level: 84 },
+        { name: "Closed-Loop PID / FOC Control Loops", level: 88 },
+        { name: "MATLAB / Simulink Model-Based Control", level: 88 },
+        { name: "C++ Data Structures & Kinematics", level: 85 }
+      ],
+      "Programming": [
+        { name: "Python / Scientific Stack (NumPy, SciPy)", level: 90 },
+        { name: "OpenCV Computer Vision Pipelines", level: 80 },
+        { name: "Linux System Administration & Bash", level: 82 },
+        { name: "Git Version Control & CI/CD Pipelines", level: 86 }
+      ]
     },
-    {
-      id: "proj-3",
-      title: "ROS2 Inspection Robot",
-      category: "SoftWare",
-      summary: "WebGL and ROS2 interface displaying dynamic sensor fusion and LiDAR clouds at sub-20ms latency.",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      details: {
-        overview: {
-          objective: "Provide real-time 3D spatial monitoring over bandwidth-constrained links.",
-          results: "Maintained 60 FPS point cloud rendering at sub-20ms end-to-end network latency."
-        },
-        equipment: ["ROS2 Humble / C++", "WebGL / Three.js", "LiDAR Sensor Fusion", "Docker Containers", "Linux Edge Computing"],
-        urls: [
-          { label: "Try Project", url: "https://github.com/lizozivzivadze-star" },
-          { label: "Live Demo", url: "https://github.com/lizozivzivadze-star" }
-        ]
+    events: [
+      {
+        id: "event-1",
+        title: "European Agentic AI Summit 2026",
+        category: "Conference",
+        summary: "Presented work on hardware-in-the-loop edge AI for real-time mechatronic systems.",
+        imageUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600",
+        details: {
+          overview: {
+            participation: "Delivered a technical workshop on integrating STM32 low-power nodes with ROS2 telemetry.",
+            outcomes: "Established key industrial contacts for future hardware benchmarking."
+          },
+          media: [
+            "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=600"
+          ],
+          urls: [
+            { label: "Demo Link", url: "https://github.com/lizozivzivadze-star" }
+          ]
+        }
+      },
+      {
+        id: "event-2",
+        title: "Benelux Mechatronics Hackathon",
+        category: "Hackathon",
+        summary: "First place solution for high-speed dynamic sorting using custom vision feedback.",
+        imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600",
+        details: {
+          overview: {
+            participation: "Lead hardware integrator and firmware developer for the team.",
+            outcomes: "Awarded First Place among 24 participating engineering teams."
+          },
+          media: [
+            "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600"
+          ],
+          urls: [
+            { label: "Demo Link", url: "https://github.com/lizozivzivadze-star" }
+          ]
+        }
       }
-    },
-    {
-      id: "proj-4",
-      title: "Micro-Fluidic Dosing Station",
-      category: "HW+SW",
-      summary: "Automated micro-volume liquid dispenser utilizing computer vision feedback for droplet correction.",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      details: {
-        overview: {
-          objective: "Dispense sub-microliter droplets with real-time optical volumetric validation.",
-          results: "Reduced volumetric variance to under 1.5% across 10,000 continuous test cycles."
-        },
-        equipment: ["Python / OpenCV", "Stepper Drivers / Microstepping", "3D Printing (SLA/FDM)", "C++ Control Loop", "Lab Micro-Scale Calibration"],
-        urls: [
-          { label: "Live Demo", url: "https://github.com/lizozivzivadze-star" }
-        ]
-      }
-    }
-  ],
-  skills: {
-    "Electronics": [
-      { name: "PCB Layout (Altium Designer)", level: 92 },
-      { name: "Analog Signal Conditioning", level: 85 },
-      { name: "Power Electronics (DC-DC / Gate Drivers)", level: 82 },
-      { name: "High-Speed Bus Layout (CAN-FD, Ethernet)", level: 88 },
-      { name: "EMC/EMI Shielding & Noise Reduction", level: 80 },
-      { name: "Circuit Simulation (LTspice / Tina-TI)", level: 86 },
-      { name: "SMD Soldering & Lab Instrumentation", level: 90 },
-      { name: "Battery Management Systems (BMS)", level: 78 }
     ],
-    "Embedded": [
-      { name: "STM32 / ARM Cortex-M Firmware", level: 94 },
-      { name: "Embedded C / Real-Time C++", level: 90 },
-      { name: "FreeRTOS Task Scheduling & Mutexes", level: 85 },
-      { name: "Low-Level Bus Protocols (SPI, I2C, UART)", level: 95 },
-      { name: "DMA Telemetry & Hardware Interrupts", level: 88 },
-      { name: "Bare-Metal Microcontroller Architecture", level: 86 },
-      { name: "Bootloaders & OTA Updates", level: 78 },
-      { name: "Hardware In-The-Loop (HIL) Testing", level: 82 }
-    ],
-    "Mechanical Design": [
-      { name: "SolidWorks Parametric Modeling", level: 95 },
-      { name: "Structural & Thermal FEA (ANSYS)", level: 88 },
-      { name: "GD&T Tolerance Stack-Up Analysis", level: 90 },
-      { name: "Precision Flexure & Kinematic Design", level: 86 },
-      { name: "Design for Manufacturing (DFM / DFA)", level: 92 },
-      { name: "CNC Milling & Machining Toolpaths", level: 84 },
-      { name: "Rapid Prototyping (FDM / SLA / SLS)", level: 94 },
-      { name: "Enclosure IP Ingress Protection Design", level: 80 }
-    ],
-    "Robotics": [
-      { name: "ROS2 (Robot Operating System)", level: 84 },
-      { name: "Closed-Loop PID / FOC Control Loops", level: 88 },
-      { name: "MATLAB / Simulink Model-Based Control", level: 88 },
-      { name: "C++ Data Structures & Kinematics", level: 85 }
-    ],
-    "Programming": [
-      { name: "Python / Scientific Stack (NumPy, SciPy)", level: 90 },
-      { name: "OpenCV Computer Vision Pipelines", level: 80 },
-      { name: "Linux System Administration & Bash", level: 82 },
-      { name: "Git Version Control & CI/CD Pipelines", level: 86 }
+    valueProps: [
+      { label: "Rapid Prototyping", imageUrl: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=600" },
+      { label: "Embedded Systems", imageUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=600" },
+      { label: "Industrial Automation", imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=600" },
+      { label: "PCB Design", imageUrl: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&q=80&w=600" },
+      { label: "Precision Manufacturing", imageUrl: "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&q=80&w=600" },
+      { label: "Robotics Integration", imageUrl: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=600" },
+      { label: "System Validation", imageUrl: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&q=80&w=600" },
+      { label: "Motion Control", imageUrl: "https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&q=80&w=600" }
     ]
-  },
-  events: [
-    {
-      id: "event-1",
-      title: "European Agentic AI Summit 2026",
-      category: "Conference",
-      summary: "Presented work on hardware-in-the-loop edge AI for real-time mechatronic systems.",
-      imageUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600",
-      details: {
-        overview: {
-          participation: "Delivered a technical workshop on integrating STM32 low-power nodes with ROS2 telemetry.",
-          outcomes: "Established key industrial contacts for future hardware benchmarking."
-        },
-        media: [
-          "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600",
-          "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=600"
-        ],
-        urls: [
-          { label: "Demo Link", url: "https://github.com/lizozivzivadze-star" }
-        ]
-      }
-    },
-    {
-      id: "event-2",
-      title: "Benelux Mechatronics Hackathon",
-      category: "Hackathon",
-      summary: "First place solution for high-speed dynamic sorting using custom vision feedback.",
-      imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600",
-      details: {
-        overview: {
-          participation: "Lead hardware integrator and firmware developer for the team.",
-          outcomes: "Awarded First Place among 24 participating engineering teams."
-        },
-        media: [
-          "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600"
-        ],
-        urls: [
-          { label: "Demo Link", url: "https://github.com/lizozivzivadze-star" }
-        ]
-      }
+  };
+
+  // ============================================================
+  // GLOBAL STATE
+  // ============================================================
+  const APP_STATE = {
+    activeProjectTab: "All",
+    projectSubTabs: {},
+    activeSkillCategory: "Electronics",
+    activeEventTab: "All",
+    eventSubTabs: {},
+    selectedDocs: { cv: false, portfolio: false }
+  };
+
+  // ============================================================
+  // ICONS
+  // ============================================================
+  const ICONS = {
+    phone: '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+    whatsapp: '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
+    mail: '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>',
+    linkedin: '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>',
+    github: '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>',
+    play: '<svg class="w-12 h-12 pointer-events-none" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'
+  };
+
+  // ============================================================
+  // UTILITIES
+  // ============================================================
+  function escapeHtml(str) {
+    if (str == null) return "";
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function extractVideoId(url) {
+    const clean = url.split("?")[0];
+    const parts = clean.split("/");
+    return parts[parts.length - 1];
+  }
+
+  function tabStyle(isActive) {
+    return isActive
+      ? "bg-[#0284c7] text-white border border-[#0284c7] font-bold rounded-md px-3 py-1.5 text-[13px] font-mono transition-colors"
+      : "bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7] rounded-md px-3 py-1.5 text-[13px] font-mono transition-colors";
+  }
+
+  function skillTabStyle(isActive) {
+    return isActive
+      ? "px-2 py-1 rounded-md border text-[12px] font-mono whitespace-nowrap bg-[#0284c7] text-white border-[#0284c7] font-bold transition-colors"
+      : "px-2 py-1 rounded-md border text-[12px] font-mono whitespace-nowrap bg-white text-[#475569] border-[#e2e8f0] hover:border-[#0284c7] transition-colors";
+  }
+
+  function subTabStyle(isActive) {
+    return isActive
+      ? "bg-[#0284c7] text-white border border-[#0284c7] font-bold rounded-md px-3 py-1.5 text-[13px] font-mono transition-colors"
+      : "bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7] rounded-md px-3 py-1.5 text-[13px] font-mono transition-colors";
+  }
+
+  function uniqueCategories(list) {
+    const seen = [];
+    list.forEach(function (item) {
+      if (seen.indexOf(item.category) === -1) seen.push(item.category);
+    });
+    return seen;
+  }
+
+  let toastTimer = null;
+  function showToast(message, kind) {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+    toast.textContent = message;
+    toast.style.backgroundColor = kind === "error" ? "#fef2f2" : "#f0f9ff";
+    toast.style.color = kind === "error" ? "#b91c1c" : "#0369a1";
+    toast.style.border = kind === "error" ? "1px solid #fecaca" : "1px solid #bae6fd";
+    toast.classList.remove("toast-hidden");
+    toast.classList.add("toast-visible");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toast.classList.remove("toast-visible");
+      toast.classList.add("toast-hidden");
+    }, 3200);
+  }
+
+  // ============================================================
+  // RENDER: HEADER + HERO
+  // ============================================================
+  function renderHero() {
+    const p = PORTFOLIO_DATA.personal;
+
+    document.getElementById("header-avatar").src = p.avatarUrl;
+    document.getElementById("header-name").textContent = p.name;
+
+    document.getElementById("hero-avatar").src = p.avatarUrl;
+    document.getElementById("hero-name").textContent = p.name;
+    document.getElementById("hero-title").textContent = p.title;
+    document.getElementById("hero-location").textContent = p.location;
+    document.getElementById("hero-statement").textContent = p.statement;
+
+    const telHref = "tel:" + p.phone.replace(/[^+\d]/g, "");
+    const contacts = document.getElementById("hero-contacts");
+    contacts.innerHTML =
+      '<a href="' + telHref + '" aria-label="Call Lizi" class="text-[#475569] hover:text-[#0284c7] transition-colors">' + ICONS.phone + "</a>" +
+      '<a href="' + escapeHtml(p.whatsapp) + '" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="text-[#475569] hover:text-[#0284c7] transition-colors">' + ICONS.whatsapp + "</a>" +
+      '<a href="mailto:' + escapeHtml(p.email) + '" aria-label="Email" class="text-[#475569] hover:text-[#0284c7] transition-colors">' + ICONS.mail + "</a>" +
+      '<a href="' + escapeHtml(p.linkedin) + '" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="text-[#475569] hover:text-[#0284c7] transition-colors">' + ICONS.linkedin + "</a>" +
+      '<a href="' + escapeHtml(p.github) + '" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="text-[#475569] hover:text-[#0284c7] transition-colors">' + ICONS.github + "</a>";
+  }
+
+  // ============================================================
+  // RENDER: PROJECTS
+  // ============================================================
+  function renderProjectSubTabContent(project, tab) {
+    if (tab === "equipment") {
+      return project.details.equipment
+        .map(function (item) {
+          return '<span class="font-mono text-[12px] bg-slate-100 text-[#0f172a] px-2 py-1 rounded border border-[#e2e8f0]">' + escapeHtml(item) + "</span>";
+        })
+        .join("");
     }
-  ],
-  valueProps: [
-    { title: "Cross-Disciplinary Integration", text: "Practical Hardware Design" },
-    { title: "Rapid Functional Prototyping", text: "Embedded Software Skills" },
-    { title: "Closed-Loop Controls", text: "Manufacturing Experience" },
-    { title: "Production-Minded Execution", text: "Rapid Problem Solving" },
-    { title: "Data-Driven Verification", text: "Rigorous Test Validation" }
-  ]
-};
-
-/* ==================================================
-   GLOBAL STATE
-================================================== */
-const APP_STATE = {
-  activeProjectTab: "All",
-  projectSubTabs: {},
-  activeSkillCategory: "Electronics",
-  activeEventTab: "All",
-  eventSubTabs: {},
-  selectedDocs: { cv: false, portfolio: false }
-};
-
-/* ==================================================
-   HELPERS
-================================================== */
-function extractVideoId(url) {
-  const match = url.match(/embed\/([a-zA-Z0-9_-]+)/);
-  return match ? match[1] : '';
-}
-
-function subTabStyle(isActive) {
-  return isActive
-    ? 'bg-[#0284c7] text-white border border-[#0284c7] font-bold rounded-md px-3 py-1.5 text-[13px] font-mono whitespace-nowrap'
-    : 'bg-white text-[#475569] border border-[#e2e8f0] hover:border-[#0284c7] rounded-md px-3 py-1.5 text-[13px] font-mono whitespace-nowrap';
-}
-
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-/* ==================================================
-   HEADER + HERO RENDERING
-================================================== */
-function renderHeader() {
-  const p = PORTFOLIO_DATA.personal;
-  document.getElementById('sticky-header').innerHTML = `
-    <div class="flex items-center gap-2 font-bold text-[#0f172a] text-[16px]">
-      <img src="${p.avatarUrl}" class="w-8 h-8 rounded-full object-cover" alt="${p.name}" />
-      <span>${p.name}</span>
-    </div>
-  `;
-}
-
-function renderHero() {
-  const p = PORTFOLIO_DATA.personal;
-  const phoneHref = `tel:${p.phone.replace(/\s+/g, '')}`;
-  const mailHref = `mailto:${p.email}`;
-  document.getElementById('hero-section').innerHTML = `
-    <div class="flex flex-row items-center gap-4">
-      <img src="${p.avatarUrl}" class="w-[80px] h-[80px] rounded-full border-2 border-[#0284c7] object-cover shrink-0" alt="${p.name}" />
-      <div class="flex flex-col items-start min-w-0">
-        <span class="text-[20px] sm:text-[22px] font-bold text-[#0f172a] whitespace-nowrap text-left">${p.name}</span>
-        <span class="font-mono font-semibold tracking-wider text-[#0369a1] text-[12px] sm:text-[13px] whitespace-nowrap overflow-hidden text-left w-full">${p.title}</span>
-        <div class="flex items-center gap-3.5 whitespace-nowrap mt-1">
-          <a href="${phoneHref}" aria-label="Call" class="text-[#475569] hover:text-[#0284c7] transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-          </a>
-          <a href="${p.whatsapp}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="text-[#475569] hover:text-[#0284c7] transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
-          </a>
-          <a href="${mailHref}" aria-label="Email" class="text-[#475569] hover:text-[#0284c7] transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path stroke-linecap="round" stroke-linejoin="round" d="M22 6l-10 7L2 6"/></svg>
-          </a>
-          <a href="${p.linkedin}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="text-[#475569] hover:text-[#0284c7] transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-          </a>
-          <a href="${p.github}" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="text-[#475569] hover:text-[#0284c7] transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
-          </a>
-        </div>
-        <span class="text-[14px] text-[#475569] font-medium text-left whitespace-nowrap mt-1">${p.location}</span>
-      </div>
-    </div>
-    <p class="w-full text-[14px] sm:text-[15px] text-[#0f172a] font-medium mt-3.5 pt-3 border-t border-slate-100 leading-relaxed">${p.statement}</p>
-  `;
-}
-
-/* ==================================================
-   PROJECTS RENDERING
-================================================== */
-function renderProjectSubTabContent(project, tab) {
-  if (tab === 'overview') {
-    return `
-      <div class="w-full flex flex-col gap-2">
-        <div>
-          <span class="font-mono font-bold text-[12px] text-[#0d9488] uppercase tracking-wide">Objective</span>
-          <p class="text-[14px] text-[#0f172a] leading-relaxed mt-0.5">${project.details.overview.objective}</p>
-        </div>
-        <div>
-          <span class="font-mono font-bold text-[12px] text-[#0284c7] uppercase tracking-wide">Results</span>
-          <p class="text-[14px] text-[#0f172a] leading-relaxed mt-0.5">${project.details.overview.results}</p>
-        </div>
-      </div>`;
-  } else if (tab === 'equipment') {
-    return project.details.equipment.map(item =>
-      `<span class="font-mono text-[12px] bg-slate-100 text-[#0f172a] px-2 py-1 rounded border border-[#e2e8f0]">${item}</span>`
-    ).join('');
-  } else if (tab === 'urls') {
-    return `<div class="w-full flex flex-col gap-2">` + project.details.urls.map(u =>
-      `<a href="${u.url}" target="_blank" rel="noopener noreferrer" class="text-[14px] font-mono font-bold text-[#0284c7] hover:text-[#0369a1] underline underline-offset-2">${u.label} →</a>`
-    ).join('') + `</div>`;
+    if (tab === "urls") {
+      return (
+        '<div class="w-full flex flex-col gap-2">' +
+        project.details.urls
+          .map(function (u) {
+            return (
+              '<a href="' + escapeHtml(u.url) + '" target="_blank" rel="noopener noreferrer" class="text-[13px] font-mono font-bold text-white bg-[#0284c7] hover:bg-[#0369a1] rounded-md px-3 py-2 text-center block transition-colors">' +
+              escapeHtml(u.label) +
+              "</a>"
+            );
+          })
+          .join("") +
+        "</div>"
+      );
+    }
+    // overview (default)
+    return (
+      '<div class="w-full flex flex-col gap-2">' +
+      '<div><span class="font-mono text-[12px] font-bold text-[#0284c7]">OBJECTIVE</span><p class="text-[14px] text-[#0f172a] mt-0.5 leading-relaxed">' +
+      escapeHtml(project.details.overview.objective) +
+      "</p></div>" +
+      '<div><span class="font-mono text-[12px] font-bold text-[#0d9488]">RESULTS</span><p class="text-[14px] text-[#0f172a] mt-0.5 leading-relaxed">' +
+      escapeHtml(project.details.overview.results) +
+      "</p></div>" +
+      "</div>"
+    );
   }
-  return '';
-}
 
-function renderProjectCard(project) {
-  const currentSubTab = APP_STATE.projectSubTabs[project.id] || 'overview';
-  const videoId = extractVideoId(project.videoUrl);
-  return `
-  <div class="w-[calc(100vw-36px)] max-w-[325px] md:w-[325px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs h-auto overflow-visible">
-    <div>
-      <div class="aspect-video rounded-md relative bg-slate-900 overflow-hidden" id="media-${project.id}">
-        <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" class="w-full h-full object-cover" alt="${project.title}" />
-        <button data-action="play-video" data-id="${project.id}" class="absolute inset-0 flex items-center justify-center bg-black/40 hover:bg-black/20 text-white transition-colors">
-          <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        </button>
-      </div>
-      <h3 class="text-[18px] font-bold text-[#0f172a] mt-2 mb-1 leading-snug">${project.title}</h3>
-      <p class="text-[14px] text-[#475569] mb-3 leading-relaxed">${project.summary}</p>
-      <div class="flex gap-1.5 mb-3 border-b border-[#e2e8f0] pb-2">
-        <button data-action="project-subtab" data-id="${project.id}" data-tab="overview" class="${subTabStyle(currentSubTab === 'overview')}">OVERVIEW</button>
-        <button data-action="project-subtab" data-id="${project.id}" data-tab="equipment" class="${subTabStyle(currentSubTab === 'equipment')}">EQUIPMENT</button>
-        <button data-action="project-subtab" data-id="${project.id}" data-tab="urls" class="${subTabStyle(currentSubTab === 'urls')}">URL</button>
-      </div>
-      <div id="content-${project.id}" class="text-[14px] text-[#0f172a] flex flex-wrap gap-1.5 break-words">
-        ${renderProjectSubTabContent(project, currentSubTab)}
-      </div>
-    </div>
-  </div>`;
-}
-
-function renderProjectTabs() {
-  const container = document.getElementById('project-tabs');
-  const categories = ['All', ...new Set(PORTFOLIO_DATA.projects.map(p => p.category))];
-  container.innerHTML = categories.map(cat =>
-    `<button data-action="select-project-tab" data-value="${cat}" class="${subTabStyle(APP_STATE.activeProjectTab === cat)}">${cat.toUpperCase()}</button>`
-  ).join('');
-}
-
-function renderProjectsCarousel() {
-  const container = document.getElementById('projects-carousel-container');
-  const filtered = APP_STATE.activeProjectTab === 'All'
-    ? PORTFOLIO_DATA.projects
-    : PORTFOLIO_DATA.projects.filter(p => p.category === APP_STATE.activeProjectTab);
-  container.innerHTML = filtered.map(renderProjectCard).join('');
-}
-
-function renderSingleProjectSubtab(projectId) {
-  const project = PORTFOLIO_DATA.projects.find(p => p.id === projectId);
-  const currentSubTab = APP_STATE.projectSubTabs[projectId];
-  const contentEl = document.getElementById(`content-${projectId}`);
-  if (!contentEl) return;
-  contentEl.innerHTML = renderProjectSubTabContent(project, currentSubTab);
-  const tabsContainer = contentEl.previousElementSibling;
-  tabsContainer.querySelectorAll('button[data-action="project-subtab"]').forEach(btn => {
-    btn.className = subTabStyle(btn.dataset.tab === currentSubTab);
-  });
-}
-
-function playProjectVideo(projectId) {
-  const project = PORTFOLIO_DATA.projects.find(p => p.id === projectId);
-  const media = document.getElementById(`media-${projectId}`);
-  if (!media || !project) return;
-  media.innerHTML = `<iframe src="${project.videoUrl}?autoplay=1" class="w-full h-full border-0" allow="autoplay" title="${project.title}"></iframe>`;
-}
-
-/* ==================================================
-   EVENTS RENDERING
-================================================== */
-function renderEventSubTabContent(event, tab) {
-  if (tab === 'overview') {
-    return `
-      <div class="w-full flex flex-col gap-2">
-        <div>
-          <span class="font-mono font-bold text-[12px] text-[#0d9488] uppercase tracking-wide">Participation</span>
-          <p class="text-[14px] text-[#0f172a] leading-relaxed mt-0.5">${event.details.overview.participation}</p>
-        </div>
-        <div>
-          <span class="font-mono font-bold text-[12px] text-[#0284c7] uppercase tracking-wide">Outcomes</span>
-          <p class="text-[14px] text-[#0f172a] leading-relaxed mt-0.5">${event.details.overview.outcomes}</p>
-        </div>
-      </div>`;
-  } else if (tab === 'media') {
-    return `<div class="w-full grid grid-cols-2 gap-1.5">` + event.details.media.map(src =>
-      `<img src="${src}" class="w-full h-20 object-cover rounded border border-[#e2e8f0]" alt="${event.title}" />`
-    ).join('') + `</div>`;
-  } else if (tab === 'urls') {
-    return `<div class="w-full flex flex-col gap-2">` + event.details.urls.map(u =>
-      `<a href="${u.url}" target="_blank" rel="noopener noreferrer" class="text-[14px] font-mono font-bold text-[#0284c7] hover:text-[#0369a1] underline underline-offset-2">${u.label} →</a>`
-    ).join('') + `</div>`;
+  function renderProjectCard(project) {
+    const currentSubTab = APP_STATE.projectSubTabs[project.id] || "overview";
+    const videoId = extractVideoId(project.videoUrl);
+    return (
+      '<div class="w-[calc(100vw-34px)] max-w-[327px] md:w-[327px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs h-auto min-h-fit overflow-visible select-none touch-pan-x">' +
+      "<div>" +
+      '<div class="aspect-video rounded-md relative bg-slate-900 overflow-hidden select-none" id="media-' + project.id + '">' +
+      '<img src="https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg" class="w-full h-full object-cover pointer-events-none" draggable="false" style="-webkit-user-drag: none;" alt="' + escapeHtml(project.title) + ' preview" />' +
+      '<button data-action="play-video" data-id="' + project.id + '" class="absolute inset-0 flex items-center justify-center bg-black/40 hover:bg-black/20 text-white transition-colors" aria-label="Play video">' +
+      ICONS.play +
+      "</button>" +
+      "</div>" +
+      '<h3 class="text-[18px] font-bold text-[#0f172a] mt-2 mb-1 leading-snug">' + escapeHtml(project.title) + "</h3>" +
+      '<p class="text-[14px] text-[#475569] mb-3 leading-relaxed">' + escapeHtml(project.summary) + "</p>" +
+      '<div class="flex gap-1.5 mb-3 border-b border-[#e2e8f0] pb-2">' +
+      '<button data-action="project-subtab" data-id="' + project.id + '" data-tab="overview" class="' + subTabStyle(currentSubTab === "overview") + '">OVERVIEW</button>' +
+      '<button data-action="project-subtab" data-id="' + project.id + '" data-tab="equipment" class="' + subTabStyle(currentSubTab === "equipment") + '">EQUIPMENT</button>' +
+      '<button data-action="project-subtab" data-id="' + project.id + '" data-tab="urls" class="' + subTabStyle(currentSubTab === "urls") + '">URL</button>' +
+      "</div>" +
+      '<div id="content-' + project.id + '" class="text-[14px] text-[#0f172a] flex flex-wrap gap-1.5 break-words">' +
+      renderProjectSubTabContent(project, currentSubTab) +
+      "</div>" +
+      "</div>" +
+      "</div>"
+    );
   }
-  return '';
-}
 
-function renderEventCard(event) {
-  const currentSubTab = APP_STATE.eventSubTabs[event.id] || 'overview';
-  return `
-  <div class="w-[calc(100vw-36px)] max-w-[325px] md:w-[325px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs h-auto overflow-visible">
-    <div>
-      <div class="aspect-video rounded-md relative bg-slate-900 overflow-hidden mb-2">
-        <img src="${event.imageUrl}" class="w-full h-full object-cover" alt="${event.title}" />
-      </div>
-      <h3 class="text-[18px] font-bold text-[#0f172a] mb-1 leading-snug">${event.title}</h3>
-      <p class="text-[14px] text-[#475569] mb-3 leading-relaxed">${event.summary}</p>
-      <div class="flex gap-1.5 mb-3 border-b border-[#e2e8f0] pb-2">
-        <button data-action="event-subtab" data-id="${event.id}" data-tab="overview" class="${subTabStyle(currentSubTab === 'overview')}">OVERVIEW</button>
-        <button data-action="event-subtab" data-id="${event.id}" data-tab="media" class="${subTabStyle(currentSubTab === 'media')}">MEDIA</button>
-        <button data-action="event-subtab" data-id="${event.id}" data-tab="urls" class="${subTabStyle(currentSubTab === 'urls')}">URL</button>
-      </div>
-      <div id="event-content-${event.id}" class="text-[14px] text-[#0f172a] flex flex-col gap-1.5 break-words">
-        ${renderEventSubTabContent(event, currentSubTab)}
-      </div>
-    </div>
-  </div>`;
-}
-
-function renderEventTabs() {
-  const container = document.getElementById('event-tabs');
-  const categories = ['All', ...new Set(PORTFOLIO_DATA.events.map(e => e.category))];
-  container.innerHTML = categories.map(cat =>
-    `<button data-action="select-event-tab" data-value="${cat}" class="${subTabStyle(APP_STATE.activeEventTab === cat)}">${cat.toUpperCase()}</button>`
-  ).join('');
-}
-
-function renderEventsCarousel() {
-  const container = document.getElementById('events-carousel-container');
-  const filtered = APP_STATE.activeEventTab === 'All'
-    ? PORTFOLIO_DATA.events
-    : PORTFOLIO_DATA.events.filter(e => e.category === APP_STATE.activeEventTab);
-  container.innerHTML = filtered.map(renderEventCard).join('');
-}
-
-function renderSingleEventSubtab(eventId) {
-  const event = PORTFOLIO_DATA.events.find(e => e.id === eventId);
-  const currentSubTab = APP_STATE.eventSubTabs[eventId];
-  const contentEl = document.getElementById(`event-content-${eventId}`);
-  if (!contentEl) return;
-  contentEl.innerHTML = renderEventSubTabContent(event, currentSubTab);
-  const tabsContainer = contentEl.previousElementSibling;
-  tabsContainer.querySelectorAll('button[data-action="event-subtab"]').forEach(btn => {
-    btn.className = subTabStyle(btn.dataset.tab === currentSubTab);
-  });
-}
-
-/* ==================================================
-   SKILLS RENDERING
-================================================== */
-function renderSkillCategories() {
-  const container = document.getElementById('skill-categories');
-  const categories = Object.keys(PORTFOLIO_DATA.skills);
-  container.innerHTML = categories.map(cat => {
-    const isActive = APP_STATE.activeSkillCategory === cat;
-    const cls = isActive
-      ? 'px-2 py-1 rounded-md border text-[12px] font-mono whitespace-nowrap bg-[#0284c7] text-white border-[#0284c7] font-bold'
-      : 'px-2 py-1 rounded-md border text-[12px] font-mono whitespace-nowrap bg-white text-[#475569] border-[#e2e8f0] hover:border-[#0284c7]';
-    return `<button data-action="select-skill-category" data-value="${cat}" class="${cls}">${cat}</button>`;
-  }).join('');
-}
-
-function renderSkillsList() {
-  const container = document.getElementById('skills-list');
-  const skills = PORTFOLIO_DATA.skills[APP_STATE.activeSkillCategory];
-  container.innerHTML = skills.map(skill => `
-    <div class="mb-3 last:mb-0">
-      <div class="flex justify-between items-center mb-1 gap-2">
-        <span class="text-[14px] font-sans text-[#0f172a] font-medium">${skill.name}</span>
-        <span class="text-[13px] font-mono text-[#0284c7] font-bold shrink-0">${skill.level}%</span>
-      </div>
-      <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-        <div class="h-full bg-[#0284c7] rounded-full" style="width: ${skill.level}%"></div>
-      </div>
-    </div>
-  `).join('');
-}
-
-/* ==================================================
-   VALUE PROPS RENDERING
-================================================== */
-function renderValueProps() {
-  const container = document.getElementById('value-props-carousel');
-  container.innerHTML = PORTFOLIO_DATA.valueProps.map(vp => `
-    <div class="w-[240px] shrink-0 snap-start bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-3.5 flex flex-col justify-between h-[190px]">
-      <span class="text-[14px] font-mono font-bold text-[#0284c7] line-clamp-2 mb-2">${vp.title}</span>
-      <span class="text-[15px] font-bold text-[#0f172a] whitespace-nowrap overflow-hidden text-ellipsis">${vp.text}</span>
-    </div>
-  `).join('');
-}
-
-/* ==================================================
-   HELP YOURSELF RENDERING
-================================================== */
-const HELP_DOCS = [
-  { key: 'cv', label: 'CV.pdf', sub: 'Full curriculum vitae' },
-  { key: 'portfolio', label: 'Portfolio.pdf', sub: 'Project case studies' }
-];
-
-function renderDocCards() {
-  const container = document.getElementById('doc-cards');
-  container.innerHTML = HELP_DOCS.map(doc => {
-    const isSelected = APP_STATE.selectedDocs[doc.key];
-    const base = 'flex items-center justify-between px-3 py-2 rounded-md cursor-pointer transition-colors';
-    const cls = isSelected ? `${base} border-2 border-[#0284c7] bg-[#f0f9ff]` : `${base} border border-[#e2e8f0] bg-white hover:border-[#0284c7]`;
-    return `
-      <div data-action="select-doc" data-value="${doc.key}" class="${cls}">
-        <div class="flex items-center gap-2">
-          <svg class="w-4 h-4 text-[#0284c7] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6M9 8h1M5 4h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>
-          <div class="flex flex-col">
-            <span class="text-[14px] font-mono font-bold text-[#0f172a]">${doc.label}</span>
-            <span class="text-[12px] font-sans text-[#475569]">${doc.sub}</span>
-          </div>
-        </div>
-        <div class="w-4 h-4 rounded-full border-2 ${isSelected ? 'bg-[#0284c7] border-[#0284c7]' : 'border-[#cbd5e1]'} flex items-center justify-center shrink-0">
-          ${isSelected ? '<svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20 8l-1.4-1.4z"/></svg>' : ''}
-        </div>
-      </div>`;
-  }).join('');
-}
-
-function showToast(message, isError) {
-  const toast = document.getElementById('toast');
-  toast.textContent = message;
-  toast.className = `fixed bottom-20 left-1/2 -translate-x-1/2 z-[60] px-4 py-2 rounded-md text-[13px] font-mono text-white shadow-lg ${isError ? 'bg-red-600' : 'bg-[#0d9488]'}`;
-  toast.style.opacity = '1';
-  clearTimeout(window.__toastTimeout);
-  window.__toastTimeout = setTimeout(() => { toast.style.opacity = '0'; }, 2500);
-}
-
-function handleSendDocs() {
-  const emailInput = document.getElementById('email-input');
-  const email = emailInput.value.trim();
-  const anySelected = APP_STATE.selectedDocs.cv || APP_STATE.selectedDocs.portfolio;
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  if (!anySelected) {
-    showToast('Select at least one document first.', true);
-    return;
+  function renderProjectTabs() {
+    const categories = ["All"].concat(uniqueCategories(PORTFOLIO_DATA.projects));
+    const el = document.getElementById("project-tabs");
+    el.innerHTML = categories
+      .map(function (cat) {
+        return '<button data-action="select-project-tab" data-value="' + escapeHtml(cat) + '" class="' + tabStyle(APP_STATE.activeProjectTab === cat) + '">' + escapeHtml(cat.toUpperCase()) + "</button>";
+      })
+      .join("");
   }
-  if (!emailValid) {
-    showToast('Enter a valid email address.', true);
-    return;
+
+  function renderProjectsCarousel() {
+    const container = document.getElementById("projects-carousel-container");
+    const filtered = PORTFOLIO_DATA.projects.filter(function (p) {
+      return APP_STATE.activeProjectTab === "All" || p.category === APP_STATE.activeProjectTab;
+    });
+    container.innerHTML = filtered.map(renderProjectCard).join('<div class="w-2 shrink-0"></div>');
   }
-  showToast('Documents sent to your email!', false);
-}
 
-/* ==================================================
-   STICKY HEADER SCROLL BEHAVIOR
-================================================== */
-function handleScroll() {
-  const header = document.getElementById('sticky-header');
-  if (window.scrollY > 100) {
-    header.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
-    header.classList.add('opacity-100');
-  } else {
-    header.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
-    header.classList.remove('opacity-100');
+  function renderProjects() {
+    renderProjectTabs();
+    renderProjectsCarousel();
   }
-}
 
-/* ==================================================
-   EVENT DELEGATION
-================================================== */
-document.body ? bindEvents() : document.addEventListener('DOMContentLoaded', bindEvents);
-function bindEvents() {
-  document.body.addEventListener('click', function(e) {
-    const target = e.target.closest('[data-action]');
-    if (!target) return;
-    const action = target.dataset.action;
+  // ============================================================
+  // RENDER: SKILLS
+  // ============================================================
+  function renderSkillCategoryTabs() {
+    const categories = Object.keys(PORTFOLIO_DATA.skills);
+    const el = document.getElementById("skill-category-tabs");
+    el.innerHTML = categories
+      .map(function (cat) {
+        return '<button data-action="select-skill-category" data-value="' + escapeHtml(cat) + '" class="' + skillTabStyle(APP_STATE.activeSkillCategory === cat) + '">' + escapeHtml(cat) + "</button>";
+      })
+      .join("");
+  }
 
-    switch (action) {
-      case 'select-project-tab':
-        APP_STATE.activeProjectTab = target.dataset.value;
+  function renderSkillsList() {
+    const list = PORTFOLIO_DATA.skills[APP_STATE.activeSkillCategory] || [];
+    const el = document.getElementById("skills-list");
+    el.innerHTML = list
+      .map(function (skill) {
+        return (
+          '<div class="mb-3 last:mb-0">' +
+          '<div class="flex justify-between items-baseline text-[13px] mb-1">' +
+          '<span class="text-[#0f172a] font-medium font-sans">' + escapeHtml(skill.name) + "</span>" +
+          '<span class="text-[#475569] font-mono">' + skill.level + "%</span>" +
+          "</div>" +
+          '<div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">' +
+          '<div class="h-full bg-[#0284c7] rounded-full" style="width:' + skill.level + '%"></div>' +
+          "</div>" +
+          "</div>"
+        );
+      })
+      .join("");
+  }
+
+  function renderSkills() {
+    renderSkillCategoryTabs();
+    renderSkillsList();
+  }
+
+  // ============================================================
+  // RENDER: EVENTS
+  // ============================================================
+  function renderEventSubTabContent(event, tab) {
+    if (tab === "media") {
+      return (
+        '<div class="w-full grid grid-cols-2 gap-1.5">' +
+        event.details.media
+          .map(function (src) {
+            return '<div class="aspect-video rounded-md overflow-hidden bg-slate-100"><img src="' + escapeHtml(src) + '" class="w-full h-full object-cover pointer-events-none" draggable="false" style="-webkit-user-drag: none;" alt="' + escapeHtml(event.title) + ' media" /></div>';
+          })
+          .join("") +
+        "</div>"
+      );
+    }
+    if (tab === "urls") {
+      return (
+        '<div class="w-full flex flex-col gap-2">' +
+        event.details.urls
+          .map(function (u) {
+            return (
+              '<a href="' + escapeHtml(u.url) + '" target="_blank" rel="noopener noreferrer" class="text-[13px] font-mono font-bold text-white bg-[#0284c7] hover:bg-[#0369a1] rounded-md px-3 py-2 text-center block transition-colors">' +
+              escapeHtml(u.label) +
+              "</a>"
+            );
+          })
+          .join("") +
+        "</div>"
+      );
+    }
+    // overview (default)
+    return (
+      '<div class="w-full flex flex-col gap-2">' +
+      '<div><span class="font-mono text-[12px] font-bold text-[#0284c7]">PARTICIPATION</span><p class="text-[14px] text-[#0f172a] mt-0.5 leading-relaxed">' +
+      escapeHtml(event.details.overview.participation) +
+      "</p></div>" +
+      '<div><span class="font-mono text-[12px] font-bold text-[#0d9488]">OUTCOMES</span><p class="text-[14px] text-[#0f172a] mt-0.5 leading-relaxed">' +
+      escapeHtml(event.details.overview.outcomes) +
+      "</p></div>" +
+      "</div>"
+    );
+  }
+
+  function renderEventCard(event) {
+    const currentSubTab = APP_STATE.eventSubTabs[event.id] || "overview";
+    return (
+      '<div class="w-[calc(100vw-34px)] max-w-[327px] md:w-[327px] shrink-0 snap-start bg-white border border-[#e2e8f0] rounded-lg p-4 flex flex-col justify-between shadow-xs h-auto min-h-fit overflow-visible select-none touch-pan-x">' +
+      "<div>" +
+      '<div class="aspect-video rounded-md relative bg-slate-900 overflow-hidden mb-2 select-none">' +
+      '<img src="' + escapeHtml(event.imageUrl) + '" class="w-full h-full object-cover pointer-events-none" draggable="false" style="-webkit-user-drag: none;" alt="' + escapeHtml(event.title) + '" />' +
+      "</div>" +
+      '<h3 class="text-[18px] font-bold text-[#0f172a] mb-1 leading-snug">' + escapeHtml(event.title) + "</h3>" +
+      '<p class="text-[14px] text-[#475569] mb-3 leading-relaxed">' + escapeHtml(event.summary) + "</p>" +
+      '<div class="flex gap-1.5 mb-3 border-b border-[#e2e8f0] pb-2">' +
+      '<button data-action="event-subtab" data-id="' + event.id + '" data-tab="overview" class="' + subTabStyle(currentSubTab === "overview") + '">OVERVIEW</button>' +
+      '<button data-action="event-subtab" data-id="' + event.id + '" data-tab="media" class="' + subTabStyle(currentSubTab === "media") + '">MEDIA</button>' +
+      '<button data-action="event-subtab" data-id="' + event.id + '" data-tab="urls" class="' + subTabStyle(currentSubTab === "urls") + '">URL</button>' +
+      "</div>" +
+      '<div id="event-content-' + event.id + '" class="text-[14px] text-[#0f172a] flex flex-col gap-1.5 break-words">' +
+      renderEventSubTabContent(event, currentSubTab) +
+      "</div>" +
+      "</div>" +
+      "</div>"
+    );
+  }
+
+  function renderEventTabs() {
+    const categories = ["All"].concat(uniqueCategories(PORTFOLIO_DATA.events));
+    const el = document.getElementById("event-tabs");
+    el.innerHTML = categories
+      .map(function (cat) {
+        return '<button data-action="select-event-tab" data-value="' + escapeHtml(cat) + '" class="' + tabStyle(APP_STATE.activeEventTab === cat) + '">' + escapeHtml(cat.toUpperCase()) + "</button>";
+      })
+      .join("");
+  }
+
+  function renderEventsCarousel() {
+    const container = document.getElementById("events-carousel-container");
+    const filtered = PORTFOLIO_DATA.events.filter(function (e) {
+      return APP_STATE.activeEventTab === "All" || e.category === APP_STATE.activeEventTab;
+    });
+    container.innerHTML = filtered.map(renderEventCard).join('<div class="w-2 shrink-0"></div>');
+  }
+
+  function renderEvents() {
+    renderEventTabs();
+    renderEventsCarousel();
+  }
+
+  // ============================================================
+  // RENDER: VALUE PROPS
+  // ============================================================
+  function renderValueProps() {
+    const el = document.getElementById("value-props-container");
+    el.innerHTML = PORTFOLIO_DATA.valueProps
+      .map(function (vp) {
+        return (
+          '<div class="w-[220px] shrink-0 snap-start bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-2.5 flex flex-col justify-between h-[195px] select-none touch-pan-x">' +
+          '<div class="aspect-[4/3] rounded-md overflow-hidden bg-slate-100 mb-2 w-full h-[135px]">' +
+          '<img src="' + escapeHtml(vp.imageUrl) + '" class="w-full h-full object-cover pointer-events-none" draggable="false" style="-webkit-user-drag: none;" alt="' + escapeHtml(vp.label) + '" />' +
+          "</div>" +
+          '<span class="text-[13px] font-mono font-bold text-[#0f172a] text-center whitespace-nowrap overflow-hidden text-ellipsis w-full mt-1">' + escapeHtml(vp.label) + "</span>" +
+          "</div>"
+        );
+      })
+      .join("");
+  }
+
+  // ============================================================
+  // RENDER: HELP YOURSELF
+  // ============================================================
+  function renderDocSelection() {
+    const cvCard = document.getElementById("doc-cv-card");
+    const portfolioCard = document.getElementById("doc-portfolio-card");
+    const cvCheck = document.getElementById("doc-cv-check");
+    const portfolioCheck = document.getElementById("doc-portfolio-check");
+
+    if (APP_STATE.selectedDocs.cv) {
+      cvCard.className = "p-3 rounded-lg border-2 border-[#0284c7] bg-[#f0f9ff] cursor-pointer flex items-center gap-3 select-none";
+      cvCheck.classList.remove("hidden");
+    } else {
+      cvCard.className = "p-3 rounded-lg border border-[#e2e8f0] bg-white cursor-pointer flex items-center gap-3 select-none";
+      cvCheck.classList.add("hidden");
+    }
+
+    if (APP_STATE.selectedDocs.portfolio) {
+      portfolioCard.className = "p-3 rounded-lg border-2 border-[#0284c7] bg-[#f0f9ff] cursor-pointer flex items-center gap-3 select-none";
+      portfolioCheck.classList.remove("hidden");
+    } else {
+      portfolioCard.className = "p-3 rounded-lg border border-[#e2e8f0] bg-white cursor-pointer flex items-center gap-3 select-none";
+      portfolioCheck.classList.add("hidden");
+    }
+  }
+
+  function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  function handleSendDocs() {
+    const emailInput = document.getElementById("email-input");
+    const email = emailInput.value.trim();
+    const anySelected = APP_STATE.selectedDocs.cv || APP_STATE.selectedDocs.portfolio;
+
+    if (!anySelected) {
+      showToast("Select at least one document first", "error");
+      return;
+    }
+    if (!isValidEmail(email)) {
+      showToast("Enter a valid email address", "error");
+      return;
+    }
+    showToast("Documents sent to " + email, "success");
+    emailInput.value = "";
+    APP_STATE.selectedDocs.cv = false;
+    APP_STATE.selectedDocs.portfolio = false;
+    renderDocSelection();
+  }
+
+  // ============================================================
+  // STICKY HEADER SCROLL BEHAVIOR
+  // ============================================================
+  function initStickyHeader() {
+    const header = document.getElementById("sticky-header");
+    let ticking = false;
+    window.addEventListener("scroll", function () {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function () {
+        if (window.scrollY > 100) {
+          header.classList.remove("header-hidden");
+          header.classList.add("header-visible");
+        } else {
+          header.classList.remove("header-visible");
+          header.classList.add("header-hidden");
+        }
+        ticking = false;
+      });
+    });
+  }
+
+  // ============================================================
+  // EVENT DELEGATION
+  // ============================================================
+  function initEventDelegation() {
+    document.body.addEventListener("click", function (e) {
+      const target = e.target.closest("[data-action]");
+      if (!target) return;
+      const action = target.getAttribute("data-action");
+
+      if (action === "select-project-tab") {
+        APP_STATE.activeProjectTab = target.getAttribute("data-value");
         renderProjectTabs();
         renderProjectsCarousel();
-        break;
-      case 'project-subtab':
-        APP_STATE.projectSubTabs[target.dataset.id] = target.dataset.tab;
-        renderSingleProjectSubtab(target.dataset.id);
-        break;
-      case 'play-video':
-        playProjectVideo(target.dataset.id);
-        break;
-      case 'select-event-tab':
-        APP_STATE.activeEventTab = target.dataset.value;
+        return;
+      }
+
+      if (action === "project-subtab") {
+        const id = target.getAttribute("data-id");
+        const tab = target.getAttribute("data-tab");
+        APP_STATE.projectSubTabs[id] = tab;
+        const project = PORTFOLIO_DATA.projects.find(function (p) { return p.id === id; });
+        if (!project) return;
+        document.getElementById("content-" + id).innerHTML = renderProjectSubTabContent(project, tab);
+        const cardTabs = target.parentElement.querySelectorAll("button");
+        cardTabs.forEach(function (btn) {
+          btn.className = subTabStyle(btn.getAttribute("data-tab") === tab);
+        });
+        return;
+      }
+
+      if (action === "play-video") {
+        const id = target.getAttribute("data-id");
+        const project = PORTFOLIO_DATA.projects.find(function (p) { return p.id === id; });
+        if (!project) return;
+        document.getElementById("media-" + id).innerHTML =
+          '<iframe src="' + project.videoUrl + '?autoplay=1" class="w-full h-full border-0" allow="autoplay" draggable="false"></iframe>';
+        return;
+      }
+
+      if (action === "select-skill-category") {
+        APP_STATE.activeSkillCategory = target.getAttribute("data-value");
+        renderSkillCategoryTabs();
+        renderSkillsList();
+        return;
+      }
+
+      if (action === "select-event-tab") {
+        APP_STATE.activeEventTab = target.getAttribute("data-value");
         renderEventTabs();
         renderEventsCarousel();
-        break;
-      case 'event-subtab':
-        APP_STATE.eventSubTabs[target.dataset.id] = target.dataset.tab;
-        renderSingleEventSubtab(target.dataset.id);
-        break;
-      case 'select-skill-category':
-        APP_STATE.activeSkillCategory = target.dataset.value;
-        renderSkillCategories();
-        renderSkillsList();
-        break;
-      case 'select-doc':
-        APP_STATE.selectedDocs[target.dataset.value] = !APP_STATE.selectedDocs[target.dataset.value];
-        renderDocCards();
-        break;
-      case 'send-docs':
+        return;
+      }
+
+      if (action === "event-subtab") {
+        const id = target.getAttribute("data-id");
+        const tab = target.getAttribute("data-tab");
+        APP_STATE.eventSubTabs[id] = tab;
+        const event = PORTFOLIO_DATA.events.find(function (ev) { return ev.id === id; });
+        if (!event) return;
+        document.getElementById("event-content-" + id).innerHTML = renderEventSubTabContent(event, tab);
+        const cardTabs = target.parentElement.querySelectorAll("button");
+        cardTabs.forEach(function (btn) {
+          btn.className = subTabStyle(btn.getAttribute("data-tab") === tab);
+        });
+        return;
+      }
+
+      if (action === "toggle-doc") {
+        const doc = target.getAttribute("data-doc");
+        APP_STATE.selectedDocs[doc] = !APP_STATE.selectedDocs[doc];
+        renderDocSelection();
+        return;
+      }
+
+      if (action === "send-docs") {
         handleSendDocs();
-        break;
-    }
-  });
-}
+        return;
+      }
+    });
+  }
 
-/* ==================================================
-   INIT
-================================================== */
-function initApp() {
-  PORTFOLIO_DATA.projects.forEach(p => { APP_STATE.projectSubTabs[p.id] = 'overview'; });
-  PORTFOLIO_DATA.events.forEach(e => { APP_STATE.eventSubTabs[e.id] = 'overview'; });
+  // ============================================================
+  // INIT
+  // ============================================================
+  function initApp() {
+    PORTFOLIO_DATA.projects.forEach(function (p) {
+      APP_STATE.projectSubTabs[p.id] = "overview";
+    });
+    PORTFOLIO_DATA.events.forEach(function (e) {
+      APP_STATE.eventSubTabs[e.id] = "overview";
+    });
 
-  renderHeader();
-  renderHero();
-  renderProjectTabs();
-  renderProjectsCarousel();
-  renderSkillCategories();
-  renderSkillsList();
-  renderEventTabs();
-  renderEventsCarousel();
-  renderValueProps();
-  renderDocCards();
+    renderHero();
+    renderProjects();
+    renderSkills();
+    renderEvents();
+    renderValueProps();
+    renderDocSelection();
 
-  window.addEventListener('scroll', handleScroll, { passive: true });
-}
+    initStickyHeader();
+    initEventDelegation();
+  }
 
-document.addEventListener('DOMContentLoaded', initApp);
+  document.addEventListener("DOMContentLoaded", initApp);
+})();
 </script>
 </body>
 </html>
