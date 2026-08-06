@@ -12,531 +12,330 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-/* =====================================================================
-   SECTION 1: GLOBAL ARCHITECTURE & DESIGN TOKENS
-   ===================================================================== */
-:root{
-  --bg-main:#FAFAFA;
-  --bg-surface:#FFFFFF;
-  --text-primary:#0F172A;
-  --text-secondary:#475569;
-  --text-muted:#64748B;
-  --border-color:#E2E8F0;
-  --accent-primary:#2563EB;
-  --accent-hover:#1D4ED8;
-  --accent-subtle:#EFF6FF;
-  --font-primary:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  --font-mono:'JetBrains Mono','Fira Code','Courier New',monospace;
-}
-
-*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
-html{ scroll-behavior:smooth; font-size:16px; }
-body{
-  font-family:var(--font-primary);
-  background:var(--bg-main);
-  color:var(--text-primary);
-  line-height:1.5;
-  -webkit-font-smoothing:antialiased;
-  -webkit-tap-highlight-color:transparent;
-}
-img{ display:block; max-width:100%; }
-button{ font:inherit; background:none; border:none; }
-a{ color:inherit; text-decoration:none; }
-
-.portfolio-container{
-  width:100%;
-  padding:15px;
-  padding-bottom:96px; /* clearance above sticky footer */
-}
-@media (min-width:768px){
-  .portfolio-container{
-    max-width:520px;
-    margin-left:auto;
-    margin-right:auto;
+  :root{
+    --bg-main:#FAFAFA;
+    --bg-surface:#FFFFFF;
+    --text-primary:#0F172A;
+    --text-secondary:#475569;
+    --text-muted:#64748B;
+    --border-color:#E2E8F0;
+    --accent-primary:#2563EB;
+    --accent-hover:#1D4ED8;
+    --accent-subtle:#EFF6FF;
+    --font-primary:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --font-mono:'JetBrains Mono','Fira Code','Courier New',monospace;
   }
-  .projects-carousel .project-card,
-  .events-carousel .event-card,
-  .value-carousel .value-card{
-    width:calc(480px - 30px - 12px - 7px);
-    min-width:calc(480px - 30px - 12px - 7px);
-    max-width:calc(480px - 30px - 12px - 7px);
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;font-size:16px;}
+  body{
+    background:var(--bg-main);
+    color:var(--text-primary);
+    font-family:var(--font-primary);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:78px;
   }
-  .sticky-header,.sticky-footer{
-    left:50%;
-    transform:translateX(-50%);
-    max-width:480px;
-    width:100%;
+
+  ::-webkit-scrollbar{ display:none; }
+
+  /* ---------- LAYOUT ---------- */
+  .portfolio-container{ padding:20px 15px 32px; width:100%; }
+  @media (min-width:768px){
+    .portfolio-container{ max-width:1024px; margin-left:auto; margin-right:auto; width:90%; padding:20px 20px 32px; }
+    .projects-carousel,.events-carousel,.value-carousel{
+      display:grid !important;
+      overflow-x:visible !important;
+      gap:20px !important;
+    }
+    .projects-carousel,.events-carousel{ grid-template-columns:repeat(2,1fr) !important; }
+    .value-carousel{ grid-template-columns:repeat(3,1fr) !important; }
+    .project-card,.event-card,.value-card{
+      width:100% !important; min-width:0 !important; max-width:100% !important;
+    }
+    .sticky-header,.sticky-footer{ position:fixed; top:0; left:0; width:100%; max-width:100%; transform:none; }
   }
-  .sticky-header.visible{ transform:translate(-50%,0); }
-}
 
-/* Shared section card shell */
-.profile-card,
-.projects-card-container,
-.skills-card,
-.events-card-container,
-.value-card-container,
-.help-yourself-card-container{
-  background:var(--bg-surface);
-  border:1px solid var(--border-color);
-  border-radius:8px;
-  margin-bottom:24px;
-  box-shadow:0 1px 3px 0 rgba(0,0,0,0.05);
-}
+  .card-shell{
+    background:var(--bg-surface);
+    border:1px solid var(--border-color);
+    border-radius:8px;
+    padding:15px;
+    margin-bottom:24px;
+    box-shadow:0 1px 3px 0 rgba(0,0,0,0.05);
+  }
 
-.section-title{
-  font-family:var(--font-primary);
-  font-size:22px;
-  font-weight:700;
-  color:var(--text-primary);
-  text-align:center;
-  margin-top:0;
-  margin-bottom:16px;
-  letter-spacing:0.05em;
-}
-.single-line-title{
-  font-size:clamp(15px,4.2vw,20px);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  width:100%;
-  letter-spacing:0.04em;
-}
+  .section-title{
+    font-family:var(--font-primary);
+    font-size:22px;
+    font-weight:700;
+    color:var(--text-primary);
+    text-align:center;
+    margin-top:0;
+    margin-bottom:16px;
+    letter-spacing:0.05em;
+  }
+  .section-title.single-line-title{
+    font-size:clamp(15px,4.2vw,20px);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;
+    letter-spacing:0.04em;
+  }
 
-/* =====================================================================
-   SECTION 2: PROFILE COMPONENT
-   ===================================================================== */
-.profile-card{ padding:15px; }
-.profile-top-row{
-  display:flex;
-  flex-direction:row;
-  align-items:center;
-  flex-wrap:nowrap;
-  gap:16px;
-}
-.profile-photo-wrap{ width:88px; height:88px; flex-shrink:0; }
-.profile-photo{
-  width:88px; height:88px;
-  object-fit:cover;
-  border-radius:50%;
-  border:1px solid var(--border-color);
-}
-.profile-content-col{
-  flex-grow:1;
-  width:100%;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  height:88px;
-}
-.profile-name{
-  font-family:var(--font-primary);
-  font-size:22px;
-  font-weight:700;
-  color:var(--text-primary);
-  text-transform:capitalize;
-  line-height:26px;
-  margin:0; padding:0;
-  width:100%;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.profile-title{
-  font-family:var(--font-mono);
-  font-size:15px;
-  font-weight:500;
-  color:var(--text-secondary);
-  line-height:20px;
-  margin:0; padding:0;
-  width:100%;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.profile-actions{
-  display:flex;
-  flex-direction:row;
-  justify-content:space-between;
-  align-items:center;
-  width:100%;
-  height:24px;
-}
-.action-btn svg{
-  width:20px; height:20px;
-  stroke:var(--text-secondary);
-  transition:stroke 0.2s ease;
-}
-.action-btn:hover svg{ stroke:var(--accent-primary); }
+  /* ---------- PROFILE ---------- */
+  .profile-card{ padding:15px; }
+  .profile-top-row{ display:flex; flex-direction:row; align-items:center; flex-wrap:nowrap; gap:16px; }
+  .profile-photo-wrap{ width:88px; height:88px; flex-shrink:0; }
+  .profile-photo{ width:88px; height:88px; object-fit:cover; border-radius:50%; border:1px solid var(--border-color); display:block; }
+  .profile-content-col{ flex-grow:1; width:100%; display:flex; flex-direction:column; justify-content:space-between; height:88px; overflow:hidden; }
+  .profile-name{
+    font-family:var(--font-primary); font-size:22px; font-weight:700; color:var(--text-primary);
+    text-transform:capitalize; line-height:26px; width:100%;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .profile-title{
+    font-family:var(--font-mono); font-size:15px; font-weight:500; color:var(--text-secondary);
+    line-height:20px; width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .profile-actions{ display:flex; flex-direction:row; justify-content:space-between; align-items:center; width:100%; height:24px; }
+  .action-btn svg{ width:20px; height:20px; }
+  .action-btn{ display:flex; align-items:center; justify-content:center; }
+  .action-btn svg{ stroke:var(--text-secondary); transition:stroke 0.2s ease; }
+  .action-btn:hover svg{ stroke:var(--accent-primary); }
+  .personal-statement{
+    font-family:var(--font-primary); font-size:16px; font-weight:400; color:var(--text-secondary);
+    line-height:22px; max-height:66px; margin-top:12px;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis;
+  }
 
-.personal-statement{
-  margin-top:12px;
-  padding-top:0;
-  font-family:var(--font-primary);
-  font-size:16px;
-  font-weight:400;
-  color:var(--text-secondary);
-  line-height:22px;
-  max-height:66px;
-  display:-webkit-box;
-  -webkit-line-clamp:3;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
+  /* ---------- FILTER / TAB BARS (shared) ---------- */
+  .filter-btn,.event-filter-btn,.skill-tab{
+    font-family:var(--font-mono); font-size:13px; font-weight:600;
+    border-radius:6px; cursor:pointer; transition:all 0.2s ease;
+    border:1px solid var(--border-color);
+    background:var(--bg-main); color:var(--text-secondary);
+  }
+  .filter-btn{ padding:6px 14px; }
+  .filter-btn.active,.event-filter-btn.active,.skill-tab.active{
+    background:var(--accent-primary); color:#FFFFFF; border-color:var(--accent-primary);
+  }
+  .projects-filter-bar{ display:flex; flex-direction:row; justify-content:center; align-items:center; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
 
-/* =====================================================================
-   SHARED: FILTER BARS, CAROUSELS, CARDS  (Sections 3 & 5)
-   ===================================================================== */
-.projects-card-container,.events-card-container{ padding:15px; }
+  .events-filter-bar{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; width:100%; margin-bottom:20px; box-sizing:border-box; }
+  .event-filter-btn{
+    height:36px; padding:0 4px; text-align:center; text-transform:uppercase;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    display:flex; align-items:center; justify-content:center;
+  }
 
-.projects-filter-bar{
-  display:flex; flex-direction:row; justify-content:center; align-items:center;
-  gap:8px; margin-bottom:20px; flex-wrap:wrap;
-}
-.events-filter-bar{
-  display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
-  width:100%; margin-bottom:20px; box-sizing:border-box;
-}
+  .skillset-tabs-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:20px; }
+  .skill-tab{
+    height:36px; padding:0 8px; font-size:13px; text-align:center; text-transform:uppercase;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
 
-.filter-btn{
-  font-family:var(--font-mono); font-size:13px; font-weight:600;
-  padding:6px 14px; border-radius:6px; cursor:pointer; transition:all 0.2s ease;
-  border:1px solid var(--border-color);
-  background:var(--bg-main); color:var(--text-secondary);
-}
-.filter-btn.active{ background:var(--accent-primary); color:#FFFFFF; border-color:var(--accent-primary); }
+  /* ---------- CAROUSELS ---------- */
+  .projects-carousel,.events-carousel,.value-carousel{
+    display:flex; flex-direction:row; gap:12px; overflow-x:auto;
+    scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none;
+    padding:4px; margin:0 -4px;
+  }
+  .project-card,.event-card,.value-card{
+    width:calc(100vw - 60px - 12px - 7px);
+    min-width:calc(100vw - 60px - 12px - 7px);
+    max-width:calc(100vw - 60px - 12px - 7px);
+    scroll-snap-align:start; flex-shrink:0;
+  }
 
-.event-filter-btn{
-  height:36px; padding:0 4px;
-  font-family:var(--font-mono); font-size:13px; font-weight:600;
-  border-radius:6px; cursor:pointer; transition:all 0.2s ease;
-  border:1px solid var(--border-color);
-  background:var(--bg-main); color:var(--text-secondary);
-  text-align:center; text-transform:uppercase;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  display:flex; align-items:center; justify-content:center;
-}
-.event-filter-btn.active{ background:var(--accent-primary); color:#FFFFFF; border-color:var(--accent-primary); }
+  /* ---------- PROJECT / EVENT CARDS ---------- */
+  .project-card{ height:485px; background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px; padding:12px; display:flex; flex-direction:column; overflow:hidden; box-sizing:border-box; }
+  .event-card{ height:460px; background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px; padding:12px; display:flex; flex-direction:column; overflow:hidden; box-sizing:border-box; }
 
-.projects-carousel,.events-carousel,.value-carousel{
-  display:flex; flex-direction:row; gap:12px;
-  overflow-x:auto; scroll-snap-type:x mandatory;
-  padding:4px; margin:0 -4px;
-  scrollbar-width:none; -ms-overflow-style:none;
-}
-.projects-carousel::-webkit-scrollbar,
-.events-carousel::-webkit-scrollbar,
-.value-carousel::-webkit-scrollbar{ display:none; }
+  .card-video-container,.card-photo-container{
+    width:100%; aspect-ratio:16/9; border-radius:6px; overflow:hidden; margin-bottom:10px; position:relative; background:#000;
+  }
+  .card-photo-container{ background:#F1F5F9; }
+  .event-cover-photo{ width:100%; height:100%; object-fit:cover; display:block; }
 
-.project-card,.event-card{
-  width:calc(100vw - 60px - 12px - 7px);
-  min-width:calc(100vw - 60px - 12px - 7px);
-  max-width:calc(100vw - 60px - 12px - 7px);
-  scroll-snap-align:start; flex-shrink:0;
-  height:460px;
-  background:var(--bg-surface);
-  border:1px solid var(--border-color);
-  border-radius:8px;
-  padding:12px;
-  display:flex; flex-direction:column; overflow:hidden; box-sizing:border-box;
-}
+  .video-placeholder{
+    width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:6px; background:linear-gradient(135deg,#0F172A,#1E293B); color:#94A3B8;
+  }
+  .video-placeholder svg{ width:30px; height:30px; stroke:#64748B; }
+  .video-placeholder span{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.05em; text-transform:uppercase; }
 
-.card-video-container,.card-photo-container{
-  width:100%; aspect-ratio:16/9; border-radius:6px; overflow:hidden;
-  margin-bottom:10px; position:relative; background:#000000;
-}
-.card-photo-container{ background:#F1F5F9; }
-.card-video-container .project-video{ width:100%; height:100%; }
-.event-cover-photo{ width:100%; height:100%; object-fit:cover; display:block; }
+  .card-header{ height:48px; overflow:hidden; }
+  .card-title{ font-family:var(--font-primary); font-size:17px; font-weight:700; color:var(--text-primary); margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:22px; }
+  .card-description{ font-family:var(--font-primary); font-size:14px; font-weight:400; color:var(--text-secondary); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:18px; }
 
-.video-placeholder{
-  width:100%; height:100%; display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:6px;
-  background:linear-gradient(135deg,#0F172A,#1E293B); color:#94A3B8;
-}
-.video-placeholder svg{ width:26px; height:26px; stroke:#64748B; }
-.video-placeholder span{
-  font-family:var(--font-mono); font-size:11px; letter-spacing:0.05em; text-transform:uppercase;
-}
+  .card-subnav{ display:flex; flex-direction:row; gap:6px; width:100%; margin-top:8px; margin-bottom:8px; }
+  .subtab-btn,.event-subtab-btn{
+    font-family:var(--font-mono); font-size:12px; font-weight:600; padding:6px 10px; border-radius:4px;
+    cursor:pointer; flex-grow:1; text-align:center; border:1px solid var(--border-color);
+    background:var(--bg-main); color:var(--text-secondary); text-decoration:none;
+  }
+  .subtab-btn.active,.event-subtab-btn.active{ background:var(--accent-primary); color:#FFFFFF; border-color:var(--accent-primary); }
+  .subtab-url-btn{ color:var(--accent-primary) !important; }
 
-.card-header{ height:48px; }
-.card-title{
-  font-family:var(--font-primary); font-size:17px; font-weight:700; color:var(--text-primary);
-  margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:22px;
-}
-.card-description{
-  font-family:var(--font-primary); font-size:14px; font-weight:400; color:var(--text-secondary);
-  margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:18px;
-}
+  .card-tab-content{ flex-grow:1; width:100%; overflow-y:hidden; box-sizing:border-box; }
+  .pane-line{ font-family:var(--font-primary); font-size:14px; color:var(--text-secondary); line-height:20px; }
+  .pane-text{ color:var(--text-secondary); }
 
-.card-subnav{
-  display:flex; flex-direction:row; gap:6px; width:100%;
-  margin-top:8px; margin-bottom:8px; padding-bottom:0; border-bottom:none;
-}
-.subtab-btn,.event-subtab-btn{
-  font-family:var(--font-mono); font-size:12px; font-weight:600;
-  padding:6px 10px; border-radius:4px; cursor:pointer; flex-grow:1; text-align:center;
-  border:1px solid var(--border-color);
-  background:var(--bg-main); color:var(--text-secondary);
-}
-.subtab-btn.active,.event-subtab-btn.active{
-  background:var(--accent-primary); color:#FFFFFF; border-color:var(--accent-primary);
-}
-.subtab-url-btn{
-  background:var(--bg-main); color:var(--accent-primary); text-decoration:none; border-color:var(--border-color);
-}
+  .tech-stack-wrap{ display:flex; flex-wrap:wrap; gap:6px; align-content:flex-start; }
+  .tech-badge{
+    font-family:var(--font-mono); font-size:12px; font-weight:500; background:var(--accent-subtle); color:var(--accent-primary);
+    border:1px solid #BFDBFE; padding:4px 8px; border-radius:4px; white-space:nowrap;
+    flex:0 1 calc(33.333% - 6px); text-align:center; box-sizing:border-box;
+  }
 
-.card-tab-content{ flex-grow:1; width:100%; height:170px; overflow-y:hidden; box-sizing:border-box; }
-.pane-overview,.event-pane-overview{ font-family:var(--font-primary); font-size:14px; color:var(--text-secondary); line-height:20px; display:none; }
-.pane-overview.active,.event-pane-overview.active{ display:block; }
-.pane-line strong{ color:var(--text-primary); }
+  .event-media-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:6px; width:100%; }
+  .lightbox-thumb{ width:100%; height:75px; object-fit:cover; border-radius:4px; cursor:pointer; border:1px solid var(--border-color); transition:transform 0.2s ease; }
+  .lightbox-thumb:hover{ transform:scale(1.03); }
 
-.pane-techstack{ display:none; flex-wrap:wrap; gap:6px; align-content:flex-start; }
-.pane-techstack.active{ display:flex; }
-.tech-badge{
-  font-family:var(--font-mono); font-size:12px; font-weight:500;
-  background:var(--accent-subtle); color:var(--accent-primary);
-  border:1px solid #BFDBFE; padding:4px 8px; border-radius:4px;
-  white-space:nowrap; flex:0 1 calc(33.333% - 6px); text-align:center; box-sizing:border-box;
-}
+  .lightbox-overlay{ position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15,23,42,0.85); display:none; align-items:center; justify-content:center; z-index:9999; cursor:zoom-out; }
+  .lightbox-overlay.open{ display:flex; }
+  #lightbox-img{ max-width:90vw; max-height:80vh; border-radius:8px; box-shadow:0 10px 25px rgba(0,0,0,0.5); }
 
-.event-pane-media{ display:none; grid-template-columns:repeat(2,1fr); gap:6px; width:100%; }
-.event-pane-media.active{ display:grid; }
-.lightbox-thumb{
-  width:100%; height:75px; object-fit:cover; border-radius:4px; cursor:pointer;
-  border:1px solid var(--border-color); transition:transform 0.2s ease;
-}
-.lightbox-thumb:hover{ transform:scale(1.03); }
-.lightbox-overlay{
-  position:fixed; top:0; left:0; width:100vw; height:100vh;
-  background:rgba(15,23,42,0.85); display:none; align-items:center; justify-content:center; z-index:9999;
-}
-.lightbox-overlay.open{ display:flex; }
-.lightbox-overlay img{
-  max-width:90vw; max-height:80vh; border-radius:8px; box-shadow:0 10px 25px rgba(0,0,0,0.5);
-}
+  /* ---------- SKILLS ---------- */
+  .skills-inner-title{ font-family:var(--font-primary); font-size:18px; font-weight:600; color:var(--text-primary); text-align:center; margin-top:0; margin-bottom:18px; }
+  .skills-display-box{ background:var(--bg-main); border:1px solid var(--border-color); border-radius:6px; padding:18px 16px; display:flex; flex-direction:column; gap:16px; }
+  .skill-row{ display:flex; flex-direction:column; gap:6px; width:100%; }
+  .skill-meta-line{ display:flex; justify-content:space-between; align-items:center; width:100%; }
+  .skill-name{ font-family:var(--font-primary); font-size:15px; font-weight:600; color:var(--text-primary); }
+  .skill-percentage{ font-family:var(--font-mono); font-size:14px; font-weight:500; color:var(--accent-primary); }
+  .progress-track{ width:100%; height:8px; background:#E2E8F0; border-radius:4px; overflow:hidden; position:relative; }
+  .progress-fill{ height:100%; width:0%; background:var(--accent-primary); border-radius:4px; transition:width 0.8s cubic-bezier(0.4,0,0.2,1); }
 
-/* =====================================================================
-   SECTION 4: SKILLSETS
-   ===================================================================== */
-.skills-card{ padding:16px; }
-.skillset-tabs-grid{
-  display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:20px;
-}
-.skill-tab{
-  height:36px; padding:0 8px;
-  font-family:var(--font-mono); font-size:13px; font-weight:600;
-  text-align:center; text-transform:uppercase; border-radius:6px; cursor:pointer;
-  transition:all 0.2s ease; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  background:var(--bg-main); color:var(--text-secondary); border:1px solid var(--border-color);
-}
-.skill-tab.active{ background:var(--accent-primary); color:#FFFFFF; border-color:var(--accent-primary); }
+  /* ---------- VALUE CARDS ---------- */
+  .value-card{ height:230px; background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px; padding:16px 20px; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; overflow:hidden; box-sizing:border-box; }
+  .value-card-header{ display:flex; align-items:center; gap:10px; margin-bottom:10px; width:100%; }
+  .value-card-icon{ width:26px; height:26px; display:flex; align-items:center; justify-content:center; color:var(--accent-primary); flex-shrink:0; }
+  .value-card-icon svg{ width:22px; height:22px; stroke:var(--accent-primary); }
+  .value-card-title{ font-family:var(--font-primary); font-size:18px; font-weight:700; color:var(--text-primary); line-height:22px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .value-card-text{
+    font-family:var(--font-primary); font-size:15.5px; font-weight:400; color:var(--text-secondary); line-height:22px; max-height:66px;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis;
+  }
 
-.skills-display-box{
-  background:var(--bg-main); border:1px solid var(--border-color); border-radius:6px;
-  padding:16px; display:flex; flex-direction:column; gap:14px;
-}
-.skills-inner-title{
-  font-family:var(--font-primary); font-size:18px; font-weight:600; color:var(--text-primary);
-  text-align:center; margin-top:0; margin-bottom:16px;
-}
-.skill-row{ display:none; flex-direction:column; gap:6px; width:100%; }
-.skill-row.active{ display:flex; }
-.skill-meta-line{ display:flex; justify-content:space-between; align-items:center; width:100%; }
-.skill-name{ font-family:var(--font-primary); font-size:15px; font-weight:600; color:var(--text-primary); }
-.skill-percentage{ font-family:var(--font-mono); font-size:14px; font-weight:500; color:var(--accent-primary); }
-.progress-track{ width:100%; height:8px; background:#E2E8F0; border-radius:4px; overflow:hidden; position:relative; }
-.progress-fill{
-  height:100%; width:0%; background:var(--accent-primary); border-radius:4px;
-  transition:width 0.8s cubic-bezier(0.4,0,0.2,1);
-}
+  /* ---------- HELP YOURSELF ---------- */
+  .help-yourself-form-stack{ display:flex; flex-direction:column; gap:12px; width:100%; box-sizing:border-box; }
+  .file-select-box{
+    height:50px; min-height:50px; width:100%; display:flex; align-items:center; padding:0 16px;
+    border-radius:8px; box-sizing:border-box; cursor:pointer; user-select:none; transition:all 0.2s ease;
+    background:var(--bg-surface); border:1px solid var(--border-color); color:var(--text-secondary);
+  }
+  .file-select-box.selected{ background:#EFF6FF; border:1.5px solid var(--accent-primary); color:var(--accent-primary); }
+  .file-checkbox{ display:none; }
+  .file-box-content{ display:flex; align-items:center; width:100%; }
+  .file-icon{ width:22px; height:22px; flex-shrink:0; stroke:currentColor; }
+  .file-label{ font-family:var(--font-primary); font-size:16px; font-weight:600; margin-left:12px; text-transform:uppercase; flex-grow:1; }
+  .checkbox-indicator{ width:20px; height:20px; border:1.5px solid var(--border-color); border-radius:4px; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s ease; }
+  .file-select-box.selected .checkbox-indicator{ background:#2563EB; border-color:#2563EB; }
+  .checkbox-indicator svg{ width:14px; height:14px; stroke:#FFFFFF; opacity:0; transition:opacity 0.15s ease; }
+  .file-select-box.selected .checkbox-indicator svg{ opacity:1; }
 
-/* =====================================================================
-   SECTION 6: WHAT DO I BRING TO THE TABLE
-   ===================================================================== */
-.value-card-container{ padding:15px; }
-.value-card{
-  width:calc(100vw - 60px - 12px - 7px);
-  min-width:calc(100vw - 60px - 12px - 7px);
-  max-width:calc(100vw - 60px - 12px - 7px);
-  scroll-snap-align:start; flex-shrink:0;
-  height:230px;
-  background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px;
-  padding:16px 20px; display:flex; flex-direction:column; justify-content:center;
-  align-items:flex-start; overflow:hidden; box-sizing:border-box;
-}
-.value-card-header{ display:flex; align-items:center; gap:10px; margin-bottom:10px; width:100%; }
-.value-card-icon{
-  width:26px; height:26px; display:flex; align-items:center; justify-content:center;
-  color:var(--accent-primary); flex-shrink:0;
-}
-.value-card-icon svg{ width:22px; height:22px; stroke:var(--accent-primary); stroke-width:2; }
-.value-card-title{
-  font-family:var(--font-primary); font-size:18px; font-weight:700; color:var(--text-primary);
-  line-height:22px; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-.value-card-text{
-  font-family:var(--font-primary); font-size:15.5px; font-weight:400; color:var(--text-secondary);
-  line-height:22px; max-height:66px;
-  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
-  overflow:hidden; text-overflow:ellipsis;
-}
+  #recipient-email{
+    height:50px; min-height:50px; width:100%; background:var(--bg-surface); border:1px solid var(--border-color);
+    border-radius:8px; padding:0 16px; box-sizing:border-box; font-family:var(--font-primary); font-size:16px; color:var(--text-primary);
+    outline:none;
+  }
+  #recipient-email:focus{ border:1.5px solid var(--accent-primary); }
+  #recipient-email::placeholder{ color:#94A3B8; font-family:var(--font-primary); font-size:16px; }
 
-/* =====================================================================
-   SECTION 7: HELP YOURSELF
-   ===================================================================== */
-.help-yourself-card-container{ padding:15px; }
-.help-yourself-form-stack{ display:flex; flex-direction:column; gap:12px; width:100%; box-sizing:border-box; }
+  .send-action-btn{
+    height:50px; min-height:50px; width:100%; background:var(--accent-primary); color:#FFFFFF; border:none;
+    border-radius:8px; font-family:var(--font-primary); font-size:17px; font-weight:700; letter-spacing:0.05em;
+    text-transform:uppercase; cursor:pointer; transition:background 0.2s ease; box-sizing:border-box;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .send-action-btn:disabled{ opacity:0.5; cursor:not-allowed; }
+  .send-action-btn:not(:disabled):hover{ background:var(--accent-hover); }
+  .send-action-btn.success{ background:#16A34A; }
+  .spinner{ width:16px; height:16px; border:2px solid rgba(255,255,255,0.4); border-top-color:#FFFFFF; border-radius:50%; animation:spin 0.7s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
 
-.file-select-box{
-  height:50px; min-height:50px; width:100%; display:flex; align-items:center;
-  padding:0 16px; border-radius:8px; box-sizing:border-box; cursor:pointer;
-  user-select:none; transition:all 0.2s ease;
-  background:var(--bg-surface); border:1px solid var(--border-color); color:var(--text-secondary);
-}
-.file-checkbox{ position:absolute; opacity:0; pointer-events:none; }
-.file-select-box:has(.file-checkbox:checked){
-  background:#EFF6FF; border:1.5px solid var(--accent-primary); color:var(--accent-primary);
-}
-.file-box-content{ display:flex; align-items:center; width:100%; }
-.file-icon{ width:22px; height:22px; flex-shrink:0; stroke:currentColor; }
-.file-label{
-  font-family:var(--font-primary); font-size:16px; font-weight:600; margin-left:12px;
-  text-transform:uppercase; flex-grow:1;
-}
-.checkbox-indicator{
-  width:20px; height:20px; border:2px solid var(--border-color); border-radius:4px; flex-shrink:0;
-  display:flex; align-items:center; justify-content:center; transition:all 0.2s ease;
-}
-.checkbox-indicator svg{ width:14px; height:14px; stroke:#FFFFFF; opacity:0; transition:opacity 0.15s ease; }
-.file-select-box:has(.file-checkbox:checked) .checkbox-indicator{ background:#2563EB; border-color:#2563EB; }
-.file-select-box:has(.file-checkbox:checked) .checkbox-indicator svg{ opacity:1; }
+  /* ---------- STICKY HEADER ---------- */
+  .sticky-header{
+    position:fixed; top:0; left:0; width:100%; height:44px; min-height:44px; z-index:100;
+    display:flex; align-items:center; justify-content:space-between; padding:0 15px; box-sizing:border-box;
+    border-bottom:1px solid rgba(226,232,240,0.8);
+    background:rgba(255,255,255,0.85); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    opacity:0; transform:translateY(-100%); pointer-events:none; transition:opacity 0.2s ease, transform 0.2s ease;
+  }
+  .sticky-header.visible{ opacity:1; transform:translateY(0); pointer-events:auto; }
+  .sticky-header-left{ display:flex; align-items:center; gap:8px; overflow:hidden; }
+  .header-mini-avatar{ width:30px; height:30px; border-radius:50%; object-fit:cover; flex-shrink:0; border:1px solid var(--border-color); }
+  .header-full-name{ font-family:var(--font-primary); font-size:16px; font-weight:700; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sticky-header-right{ margin-left:auto; display:flex; align-items:center; height:100%; }
 
-#recipient-email{
-  height:50px; min-height:50px; width:100%;
-  background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px;
-  padding:0 16px; box-sizing:border-box; font-family:var(--font-primary); font-size:16px;
-  color:var(--text-primary); outline:none;
-}
-#recipient-email:focus{ outline:1.5px solid var(--accent-primary); }
-#recipient-email::placeholder{ color:#94A3B8; font-family:var(--font-primary); font-size:16px; }
+  /* ---------- STICKY FOOTER ---------- */
+  .sticky-footer{
+    position:fixed; bottom:0; left:0; width:100%; height:auto; z-index:90;
+    background:rgba(255,255,255,0.90); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    border-top:1px solid var(--border-color); padding:8px 15px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; box-sizing:border-box;
+  }
+  .footer-line-1{ display:flex; align-items:center; justify-content:center; width:100%; }
+  .footer-copyright-text{ font-family:var(--font-mono); font-size:14.5px; font-weight:700; color:var(--text-primary); text-align:center; }
+  .footer-line-2{ display:flex; align-items:center; justify-content:center; gap:6px; width:100%; }
+  .status-pulse-dot{ width:8px; height:8px; border-radius:50%; background:#22C55E; position:relative; flex-shrink:0; animation:status-pulse 2s infinite; }
+  @keyframes status-pulse{
+    0%{ box-shadow:0 0 0 0 rgba(34,197,94,0.7); }
+    70%{ box-shadow:0 0 0 6px rgba(34,197,94,0); }
+    100%{ box-shadow:0 0 0 0 rgba(34,197,94,0); }
+  }
+  .footer-status-text{ font-family:var(--font-mono); font-size:13.5px; font-weight:500; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.04em; text-align:center; }
 
-.send-action-btn{
-  height:50px; min-height:50px; width:100%; background:var(--accent-primary); color:#FFFFFF;
-  border:none; border-radius:8px; font-family:var(--font-primary); font-size:17px; font-weight:700;
-  letter-spacing:0.05em; text-transform:uppercase; cursor:pointer; transition:background 0.2s ease;
-  box-sizing:border-box; display:flex; align-items:center; justify-content:center; gap:8px;
-}
-.send-action-btn:hover:not(:disabled){ background:var(--accent-hover); }
-.send-action-btn:disabled{ opacity:0.5; cursor:not-allowed; }
-.send-action-btn.success{ background:#16A34A; }
-.spinner{
-  width:16px; height:16px; border:2px solid rgba(255,255,255,0.4); border-top-color:#FFFFFF;
-  border-radius:50%; animation:spin 0.7s linear infinite;
-}
-@keyframes spin{ to{ transform:rotate(360deg); } }
-
-/* =====================================================================
-   SECTION 8: STICKY HEADER
-   ===================================================================== */
-.sticky-header{
-  position:fixed; top:0; left:0; width:100%; height:44px; min-height:44px; z-index:100;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 15px; box-sizing:border-box;
-  border-bottom:1px solid rgba(226,232,240,0.8);
-  background:rgba(255,255,255,0.85);
-  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
-  opacity:0; transform:translateY(-100%); pointer-events:none;
-  transition:opacity 0.2s ease, transform 0.2s ease;
-}
-.sticky-header.visible{ opacity:1; transform:translateY(0); pointer-events:auto; }
-.sticky-header-left{ display:flex; align-items:center; gap:8px; }
-.header-mini-avatar{
-  width:30px; height:30px; border-radius:50%; object-fit:cover; flex-shrink:0;
-  border:1px solid var(--border-color);
-}
-.header-full-name{
-  font-family:var(--font-primary); font-size:16px; font-weight:700; color:var(--text-primary);
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-.sticky-header-right{ margin-left:auto; display:flex; align-items:center; height:100%; width:auto; }
-
-/* =====================================================================
-   SECTION 9: STICKY FOOTER
-   ===================================================================== */
-.sticky-footer{
-  position:fixed; bottom:0; left:0; width:100%; height:auto; z-index:90;
-  background:rgba(255,255,255,0.90); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
-  border-top:1px solid var(--border-color); padding:8px 15px;
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
-  box-sizing:border-box;
-}
-.footer-line-1,.footer-line-2{ display:flex; align-items:center; justify-content:center; width:100%; gap:6px; }
-.footer-copyright-text{
-  font-family:var(--font-mono); font-size:14.5px; font-weight:700; color:var(--text-primary); text-align:center;
-}
-.status-pulse-dot{
-  width:8px; height:8px; border-radius:50%; background:#22C55E; position:relative; flex-shrink:0;
-  animation:status-pulse 2s infinite;
-}
-@keyframes status-pulse{
-  0%{ box-shadow:0 0 0 0 rgba(34,197,94,0.7); }
-  70%{ box-shadow:0 0 0 6px rgba(34,197,94,0); }
-  100%{ box-shadow:0 0 0 0 rgba(34,197,94,0); }
-}
-.footer-status-text{
-  font-family:var(--font-mono); font-size:13.5px; font-weight:500; color:var(--text-secondary);
-  text-transform:uppercase; letter-spacing:0.04em; text-align:center;
-}
-
-/* Accessibility */
-a:focus-visible,button:focus-visible,input:focus-visible{
-  outline:2px solid var(--accent-primary); outline-offset:2px;
-}
-@media (prefers-reduced-motion:reduce){
-  *{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
-}
+  .placeholder-note{ font-family:var(--font-mono); font-size:11px; color:#94A3B8; text-align:center; margin-top:6px; letter-spacing:0.02em; }
 </style>
 </head>
 <body>
 
-<!-- Lightbox (global, shared by all event media galleries) -->
-<div id="lightbox-modal" class="lightbox-overlay" onclick="closeLightbox()">
-  <img id="lightbox-img" src="" alt="Enlarged Media">
-</div>
-
-<!-- SECTION 8: Sticky Header -->
+<!-- STICKY HEADER -->
 <header id="sticky-header" class="sticky-header">
   <div class="sticky-header-left">
-    <img id="header-mini-avatar" src="" alt="Profile Mini" class="header-mini-avatar">
-    <span id="header-full-name" class="header-full-name"></span>
+    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=80" alt="Profile Mini" class="header-mini-avatar">
+    <span class="header-full-name">Lizi Zivzivadze</span>
   </div>
   <div class="sticky-header-right"></div>
 </header>
 
 <main class="portfolio-container">
 
-  <!-- SECTION 2: Profile -->
-  <section id="profile-section" class="profile-card">
+  <!-- PROFILE -->
+  <section id="profile-section" class="card-shell profile-card">
     <div class="profile-top-row">
       <div class="profile-photo-wrap">
-        <img id="profile-photo" src="" alt="Lizi Zivzivadze Profile Photo" class="profile-photo">
+        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80" alt="Lizi Zivzivadze Profile Photo" class="profile-photo">
       </div>
       <div class="profile-content-col">
-        <h1 id="profile-name" class="profile-name"></h1>
-        <p id="profile-title" class="profile-title"></p>
-        <nav class="profile-actions" id="profile-actions"></nav>
+        <h1 class="profile-name">Lizi Zivzivadze</h1>
+        <p class="profile-title">Electromechanical Engineer</p>
+        <nav class="profile-actions">
+          <a href="tel:+32499221680" title="Call Lizi Zivzivadze" target="_self" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </a>
+          <a href="https://wa.me/32499221680" title="WhatsApp Chat" target="_blank" rel="noopener noreferrer" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/></svg>
+          </a>
+          <a href="mailto:lizozivzivadze@gmail.com" title="Email Lizi Zivzivadze" target="_self" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/lizizivzivadze/" title="LinkedIn Profile" target="_blank" rel="noopener noreferrer" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="https://github.com/lizozivzivadze-star" title="GitHub Profile" target="_blank" rel="noopener noreferrer" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          </a>
+        </nav>
       </div>
     </div>
-    <p id="personal-statement" class="personal-statement"></p>
+    <p class="personal-statement">Electromechanical engineer specialized in embedded systems, mechatronics, and real-time control. Focused on robust hardware-software integration for complex challenges.</p>
   </section>
 
-  <!-- SECTION 3: Projects -->
-  <section id="projects-section" class="projects-card-container">
+  <!-- PROJECTS -->
+  <section id="projects-section" class="card-shell projects-card-container">
     <h2 class="section-title">PROJECTS</h2>
-    <nav class="projects-filter-bar">
+    <nav class="projects-filter-bar" id="projects-filter-bar">
       <button class="filter-btn active" data-filter="all">ALL</button>
       <button class="filter-btn" data-filter="hw-sw">HW+SW</button>
       <button class="filter-btn" data-filter="hw"><b>H</b>ard<b>W</b>are</button>
@@ -545,47 +344,60 @@ a:focus-visible,button:focus-visible,input:focus-visible{
     <div class="projects-carousel" id="projects-carousel"></div>
   </section>
 
-  <!-- SECTION 4: Skillsets -->
-  <section id="skills-section" class="skills-card">
+  <!-- SKILLSETS -->
+  <section id="skills-section" class="card-shell skills-card">
     <h2 class="section-title">SKILLSETS</h2>
-    <nav class="skillset-tabs-grid" id="skillset-tabs-grid"></nav>
+    <nav class="skillset-tabs-grid" id="skillset-tabs-grid">
+      <button class="skill-tab active" data-skillset="mechatronics">MECHATRONICS</button>
+      <button class="skill-tab" data-skillset="embedded">EMBEDDED</button>
+      <button class="skill-tab" data-skillset="software">SOFTWARE</button>
+      <button class="skill-tab" data-skillset="cad-cam">CAD / CAM</button>
+      <button class="skill-tab" data-skillset="controls">CONTROLS</button>
+      <button class="skill-tab" data-skillset="prototyping">PROTOTYPING</button>
+    </nav>
     <div class="skills-display-box">
       <h3 class="skills-inner-title">Skills</h3>
-      <div id="skill-rows"></div>
+      <div id="skills-rows"></div>
     </div>
   </section>
 
-  <!-- SECTION 5: Events -->
-  <section id="events-section" class="events-card-container">
+  <!-- EVENTS -->
+  <section id="events-section" class="card-shell events-card-container">
     <h2 class="section-title">EVENTS</h2>
-    <nav class="events-filter-bar" id="events-filter-bar"></nav>
+    <nav class="events-filter-bar" id="events-filter-bar">
+      <button class="event-filter-btn active" data-filter="all">ALL</button>
+      <button class="event-filter-btn" data-filter="hackathon">HACKATHON</button>
+      <button class="event-filter-btn" data-filter="conference">CONFERENCE</button>
+      <button class="event-filter-btn" data-filter="expo">EXPO</button>
+      <button class="event-filter-btn" data-filter="meetup">MEETUP</button>
+    </nav>
     <div class="events-carousel" id="events-carousel"></div>
   </section>
 
-  <!-- SECTION 6: What Do I Bring to the Table -->
-  <section id="value-section" class="value-card-container">
+  <!-- WHAT DO I BRING TO THE TABLE -->
+  <section id="value-section" class="card-shell value-card-container">
     <h2 class="section-title single-line-title">WHAT DO I BRING TO THE TABLE?</h2>
     <div class="value-carousel" id="value-carousel"></div>
   </section>
 
-  <!-- SECTION 7: Help Yourself -->
-  <section id="help-yourself-section" class="help-yourself-card-container">
+  <!-- HELP YOURSELF -->
+  <section id="help-yourself-section" class="card-shell help-yourself-card-container">
     <h2 class="section-title">HELP YOURSELF</h2>
     <form id="help-yourself-form" class="help-yourself-form-stack">
-      <label class="file-select-box">
+      <label class="file-select-box" data-box="cv">
         <input type="checkbox" name="selected_files" value="cv" class="file-checkbox">
         <span class="file-box-content">
-          <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/></svg>
-          <span class="file-label">CV</span>
-          <span class="checkbox-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+          <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          <span class="file-label">[CV]</span>
+          <span class="checkbox-indicator"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
         </span>
       </label>
-      <label class="file-select-box">
+      <label class="file-select-box" data-box="portfolio">
         <input type="checkbox" name="selected_files" value="portfolio" class="file-checkbox">
         <span class="file-box-content">
-          <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/></svg>
-          <span class="file-label">PORTFOLIO</span>
-          <span class="checkbox-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+          <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          <span class="file-label">[CV | PORTFOLIO]</span>
+          <span class="checkbox-indicator"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
         </span>
       </label>
       <input type="email" id="recipient-email" name="user_email" placeholder="your.email@example.com" required>
@@ -595,7 +407,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 
 </main>
 
-<!-- SECTION 9: Sticky Footer -->
+<!-- STICKY FOOTER -->
 <footer id="sticky-footer" class="sticky-footer">
   <div class="footer-line-1">
     <span class="footer-copyright-text">© 2026 Lizi Zivzivadze</span>
@@ -606,316 +418,233 @@ a:focus-visible,button:focus-visible,input:focus-visible{
   </div>
 </footer>
 
+<!-- LIGHTBOX -->
+<div id="lightbox-modal" class="lightbox-overlay" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="Enlarged Media">
+</div>
+
 <script>
-/* =====================================================================
-   DATA — edit everything below to update site content.
-   Fields containing "ADD_" / null are placeholders for you to fill in.
-   ===================================================================== */
-const PLACEHOLDER_IMG = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="225" viewBox="0 0 400 225">' +
-  '<rect width="400" height="225" fill="#F1F5F9"/>' +
-  '<g fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-  '<rect x="150" y="82" width="100" height="70" rx="6"/><circle cx="175" cy="105" r="7"/>' +
-  '<path d="M150 140l25-25 20 20 15-15 40 32"/></g>' +
-  '<text x="200" y="185" font-family="monospace" font-size="12" fill="#94A3B8" text-anchor="middle">ADD PHOTO</text>' +
-  '</svg>'
-);
-
+/* ============================================================
+   PORTFOLIO DATA
+   ============================================================ */
 const PORTFOLIO_DATA = {
-  profile: {
-    name: "Lizi Zivzivadze",
-    title: "Electromechanical Engineer",
-    photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
-    statement: "Electromechanical engineer specialized in embedded systems, mechatronics, and real-time control. Focused on robust hardware-software integration for complex challenges.",
-    phone: "+32499221680",
-    whatsapp: "32499221680",
-    email: "lizozivzivadze@gmail.com",
-    linkedin: "https://www.linkedin.com/in/lizizivzivadze/",
-    github: "https://github.com/lizozivzivadze-star"
-  },
-
   projects: [
     {
       id: "tactical-field-unit",
       category: "hw-sw",
       title: "AI Tactical Field Unit",
-      description: "ESP32 voice assistant chaining Whisper, Claude & TTS",
-      videoId: null, // ADD_YOUTUBE_ID
-      liveUrl: "https://github.com/lizozivzivadze-star", // ADD_LIVE_URL
-      objective: "Build a fully portable, voice-activated assistant on an ESP32 that could capture speech, reason about it, and respond aloud with no laptop in the loop.",
-      results: "Chained Groq Whisper, Claude, and ElevenLabs TTS into a working perfboard prototype with an INMP441 mic, MAX98357 amplifier, and SSD1306 display — learning I2S audio, PCM/WAV handling, and ESP32 heap management along the way.",
-      techStack: ["ESP32","I2S","Whisper API","Claude API","ElevenLabs","C++"]
+      description: "ESP32 voice assistant chaining Whisper, Claude & ElevenLabs",
+      objective: "Build a portable, voice-activated field assistant on an ESP32 that captures speech, routes it through an AI reasoning pipeline, and speaks the response back — entirely from a handheld, battery-powered unit.",
+      results: "Working perfboard prototype chaining Groq Whisper transcription, Claude Sonnet reasoning, and ElevenLabs speech synthesis over I2S audio and HTTP streaming. Learned I2S protocol, PCM/WAV handling, and ESP32 heap management under load.",
+      stack: ["ESP32","INMP441 Mic","MAX98357 Amp","SSD1306 OLED","Groq Whisper","Claude Sonnet","ElevenLabs TTS","I2S Protocol"],
+      url: "https://github.com/lizozivzivadze-star"
     },
     {
       id: "dcbench",
       category: "sw",
       title: "DCBench",
-      description: "Browser simulation of a DC machines lab test bench",
-      videoId: null, // ADD_YOUTUBE_ID
-      liveUrl: "https://github.com/lizozivzivadze-star", // ADD_LIVE_URL
-      objective: "Recreate the university's coupled DC motor/generator lab bench in the browser so students can practice wiring and diagnostics before touching the real hardware.",
-      results: "Delivered a five-milestone build (physics core, SVG components, wiring/netlist, fault engine with logging, AI tutor), then simplified the UI for beginners and stood up an n8n backend with 13 workflows and a PostgreSQL schema.",
-      techStack: ["JavaScript","SVG","Canvas","n8n","PostgreSQL","Physics Sim"]
+      description: "Browser sim of the KU Leuven DC machines lab bench",
+      objective: "Recreate the university's DC Machines Laboratory Test Bench 1 (coupled DC motor + generator) as a zero-dependency browser simulation so students can rehearse safely before touching the real equipment.",
+      results: "Delivered all 5 milestones — physics core, SVG components, wiring/netlist, faults + data logger, and an AI tutor — plus a 13-workflow n8n backend with a PostgreSQL schema and a shared rules engine that runs identically client- and server-side.",
+      stack: ["Vanilla ES Modules","SVG / Canvas","CSS3","n8n","PostgreSQL","OpenAPI","GitHub Pages"],
+      url: "https://github.com/lizozivzivadze-star"
     },
     {
       id: "argus",
       category: "sw",
       title: "ARGUS",
-      description: "Single-file ISR app powered by Claude Vision",
-      videoId: null, // ADD_YOUTUBE_ID
-      liveUrl: "https://github.com/lizozivzivadze-star", // ADD_LIVE_URL
-      objective: "Explore how a vision-capable model could turn a live webcam feed into structured intelligence reporting, entirely from a single HTML file.",
-      results: "Built a tactical HUD interface that arms/disarms a webcam, runs configurable auto-analysis intervals through the Claude Vision API, and generates NATO SALUTE reports with threat-level assessments and a timestamped event log.",
-      techStack: ["Claude Vision API","JavaScript","HTML5"]
+      description: "Webcam ISR app generating NATO SALUTE reports",
+      objective: "Explore how a vision-language model could act as a real-time ISR (Intelligence, Surveillance, Reconnaissance) analyst inside a browser, with no backend server involved.",
+      results: "A single-file HTML app with a tactical amber HUD that arms a webcam feed, runs configurable-interval analysis through Claude's Vision API, and outputs structured NATO SALUTE threat-level reports with a timestamped event log.",
+      stack: ["HTML5","Vanilla JS","Claude Vision API","getUserMedia","Tactical HUD UI"],
+      url: "https://github.com/lizozivzivadze-star"
     },
     {
       id: "ghostlens",
       category: "sw",
       title: "GhostLens",
-      description: "Simulated multispectral imaging in the browser",
-      videoId: null, // ADD_YOUTUBE_ID
-      liveUrl: "https://github.com/lizozivzivadze-star", // ADD_LIVE_URL
-      objective: "Give people a hands-on feel for how NIR, UV, LWIR, and X-ray imaging change what a scene reveals, without access to real sensors.",
-      results: "Built a dependency-free, single-file tool using HTML5 Canvas that switches between four simulated filter modes, deployed directly as a static page.",
-      techStack: ["JavaScript","HTML5 Canvas","Image Processing"]
+      description: "Simulated multispectral imaging tool (NIR/UV/LWIR/X-ray)",
+      objective: "Simulate how a scene would look under imaging modalities engineers rarely get hands-on access to, to build intuition for spectral-imaging concepts covered in coursework.",
+      results: "A dependency-free HTML5 Canvas application with real-time switching between four simulated spectral filter modes, built as a single portable file with no backend.",
+      stack: ["HTML5 Canvas","Vanilla JS","Canvas Filter Pipelines"],
+      url: "https://github.com/lizozivzivadze-star"
     }
   ],
 
-  skillsetTabs: [
-    { id:"mechatronics", label:"MECHATRONICS" },
-    { id:"embedded", label:"EMBEDDED" },
-    { id:"software", label:"SOFTWARE" },
-    { id:"cad-cam", label:"CAD / CAM" },
-    { id:"controls", label:"CONTROLS" },
-    { id:"prototyping", label:"PROTOTYPING" }
-  ],
+  skillsets: {
+    "mechatronics": [
+      {name:"DC Motor & Generator Theory", pct:88},
+      {name:"Sensor Integration", pct:82},
+      {name:"Actuator Selection", pct:78},
+      {name:"System-Level Debugging", pct:85},
+      {name:"Electromechanical Design", pct:80}
+    ],
+    "embedded": [
+      {name:"ESP32 / Arduino C++", pct:85},
+      {name:"I2S Audio Protocol", pct:78},
+      {name:"Heap & Memory Management", pct:75},
+      {name:"Serial / HTTP Streaming", pct:80},
+      {name:"Peripheral Drivers (OLED, I2C)", pct:77}
+    ],
+    "software": [
+      {name:"Vanilla JavaScript", pct:90},
+      {name:"HTML5 Canvas & SVG", pct:87},
+      {name:"REST / Vision APIs", pct:83},
+      {name:"n8n Workflow Automation", pct:79},
+      {name:"PostgreSQL", pct:72}
+    ],
+    "cad-cam": [
+      {name:"Siemens NX", pct:84},
+      {name:"Moldflow Analysis", pct:76},
+      {name:"Injection Mold Design", pct:74},
+      {name:"GD&T", pct:70},
+      {name:"DFM Principles", pct:73}
+    ],
+    "controls": [
+      {name:"Closed-Loop Control", pct:76},
+      {name:"PID Fundamentals", pct:74},
+      {name:"RAMI 4.0 / Industry 4.0", pct:80},
+      {name:"Line Balancing", pct:78},
+      {name:"OPC UA Concepts", pct:70}
+    ],
+    "prototyping": [
+      {name:"Perfboard & Soldering", pct:82},
+      {name:"Rapid Iteration", pct:88},
+      {name:"FFmpeg Media Pipelines", pct:80},
+      {name:"Single-File Web Deployment", pct:90},
+      {name:"GitHub Pages Deployment", pct:85}
+    ]
+  },
 
-  // percentages are placeholders — tune to taste
-  skills: [
-    { category:"mechatronics", name:"Sensor Integration", pct:85 },
-    { category:"mechatronics", name:"System Modeling", pct:80 },
-    { category:"mechatronics", name:"Actuator Selection", pct:78 },
-    { category:"mechatronics", name:"Signal Conditioning", pct:75 },
-    { category:"mechatronics", name:"Mech-Electrical Interfacing", pct:82 },
-
-    { category:"embedded", name:"I2S Audio Protocols", pct:80 },
-    { category:"embedded", name:"ESP32 Firmware", pct:85 },
-    { category:"embedded", name:"Real-Time Control Loops", pct:78 },
-    { category:"embedded", name:"Memory & Heap Management", pct:75 },
-    { category:"embedded", name:"Serial / HTTP Comms", pct:82 },
-
-    { category:"software", name:"Vanilla JavaScript", pct:90 },
-    { category:"software", name:"LLM API Integration", pct:88 },
-    { category:"software", name:"Physics Simulation", pct:80 },
-    { category:"software", name:"n8n Workflow Automation", pct:78 },
-    { category:"software", name:"PostgreSQL", pct:72 },
-
-    { category:"cad-cam", name:"NX CAD Modeling", pct:80 },
-    { category:"cad-cam", name:"Moldflow Analysis", pct:72 },
-    { category:"cad-cam", name:"GD&T", pct:70 },
-    { category:"cad-cam", name:"Assembly Modeling", pct:76 },
-    { category:"cad-cam", name:"DFM Review", pct:68 },
-
-    { category:"controls", name:"DC Motor / Generator Theory", pct:85 },
-    { category:"controls", name:"PID Fundamentals", pct:75 },
-    { category:"controls", name:"Fault Diagnostics", pct:78 },
-    { category:"controls", name:"Closed-Loop Systems", pct:74 },
-    { category:"controls", name:"Instrumentation", pct:76 },
-
-    { category:"prototyping", name:"Rapid Iteration", pct:88 },
-    { category:"prototyping", name:"Perfboard Assembly", pct:80 },
-    { category:"prototyping", name:"FFmpeg Media Pipelines", pct:82 },
-    { category:"prototyping", name:"Benchtop Testing", pct:78 },
-    { category:"prototyping", name:"Hands-On Lab Work", pct:85 }
-  ],
-
-  eventFilters: [
-    { filter:"all", label:"ALL" },
-    { filter:"hackathon", label:"HACKATHON" },
-    { filter:"conference", label:"CONFERENCE" },
-    { filter:"expo", label:"EXPO" },
-    { filter:"meetup", label:"MEETUP" }
-  ],
-
-  // Template placeholders — replace with your real events
   events: [
     {
       id: "event-1",
       category: "hackathon",
-      title: "ADD_EVENT_NAME",
-      description: "Edit this card with your event details",
-      coverPhoto: null, // ADD_EVENT_IMAGE_URL
-      participation: "[Insert event participation role/details]",
-      outcomes: "[Insert key outcomes/achievements]",
-      media: [null, null, null, null], // ADD_THUMB_URLs
-      officialUrl: "#" // ADD_EVENT_URL
+      title: "[Add Event Title]",
+      description: "[Add a one-line description]",
+      image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80",
+      participation: "[Describe your role — team member, solo build, mentor, etc.]",
+      outcomes: "[Describe key outcomes or achievements]",
+      media: [
+        "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=300&q=80",
+        "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=300&q=80",
+        "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=300&q=80",
+        "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=300&q=80"
+      ],
+      url: "#"
     },
     {
       id: "event-2",
       category: "conference",
-      title: "ADD_EVENT_NAME",
-      description: "Edit this card with your event details",
-      coverPhoto: null,
-      participation: "[Insert event participation role/details]",
-      outcomes: "[Insert key outcomes/achievements]",
-      media: [null, null, null, null],
-      officialUrl: "#"
+      title: "[Add Event Title]",
+      description: "[Add a one-line description]",
+      image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80",
+      participation: "[Describe your role — attendee, speaker, poster session, etc.]",
+      outcomes: "[Describe key outcomes or achievements]",
+      media: [
+        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=300&q=80",
+        "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=300&q=80",
+        "https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&w=300&q=80",
+        "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=300&q=80"
+      ],
+      url: "#"
     }
   ],
 
-  valueCards: [
+  values: [
     {
       title: "Hardware/Software Integration",
-      icon: "cpu",
-      text: "Bridging the gap between electromechanical hardware and real-time software. Experienced in developing embedded control logic and automated firmware."
+      text: "Bridging the gap between electromechanical hardware and real-time software. Experienced in developing embedded control logic and automated firmware.",
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg>'
     },
     {
       title: "Robust System Design",
-      icon: "shield",
-      text: "Designing clean, maintainable mechatronic architectures focused on deterministic execution, thorough testing protocols, and robust component selection."
+      text: "Designing clean, maintainable mechatronic architectures focused on deterministic execution, thorough testing protocols, and robust component selection.",
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>'
     },
     {
       title: "Rapid Prototype Execution",
-      icon: "zap",
-      text: "Accelerating project lifecycles through rapid iteration, custom CAD modeling, microcontroller programming, and hands-on laboratory assembly."
+      text: "Accelerating project lifecycles through rapid iteration, custom CAD modeling, microcontroller programming, and hands-on laboratory assembly.",
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>'
     }
   ]
 };
 
-/* =====================================================================
-   ICONS
-   ===================================================================== */
-const ICONS = {
-  phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
-  whatsapp: '<path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/>',
-  mail: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
-  linkedin: '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>',
-  github: '<path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/>',
-  cpu: '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/>',
-  shield: '<path d="M20 13c0 5-3.5 7.5-7.5 9-.5.5-1.5.5-2 0C6.5 20.5 3 18 3 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C13.5 3.8 16 5 18 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
-  zap: '<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>',
-  video: '<path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2"/>'
-};
-function svgIcon(name, extraAttrs){
-  return '<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" ' + (extraAttrs||'') + '>' + ICONS[name] + '</svg>';
-}
+const CATEGORY_LABELS = { "hw-sw":"HW+SW", "hw":"HARDWARE", "sw":"SOFTWARE" };
 
-/* =====================================================================
-   RENDER: PROFILE
-   ===================================================================== */
-function renderProfile(){
-  const p = PORTFOLIO_DATA.profile;
-  document.getElementById('profile-photo').src = p.photo;
-  document.getElementById('profile-name').textContent = p.name;
-  document.getElementById('profile-title').textContent = p.title;
-  document.getElementById('personal-statement').textContent = p.statement;
-  document.getElementById('header-mini-avatar').src = p.photo;
-  document.getElementById('header-full-name').textContent = p.name;
-
-  const actions = document.getElementById('profile-actions');
-  actions.innerHTML = `
-    <a href="tel:${p.phone}" title="Call ${p.name}" target="_self" class="action-btn">${svgIcon('phone','stroke-width="2"')}</a>
-    <a href="https://wa.me/${p.whatsapp}" title="WhatsApp Chat" target="_blank" rel="noopener noreferrer" class="action-btn">${svgIcon('whatsapp','stroke-width="2"')}</a>
-    <a href="mailto:${p.email}" title="Email ${p.name}" target="_self" class="action-btn">${svgIcon('mail','stroke-width="2"')}</a>
-    <a href="${p.linkedin}" title="LinkedIn Profile" target="_blank" rel="noopener noreferrer" class="action-btn">${svgIcon('linkedin','stroke-width="2" fill="none"')}</a>
-    <a href="${p.github}" title="GitHub Profile" target="_blank" rel="noopener noreferrer" class="action-btn">${svgIcon('github','stroke-width="2"')}</a>
-  `;
-}
-
-/* =====================================================================
+/* ============================================================
    RENDER: PROJECTS
-   ===================================================================== */
+   ============================================================ */
 function renderProjects(){
-  const wrap = document.getElementById('projects-carousel');
-  wrap.innerHTML = PORTFOLIO_DATA.projects.map(function(proj){
-    const videoInner = proj.videoId
-      ? `<iframe class="project-video" src="https://www.youtube-nocookie.com/embed/${proj.videoId}?enablejsapi=1" title="${proj.title} Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;"></iframe>`
-      : `<div class="video-placeholder">${svgIcon('video','stroke-width="2"')}<span>Add Demo Video</span></div>`;
-    const badges = proj.techStack.map(function(t){ return `<span class="tech-badge">${t}</span>`; }).join('');
-    return `
-    <article class="project-card" data-category="${proj.category}">
-      <div class="card-video-container">${videoInner}</div>
+  const el = document.getElementById("projects-carousel");
+  el.innerHTML = PORTFOLIO_DATA.projects.map(p => `
+    <article class="project-card" data-category="${p.category}">
+      <div class="card-video-container">
+        <div class="video-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Demo video coming soon</span>
+        </div>
+      </div>
       <div class="card-header">
-        <h3 class="card-title">${proj.title}</h3>
-        <p class="card-description">${proj.description}</p>
+        <h3 class="card-title">${p.title}</h3>
+        <p class="card-description">${p.description}</p>
       </div>
       <nav class="card-subnav">
         <button class="subtab-btn active" data-tab="overview">OVERVIEW</button>
         <button class="subtab-btn" data-tab="techstack">TECH STACK</button>
-        <a href="${proj.liveUrl}" target="_blank" rel="noopener noreferrer" class="subtab-btn subtab-url-btn">URL ↗</a>
+        <a href="${p.url}" target="_blank" rel="noopener noreferrer" class="subtab-btn subtab-url-btn">URL ↗</a>
       </nav>
       <div class="card-tab-content">
-        <div class="pane-overview active">
-          <p class="pane-line"><strong>Objective:</strong> <span class="pane-text">${proj.objective}</span></p>
-          <p class="pane-line" style="margin-top:8px;"><strong>Results:</strong> <span class="pane-text">${proj.results}</span></p>
+        <div class="pane-overview">
+          <p class="pane-line"><strong>Objective:</strong> <span class="pane-text">${p.objective}</span></p>
+          <p class="pane-line" style="margin-top:8px;"><strong>Results:</strong> <span class="pane-text">${p.results}</span></p>
         </div>
-        <div class="pane-techstack">${badges}</div>
+        <div class="pane-techstack tech-stack-wrap" style="display:none;">
+          ${p.stack.map(s => `<span class="tech-badge">${s}</span>`).join("")}
+        </div>
       </div>
-    </article>`;
-  }).join('');
+    </article>
+  `).join("");
 }
 
-/* =====================================================================
+/* ============================================================
    RENDER: SKILLS
-   ===================================================================== */
+   ============================================================ */
 function renderSkills(){
-  const tabsWrap = document.getElementById('skillset-tabs-grid');
-  tabsWrap.innerHTML = PORTFOLIO_DATA.skillsetTabs.map(function(tab,i){
-    return `<button class="skill-tab${i===0?' active':''}" data-skillset="${tab.id}">${tab.label}</button>`;
-  }).join('');
-
-  const rowsWrap = document.getElementById('skill-rows');
-  rowsWrap.innerHTML = PORTFOLIO_DATA.skills.map(function(s,i){
-    const isFirstCategory = s.category === PORTFOLIO_DATA.skillsetTabs[0].id;
-    return `
-    <div class="skill-row${isFirstCategory?' active':''}" data-category="${s.category}" style="${i>0?'margin-top:0;':''}">
-      <div class="skill-meta-line">
-        <span class="skill-name">${s.name}</span>
-        <span class="skill-percentage">${s.pct}%</span>
+  const el = document.getElementById("skills-rows");
+  el.innerHTML = Object.entries(PORTFOLIO_DATA.skillsets).map(([cat, skills]) => {
+    return skills.map(s => `
+      <div class="skill-row" data-category="${cat}" style="display:${cat === 'mechatronics' ? 'flex' : 'none'};">
+        <div class="skill-meta-line">
+          <span class="skill-name">${s.name}</span>
+          <span class="skill-percentage">${s.pct}%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:0%;" data-target-width="${s.pct}%"></div>
+        </div>
       </div>
-      <div class="progress-track">
-        <div class="progress-fill" style="width:0%;" data-target-width="${s.pct}%"></div>
-      </div>
-    </div>`;
-  }).join('');
-
-  // apply the 14px gap manually since rows are injected as flat HTML
-  const container = rowsWrap;
-  container.style.display = 'flex';
-  container.style.flexDirection = 'column';
-  container.style.gap = '14px';
-
+    `).join("");
+  }).join("");
   animateVisibleFills();
 }
+
 function animateVisibleFills(){
-  document.querySelectorAll('.skill-row.active .progress-fill').forEach(function(f){ f.style.width = '0%'; });
-  setTimeout(function(){
-    document.querySelectorAll('.skill-row.active .progress-fill').forEach(function(f){
-      f.style.width = f.getAttribute('data-target-width');
-    });
+  const rows = document.querySelectorAll('.skill-row[style*="display: flex"] .progress-fill, .skill-row[style*="display:flex"] .progress-fill');
+  rows.forEach(f => f.style.width = "0%");
+  setTimeout(() => {
+    rows.forEach(f => { f.style.width = f.getAttribute("data-target-width"); });
   }, 50);
 }
 
-/* =====================================================================
+/* ============================================================
    RENDER: EVENTS
-   ===================================================================== */
+   ============================================================ */
 function renderEvents(){
-  const filterWrap = document.getElementById('events-filter-bar');
-  filterWrap.innerHTML = PORTFOLIO_DATA.eventFilters.map(function(f,i){
-    return `<button class="event-filter-btn${i===0?' active':''}" data-filter="${f.filter}">${f.label}</button>`;
-  }).join('');
-
-  const wrap = document.getElementById('events-carousel');
-  wrap.innerHTML = PORTFOLIO_DATA.events.map(function(ev){
-    const cover = ev.coverPhoto || PLACEHOLDER_IMG;
-    const thumbs = ev.media.map(function(url){
-      const src = url || PLACEHOLDER_IMG;
-      return `<img src="${src}" alt="Event Media" class="lightbox-thumb" onclick="openLightbox('${src}')">`;
-    }).join('');
-    return `
+  const el = document.getElementById("events-carousel");
+  el.innerHTML = PORTFOLIO_DATA.events.map(ev => `
     <article class="event-card" data-category="${ev.category}">
       <div class="card-photo-container">
-        <img src="${cover}" alt="Event Photo" class="event-cover-photo">
+        <img src="${ev.image}" alt="Event Photo" class="event-cover-photo">
       </div>
       <div class="card-header">
         <h3 class="card-title">${ev.title}</h3>
@@ -924,204 +653,206 @@ function renderEvents(){
       <nav class="card-subnav">
         <button class="event-subtab-btn active" data-tab="overview">OVERVIEW</button>
         <button class="event-subtab-btn" data-tab="media">MEDIA</button>
-        <a href="${ev.officialUrl}" target="_blank" rel="noopener noreferrer" class="event-subtab-btn subtab-url-btn">URL ↗</a>
+        <a href="${ev.url}" target="_blank" rel="noopener noreferrer" class="event-subtab-btn subtab-url-btn">URL ↗</a>
       </nav>
       <div class="card-tab-content">
-        <div class="event-pane-overview active">
+        <div class="event-pane-overview">
           <p class="pane-line"><strong>Participation:</strong> <span class="pane-text">${ev.participation}</span></p>
           <p class="pane-line" style="margin-top:8px;"><strong>Outcomes:</strong> <span class="pane-text">${ev.outcomes}</span></p>
+          <p class="placeholder-note">Swap in your real event details here</p>
         </div>
-        <div class="event-pane-media">${thumbs}</div>
+        <div class="event-pane-media event-media-grid" style="display:none;">
+          ${ev.media.map(m => `<img src="${m}" alt="Event Media" class="lightbox-thumb" onclick="openLightbox('${m}')">`).join("")}
+        </div>
       </div>
-    </article>`;
-  }).join('');
+    </article>
+  `).join("");
 }
 
-/* =====================================================================
+/* ============================================================
    RENDER: VALUE CARDS
-   ===================================================================== */
-function renderValueCards(){
-  const wrap = document.getElementById('value-carousel');
-  wrap.innerHTML = PORTFOLIO_DATA.valueCards.map(function(v){
-    return `
+   ============================================================ */
+function renderValues(){
+  const el = document.getElementById("value-carousel");
+  el.innerHTML = PORTFOLIO_DATA.values.map(v => `
     <article class="value-card">
       <div class="value-card-header">
-        <span class="value-card-icon">${svgIcon(v.icon,'stroke-width="2"')}</span>
+        <span class="value-card-icon">${v.icon}</span>
         <h3 class="value-card-title">${v.title}</h3>
       </div>
       <p class="value-card-text">${v.text}</p>
-    </article>`;
-  }).join('');
+    </article>
+  `).join("");
 }
 
-/* =====================================================================
-   INTERACTION: PROJECT FILTER BAR
-   ===================================================================== */
-document.querySelector('.projects-filter-bar').addEventListener('click', function(e){
-  const btn = e.target.closest('.filter-btn');
+/* ============================================================
+   FILTER LOGIC — PROJECTS
+   ============================================================ */
+document.getElementById("projects-filter-bar").addEventListener("click", (e) => {
+  const btn = e.target.closest(".filter-btn");
   if(!btn) return;
-  document.querySelectorAll('.projects-filter-bar .filter-btn').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
+  document.querySelectorAll("#projects-filter-bar .filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
   const filter = btn.dataset.filter;
-  document.querySelectorAll('#projects-carousel .project-card').forEach(function(card){
-    const show = filter === 'all' || card.dataset.category === filter;
-    card.style.display = show ? 'flex' : 'none';
+  document.querySelectorAll("#projects-carousel .project-card").forEach(card => {
+    card.style.display = (filter === "all" || card.dataset.category === filter) ? "flex" : "none";
   });
 });
 
-/* =====================================================================
-   INTERACTION: EVENTS FILTER BAR (delegated, since it's rendered dynamically)
-   ===================================================================== */
-document.getElementById('events-filter-bar').addEventListener('click', function(e){
-  const btn = e.target.closest('.event-filter-btn');
+/* ============================================================
+   FILTER LOGIC — EVENTS
+   ============================================================ */
+document.getElementById("events-filter-bar").addEventListener("click", (e) => {
+  const btn = e.target.closest(".event-filter-btn");
   if(!btn) return;
-  document.querySelectorAll('#events-filter-bar .event-filter-btn').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
+  document.querySelectorAll("#events-filter-bar .event-filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
   const filter = btn.dataset.filter;
-  document.querySelectorAll('#events-carousel .event-card').forEach(function(card){
-    const show = filter === 'all' || card.dataset.category === filter;
-    card.style.display = show ? 'flex' : 'none';
+  document.querySelectorAll("#events-carousel .event-card").forEach(card => {
+    card.style.display = (filter === "all" || card.dataset.category === filter) ? "flex" : "none";
   });
 });
 
-/* =====================================================================
-   INTERACTION: PROJECT CARD SUB-TABS (Overview / Tech Stack)
-   ===================================================================== */
-document.getElementById('projects-carousel').addEventListener('click', function(e){
-  const btn = e.target.closest('.subtab-btn');
-  if(!btn || btn.classList.contains('subtab-url-btn')) return;
-  const card = btn.closest('.project-card');
-  card.querySelectorAll('.subtab-btn').forEach(function(b){ if(!b.classList.contains('subtab-url-btn')) b.classList.remove('active'); });
-  btn.classList.add('active');
+/* ============================================================
+   SUB-TAB LOGIC — PROJECT & EVENT CARDS (event delegation)
+   ============================================================ */
+document.getElementById("projects-carousel").addEventListener("click", (e) => {
+  const btn = e.target.closest(".subtab-btn");
+  if(!btn || btn.tagName === "A") return;
+  const card = btn.closest(".project-card");
+  card.querySelectorAll(".subtab-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
   const tab = btn.dataset.tab;
-  card.querySelector('.pane-overview').classList.toggle('active', tab === 'overview');
-  card.querySelector('.pane-techstack').classList.toggle('active', tab === 'techstack');
+  card.querySelector(".pane-overview").style.display = tab === "overview" ? "block" : "none";
+  card.querySelector(".pane-techstack").style.display = tab === "techstack" ? "flex" : "none";
 });
 
-/* =====================================================================
-   INTERACTION: EVENT CARD SUB-TABS (Overview / Media)
-   ===================================================================== */
-document.getElementById('events-carousel').addEventListener('click', function(e){
-  const btn = e.target.closest('.event-subtab-btn');
-  if(!btn || btn.classList.contains('subtab-url-btn')) return;
-  const card = btn.closest('.event-card');
-  card.querySelectorAll('.event-subtab-btn').forEach(function(b){ if(!b.classList.contains('subtab-url-btn')) b.classList.remove('active'); });
-  btn.classList.add('active');
+document.getElementById("events-carousel").addEventListener("click", (e) => {
+  const btn = e.target.closest(".event-subtab-btn");
+  if(!btn || btn.tagName === "A") return;
+  const card = btn.closest(".event-card");
+  card.querySelectorAll(".event-subtab-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
   const tab = btn.dataset.tab;
-  card.querySelector('.event-pane-overview').classList.toggle('active', tab === 'overview');
-  card.querySelector('.event-pane-media').classList.toggle('active', tab === 'media');
+  card.querySelector(".event-pane-overview").style.display = tab === "overview" ? "block" : "none";
+  card.querySelector(".event-pane-media").style.display = tab === "media" ? "grid" : "none";
 });
 
-/* =====================================================================
-   INTERACTION: SKILLSET TABS + FILL ANIMATION
-   ===================================================================== */
-document.getElementById('skillset-tabs-grid').addEventListener('click', function(e){
-  const btn = e.target.closest('.skill-tab');
+/* ============================================================
+   SKILLSET TAB SWITCHING + FILL ANIMATION
+   ============================================================ */
+document.getElementById("skillset-tabs-grid").addEventListener("click", (e) => {
+  const btn = e.target.closest(".skill-tab");
   if(!btn) return;
-  document.querySelectorAll('.skill-tab').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
+  document.querySelectorAll("#skillset-tabs-grid .skill-tab").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
   const skillset = btn.dataset.skillset;
-  document.querySelectorAll('.skill-row').forEach(function(row){
-    row.classList.toggle('active', row.dataset.category === skillset);
+
+  document.querySelectorAll(".skill-row").forEach(row => {
+    row.style.display = row.dataset.category === skillset ? "flex" : "none";
   });
-  animateVisibleFills();
+
+  document.querySelectorAll('.skill-row[data-category="' + skillset + '"] .progress-fill').forEach(f => {
+    f.style.width = "0%";
+  });
+  setTimeout(() => {
+    document.querySelectorAll('.skill-row[data-category="' + skillset + '"] .progress-fill').forEach(f => {
+      f.style.width = f.getAttribute("data-target-width");
+    });
+  }, 50);
 });
 
-/* =====================================================================
-   INTERACTION: LIGHTBOX
-   ===================================================================== */
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
 function openLightbox(src){
-  document.getElementById('lightbox-img').src = src;
-  document.getElementById('lightbox-modal').classList.add('open');
+  document.getElementById("lightbox-img").src = src;
+  document.getElementById("lightbox-modal").classList.add("open");
 }
 function closeLightbox(){
-  document.getElementById('lightbox-modal').classList.remove('open');
-  document.getElementById('lightbox-img').src = '';
+  document.getElementById("lightbox-modal").classList.remove("open");
+  document.getElementById("lightbox-img").src = "";
 }
-document.getElementById('lightbox-img').addEventListener('click', function(e){ e.stopPropagation(); });
 
-/* =====================================================================
-   INTERACTION: STICKY HEADER VISIBILITY (IntersectionObserver)
-   ===================================================================== */
-const stickyHeader = document.getElementById('sticky-header');
-const profileSection = document.getElementById('profile-section');
-new IntersectionObserver(function(entries){
-  entries.forEach(function(entry){
-    stickyHeader.classList.toggle('visible', !entry.isIntersecting);
+/* ============================================================
+   STICKY HEADER — INTERSECTION OBSERVER
+   ============================================================ */
+const stickyHeader = document.getElementById("sticky-header");
+const profileSection = document.getElementById("profile-section");
+const headerObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      stickyHeader.classList.remove("visible");
+    } else {
+      stickyHeader.classList.add("visible");
+    }
   });
-}, { threshold: 0 }).observe(profileSection);
+}, { threshold: 0 });
+headerObserver.observe(profileSection);
 
-/* =====================================================================
-   INTERACTION: HELP YOURSELF FORM
-   ===================================================================== */
-const form = document.getElementById('help-yourself-form');
-const emailInput = document.getElementById('recipient-email');
-const sendBtn = document.getElementById('send-pdf-btn');
-const fileChecks = document.querySelectorAll('.file-checkbox');
+/* ============================================================
+   HELP YOURSELF — FORM LOGIC
+   ============================================================ */
+const fileBoxes = document.querySelectorAll(".file-select-box");
+const emailInput = document.getElementById("recipient-email");
+const sendBtn = document.getElementById("send-pdf-btn");
+const helpForm = document.getElementById("help-yourself-form");
 
-// TODO: point this at a real Formspree / EmailJS / serverless endpoint before going live.
-const FORM_ENDPOINT = null;
-const OWNER_EMAIL = PORTFOLIO_DATA.profile.email;
-
-function validateForm(){
-  const anySelected = Array.from(fileChecks).some(function(c){ return c.checked; });
-  const emailValid = emailInput.checkValidity() && emailInput.value.trim().length > 0;
-  sendBtn.disabled = !(anySelected && emailValid);
+function isValidEmail(value){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
-fileChecks.forEach(function(c){ c.addEventListener('change', validateForm); });
-emailInput.addEventListener('input', validateForm);
 
-form.addEventListener('submit', function(e){
+function refreshSendState(){
+  const anyChecked = Array.from(document.querySelectorAll(".file-checkbox")).some(cb => cb.checked);
+  sendBtn.disabled = !(anyChecked && isValidEmail(emailInput.value));
+}
+
+fileBoxes.forEach(box => {
+  const checkbox = box.querySelector(".file-checkbox");
+  box.addEventListener("click", (e) => {
+    e.preventDefault();
+    checkbox.checked = !checkbox.checked;
+    box.classList.toggle("selected", checkbox.checked);
+    refreshSendState();
+  });
+});
+
+emailInput.addEventListener("input", refreshSendState);
+
+helpForm.addEventListener("submit", (e) => {
   e.preventDefault();
   if(sendBtn.disabled) return;
 
-  const selectedFiles = Array.from(fileChecks).filter(function(c){ return c.checked; }).map(function(c){ return c.value; });
-  const userEmail = emailInput.value.trim();
-  const originalLabel = 'SEND';
+  const selectedFiles = Array.from(document.querySelectorAll(".file-checkbox"))
+    .filter(cb => cb.checked)
+    .map(cb => cb.value);
 
   sendBtn.disabled = true;
   sendBtn.innerHTML = '<span class="spinner"></span> SENDING...';
 
-  const payload = {
-    recipient: userEmail,
-    files: selectedFiles,
-    owner: OWNER_EMAIL,
-    subject: "Portfolio Alert: Asset Requested",
-    body: "User " + userEmail + " requested " + selectedFiles.join(', ') + " at " + new Date().toISOString()
-  };
-
-  const dispatch = FORM_ENDPOINT
-    ? fetch(FORM_ENDPOINT, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) })
-    : Promise.resolve(); // no endpoint configured yet — simulate locally
-
-  dispatch.then(function(){
-    sendBtn.classList.add('success');
-    sendBtn.innerHTML = 'SENT ✓';
-    setTimeout(function(){
-      sendBtn.classList.remove('success');
-      sendBtn.innerHTML = originalLabel;
-      form.reset();
-      validateForm();
+  // Simulated dual-notification dispatch (client-side placeholder —
+  // wire this up to a real Formspree / EmailJS / serverless endpoint).
+  setTimeout(() => {
+    sendBtn.classList.add("success");
+    sendBtn.innerHTML = "SENT ✓";
+    setTimeout(() => {
+      sendBtn.classList.remove("success");
+      sendBtn.innerHTML = "SEND";
+      helpForm.reset();
+      fileBoxes.forEach(box => box.classList.remove("selected"));
+      refreshSendState();
     }, 4000);
-  }).catch(function(err){
-    console.error('Send failed:', err);
-    sendBtn.innerHTML = 'ERROR — TRY AGAIN';
-    setTimeout(function(){
-      sendBtn.innerHTML = originalLabel;
-      validateForm();
-    }, 2500);
-  });
+  }, 900);
 });
 
-/* =====================================================================
+/* ============================================================
    INIT
-   ===================================================================== */
-renderProfile();
+   ============================================================ */
 renderProjects();
 renderSkills();
 renderEvents();
-renderValueCards();
-validateForm();
+renderValues();
+refreshSendState();
 </script>
 </body>
 </html>
