@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Lizi Zivzivadze — Electromechanical Engineer</title>
-<meta name="description" content="Portfolio of Lizi Zivzivadze, Electromechanical Engineer specialized in embedded systems, mechatronic architecture, and real-time control workflows.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-/* ============================================================
-   1. GLOBAL ARCHITECTURE & DESIGN TOKENS
-   ============================================================ */
+/* =====================================================================
+   SECTION 1: GLOBAL ARCHITECTURE & DESIGN TOKENS
+   ===================================================================== */
 :root{
   --bg-main:#FAFAFA;
   --bg-surface:#FFFFFF;
@@ -27,46 +27,86 @@
   --accent-subtle:#EFF6FF;
   --font-primary:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   --font-mono:'JetBrains Mono','Fira Code','Courier New',monospace;
-  --header-height:44px;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; font-size:16px; }
 body{
   font-family:var(--font-primary);
-  font-size:16px;
-  line-height:1.5;
   background:var(--bg-main);
   color:var(--text-primary);
+  line-height:1.5;
   -webkit-font-smoothing:antialiased;
   -webkit-tap-highlight-color:transparent;
 }
-img{display:block;max-width:100%;}
-button{font:inherit;background:none;border:none;}
-a{color:inherit;text-decoration:none;}
-:focus-visible{outline:2px solid var(--accent-primary);outline-offset:2px;}
+img{ display:block; max-width:100%; }
+button{ font:inherit; background:none; border:none; }
+a{ color:inherit; text-decoration:none; }
 
-.app-shell{
-  max-width:430px;
-  margin:0 auto;
-  padding:15px 15px 96px;
-  position:relative;
+.portfolio-container{
+  width:100%;
+  padding:15px;
+  padding-bottom:96px; /* clearance above sticky footer */
+}
+@media (min-width:768px){
+  .portfolio-container{
+    max-width:520px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  .projects-carousel .project-card,
+  .events-carousel .event-card,
+  .value-carousel .value-card{
+    width:calc(480px - 30px - 12px - 7px);
+    min-width:calc(480px - 30px - 12px - 7px);
+    max-width:calc(480px - 30px - 12px - 7px);
+  }
+  .sticky-header,.sticky-footer{
+    left:50%;
+    transform:translateX(-50%);
+    max-width:480px;
+    width:100%;
+  }
+  .sticky-header.visible{ transform:translate(-50%,0); }
 }
 
-/* Hide scrollbars on carousels while keeping scroll functional */
-.no-scrollbar{scrollbar-width:none;-ms-overflow-style:none;}
-.no-scrollbar::-webkit-scrollbar{display:none;}
-
-/* ============================================================
-   2. PROFILE COMPONENT
-   ============================================================ */
-.profile-card{
+/* Shared section card shell */
+.profile-card,
+.projects-card-container,
+.skills-card,
+.events-card-container,
+.value-card-container,
+.help-yourself-card-container{
   background:var(--bg-surface);
   border:1px solid var(--border-color);
   border-radius:8px;
-  padding:15px;
   margin-bottom:24px;
   box-shadow:0 1px 3px 0 rgba(0,0,0,0.05);
 }
+
+.section-title{
+  font-family:var(--font-primary);
+  font-size:22px;
+  font-weight:700;
+  color:var(--text-primary);
+  text-align:center;
+  margin-top:0;
+  margin-bottom:16px;
+  letter-spacing:0.05em;
+}
+.single-line-title{
+  font-size:clamp(15px,4.2vw,20px);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  width:100%;
+  letter-spacing:0.04em;
+}
+
+/* =====================================================================
+   SECTION 2: PROFILE COMPONENT
+   ===================================================================== */
+.profile-card{ padding:15px; }
 .profile-top-row{
   display:flex;
   flex-direction:row;
@@ -74,15 +114,16 @@ a{color:inherit;text-decoration:none;}
   flex-wrap:nowrap;
   gap:16px;
 }
-.profile-photo-wrap{width:88px;height:88px;flex-shrink:0;}
+.profile-photo-wrap{ width:88px; height:88px; flex-shrink:0; }
 .profile-photo{
-  width:88px;height:88px;
+  width:88px; height:88px;
   object-fit:cover;
   border-radius:50%;
   border:1px solid var(--border-color);
 }
 .profile-content-col{
   flex-grow:1;
+  width:100%;
   min-width:0;
   display:flex;
   flex-direction:column;
@@ -91,21 +132,25 @@ a{color:inherit;text-decoration:none;}
 }
 .profile-name{
   font-family:var(--font-primary);
-  font-size:20px;
+  font-size:22px;
   font-weight:700;
   color:var(--text-primary);
   text-transform:capitalize;
-  line-height:24px;
+  line-height:26px;
+  margin:0; padding:0;
+  width:100%;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
 .profile-title{
   font-family:var(--font-mono);
-  font-size:13px;
+  font-size:15px;
   font-weight:500;
   color:var(--text-secondary);
-  line-height:18px;
+  line-height:20px;
+  margin:0; padding:0;
+  width:100%;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -118,27 +163,22 @@ a{color:inherit;text-decoration:none;}
   width:100%;
   height:24px;
 }
-.action-btn{
-  width:20px;height:20px;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-}
 .action-btn svg{
-  width:20px;height:20px;
+  width:20px; height:20px;
   stroke:var(--text-secondary);
   transition:stroke 0.2s ease;
 }
-.action-btn:hover svg{stroke:var(--accent-primary);}
+.action-btn:hover svg{ stroke:var(--accent-primary); }
+
 .personal-statement{
-  margin-top:15px;
-  padding-top:15px;
-  border-top:1px solid var(--border-color);
+  margin-top:12px;
+  padding-top:0;
   font-family:var(--font-primary);
-  font-size:14px;
+  font-size:16px;
   font-weight:400;
   color:var(--text-secondary);
-  line-height:20px;
-  max-height:60px;
+  line-height:22px;
+  max-height:66px;
   display:-webkit-box;
   -webkit-line-clamp:3;
   -webkit-box-orient:vertical;
@@ -146,491 +186,418 @@ a{color:inherit;text-decoration:none;}
   text-overflow:ellipsis;
 }
 
-/* ============================================================
-   SHARED: section title / filter tabs / carousels / cards
-   ============================================================ */
-.section-title{
-  font-family:var(--font-primary);
-  font-size:20px;
-  font-weight:700;
-  color:var(--text-primary);
-  text-align:center;
-  margin-bottom:16px;
-  letter-spacing:0.05em;
-}
-.single-line-title{
-  font-size:clamp(13px,3.8vw,18px);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  width:100%;
-  letter-spacing:0.04em;
-}
+/* =====================================================================
+   SHARED: FILTER BARS, CAROUSELS, CARDS  (Sections 3 & 5)
+   ===================================================================== */
+.projects-card-container,.events-card-container{ padding:15px; }
 
-.tab-bar{
-  display:flex;
-  flex-direction:row;
-  justify-content:center;
-  align-items:center;
-  gap:8px;
-  margin-bottom:20px;
-  flex-wrap:wrap;
-}
-.tab-btn{
-  font-family:var(--font-mono);
-  font-size:12px;
-  font-weight:600;
-  padding:6px 14px;
-  border-radius:6px;
-  cursor:pointer;
-  transition:all 0.2s ease;
-  border:1px solid var(--border-color);
-  background:var(--bg-main);
-  color:var(--text-secondary);
-}
-.tab-btn.active{
-  background:var(--accent-primary);
-  color:#FFFFFF;
-  border-color:var(--accent-primary);
+.projects-filter-bar{
+  display:flex; flex-direction:row; justify-content:center; align-items:center;
+  gap:8px; margin-bottom:20px; flex-wrap:wrap;
 }
 .events-filter-bar{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  width:100%;
-  margin-bottom:20px;
-  box-sizing:border-box;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
+  width:100%; margin-bottom:20px; box-sizing:border-box;
 }
+
+.filter-btn{
+  font-family:var(--font-mono); font-size:13px; font-weight:600;
+  padding:6px 14px; border-radius:6px; cursor:pointer; transition:all 0.2s ease;
+  border:1px solid var(--border-color);
+  background:var(--bg-main); color:var(--text-secondary);
+}
+.filter-btn.active{ background:var(--accent-primary); color:#FFFFFF; border-color:var(--accent-primary); }
+
 .event-filter-btn{
-  height:36px;
-  padding:0 4px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-transform:uppercase;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  height:36px; padding:0 4px;
+  font-family:var(--font-mono); font-size:13px; font-weight:600;
+  border-radius:6px; cursor:pointer; transition:all 0.2s ease;
+  border:1px solid var(--border-color);
+  background:var(--bg-main); color:var(--text-secondary);
+  text-align:center; text-transform:uppercase;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  display:flex; align-items:center; justify-content:center;
 }
+.event-filter-btn.active{ background:var(--accent-primary); color:#FFFFFF; border-color:var(--accent-primary); }
 
-.carousel{
-  display:flex;
-  flex-direction:row;
-  gap:12px;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-  padding:4px;
-  margin:0 -4px;
+.projects-carousel,.events-carousel,.value-carousel{
+  display:flex; flex-direction:row; gap:12px;
+  overflow-x:auto; scroll-snap-type:x mandatory;
+  padding:4px; margin:0 -4px;
+  scrollbar-width:none; -ms-overflow-style:none;
 }
-.carousel-card{
-  flex-shrink:0;
-  scroll-snap-align:start;
-  width:calc(100vw - 30px - 12px - 7px);
-  max-width:381px; /* caps the peek formula inside the 430px app-shell on wide viewports */
-}
+.projects-carousel::-webkit-scrollbar,
+.events-carousel::-webkit-scrollbar,
+.value-carousel::-webkit-scrollbar{ display:none; }
 
-.card-shell{
-  height:400px;
+.project-card,.event-card{
+  width:calc(100vw - 60px - 12px - 7px);
+  min-width:calc(100vw - 60px - 12px - 7px);
+  max-width:calc(100vw - 60px - 12px - 7px);
+  scroll-snap-align:start; flex-shrink:0;
+  height:460px;
   background:var(--bg-surface);
   border:1px solid var(--border-color);
   border-radius:8px;
   padding:12px;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-  box-sizing:border-box;
+  display:flex; flex-direction:column; overflow:hidden; box-sizing:border-box;
 }
-.card-media{
-  width:100%;
-  aspect-ratio:16/9;
-  border-radius:6px;
-  overflow:hidden;
-  margin-bottom:10px;
-  position:relative;
-  background:#000000;
-  flex-shrink:0;
-}
-.card-media img{width:100%;height:100%;object-fit:cover;}
-.card-media iframe{width:100%;height:100%;border:0;}
-.card-media.photo-media{background:#F1F5F9;}
-.video-placeholder{
-  width:100%;height:100%;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
-  background:linear-gradient(135deg,#0F172A,#1E293B);
-  color:#94A3B8;
-}
-.video-placeholder svg{width:26px;height:26px;stroke:#64748B;}
-.video-placeholder span{font-family:var(--font-mono);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;}
 
-.card-header{height:42px;flex-shrink:0;overflow:hidden;}
+.card-video-container,.card-photo-container{
+  width:100%; aspect-ratio:16/9; border-radius:6px; overflow:hidden;
+  margin-bottom:10px; position:relative; background:#000000;
+}
+.card-photo-container{ background:#F1F5F9; }
+.card-video-container .project-video{ width:100%; height:100%; }
+.event-cover-photo{ width:100%; height:100%; object-fit:cover; display:block; }
+
+.video-placeholder{
+  width:100%; height:100%; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:6px;
+  background:linear-gradient(135deg,#0F172A,#1E293B); color:#94A3B8;
+}
+.video-placeholder svg{ width:26px; height:26px; stroke:#64748B; }
+.video-placeholder span{
+  font-family:var(--font-mono); font-size:11px; letter-spacing:0.05em; text-transform:uppercase;
+}
+
+.card-header{ height:48px; }
 .card-title{
-  font-family:var(--font-primary);
-  font-size:15px;font-weight:700;color:var(--text-primary);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:18px;
+  font-family:var(--font-primary); font-size:17px; font-weight:700; color:var(--text-primary);
+  margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:22px;
 }
 .card-description{
-  font-family:var(--font-primary);
-  font-size:12px;font-weight:400;color:var(--text-secondary);
-  margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:16px;
+  font-family:var(--font-primary); font-size:14px; font-weight:400; color:var(--text-secondary);
+  margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:18px;
 }
 
 .card-subnav{
-  display:flex;flex-direction:row;gap:6px;width:100%;
-  margin-top:8px;margin-bottom:8px;padding-bottom:6px;
-  border-bottom:1px solid var(--border-color);
-  flex-shrink:0;
+  display:flex; flex-direction:row; gap:6px; width:100%;
+  margin-top:8px; margin-bottom:8px; padding-bottom:0; border-bottom:none;
 }
-.subtab-btn{
-  font-family:var(--font-mono);font-size:11px;font-weight:600;
-  padding:4px 10px;border-radius:4px;cursor:pointer;flex-grow:1;text-align:center;
+.subtab-btn,.event-subtab-btn{
+  font-family:var(--font-mono); font-size:12px; font-weight:600;
+  padding:6px 10px; border-radius:4px; cursor:pointer; flex-grow:1; text-align:center;
   border:1px solid var(--border-color);
-  background:var(--bg-main);color:var(--text-secondary);
+  background:var(--bg-main); color:var(--text-secondary);
 }
-.subtab-btn.active{background:var(--accent-primary);color:#FFFFFF;border-color:var(--accent-primary);}
-.subtab-url-btn{background:var(--bg-main);color:var(--accent-primary);text-decoration:none;border-color:var(--border-color);}
+.subtab-btn.active,.event-subtab-btn.active{
+  background:var(--accent-primary); color:#FFFFFF; border-color:var(--accent-primary);
+}
+.subtab-url-btn{
+  background:var(--bg-main); color:var(--accent-primary); text-decoration:none; border-color:var(--border-color);
+}
 
-.card-tab-content{
-  flex:1 1 auto;
-  min-height:0;
-  width:100%;
-  overflow-y:auto;
-  box-sizing:border-box;
-}
-.pane-line{font-family:var(--font-primary);font-size:12px;color:var(--text-secondary);line-height:16px;}
-.pane-line strong{color:var(--text-primary);}
-.truncated-2-lines{
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;
-}
-.tech-stack-wrap{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;}
+.card-tab-content{ flex-grow:1; width:100%; height:170px; overflow-y:hidden; box-sizing:border-box; }
+.pane-overview,.event-pane-overview{ font-family:var(--font-primary); font-size:14px; color:var(--text-secondary); line-height:20px; display:none; }
+.pane-overview.active,.event-pane-overview.active{ display:block; }
+.pane-line strong{ color:var(--text-primary); }
+
+.pane-techstack{ display:none; flex-wrap:wrap; gap:6px; align-content:flex-start; }
+.pane-techstack.active{ display:flex; }
 .tech-badge{
-  font-family:var(--font-mono);font-size:10.5px;font-weight:500;
-  background:var(--accent-subtle);color:var(--accent-primary);
-  border:1px solid #BFDBFE;padding:2px 7px;border-radius:4px;white-space:nowrap;
-  flex:0 1 calc(33.333% - 6px);text-align:center;box-sizing:border-box;
+  font-family:var(--font-mono); font-size:12px; font-weight:500;
+  background:var(--accent-subtle); color:var(--accent-primary);
+  border:1px solid #BFDBFE; padding:4px 8px; border-radius:4px;
+  white-space:nowrap; flex:0 1 calc(33.333% - 6px); text-align:center; box-sizing:border-box;
 }
-.media-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;width:100%;}
-.lightbox-thumb{
-  width:100%;height:52px;object-fit:cover;border-radius:4px;cursor:pointer;
-  border:1px solid var(--border-color);transition:transform 0.2s ease;
-}
-.lightbox-thumb:hover{transform:scale(1.03);}
 
-/* ============================================================
-   4. SKILLSETS + SKILLS
-   ============================================================ */
-.skills-card{
-  background:var(--bg-surface);
-  border:1px solid var(--border-color);
-  border-radius:8px;
-  padding:16px;
-  margin-bottom:24px;
-  box-shadow:0 1px 3px 0 rgba(0,0,0,0.05);
+.event-pane-media{ display:none; grid-template-columns:repeat(2,1fr); gap:6px; width:100%; }
+.event-pane-media.active{ display:grid; }
+.lightbox-thumb{
+  width:100%; height:75px; object-fit:cover; border-radius:4px; cursor:pointer;
+  border:1px solid var(--border-color); transition:transform 0.2s ease;
 }
+.lightbox-thumb:hover{ transform:scale(1.03); }
+.lightbox-overlay{
+  position:fixed; top:0; left:0; width:100vw; height:100vh;
+  background:rgba(15,23,42,0.85); display:none; align-items:center; justify-content:center; z-index:9999;
+}
+.lightbox-overlay.open{ display:flex; }
+.lightbox-overlay img{
+  max-width:90vw; max-height:80vh; border-radius:8px; box-shadow:0 10px 25px rgba(0,0,0,0.5);
+}
+
+/* =====================================================================
+   SECTION 4: SKILLSETS
+   ===================================================================== */
+.skills-card{ padding:16px; }
 .skillset-tabs-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-bottom:20px;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:20px;
 }
 .skill-tab{
-  height:36px;padding:0 8px;
-  font-family:var(--font-mono);font-size:11px;font-weight:600;
-  text-align:center;text-transform:uppercase;
-  border-radius:6px;cursor:pointer;transition:all 0.2s ease;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  display:flex;align-items:center;justify-content:center;
-  background:var(--bg-main);color:var(--text-secondary);border:1px solid var(--border-color);
+  height:36px; padding:0 8px;
+  font-family:var(--font-mono); font-size:13px; font-weight:600;
+  text-align:center; text-transform:uppercase; border-radius:6px; cursor:pointer;
+  transition:all 0.2s ease; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  background:var(--bg-main); color:var(--text-secondary); border:1px solid var(--border-color);
 }
-.skill-tab.active{background:var(--accent-primary);color:#FFFFFF;border-color:var(--accent-primary);}
-.skills-inner-title{
-  font-family:var(--font-primary);font-size:16px;font-weight:600;color:var(--text-primary);
-  text-align:center;margin-bottom:12px;
-}
+.skill-tab.active{ background:var(--accent-primary); color:#FFFFFF; border-color:var(--accent-primary); }
+
 .skills-display-box{
-  background:var(--bg-main);
-  border:1px solid var(--border-color);
-  border-radius:6px;
-  padding:16px;
-  display:flex;flex-direction:column;gap:14px;
+  background:var(--bg-main); border:1px solid var(--border-color); border-radius:6px;
+  padding:16px; display:flex; flex-direction:column; gap:14px;
 }
-.skill-row{display:flex;flex-direction:column;gap:6px;width:100%;}
-.skill-meta-line{display:flex;justify-content:space-between;align-items:center;width:100%;}
-.skill-name{font-family:var(--font-primary);font-size:13px;font-weight:600;color:var(--text-primary);}
-.skill-percentage{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--accent-primary);}
-.progress-track{width:100%;height:8px;background:#E2E8F0;border-radius:4px;overflow:hidden;position:relative;}
+.skills-inner-title{
+  font-family:var(--font-primary); font-size:18px; font-weight:600; color:var(--text-primary);
+  text-align:center; margin-top:0; margin-bottom:16px;
+}
+.skill-row{ display:none; flex-direction:column; gap:6px; width:100%; }
+.skill-row.active{ display:flex; }
+.skill-meta-line{ display:flex; justify-content:space-between; align-items:center; width:100%; }
+.skill-name{ font-family:var(--font-primary); font-size:15px; font-weight:600; color:var(--text-primary); }
+.skill-percentage{ font-family:var(--font-mono); font-size:14px; font-weight:500; color:var(--accent-primary); }
+.progress-track{ width:100%; height:8px; background:#E2E8F0; border-radius:4px; overflow:hidden; position:relative; }
 .progress-fill{
-  height:100%;width:0%;background:var(--accent-primary);border-radius:4px;
+  height:100%; width:0%; background:var(--accent-primary); border-radius:4px;
   transition:width 0.8s cubic-bezier(0.4,0,0.2,1);
 }
 
-/* ============================================================
-   6. VALUE CARDS ("What do I bring to the table")
-   ============================================================ */
+/* =====================================================================
+   SECTION 6: WHAT DO I BRING TO THE TABLE
+   ===================================================================== */
+.value-card-container{ padding:15px; }
 .value-card{
-  height:220px;
-  background:var(--bg-surface);
-  border:1px solid var(--border-color);
-  border-radius:8px;
-  padding:16px;
-  display:flex;flex-direction:column;justify-content:flex-start;
-  overflow:hidden;box-sizing:border-box;
+  width:calc(100vw - 60px - 12px - 7px);
+  min-width:calc(100vw - 60px - 12px - 7px);
+  max-width:calc(100vw - 60px - 12px - 7px);
+  scroll-snap-align:start; flex-shrink:0;
+  height:230px;
+  background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px;
+  padding:16px 20px; display:flex; flex-direction:column; justify-content:center;
+  align-items:flex-start; overflow:hidden; box-sizing:border-box;
 }
-.value-card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.value-card-header{ display:flex; align-items:center; gap:10px; margin-bottom:10px; width:100%; }
 .value-card-icon{
-  width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:var(--accent-primary);flex-shrink:0;
+  width:26px; height:26px; display:flex; align-items:center; justify-content:center;
+  color:var(--accent-primary); flex-shrink:0;
 }
-.value-card-icon svg{width:20px;height:20px;stroke:var(--accent-primary);}
+.value-card-icon svg{ width:22px; height:22px; stroke:var(--accent-primary); stroke-width:2; }
 .value-card-title{
-  font-family:var(--font-primary);font-size:16px;font-weight:700;color:var(--text-primary);
-  line-height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-family:var(--font-primary); font-size:18px; font-weight:700; color:var(--text-primary);
+  line-height:22px; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 .value-card-text{
-  font-family:var(--font-primary);font-size:13.5px;font-weight:400;color:var(--text-secondary);
-  line-height:20px;max-height:60px;margin:0;
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;
+  font-family:var(--font-primary); font-size:15.5px; font-weight:400; color:var(--text-secondary);
+  line-height:22px; max-height:66px;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+  overflow:hidden; text-overflow:ellipsis;
 }
 
-/* ============================================================
-   7. HELP YOURSELF
-   ============================================================ */
-.help-yourself-container{display:flex;flex-direction:column;gap:12px;width:100%;box-sizing:border-box;}
+/* =====================================================================
+   SECTION 7: HELP YOURSELF
+   ===================================================================== */
+.help-yourself-card-container{ padding:15px; }
+.help-yourself-form-stack{ display:flex; flex-direction:column; gap:12px; width:100%; box-sizing:border-box; }
+
 .file-select-box{
-  height:50px;min-height:50px;width:100%;
-  display:flex;align-items:center;
-  border-radius:8px;box-sizing:border-box;cursor:pointer;user-select:none;
-  transition:all 0.2s ease;
-  background:var(--bg-surface);border:1px solid var(--border-color);color:var(--text-secondary);
+  height:50px; min-height:50px; width:100%; display:flex; align-items:center;
+  padding:0 16px; border-radius:8px; box-sizing:border-box; cursor:pointer;
+  user-select:none; transition:all 0.2s ease;
+  background:var(--bg-surface); border:1px solid var(--border-color); color:var(--text-secondary);
 }
-.file-select-box.selected,
-.file-select-box:has(:checked){
-  background:#EFF6FF;border:1.5px solid var(--accent-primary);color:var(--accent-primary);
+.file-checkbox{ position:absolute; opacity:0; pointer-events:none; }
+.file-select-box:has(.file-checkbox:checked){
+  background:#EFF6FF; border:1.5px solid var(--accent-primary); color:var(--accent-primary);
 }
-.file-checkbox{position:absolute;opacity:0;width:0;height:0;}
-.file-box-content{display:flex;align-items:center;width:100%;padding:0 16px;}
-.file-icon{width:20px;height:20px;flex-shrink:0;stroke:currentColor;}
+.file-box-content{ display:flex; align-items:center; width:100%; }
+.file-icon{ width:22px; height:22px; flex-shrink:0; stroke:currentColor; }
 .file-label{
-  font-family:var(--font-primary);font-size:14px;font-weight:600;
-  margin-left:12px;text-transform:uppercase;flex-grow:1;
+  font-family:var(--font-primary); font-size:16px; font-weight:600; margin-left:12px;
+  text-transform:uppercase; flex-grow:1;
 }
 .checkbox-indicator{
-  width:18px;height:18px;flex-shrink:0;border-radius:4px;
-  border:1.5px solid var(--border-color);
-  display:flex;align-items:center;justify-content:center;
-  transition:all 0.2s ease;
+  width:20px; height:20px; border:2px solid var(--border-color); border-radius:4px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; transition:all 0.2s ease;
 }
-.file-select-box.selected .checkbox-indicator,
-.file-select-box:has(:checked) .checkbox-indicator{
-  background:#2563EB;border-color:#2563EB;
-}
-.checkbox-indicator svg{width:12px;height:12px;stroke:#fff;opacity:0;transition:opacity 0.15s ease;}
-.file-select-box.selected .checkbox-indicator svg,
-.file-select-box:has(:checked) .checkbox-indicator svg{opacity:1;}
+.checkbox-indicator svg{ width:14px; height:14px; stroke:#FFFFFF; opacity:0; transition:opacity 0.15s ease; }
+.file-select-box:has(.file-checkbox:checked) .checkbox-indicator{ background:#2563EB; border-color:#2563EB; }
+.file-select-box:has(.file-checkbox:checked) .checkbox-indicator svg{ opacity:1; }
 
 #recipient-email{
-  height:50px;min-height:50px;width:100%;
-  background:var(--bg-surface);border:1px solid var(--border-color);border-radius:8px;
-  padding:0 16px;box-sizing:border-box;
-  font-family:var(--font-primary);font-size:14px;color:var(--text-primary);
+  height:50px; min-height:50px; width:100%;
+  background:var(--bg-surface); border:1px solid var(--border-color); border-radius:8px;
+  padding:0 16px; box-sizing:border-box; font-family:var(--font-primary); font-size:16px;
+  color:var(--text-primary); outline:none;
 }
-#recipient-email:focus{outline:1.5px solid var(--accent-primary);border-color:var(--accent-primary);}
-#recipient-email::placeholder{color:#94A3B8;font-family:var(--font-primary);}
+#recipient-email:focus{ outline:1.5px solid var(--accent-primary); }
+#recipient-email::placeholder{ color:#94A3B8; font-family:var(--font-primary); font-size:16px; }
 
 .send-action-btn{
-  height:50px;min-height:50px;width:100%;
-  background:var(--accent-primary);color:#FFFFFF;border:none;border-radius:8px;
-  font-family:var(--font-primary);font-size:15px;font-weight:700;
-  letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
-  transition:background 0.2s ease;box-sizing:border-box;
-  display:flex;align-items:center;justify-content:center;gap:8px;
+  height:50px; min-height:50px; width:100%; background:var(--accent-primary); color:#FFFFFF;
+  border:none; border-radius:8px; font-family:var(--font-primary); font-size:17px; font-weight:700;
+  letter-spacing:0.05em; text-transform:uppercase; cursor:pointer; transition:background 0.2s ease;
+  box-sizing:border-box; display:flex; align-items:center; justify-content:center; gap:8px;
 }
-.send-action-btn:hover:not(:disabled){background:var(--accent-hover);}
-.send-action-btn:disabled{opacity:0.5;cursor:not-allowed;}
-.send-action-btn.is-success{background:#16A34A;}
+.send-action-btn:hover:not(:disabled){ background:var(--accent-hover); }
+.send-action-btn:disabled{ opacity:0.5; cursor:not-allowed; }
+.send-action-btn.success{ background:#16A34A; }
 .spinner{
-  width:16px;height:16px;border-radius:50%;
-  border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;
-  animation:spin 0.7s linear infinite;
+  width:16px; height:16px; border:2px solid rgba(255,255,255,0.4); border-top-color:#FFFFFF;
+  border-radius:50%; animation:spin 0.7s linear infinite;
 }
-@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes spin{ to{ transform:rotate(360deg); } }
 
-/* ============================================================
-   8. STICKY HEADER
-   ============================================================ */
+/* =====================================================================
+   SECTION 8: STICKY HEADER
+   ===================================================================== */
 .sticky-header{
-  position:fixed;top:0;left:0;width:100%;height:var(--header-height);min-height:var(--header-height);
-  z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 15px;box-sizing:border-box;
+  position:fixed; top:0; left:0; width:100%; height:44px; min-height:44px; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 15px; box-sizing:border-box;
   border-bottom:1px solid rgba(226,232,240,0.8);
   background:rgba(255,255,255,0.85);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  opacity:0;transform:translateY(-100%);pointer-events:none;
-  transition:opacity 0.2s ease,transform 0.2s ease;
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  opacity:0; transform:translateY(-100%); pointer-events:none;
+  transition:opacity 0.2s ease, transform 0.2s ease;
 }
-.sticky-header.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
-.sticky-header-left{display:flex;align-items:center;gap:8px;min-width:0;}
+.sticky-header.visible{ opacity:1; transform:translateY(0); pointer-events:auto; }
+.sticky-header-left{ display:flex; align-items:center; gap:8px; }
 .header-mini-avatar{
-  width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid var(--border-color);
+  width:30px; height:30px; border-radius:50%; object-fit:cover; flex-shrink:0;
+  border:1px solid var(--border-color);
 }
 .header-full-name{
-  font-family:var(--font-primary);font-size:14px;font-weight:700;color:var(--text-primary);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-family:var(--font-primary); font-size:16px; font-weight:700; color:var(--text-primary);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
-.sticky-header-right{margin-left:auto;display:flex;align-items:center;height:100%;width:auto;}
+.sticky-header-right{ margin-left:auto; display:flex; align-items:center; height:100%; width:auto; }
 
-/* ============================================================
-   9. STICKY FOOTER
-   ============================================================ */
+/* =====================================================================
+   SECTION 9: STICKY FOOTER
+   ===================================================================== */
 .sticky-footer{
-  position:fixed;bottom:0;left:0;width:100%;height:auto;z-index:90;
-  background:rgba(255,255,255,0.90);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  border-top:1px solid var(--border-color);
-  padding:8px 15px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  position:fixed; bottom:0; left:0; width:100%; height:auto; z-index:90;
+  background:rgba(255,255,255,0.90); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  border-top:1px solid var(--border-color); padding:8px 15px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
   box-sizing:border-box;
 }
-.footer-line-1,.footer-line-2{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;}
+.footer-line-1,.footer-line-2{ display:flex; align-items:center; justify-content:center; width:100%; gap:6px; }
 .footer-copyright-text{
-  font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--text-primary);text-align:center;
+  font-family:var(--font-mono); font-size:14.5px; font-weight:700; color:var(--text-primary); text-align:center;
 }
 .status-pulse-dot{
-  width:8px;height:8px;border-radius:50%;background:#22C55E;position:relative;flex-shrink:0;
+  width:8px; height:8px; border-radius:50%; background:#22C55E; position:relative; flex-shrink:0;
   animation:status-pulse 2s infinite;
 }
 @keyframes status-pulse{
-  0%{box-shadow:0 0 0 0 rgba(34,197,94,0.7);}
-  70%{box-shadow:0 0 0 6px rgba(34,197,94,0);}
-  100%{box-shadow:0 0 0 0 rgba(34,197,94,0);}
+  0%{ box-shadow:0 0 0 0 rgba(34,197,94,0.7); }
+  70%{ box-shadow:0 0 0 6px rgba(34,197,94,0); }
+  100%{ box-shadow:0 0 0 0 rgba(34,197,94,0); }
 }
 .footer-status-text{
-  font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--text-secondary);
-  text-transform:uppercase;letter-spacing:0.04em;text-align:center;
+  font-family:var(--font-mono); font-size:13.5px; font-weight:500; color:var(--text-secondary);
+  text-transform:uppercase; letter-spacing:0.04em; text-align:center;
 }
 
-/* ============================================================
-   LIGHTBOX
-   ============================================================ */
-.lightbox-overlay{
-  position:fixed;top:0;left:0;width:100vw;height:100vh;
-  background:rgba(15,23,42,0.85);display:none;align-items:center;justify-content:center;z-index:9999;
-  padding:24px;box-sizing:border-box;
+/* Accessibility */
+a:focus-visible,button:focus-visible,input:focus-visible{
+  outline:2px solid var(--accent-primary); outline-offset:2px;
 }
-.lightbox-overlay.open{display:flex;}
-#lightbox-img{max-width:90vw;max-height:80vh;border-radius:8px;box-shadow:0 10px 25px rgba(0,0,0,0.5);}
-
-section{margin-bottom:32px;}
-section:last-of-type{margin-bottom:8px;}
+@media (prefers-reduced-motion:reduce){
+  *{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+}
 </style>
 </head>
 <body>
 
+<!-- Lightbox (global, shared by all event media galleries) -->
+<div id="lightbox-modal" class="lightbox-overlay" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="Enlarged Media">
+</div>
+
+<!-- SECTION 8: Sticky Header -->
 <header id="sticky-header" class="sticky-header">
   <div class="sticky-header-left">
-    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=80" alt="Lizi Zivzivadze mini avatar" class="header-mini-avatar">
-    <span class="header-full-name">Lizi Zivzivadze</span>
+    <img id="header-mini-avatar" src="" alt="Profile Mini" class="header-mini-avatar">
+    <span id="header-full-name" class="header-full-name"></span>
   </div>
   <div class="sticky-header-right"></div>
 </header>
 
-<div class="app-shell">
+<main class="portfolio-container">
 
-  <!-- ============ SECTION 2: PROFILE ============ -->
+  <!-- SECTION 2: Profile -->
   <section id="profile-section" class="profile-card">
     <div class="profile-top-row">
       <div class="profile-photo-wrap">
-        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80" alt="Lizi Zivzivadze Profile Photo" class="profile-photo">
+        <img id="profile-photo" src="" alt="Lizi Zivzivadze Profile Photo" class="profile-photo">
       </div>
       <div class="profile-content-col">
-        <h1 class="profile-name">Lizi Zivzivadze</h1>
-        <p class="profile-title">Electromechanical Engineer</p>
-        <nav class="profile-actions" aria-label="Contact links">
-          <a href="tel:+32499221680" title="Call Lizi Zivzivadze" target="_self" class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          </a>
-          <a href="https://wa.me/32499221680" title="WhatsApp Chat" target="_blank" rel="noopener noreferrer" class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/></svg>
-          </a>
-          <a href="mailto:lizozivzivadze@gmail.com" title="Email Lizi Zivzivadze" target="_self" class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-          </a>
-          <a href="https://www.linkedin.com/in/lizizivzivadze/" title="LinkedIn Profile" target="_blank" rel="noopener noreferrer" class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
-          </a>
-          <a href="https://github.com/lizozivzivadze-star" title="GitHub Profile" target="_blank" rel="noopener noreferrer" class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-          </a>
-        </nav>
+        <h1 id="profile-name" class="profile-name"></h1>
+        <p id="profile-title" class="profile-title"></p>
+        <nav class="profile-actions" id="profile-actions"></nav>
       </div>
     </div>
-    <p class="personal-statement">Electromechanical engineer specialized in embedded systems, mechatronic architecture, and real-time control workflows. Focused on delivering robust, production-grade hardware-software integration for complex technical challenges.</p>
+    <p id="personal-statement" class="personal-statement"></p>
   </section>
 
-  <!-- ============ SECTION 3: PROJECTS ============ -->
-  <section id="projects-section">
+  <!-- SECTION 3: Projects -->
+  <section id="projects-section" class="projects-card-container">
     <h2 class="section-title">PROJECTS</h2>
-    <nav class="tab-bar" id="projects-filter-bar">
-      <button class="tab-btn active" data-filter="all">ALL</button>
-      <button class="tab-btn" data-filter="hw-sw">HW+SW</button>
-      <button class="tab-btn" data-filter="hw"><b>H</b>ard<b>W</b>are</button>
-      <button class="tab-btn" data-filter="sw"><b>S</b>oft<b>W</b>are</button>
+    <nav class="projects-filter-bar">
+      <button class="filter-btn active" data-filter="all">ALL</button>
+      <button class="filter-btn" data-filter="hw-sw">HW+SW</button>
+      <button class="filter-btn" data-filter="hw"><b>H</b>ard<b>W</b>are</button>
+      <button class="filter-btn" data-filter="sw"><b>S</b>oft<b>W</b>are</button>
     </nav>
-    <div class="carousel no-scrollbar" id="projects-carousel"></div>
+    <div class="projects-carousel" id="projects-carousel"></div>
   </section>
 
-  <!-- ============ SECTION 4: SKILLSETS ============ -->
+  <!-- SECTION 4: Skillsets -->
   <section id="skills-section" class="skills-card">
     <h2 class="section-title">SKILLSETS</h2>
-    <nav class="skillset-tabs-grid" id="skillset-tabs"></nav>
-    <h3 class="skills-inner-title">Skills</h3>
-    <div class="skills-display-box" id="skills-display-box"></div>
+    <nav class="skillset-tabs-grid" id="skillset-tabs-grid"></nav>
+    <div class="skills-display-box">
+      <h3 class="skills-inner-title">Skills</h3>
+      <div id="skill-rows"></div>
+    </div>
   </section>
 
-  <!-- ============ SECTION 5: EVENTS ============ -->
-  <section id="events-section">
+  <!-- SECTION 5: Events -->
+  <section id="events-section" class="events-card-container">
     <h2 class="section-title">EVENTS</h2>
     <nav class="events-filter-bar" id="events-filter-bar"></nav>
-    <div class="carousel no-scrollbar" id="events-carousel"></div>
+    <div class="events-carousel" id="events-carousel"></div>
   </section>
 
-  <!-- ============ SECTION 6: WHAT DO I BRING TO THE TABLE ============ -->
-  <section id="value-section">
+  <!-- SECTION 6: What Do I Bring to the Table -->
+  <section id="value-section" class="value-card-container">
     <h2 class="section-title single-line-title">WHAT DO I BRING TO THE TABLE?</h2>
-    <div class="carousel no-scrollbar" id="value-carousel"></div>
+    <div class="value-carousel" id="value-carousel"></div>
   </section>
 
-  <!-- ============ SECTION 7: HELP YOURSELF ============ -->
-  <section id="help-section">
+  <!-- SECTION 7: Help Yourself -->
+  <section id="help-yourself-section" class="help-yourself-card-container">
     <h2 class="section-title">HELP YOURSELF</h2>
-    <form id="help-yourself-form" class="help-yourself-container">
-      <label class="file-select-box" data-box="cv">
+    <form id="help-yourself-form" class="help-yourself-form-stack">
+      <label class="file-select-box">
         <input type="checkbox" name="selected_files" value="cv" class="file-checkbox">
         <span class="file-box-content">
-          <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/></svg>
           <span class="file-label">CV</span>
-          <span class="checkbox-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="checkbox-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
         </span>
       </label>
-      <label class="file-select-box" data-box="portfolio">
+      <label class="file-select-box">
         <input type="checkbox" name="selected_files" value="portfolio" class="file-checkbox">
         <span class="file-box-content">
-          <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-          <span class="file-label">Portfolio</span>
-          <span class="checkbox-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/></svg>
+          <span class="file-label">PORTFOLIO</span>
+          <span class="checkbox-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
         </span>
       </label>
       <input type="email" id="recipient-email" name="user_email" placeholder="your.email@example.com" required>
-      <button type="submit" id="send-pdf-btn" class="send-action-btn" disabled>
-        <span class="btn-label">SEND</span>
-      </button>
+      <button type="submit" id="send-pdf-btn" class="send-action-btn" disabled>SEND</button>
     </form>
   </section>
 
-</div>
+</main>
 
+<!-- SECTION 9: Sticky Footer -->
 <footer id="sticky-footer" class="sticky-footer">
   <div class="footer-line-1">
-    <svg class="verified-icon" width="14" height="14" viewBox="0 0 24 24" fill="#2563EB"><path d="M12 1l2.9 2.1 3.6-.2 1 3.5 3.1 1.9-1.2 3.5 1.2 3.5-3.1 1.9-1 3.5-3.6-.2L12 23l-2.9-2.1-3.6.2-1-3.5-3.1-1.9 1.2-3.5-1.2-3.5 3.1-1.9 1-3.5 3.6.2z"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <span class="footer-copyright-text">© 2026 Lizi Zivzivadze</span>
   </div>
   <div class="footer-line-2">
@@ -639,454 +606,522 @@ section:last-of-type{margin-bottom:8px;}
   </div>
 </footer>
 
-<div id="lightbox-modal" class="lightbox-overlay" onclick="closeLightbox()">
-  <img id="lightbox-img" src="" alt="Enlarged Media">
-</div>
-
 <script>
-/* ================================================================
-   DATA — replace/extend freely. This is the single source of truth
-   for Projects, Skillsets, Events and Value cards.
-   ================================================================ */
+/* =====================================================================
+   DATA — edit everything below to update site content.
+   Fields containing "ADD_" / null are placeholders for you to fill in.
+   ===================================================================== */
+const PLACEHOLDER_IMG = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="225" viewBox="0 0 400 225">' +
+  '<rect width="400" height="225" fill="#F1F5F9"/>' +
+  '<g fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+  '<rect x="150" y="82" width="100" height="70" rx="6"/><circle cx="175" cy="105" r="7"/>' +
+  '<path d="M150 140l25-25 20 20 15-15 40 32"/></g>' +
+  '<text x="200" y="185" font-family="monospace" font-size="12" fill="#94A3B8" text-anchor="middle">ADD PHOTO</text>' +
+  '</svg>'
+);
+
 const PORTFOLIO_DATA = {
+  profile: {
+    name: "Lizi Zivzivadze",
+    title: "Electromechanical Engineer",
+    photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
+    statement: "Electromechanical engineer specialized in embedded systems, mechatronics, and real-time control. Focused on robust hardware-software integration for complex challenges.",
+    phone: "+32499221680",
+    whatsapp: "32499221680",
+    email: "lizozivzivadze@gmail.com",
+    linkedin: "https://www.linkedin.com/in/lizizivzivadze/",
+    github: "https://github.com/lizozivzivadze-star"
+  },
 
   projects: [
     {
-      id:'dcbench', category:'hw-sw',
-      title:'DCBench — DC Machines Lab Sim',
-      description:'Browser sim of the KU Leuven DC machines test bench',
-      videoId:'', // paste a YouTube ID here to enable the inline demo video
-      liveUrl:'https://github.com/lizozivzivadze-star',
-      objective:'Recreate the university\'s coupled DC motor/generator test bench (Machine 1 & 2) as an interactive, zero-dependency browser simulation for remote lab practice.',
-      results:'Shipped 5 milestones — physics core, SVG wiring, fault engine + data logger, and an n8n-orchestrated AI tutor backed by 13 workflows and a PostgreSQL schema.',
-      stack:['JavaScript','SVG','Canvas','n8n','PostgreSQL','OpenAPI','CSS3']
+      id: "tactical-field-unit",
+      category: "hw-sw",
+      title: "AI Tactical Field Unit",
+      description: "ESP32 voice assistant chaining Whisper, Claude & TTS",
+      videoId: null, // ADD_YOUTUBE_ID
+      liveUrl: "https://github.com/lizozivzivadze-star", // ADD_LIVE_URL
+      objective: "Build a fully portable, voice-activated assistant on an ESP32 that could capture speech, reason about it, and respond aloud with no laptop in the loop.",
+      results: "Chained Groq Whisper, Claude, and ElevenLabs TTS into a working perfboard prototype with an INMP441 mic, MAX98357 amplifier, and SSD1306 display — learning I2S audio, PCM/WAV handling, and ESP32 heap management along the way.",
+      techStack: ["ESP32","I2S","Whisper API","Claude API","ElevenLabs","C++"]
     },
     {
-      id:'tactical-field-unit', category:'hw',
-      title:'AI Tactical Field Unit',
-      description:'ESP32 voice assistant chaining Whisper + Claude + TTS',
-      videoId:'',
-      liveUrl:'https://github.com/lizozivzivadze-star',
-      objective:'Build a portable, voice-activated field assistant on ESP32 hardware capable of natural conversation without a host PC.',
-      results:'Chained Groq Whisper, Claude Sonnet, and ElevenLabs TTS over HTTP streaming; solved I2S audio capture, PCM/WAV handling, and ESP32 heap constraints.',
-      stack:['ESP32','C++','I2S','INMP441','MAX98357','SSD1306','Whisper API','Claude API','ElevenLabs']
+      id: "dcbench",
+      category: "sw",
+      title: "DCBench",
+      description: "Browser simulation of a DC machines lab test bench",
+      videoId: null, // ADD_YOUTUBE_ID
+      liveUrl: "https://github.com/lizozivzivadze-star", // ADD_LIVE_URL
+      objective: "Recreate the university's coupled DC motor/generator lab bench in the browser so students can practice wiring and diagnostics before touching the real hardware.",
+      results: "Delivered a five-milestone build (physics core, SVG components, wiring/netlist, fault engine with logging, AI tutor), then simplified the UI for beginners and stood up an n8n backend with 13 workflows and a PostgreSQL schema.",
+      techStack: ["JavaScript","SVG","Canvas","n8n","PostgreSQL","Physics Sim"]
     },
     {
-      id:'argus', category:'sw',
-      title:'ARGUS — ISR Vision App',
-      description:'Single-file ISR tool powered by Claude Vision',
-      videoId:'',
-      liveUrl:'https://github.com/lizozivzivadze-star',
-      objective:'Deliver a single-file browser ISR (Intelligence, Surveillance, Reconnaissance) tool turning a webcam feed into structured, timestamped threat reporting.',
-      results:'Built a tactical amber HUD with ARM/DISARM control and configurable auto-analysis intervals, generating NATO SALUTE-format reports with threat-level scoring.',
-      stack:['HTML/CSS/JS','Claude Vision API','Canvas','WebRTC']
+      id: "argus",
+      category: "sw",
+      title: "ARGUS",
+      description: "Single-file ISR app powered by Claude Vision",
+      videoId: null, // ADD_YOUTUBE_ID
+      liveUrl: "https://github.com/lizozivzivadze-star", // ADD_LIVE_URL
+      objective: "Explore how a vision-capable model could turn a live webcam feed into structured intelligence reporting, entirely from a single HTML file.",
+      results: "Built a tactical HUD interface that arms/disarms a webcam, runs configurable auto-analysis intervals through the Claude Vision API, and generates NATO SALUTE reports with threat-level assessments and a timestamped event log.",
+      techStack: ["Claude Vision API","JavaScript","HTML5"]
     },
     {
-      id:'ghostlens', category:'sw',
-      title:'GhostLens — Multispectral Sim',
-      description:'Simulated NIR / UV / LWIR / X-ray imaging in-browser',
-      videoId:'',
-      liveUrl:'https://github.com/lizozivzivadze-star',
-      objective:'Simulate multispectral sensor behavior (NIR, UV, LWIR, X-ray) purely client-side so spectral-imaging concepts are explorable without lab hardware.',
-      results:'Shipped a dependency-free single HTML file using Canvas-based filter pipelines across four distinct imaging modes.',
-      stack:['HTML5 Canvas','Vanilla JS']
+      id: "ghostlens",
+      category: "sw",
+      title: "GhostLens",
+      description: "Simulated multispectral imaging in the browser",
+      videoId: null, // ADD_YOUTUBE_ID
+      liveUrl: "https://github.com/lizozivzivadze-star", // ADD_LIVE_URL
+      objective: "Give people a hands-on feel for how NIR, UV, LWIR, and X-ray imaging change what a scene reveals, without access to real sensors.",
+      results: "Built a dependency-free, single-file tool using HTML5 Canvas that switches between four simulated filter modes, deployed directly as a static page.",
+      techStack: ["JavaScript","HTML5 Canvas","Image Processing"]
     }
   ],
 
-  skillsets: [
-    { id:'mechatronics', label:'MECHATRONICS' },
-    { id:'embedded', label:'EMBEDDED' },
-    { id:'software', label:'SOFTWARE' },
-    { id:'cad-cam', label:'CAD / CAM' },
-    { id:'controls', label:'CONTROLS' },
-    { id:'prototyping', label:'PROTOTYPING' }
-  ],
-  skills: [
-    { category:'mechatronics', name:'Sensor Integration', pct:85 },
-    { category:'mechatronics', name:'Actuator & Motor Control', pct:80 },
-    { category:'mechatronics', name:'System Architecture', pct:78 },
-    { category:'embedded', name:'ESP32 / Microcontrollers', pct:82 },
-    { category:'embedded', name:'I2S / Audio Protocols', pct:75 },
-    { category:'embedded', name:'Firmware (C/C++)', pct:78 },
-    { category:'software', name:'JavaScript (Vanilla / ES Modules)', pct:88 },
-    { category:'software', name:'Python', pct:75 },
-    { category:'software', name:'REST API Integration', pct:85 },
-    { category:'cad-cam', name:'NX CAD Modeling', pct:80 },
-    { category:'cad-cam', name:'Moldflow Analysis', pct:72 },
-    { category:'cad-cam', name:'Injection Mold Design', pct:70 },
-    { category:'controls', name:'Automation & Industry 4.0', pct:78 },
-    { category:'controls', name:'OPC UA / Digital Twin', pct:70 },
-    { category:'controls', name:'DC Machine Theory', pct:82 },
-    { category:'prototyping', name:'Rapid Browser Prototyping', pct:90 },
-    { category:'prototyping', name:'Single-File Deployment', pct:88 },
-    { category:'prototyping', name:'Hardware Breadboarding', pct:76 }
+  skillsetTabs: [
+    { id:"mechatronics", label:"MECHATRONICS" },
+    { id:"embedded", label:"EMBEDDED" },
+    { id:"software", label:"SOFTWARE" },
+    { id:"cad-cam", label:"CAD / CAM" },
+    { id:"controls", label:"CONTROLS" },
+    { id:"prototyping", label:"PROTOTYPING" }
   ],
 
-  eventFilters:[
-    { id:'all', label:'ALL' },
-    { id:'hackathon', label:'HACKATHON' },
-    { id:'conference', label:'CONFERENCE' },
-    { id:'expo', label:'EXPO' },
-    { id:'meetup', label:'MEETUP' }
+  // percentages are placeholders — tune to taste
+  skills: [
+    { category:"mechatronics", name:"Sensor Integration", pct:85 },
+    { category:"mechatronics", name:"System Modeling", pct:80 },
+    { category:"mechatronics", name:"Actuator Selection", pct:78 },
+    { category:"mechatronics", name:"Signal Conditioning", pct:75 },
+    { category:"mechatronics", name:"Mech-Electrical Interfacing", pct:82 },
+
+    { category:"embedded", name:"I2S Audio Protocols", pct:80 },
+    { category:"embedded", name:"ESP32 Firmware", pct:85 },
+    { category:"embedded", name:"Real-Time Control Loops", pct:78 },
+    { category:"embedded", name:"Memory & Heap Management", pct:75 },
+    { category:"embedded", name:"Serial / HTTP Comms", pct:82 },
+
+    { category:"software", name:"Vanilla JavaScript", pct:90 },
+    { category:"software", name:"LLM API Integration", pct:88 },
+    { category:"software", name:"Physics Simulation", pct:80 },
+    { category:"software", name:"n8n Workflow Automation", pct:78 },
+    { category:"software", name:"PostgreSQL", pct:72 },
+
+    { category:"cad-cam", name:"NX CAD Modeling", pct:80 },
+    { category:"cad-cam", name:"Moldflow Analysis", pct:72 },
+    { category:"cad-cam", name:"GD&T", pct:70 },
+    { category:"cad-cam", name:"Assembly Modeling", pct:76 },
+    { category:"cad-cam", name:"DFM Review", pct:68 },
+
+    { category:"controls", name:"DC Motor / Generator Theory", pct:85 },
+    { category:"controls", name:"PID Fundamentals", pct:75 },
+    { category:"controls", name:"Fault Diagnostics", pct:78 },
+    { category:"controls", name:"Closed-Loop Systems", pct:74 },
+    { category:"controls", name:"Instrumentation", pct:76 },
+
+    { category:"prototyping", name:"Rapid Iteration", pct:88 },
+    { category:"prototyping", name:"Perfboard Assembly", pct:80 },
+    { category:"prototyping", name:"FFmpeg Media Pipelines", pct:82 },
+    { category:"prototyping", name:"Benchtop Testing", pct:78 },
+    { category:"prototyping", name:"Hands-On Lab Work", pct:85 }
   ],
+
+  eventFilters: [
+    { filter:"all", label:"ALL" },
+    { filter:"hackathon", label:"HACKATHON" },
+    { filter:"conference", label:"CONFERENCE" },
+    { filter:"expo", label:"EXPO" },
+    { filter:"meetup", label:"MEETUP" }
+  ],
+
+  // Template placeholders — replace with your real events
   events: [
     {
-      id:'event-1', category:'expo',
-      title:'KU Leuven Group T Open Day',
-      description:'Presented mechatronic project builds to visitors',
-      coverUrl:'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80',
-      summaryUrl:'https://www.groept.be/',
-      participation:'Presented hands-on hardware demos on the engineering showcase floor, walking visitors through embedded systems builds.',
-      outcomes:'Fielded technical questions from prospective students and faculty; refined how project work is explained to non-specialist audiences.',
-      media:[
-        'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=300&q=80',
-        'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=300&q=80',
-        'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=300&q=80',
-        'https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?auto=format&fit=crop&w=300&q=80'
-      ]
+      id: "event-1",
+      category: "hackathon",
+      title: "ADD_EVENT_NAME",
+      description: "Edit this card with your event details",
+      coverPhoto: null, // ADD_EVENT_IMAGE_URL
+      participation: "[Insert event participation role/details]",
+      outcomes: "[Insert key outcomes/achievements]",
+      media: [null, null, null, null], // ADD_THUMB_URLs
+      officialUrl: "#" // ADD_EVENT_URL
     },
     {
-      id:'event-2', category:'hackathon',
-      title:'Campus Hardware Hackathon',
-      description:'Team build sprint on an embedded systems challenge',
-      coverUrl:'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80',
-      summaryUrl:'https://github.com/lizozivzivadze-star',
-      participation:'Joined a small team building a rapid embedded-systems prototype against a fixed deadline.',
-      outcomes:'Delivered a working demo within the time limit and picked up practical lessons on hardware debugging under pressure.',
-      media:[
-        'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=300&q=80',
-        'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=300&q=80',
-        'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=300&q=80',
-        'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=300&q=80'
-      ]
+      id: "event-2",
+      category: "conference",
+      title: "ADD_EVENT_NAME",
+      description: "Edit this card with your event details",
+      coverPhoto: null,
+      participation: "[Insert event participation role/details]",
+      outcomes: "[Insert key outcomes/achievements]",
+      media: [null, null, null, null],
+      officialUrl: "#"
     }
   ],
 
-  values: [
+  valueCards: [
     {
-      title:'Hardware/Software Integration',
-      icon:`<path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 9h6v6H9z"/>`,
-      text:'Bridging the gap between electromechanical hardware and real-time software. Experienced in developing embedded control logic, sensor pipelines, and automated firmware interfaces.'
+      title: "Hardware/Software Integration",
+      icon: "cpu",
+      text: "Bridging the gap between electromechanical hardware and real-time software. Experienced in developing embedded control logic and automated firmware."
     },
     {
-      title:'Robust System Design',
-      icon:`<path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5z"/><path d="m9 12 2 2 4-4"/>`,
-      text:'Designing clean, maintainable mechatronic architectures with emphasis on deterministic execution, thorough testing protocols, and production-ready component selection.'
+      title: "Robust System Design",
+      icon: "shield",
+      text: "Designing clean, maintainable mechatronic architectures focused on deterministic execution, thorough testing protocols, and robust component selection."
     },
     {
-      title:'Rapid Prototype Execution',
-      icon:`<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>`,
-      text:'Accelerating project lifecycles through rapid iteration, custom CAD modeling, micro-controller programming, and hands-on laboratory assembly.'
+      title: "Rapid Prototype Execution",
+      icon: "zap",
+      text: "Accelerating project lifecycles through rapid iteration, custom CAD modeling, microcontroller programming, and hands-on laboratory assembly."
     }
   ]
 };
 
-/* ================================================================
-   RENDERING
-   ================================================================ */
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* =====================================================================
+   ICONS
+   ===================================================================== */
+const ICONS = {
+  phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+  whatsapp: '<path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/>',
+  mail: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
+  linkedin: '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>',
+  github: '<path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/>',
+  cpu: '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/>',
+  shield: '<path d="M20 13c0 5-3.5 7.5-7.5 9-.5.5-1.5.5-2 0C6.5 20.5 3 18 3 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C13.5 3.8 16 5 18 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+  zap: '<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>',
+  video: '<path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2"/>'
+};
+function svgIcon(name, extraAttrs){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" ' + (extraAttrs||'') + '>' + ICONS[name] + '</svg>';
 }
 
+/* =====================================================================
+   RENDER: PROFILE
+   ===================================================================== */
+function renderProfile(){
+  const p = PORTFOLIO_DATA.profile;
+  document.getElementById('profile-photo').src = p.photo;
+  document.getElementById('profile-name').textContent = p.name;
+  document.getElementById('profile-title').textContent = p.title;
+  document.getElementById('personal-statement').textContent = p.statement;
+  document.getElementById('header-mini-avatar').src = p.photo;
+  document.getElementById('header-full-name').textContent = p.name;
+
+  const actions = document.getElementById('profile-actions');
+  actions.innerHTML = `
+    <a href="tel:${p.phone}" title="Call ${p.name}" target="_self" class="action-btn">${svgIcon('phone','stroke-width="2"')}</a>
+    <a href="https://wa.me/${p.whatsapp}" title="WhatsApp Chat" target="_blank" rel="noopener noreferrer" class="action-btn">${svgIcon('whatsapp','stroke-width="2"')}</a>
+    <a href="mailto:${p.email}" title="Email ${p.name}" target="_self" class="action-btn">${svgIcon('mail','stroke-width="2"')}</a>
+    <a href="${p.linkedin}" title="LinkedIn Profile" target="_blank" rel="noopener noreferrer" class="action-btn">${svgIcon('linkedin','stroke-width="2" fill="none"')}</a>
+    <a href="${p.github}" title="GitHub Profile" target="_blank" rel="noopener noreferrer" class="action-btn">${svgIcon('github','stroke-width="2"')}</a>
+  `;
+}
+
+/* =====================================================================
+   RENDER: PROJECTS
+   ===================================================================== */
 function renderProjects(){
-  const carousel = document.getElementById('projects-carousel');
-  carousel.innerHTML = PORTFOLIO_DATA.projects.map(p => `
-    <article class="carousel-card">
-      <article class="project-card card-shell" data-category="${p.category}">
-        <div class="card-media">
-          ${p.videoId
-            ? `<iframe class="project-video" src="https://www.youtube-nocookie.com/embed/${p.videoId}?enablejsapi=1" title="${escapeHtml(p.title)} demo video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
-            : `<div class="video-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><span>Demo video coming soon</span></div>`
-          }
+  const wrap = document.getElementById('projects-carousel');
+  wrap.innerHTML = PORTFOLIO_DATA.projects.map(function(proj){
+    const videoInner = proj.videoId
+      ? `<iframe class="project-video" src="https://www.youtube-nocookie.com/embed/${proj.videoId}?enablejsapi=1" title="${proj.title} Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;"></iframe>`
+      : `<div class="video-placeholder">${svgIcon('video','stroke-width="2"')}<span>Add Demo Video</span></div>`;
+    const badges = proj.techStack.map(function(t){ return `<span class="tech-badge">${t}</span>`; }).join('');
+    return `
+    <article class="project-card" data-category="${proj.category}">
+      <div class="card-video-container">${videoInner}</div>
+      <div class="card-header">
+        <h3 class="card-title">${proj.title}</h3>
+        <p class="card-description">${proj.description}</p>
+      </div>
+      <nav class="card-subnav">
+        <button class="subtab-btn active" data-tab="overview">OVERVIEW</button>
+        <button class="subtab-btn" data-tab="techstack">TECH STACK</button>
+        <a href="${proj.liveUrl}" target="_blank" rel="noopener noreferrer" class="subtab-btn subtab-url-btn">URL ↗</a>
+      </nav>
+      <div class="card-tab-content">
+        <div class="pane-overview active">
+          <p class="pane-line"><strong>Objective:</strong> <span class="pane-text">${proj.objective}</span></p>
+          <p class="pane-line" style="margin-top:8px;"><strong>Results:</strong> <span class="pane-text">${proj.results}</span></p>
         </div>
-        <div class="card-header">
-          <h3 class="card-title">${escapeHtml(p.title)}</h3>
-          <p class="card-description">${escapeHtml(p.description)}</p>
-        </div>
-        <nav class="card-subnav">
-          <button class="subtab-btn active" data-tab="overview">OVERVIEW</button>
-          <button class="subtab-btn" data-tab="techstack">TECH STACK</button>
-          <a href="${p.liveUrl}" target="_blank" rel="noopener noreferrer" class="subtab-btn subtab-url-btn">URL ↗</a>
-        </nav>
-        <div class="card-tab-content">
-          <div class="pane-overview" data-pane="overview">
-            <p class="pane-line"><strong>Objective:</strong> <span class="truncated-2-lines">${escapeHtml(p.objective)}</span></p>
-            <p class="pane-line" style="margin-top:6px;"><strong>Results:</strong> <span class="truncated-2-lines">${escapeHtml(p.results)}</span></p>
-          </div>
-          <div class="pane-techstack tech-stack-wrap" data-pane="techstack" style="display:none;">
-            ${p.stack.map(t => `<span class="tech-badge">${escapeHtml(t)}</span>`).join('')}
-          </div>
-        </div>
-      </article>
-    </article>
-  `).join('');
+        <div class="pane-techstack">${badges}</div>
+      </div>
+    </article>`;
+  }).join('');
 }
 
-function renderSkillsets(){
-  const tabsNav = document.getElementById('skillset-tabs');
-  tabsNav.innerHTML = PORTFOLIO_DATA.skillsets.map((s,i) =>
-    `<button class="skill-tab${i===0?' active':''}" data-skillset="${s.id}">${escapeHtml(s.label)}</button>`
-  ).join('');
+/* =====================================================================
+   RENDER: SKILLS
+   ===================================================================== */
+function renderSkills(){
+  const tabsWrap = document.getElementById('skillset-tabs-grid');
+  tabsWrap.innerHTML = PORTFOLIO_DATA.skillsetTabs.map(function(tab,i){
+    return `<button class="skill-tab${i===0?' active':''}" data-skillset="${tab.id}">${tab.label}</button>`;
+  }).join('');
 
-  const box = document.getElementById('skills-display-box');
-  const firstCategory = PORTFOLIO_DATA.skillsets[0].id;
-  box.innerHTML = PORTFOLIO_DATA.skills.map(sk => `
-    <div class="skill-row" data-category="${sk.category}" style="${sk.category===firstCategory?'':'display:none;'}">
+  const rowsWrap = document.getElementById('skill-rows');
+  rowsWrap.innerHTML = PORTFOLIO_DATA.skills.map(function(s,i){
+    const isFirstCategory = s.category === PORTFOLIO_DATA.skillsetTabs[0].id;
+    return `
+    <div class="skill-row${isFirstCategory?' active':''}" data-category="${s.category}" style="${i>0?'margin-top:0;':''}">
       <div class="skill-meta-line">
-        <span class="skill-name">${escapeHtml(sk.name)}</span>
-        <span class="skill-percentage">${sk.pct}%</span>
+        <span class="skill-name">${s.name}</span>
+        <span class="skill-percentage">${s.pct}%</span>
       </div>
       <div class="progress-track">
-        <div class="progress-fill" style="width:0%;" data-target-width="${sk.pct}%"></div>
+        <div class="progress-fill" style="width:0%;" data-target-width="${s.pct}%"></div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
+
+  // apply the 14px gap manually since rows are injected as flat HTML
+  const container = rowsWrap;
+  container.style.display = 'flex';
+  container.style.flexDirection = 'column';
+  container.style.gap = '14px';
 
   animateVisibleFills();
 }
-
 function animateVisibleFills(){
-  const box = document.getElementById('skills-display-box');
-  const visibleFills = box.querySelectorAll('.skill-row:not([style*="display: none"]) .progress-fill');
-  visibleFills.forEach(f => f.style.width = '0%');
-  setTimeout(() => {
-    visibleFills.forEach(f => { f.style.width = f.dataset.targetWidth; });
+  document.querySelectorAll('.skill-row.active .progress-fill').forEach(function(f){ f.style.width = '0%'; });
+  setTimeout(function(){
+    document.querySelectorAll('.skill-row.active .progress-fill').forEach(function(f){
+      f.style.width = f.getAttribute('data-target-width');
+    });
   }, 50);
 }
 
+/* =====================================================================
+   RENDER: EVENTS
+   ===================================================================== */
 function renderEvents(){
-  const filterBar = document.getElementById('events-filter-bar');
-  filterBar.innerHTML = PORTFOLIO_DATA.eventFilters.map((f,i) =>
-    `<button class="tab-btn event-filter-btn${i===0?' active':''}" data-filter="${f.id}">${escapeHtml(f.label)}</button>`
-  ).join('');
+  const filterWrap = document.getElementById('events-filter-bar');
+  filterWrap.innerHTML = PORTFOLIO_DATA.eventFilters.map(function(f,i){
+    return `<button class="event-filter-btn${i===0?' active':''}" data-filter="${f.filter}">${f.label}</button>`;
+  }).join('');
 
-  const carousel = document.getElementById('events-carousel');
-  carousel.innerHTML = PORTFOLIO_DATA.events.map(e => `
-    <article class="carousel-card">
-      <article class="event-card card-shell" data-category="${e.category}">
-        <div class="card-media photo-media">
-          <img src="${e.coverUrl}" alt="${escapeHtml(e.title)} photo" class="event-cover-photo">
+  const wrap = document.getElementById('events-carousel');
+  wrap.innerHTML = PORTFOLIO_DATA.events.map(function(ev){
+    const cover = ev.coverPhoto || PLACEHOLDER_IMG;
+    const thumbs = ev.media.map(function(url){
+      const src = url || PLACEHOLDER_IMG;
+      return `<img src="${src}" alt="Event Media" class="lightbox-thumb" onclick="openLightbox('${src}')">`;
+    }).join('');
+    return `
+    <article class="event-card" data-category="${ev.category}">
+      <div class="card-photo-container">
+        <img src="${cover}" alt="Event Photo" class="event-cover-photo">
+      </div>
+      <div class="card-header">
+        <h3 class="card-title">${ev.title}</h3>
+        <p class="card-description">${ev.description}</p>
+      </div>
+      <nav class="card-subnav">
+        <button class="event-subtab-btn active" data-tab="overview">OVERVIEW</button>
+        <button class="event-subtab-btn" data-tab="media">MEDIA</button>
+        <a href="${ev.officialUrl}" target="_blank" rel="noopener noreferrer" class="event-subtab-btn subtab-url-btn">URL ↗</a>
+      </nav>
+      <div class="card-tab-content">
+        <div class="event-pane-overview active">
+          <p class="pane-line"><strong>Participation:</strong> <span class="pane-text">${ev.participation}</span></p>
+          <p class="pane-line" style="margin-top:8px;"><strong>Outcomes:</strong> <span class="pane-text">${ev.outcomes}</span></p>
         </div>
-        <div class="card-header">
-          <h3 class="card-title">${escapeHtml(e.title)}</h3>
-          <p class="card-description">${escapeHtml(e.description)}</p>
-        </div>
-        <nav class="card-subnav">
-          <button class="event-subtab-btn subtab-btn active" data-tab="overview">OVERVIEW</button>
-          <button class="event-subtab-btn subtab-btn" data-tab="media">MEDIA</button>
-          <a href="${e.summaryUrl}" target="_blank" rel="noopener noreferrer" class="event-subtab-btn subtab-btn subtab-url-btn">URL ↗</a>
-        </nav>
-        <div class="card-tab-content">
-          <div class="event-pane-overview" data-pane="overview">
-            <p class="pane-line"><strong>Participation:</strong> <span class="truncated-2-lines">${escapeHtml(e.participation)}</span></p>
-            <p class="pane-line" style="margin-top:6px;"><strong>Outcomes:</strong> <span class="truncated-2-lines">${escapeHtml(e.outcomes)}</span></p>
-          </div>
-          <div class="event-pane-media media-grid" data-pane="media" style="display:none;">
-            ${e.media.map(src => `<img src="${src}" alt="${escapeHtml(e.title)} media" class="lightbox-thumb" onclick="openLightbox(this.src)">`).join('')}
-          </div>
-        </div>
-      </article>
-    </article>
-  `).join('');
+        <div class="event-pane-media">${thumbs}</div>
+      </div>
+    </article>`;
+  }).join('');
 }
 
+/* =====================================================================
+   RENDER: VALUE CARDS
+   ===================================================================== */
 function renderValueCards(){
-  const carousel = document.getElementById('value-carousel');
-  carousel.innerHTML = PORTFOLIO_DATA.values.map(v => `
-    <article class="carousel-card">
-      <article class="value-card">
-        <div class="value-card-header">
-          <span class="value-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${v.icon}</svg></span>
-          <h3 class="value-card-title">${escapeHtml(v.title)}</h3>
-        </div>
-        <p class="value-card-text">${escapeHtml(v.text)}</p>
-      </article>
-    </article>
-  `).join('');
+  const wrap = document.getElementById('value-carousel');
+  wrap.innerHTML = PORTFOLIO_DATA.valueCards.map(function(v){
+    return `
+    <article class="value-card">
+      <div class="value-card-header">
+        <span class="value-card-icon">${svgIcon(v.icon,'stroke-width="2"')}</span>
+        <h3 class="value-card-title">${v.title}</h3>
+      </div>
+      <p class="value-card-text">${v.text}</p>
+    </article>`;
+  }).join('');
 }
 
-/* ================================================================
-   INTERACTIONS
-   ================================================================ */
-function initProjectFilters(){
-  const bar = document.getElementById('projects-filter-bar');
-  bar.addEventListener('click', e => {
-    const btn = e.target.closest('.tab-btn');
-    if(!btn) return;
-    bar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const filter = btn.dataset.filter;
-    document.querySelectorAll('#projects-carousel .project-card').forEach(card => {
-      const wrap = card.closest('.carousel-card');
-      const match = filter === 'all' || card.dataset.category === filter;
-      wrap.style.display = match ? 'block' : 'none';
-    });
+/* =====================================================================
+   INTERACTION: PROJECT FILTER BAR
+   ===================================================================== */
+document.querySelector('.projects-filter-bar').addEventListener('click', function(e){
+  const btn = e.target.closest('.filter-btn');
+  if(!btn) return;
+  document.querySelectorAll('.projects-filter-bar .filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  const filter = btn.dataset.filter;
+  document.querySelectorAll('#projects-carousel .project-card').forEach(function(card){
+    const show = filter === 'all' || card.dataset.category === filter;
+    card.style.display = show ? 'flex' : 'none';
   });
-}
+});
 
-function initEventFilters(){
-  const bar = document.getElementById('events-filter-bar');
-  bar.addEventListener('click', e => {
-    const btn = e.target.closest('.tab-btn');
-    if(!btn) return;
-    bar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const filter = btn.dataset.filter;
-    document.querySelectorAll('#events-carousel .event-card').forEach(card => {
-      const wrap = card.closest('.carousel-card');
-      const match = filter === 'all' || card.dataset.category === filter;
-      wrap.style.display = match ? 'block' : 'none';
-    });
+/* =====================================================================
+   INTERACTION: EVENTS FILTER BAR (delegated, since it's rendered dynamically)
+   ===================================================================== */
+document.getElementById('events-filter-bar').addEventListener('click', function(e){
+  const btn = e.target.closest('.event-filter-btn');
+  if(!btn) return;
+  document.querySelectorAll('#events-filter-bar .event-filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  const filter = btn.dataset.filter;
+  document.querySelectorAll('#events-carousel .event-card').forEach(function(card){
+    const show = filter === 'all' || card.dataset.category === filter;
+    card.style.display = show ? 'flex' : 'none';
   });
-}
+});
 
-function initCardSubtabs(carouselId, subtabSelector, paneAttr){
-  const carousel = document.getElementById(carouselId);
-  carousel.addEventListener('click', e => {
-    const btn = e.target.closest(subtabSelector);
-    if(!btn || btn.classList.contains('subtab-url-btn')) return;
-    const card = btn.closest('.card-shell');
-    card.querySelectorAll(subtabSelector + ':not(.subtab-url-btn)').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const target = btn.dataset.tab;
-    card.querySelectorAll(`[${paneAttr}]`).forEach(pane => {
-      pane.style.display = pane.getAttribute(paneAttr) === target ? '' : 'none';
-    });
+/* =====================================================================
+   INTERACTION: PROJECT CARD SUB-TABS (Overview / Tech Stack)
+   ===================================================================== */
+document.getElementById('projects-carousel').addEventListener('click', function(e){
+  const btn = e.target.closest('.subtab-btn');
+  if(!btn || btn.classList.contains('subtab-url-btn')) return;
+  const card = btn.closest('.project-card');
+  card.querySelectorAll('.subtab-btn').forEach(function(b){ if(!b.classList.contains('subtab-url-btn')) b.classList.remove('active'); });
+  btn.classList.add('active');
+  const tab = btn.dataset.tab;
+  card.querySelector('.pane-overview').classList.toggle('active', tab === 'overview');
+  card.querySelector('.pane-techstack').classList.toggle('active', tab === 'techstack');
+});
+
+/* =====================================================================
+   INTERACTION: EVENT CARD SUB-TABS (Overview / Media)
+   ===================================================================== */
+document.getElementById('events-carousel').addEventListener('click', function(e){
+  const btn = e.target.closest('.event-subtab-btn');
+  if(!btn || btn.classList.contains('subtab-url-btn')) return;
+  const card = btn.closest('.event-card');
+  card.querySelectorAll('.event-subtab-btn').forEach(function(b){ if(!b.classList.contains('subtab-url-btn')) b.classList.remove('active'); });
+  btn.classList.add('active');
+  const tab = btn.dataset.tab;
+  card.querySelector('.event-pane-overview').classList.toggle('active', tab === 'overview');
+  card.querySelector('.event-pane-media').classList.toggle('active', tab === 'media');
+});
+
+/* =====================================================================
+   INTERACTION: SKILLSET TABS + FILL ANIMATION
+   ===================================================================== */
+document.getElementById('skillset-tabs-grid').addEventListener('click', function(e){
+  const btn = e.target.closest('.skill-tab');
+  if(!btn) return;
+  document.querySelectorAll('.skill-tab').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  const skillset = btn.dataset.skillset;
+  document.querySelectorAll('.skill-row').forEach(function(row){
+    row.classList.toggle('active', row.dataset.category === skillset);
   });
-}
+  animateVisibleFills();
+});
 
-function initSkillTabs(){
-  const nav = document.getElementById('skillset-tabs');
-  nav.addEventListener('click', e => {
-    const btn = e.target.closest('.skill-tab');
-    if(!btn) return;
-    nav.querySelectorAll('.skill-tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const category = btn.dataset.skillset;
-    document.querySelectorAll('#skills-display-box .skill-row').forEach(row => {
-      row.style.display = row.dataset.category === category ? 'flex' : 'none';
-    });
-    animateVisibleFills();
-  });
-}
-
+/* =====================================================================
+   INTERACTION: LIGHTBOX
+   ===================================================================== */
 function openLightbox(src){
-  const modal = document.getElementById('lightbox-modal');
   document.getElementById('lightbox-img').src = src;
-  modal.classList.add('open');
+  document.getElementById('lightbox-modal').classList.add('open');
 }
 function closeLightbox(){
   document.getElementById('lightbox-modal').classList.remove('open');
+  document.getElementById('lightbox-img').src = '';
 }
+document.getElementById('lightbox-img').addEventListener('click', function(e){ e.stopPropagation(); });
 
-/* ---- Help Yourself form ---- */
-function initHelpYourselfForm(){
-  const form = document.getElementById('help-yourself-form');
-  const checkboxes = form.querySelectorAll('.file-checkbox');
-  const emailInput = document.getElementById('recipient-email');
-  const sendBtn = document.getElementById('send-pdf-btn');
-  const btnLabel = sendBtn.querySelector('.btn-label');
-
-  function isValidEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-
-  function updateBoxState(cb){
-    const box = cb.closest('.file-select-box');
-    box.classList.toggle('selected', cb.checked);
-  }
-  function validate(){
-    const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
-    sendBtn.disabled = !(anyChecked && isValidEmail(emailInput.value.trim()));
-  }
-
-  checkboxes.forEach(cb => cb.addEventListener('change', () => { updateBoxState(cb); validate(); }));
-  emailInput.addEventListener('input', validate);
-  validate();
-
-  // Configure these to enable real dispatch via EmailJS (https://www.emailjs.com/).
-  // Left unconfigured, the form runs in demo mode: it shows the full loading/success
-  // states but does not contact a server.
-  const EMAIL_CONFIG = {
-    serviceId:'YOUR_EMAILJS_SERVICE_ID',
-    templateId:'YOUR_EMAILJS_TEMPLATE_ID',
-    publicKey:'YOUR_EMAILJS_PUBLIC_KEY',
-    ownerEmail:'lizozivzivadze@gmail.com'
-  };
-  const isConfigured = !EMAIL_CONFIG.serviceId.startsWith('YOUR_')
-    && !EMAIL_CONFIG.templateId.startsWith('YOUR_')
-    && !EMAIL_CONFIG.publicKey.startsWith('YOUR_');
-
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    if(sendBtn.disabled) return;
-
-    const selectedFiles = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
-    const userEmail = emailInput.value.trim();
-
-    sendBtn.disabled = true;
-    btnLabel.innerHTML = '<span class="spinner"></span><span>SENDING...</span>';
-
-    const finishSuccess = () => {
-      sendBtn.classList.add('is-success');
-      btnLabel.textContent = 'SENT ✓';
-      setTimeout(() => {
-        form.reset();
-        checkboxes.forEach(cb => updateBoxState(cb));
-        sendBtn.classList.remove('is-success');
-        btnLabel.textContent = 'SEND';
-        validate();
-      }, 4000);
-    };
-
-    try{
-      if(isConfigured && window.emailjs){
-        await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, {
-          to_email:userEmail, requested_files:selectedFiles.join(', '), timestamp:new Date().toISOString()
-        });
-        await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, {
-          to_email:EMAIL_CONFIG.ownerEmail,
-          subject:'Portfolio Alert: Asset Requested',
-          message:`User ${userEmail} requested ${selectedFiles.join(', ')} at ${new Date().toLocaleString()}.`
-        });
-      } else {
-        console.info('[Help Yourself] EmailJS is not configured — running in demo mode. Set EMAIL_CONFIG in index.html to enable real dispatch.');
-        await new Promise(r => setTimeout(r, 900));
-      }
-      finishSuccess();
-    } catch(err){
-      console.error('[Help Yourself] Send failed, falling back to mailto:', err);
-      window.location.href = `mailto:${EMAIL_CONFIG.ownerEmail}?subject=${encodeURIComponent('Portfolio Alert: Asset Requested')}&body=${encodeURIComponent(`User ${userEmail} requested ${selectedFiles.join(', ')}.`)}`;
-      finishSuccess();
-    }
+/* =====================================================================
+   INTERACTION: STICKY HEADER VISIBILITY (IntersectionObserver)
+   ===================================================================== */
+const stickyHeader = document.getElementById('sticky-header');
+const profileSection = document.getElementById('profile-section');
+new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    stickyHeader.classList.toggle('visible', !entry.isIntersecting);
   });
+}, { threshold: 0 }).observe(profileSection);
+
+/* =====================================================================
+   INTERACTION: HELP YOURSELF FORM
+   ===================================================================== */
+const form = document.getElementById('help-yourself-form');
+const emailInput = document.getElementById('recipient-email');
+const sendBtn = document.getElementById('send-pdf-btn');
+const fileChecks = document.querySelectorAll('.file-checkbox');
+
+// TODO: point this at a real Formspree / EmailJS / serverless endpoint before going live.
+const FORM_ENDPOINT = null;
+const OWNER_EMAIL = PORTFOLIO_DATA.profile.email;
+
+function validateForm(){
+  const anySelected = Array.from(fileChecks).some(function(c){ return c.checked; });
+  const emailValid = emailInput.checkValidity() && emailInput.value.trim().length > 0;
+  sendBtn.disabled = !(anySelected && emailValid);
 }
+fileChecks.forEach(function(c){ c.addEventListener('change', validateForm); });
+emailInput.addEventListener('input', validateForm);
 
-/* ---- Sticky header visibility ---- */
-function initStickyHeader(){
-  const header = document.getElementById('sticky-header');
-  const profileSection = document.getElementById('profile-section');
-  const observer = new IntersectionObserver(([entry]) => {
-    header.classList.toggle('visible', !entry.isIntersecting);
-  }, { threshold: 0 });
-  observer.observe(profileSection);
-}
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  if(sendBtn.disabled) return;
 
-/* ================================================================
-   BOOT
-   ================================================================ */
-document.addEventListener('DOMContentLoaded', () => {
-  renderProjects();
-  renderSkillsets();
-  renderEvents();
-  renderValueCards();
+  const selectedFiles = Array.from(fileChecks).filter(function(c){ return c.checked; }).map(function(c){ return c.value; });
+  const userEmail = emailInput.value.trim();
+  const originalLabel = 'SEND';
 
-  initProjectFilters();
-  initEventFilters();
-  initCardSubtabs('projects-carousel', '.subtab-btn', 'data-pane');
-  initCardSubtabs('events-carousel', '.event-subtab-btn', 'data-pane');
-  initSkillTabs();
-  initHelpYourselfForm();
-  initStickyHeader();
+  sendBtn.disabled = true;
+  sendBtn.innerHTML = '<span class="spinner"></span> SENDING...';
+
+  const payload = {
+    recipient: userEmail,
+    files: selectedFiles,
+    owner: OWNER_EMAIL,
+    subject: "Portfolio Alert: Asset Requested",
+    body: "User " + userEmail + " requested " + selectedFiles.join(', ') + " at " + new Date().toISOString()
+  };
+
+  const dispatch = FORM_ENDPOINT
+    ? fetch(FORM_ENDPOINT, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) })
+    : Promise.resolve(); // no endpoint configured yet — simulate locally
+
+  dispatch.then(function(){
+    sendBtn.classList.add('success');
+    sendBtn.innerHTML = 'SENT ✓';
+    setTimeout(function(){
+      sendBtn.classList.remove('success');
+      sendBtn.innerHTML = originalLabel;
+      form.reset();
+      validateForm();
+    }, 4000);
+  }).catch(function(err){
+    console.error('Send failed:', err);
+    sendBtn.innerHTML = 'ERROR — TRY AGAIN';
+    setTimeout(function(){
+      sendBtn.innerHTML = originalLabel;
+      validateForm();
+    }, 2500);
+  });
 });
+
+/* =====================================================================
+   INIT
+   ===================================================================== */
+renderProfile();
+renderProjects();
+renderSkills();
+renderEvents();
+renderValueCards();
+validateForm();
 </script>
 </body>
 </html>
