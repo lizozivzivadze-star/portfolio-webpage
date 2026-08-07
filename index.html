@@ -9,404 +9,198 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  :root {
-    --bg-main: #FAFAFA;
-    --bg-surface: #FFFFFF;
-    --text-primary: #0F172A;
-    --text-secondary: #475569;
-    --text-muted: #64748B;
-    --border-color: #E2E8F0;
-    --accent-primary: #2563EB;
-    --accent-hover: #1D4ED8;
-    --accent-subtle: #EFF6FF;
-    --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-mono: "JetBrains Mono", "Fira Code", "Courier New", monospace;
+  :root{
+    --bg-main:#FAFAFA; --bg-surface:#FFFFFF;
+    --text-primary:#0F172A; --text-secondary:#475569; --text-muted:#64748B;
+    --border-color:#E2E8F0;
+    --accent-primary:#2563EB; --accent-hover:#1D4ED8; --accent-subtle:#EFF6FF;
+    --font-primary:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --font-mono:"JetBrains Mono","Fira Code","Courier New",monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;text-size-adjust:100%;font-size:16px;}
+  body{background:var(--bg-main);color:var(--text-primary);font-family:var(--font-primary);line-height:1.5;}
+  img{display:block;max-width:100%;}
+  button,input{font-family:inherit;}
+
+  /* ===== LAYOUT WRAPPER ===== */
+  .portfolio-container{max-width:100%;margin:0 auto;padding:15px;padding-top:calc(15px + 44px);}
+  @media (min-width:768px) and (max-width:1023px){
+    .portfolio-container{max-width:700px;}
+  }
+  @media (min-width:1024px){
+    .portfolio-container{max-width:1080px;padding:32px;padding-top:calc(32px + 44px);}
   }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; text-size-adjust: 100%; }
-  body {
-    background: var(--bg-main);
-    color: var(--text-primary);
-    font-family: var(--font-primary);
-    font-size: 16px;
-    line-height: 1.5;
-    padding-top: 0;
+  /* ===== STICKY HEADER (Section 8) ===== */
+  .sticky-header{
+    position:fixed;top:0;left:0;width:100%;height:44px;min-height:44px;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 15px;box-sizing:border-box;
+    border-bottom:1px solid rgba(226,232,240,0.8);
+    background:rgba(255,255,255,0.85);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    opacity:0;transform:translateY(-100%);pointer-events:none;
+    transition:opacity 0.2s ease, transform 0.2s ease;
+  }
+  .sticky-header.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+  @media (min-width:1024px){
+    .sticky-header{left:50%;transform:translateX(-50%) translateY(-100%);max-width:1080px;width:100%;padding-left:32px;padding-right:32px;}
+    .sticky-header.visible{transform:translateX(-50%) translateY(0);}
+  }
+  .sticky-header-left{display:flex;align-items:center;gap:8px;}
+  .header-mini-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid var(--border-color);}
+  .header-full-name{font-family:var(--font-primary);font-size:16px;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .sticky-header-right{margin-left:auto;display:flex;align-items:center;height:100%;width:auto;}
+
+  /* ===== SHARED CARD / SECTION STYLES ===== */
+  .section-title{font-family:var(--font-primary);font-size:22px;font-weight:700;color:var(--text-primary);text-align:center;margin-top:0;margin-bottom:16px;letter-spacing:0.05em;}
+  .single-line-title{font-size:clamp(15px,4.2vw,20px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;letter-spacing:0.04em;}
+  @media (min-width:1024px){ .section-title{font-size:26px;} }
+
+  /* ===== PROFILE (Section 2) ===== */
+  .profile-card{
+    background:var(--bg-surface);border:1px solid var(--border-color);border-radius:8px;
+    padding:15px;margin-bottom:44px;box-shadow:0 1px 3px 0 rgba(0,0,0,0.05);
+  }
+  .profile-top-row{display:flex;flex-direction:row;align-items:center;flex-wrap:nowrap;gap:16px;}
+  .profile-photo-wrap{width:88px;height:88px;flex-shrink:0;}
+  .profile-photo{width:88px;height:88px;object-fit:cover;border-radius:50%;border:1px solid var(--border-color);}
+  .profile-content-col{flex-grow:1;width:100%;display:flex;flex-direction:column;justify-content:space-between;height:88px;min-width:0;}
+  .profile-name{font-family:var(--font-primary);font-size:22px;font-weight:700;color:var(--text-primary);text-transform:capitalize;line-height:26px;margin:0;padding:0;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .profile-title{font-family:var(--font-mono);font-size:15px;font-weight:500;color:var(--text-secondary);line-height:1.3;margin:0;padding:0;width:100%;white-space:nowrap;overflow:hidden;}
+  .profile-actions{display:flex;flex-direction:row;justify-content:space-between;align-items:center;width:100%;height:32px;}
+  .action-btn svg{width:30px;height:30px;stroke:var(--text-secondary);transition:stroke 0.2s ease;}
+  .action-btn:hover svg{stroke:var(--accent-primary);}
+  .personal-statement{
+    margin-top:12px;padding-top:0;font-family:var(--font-primary);font-size:16px;font-weight:400;
+    color:var(--text-secondary);line-height:1.375;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  @media (min-width:1024px){
+    .profile-photo-wrap,.profile-photo{width:120px;height:120px;}
+    .profile-content-col{height:120px;}
+    .profile-top-row{align-items:flex-start;}
+    .profile-top-row{display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:center;}
+    .personal-statement{font-size:17px;grid-column:1 / -1;}
+    .profile-card{display:flex;flex-direction:column;}
   }
 
-  .portfolio-container {
-    width: 100%;
-    padding: 15px;
-    padding-top: 24px;
-    padding-bottom: 100px;
-  }
+  /* ===== CAROUSEL SHARED (Section 1.6) ===== */
+  .carousel-row{display:flex;flex-direction:row;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none;}
+  .carousel-row::-webkit-scrollbar{display:none;}
+  .carousel-card{width:calc(100% - 19px);min-width:calc(100% - 19px);max-width:calc(100% - 19px);scroll-snap-align:start;flex-shrink:0;}
 
-  /* ===================== SECTION TITLES ===================== */
-  .section-title {
-    font-family: var(--font-primary);
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text-primary);
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 16px;
-    letter-spacing: 0.05em;
+  /* ===== PROJECTS (Section 3) ===== */
+  .projects-card-container,.events-card-container,.value-card-container,.help-yourself-card-container,.skills-card{
+    background:var(--bg-surface);border:1px solid var(--border-color);border-radius:8px;
+    padding:15px;margin-bottom:24px;box-shadow:0 1px 3px 0 rgba(0,0,0,0.05);
   }
-  .single-line-title {
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    font-size: clamp(15px, 4.2vw, 20px);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-    display: block;
+  .skills-card{padding:16px;}
+  .projects-filter-bar{display:flex;flex-direction:row;flex-wrap:nowrap;justify-content:space-between;align-items:center;gap:6px;margin-bottom:10px;}
+  .filter-btn{font-family:var(--font-mono);font-size:11.5px;font-weight:600;padding:6px 8px;border-radius:6px;cursor:pointer;transition:all 0.2s ease;border:1px solid var(--border-color);white-space:nowrap;flex:1 1 0;text-align:center;min-width:0;background:var(--bg-main);color:var(--text-secondary);}
+  .filter-btn.active{background:var(--accent-primary);color:#fff;border-color:var(--accent-primary);}
+  .filter-btn b{font-weight:800;}
+  .projects-carousel{margin:4px -15px;padding:0 15px;}
+  @media (min-width:1024px){
+    .projects-carousel,.events-carousel{display:grid !important;grid-template-columns:repeat(2,1fr);gap:16px;margin:4px 0;padding:0;overflow:visible;}
+    .value-carousel{display:grid !important;grid-template-columns:repeat(3,1fr);gap:16px;margin:4px 0;padding:0;overflow:visible;}
+    .carousel-card{width:100%;min-width:0;max-width:100%;}
+    .project-card,.event-card{height:auto;min-height:476px;}
   }
+  @media (min-width:1440px){
+    .projects-carousel,.events-carousel{grid-template-columns:repeat(3,1fr);}
+  }
+  .project-card,.event-card{
+    height:476px;background:var(--bg-surface);border:1px solid var(--border-color);border-radius:8px;
+    padding:12px;display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box;
+  }
+  .card-video-container,.card-photo-container{width:100%;aspect-ratio:16/9;border-radius:6px;overflow:hidden;margin-bottom:10px;position:relative;background:#000;}
+  .card-photo-container{background:#F1F5F9;}
+  .event-cover-photo{width:100%;height:100%;object-fit:cover;}
+  .card-header{height:64px;}
+  .card-title{font-family:var(--font-primary);font-size:17px;font-weight:700;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:22px;}
+  .card-description{font-family:var(--font-primary);font-size:14px;font-weight:400;color:var(--text-secondary);margin-top:2px;line-height:18px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;}
+  .card-subnav{display:flex;flex-direction:row;gap:6px;width:100%;margin-top:8px;margin-bottom:8px;}
+  .subtab-btn,.event-subtab-btn{font-family:var(--font-mono);font-size:12px;font-weight:600;padding:6px 10px;border-radius:4px;cursor:pointer;flex-grow:1;text-align:center;border:1px solid var(--border-color);background:var(--bg-surface);color:var(--text-muted);text-decoration:none;display:inline-block;}
+  .subtab-btn.active,.event-subtab-btn.active{background:var(--accent-subtle);color:var(--accent-primary);border-color:#BFDBFE;}
+  .subtab-url-btn{background:var(--bg-surface);color:var(--accent-primary);border-color:var(--border-color);}
+  .card-tab-content{flex-grow:1;width:100%;overflow-y:hidden;box-sizing:border-box;}
+  .pane-overview,.event-pane-overview{font-family:var(--font-primary);font-size:14px;color:var(--text-secondary);line-height:20px;}
+  .pane-line strong{color:var(--text-primary);}
+  .pane-techstack{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;}
+  .tech-badge{font-family:var(--font-mono);font-size:12px;font-weight:500;background:var(--accent-subtle);color:var(--accent-primary);border:1px solid #BFDBFE;padding:4px 8px;border-radius:4px;white-space:nowrap;flex:0 1 calc(33.333% - 6px);text-align:center;box-sizing:border-box;}
+  .event-pane-media{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;width:100%;}
+  .lightbox-thumb{width:100%;height:75px;object-fit:cover;border-radius:4px;cursor:pointer;border:1px solid var(--border-color);transition:transform 0.2s ease;}
+  .lightbox-thumb:hover{transform:scale(1.03);}
+  .lightbox-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(15,23,42,0.85);display:none;align-items:center;justify-content:center;z-index:9999;}
+  .lightbox-overlay.open{display:flex;}
+  #lightbox-img{max-width:90vw;max-height:80vh;border-radius:8px;box-shadow:0 10px 25px rgba(0,0,0,0.5);}
 
-  /* ===================== CARD SHELL (shared) ===================== */
-  .profile-card, .projects-card-container, .skills-card, .events-card-container,
-  .value-card-container, .help-yourself-card-container {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 24px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-  }
-  .skills-card { padding: 16px; }
+  /* ===== SKILLS (Section 4) ===== */
+  .skillset-tabs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;}
+  @media (min-width:1024px){ .skillset-tabs-grid{grid-template-columns:repeat(6,1fr);} }
+  .skill-tab{height:36px;padding:0 8px;font-family:var(--font-mono);font-size:13px;font-weight:600;text-align:center;text-transform:uppercase;border-radius:6px;cursor:pointer;transition:all 0.2s ease;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:var(--bg-main);color:var(--text-primary);border:1px solid var(--border-color);}
+  .skill-tab.active{background:var(--accent-primary);color:#fff;border-color:var(--accent-primary);}
+  .skills-display-box{background:var(--bg-main);border:1px solid var(--border-color);border-radius:6px;padding:8px 16px 16px 16px;display:flex;flex-direction:column;gap:14px;}
+  .skills-inner-title{font-family:var(--font-primary);font-size:18px;font-weight:600;color:var(--text-primary);text-align:center;margin-top:0;margin-bottom:8px;}
+  .skill-row{display:flex;flex-direction:column;gap:6px;width:100%;}
+  .skill-meta-line{display:flex;justify-content:space-between;align-items:center;width:100%;}
+  .skill-name{font-family:var(--font-primary);font-size:15px;font-weight:600;color:var(--text-secondary);}
+  .skill-percentage{font-family:var(--font-mono);font-size:14px;font-weight:500;color:var(--accent-primary);}
+  .progress-track{width:100%;height:8px;background:#E2E8F0;border-radius:4px;overflow:hidden;position:relative;}
+  .progress-fill{height:100%;background:var(--accent-primary);border-radius:4px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1);width:0%;}
 
-  /* ===================== SECTION 2: PROFILE ===================== */
-  .profile-top-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex-wrap: nowrap;
-    gap: 16px;
+  /* ===== VALUE CARDS (Section 6) ===== */
+  .value-carousel{margin:4px -15px;padding:0 15px;}
+  .value-card{
+    height:176px;background:var(--bg-surface);border:1px solid var(--border-color);border-radius:8px;
+    padding:16px 20px 32px 20px;display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;
+    position:relative;overflow:hidden;box-sizing:border-box;
   }
-  .profile-photo-wrap { width: 88px; height: 88px; flex-shrink: 0; }
-  .profile-photo {
-    width: 88px; height: 88px; object-fit: cover; border-radius: 50%;
-    border: 1px solid var(--border-color); display: block;
-  }
-  .profile-content-col {
-    flex-grow: 1; width: 100%; display: flex; flex-direction: column;
-    justify-content: space-between; height: 88px; min-width: 0;
-  }
-  .profile-name {
-    font-family: var(--font-primary); font-size: 22px; font-weight: 700;
-    color: var(--text-primary); text-transform: capitalize; line-height: 26px;
-    width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .profile-title {
-    font-family: var(--font-mono); font-size: 15px; font-weight: 500;
-    color: var(--text-secondary); line-height: 20px; width: 100%;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .profile-actions {
-    display: flex; flex-direction: row; justify-content: space-between;
-    align-items: center; width: 100%; height: 24px;
-  }
-  .action-btn { display: flex; align-items: center; justify-content: center; }
-  .action-btn svg {
-    width: 20px; height: 20px; stroke: var(--text-secondary);
-    transition: stroke 0.2s ease;
-  }
-  .action-btn:hover svg { stroke: var(--accent-primary); }
+  .value-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;width:100%;}
+  .value-card-icon{width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--accent-primary);flex-shrink:0;}
+  .value-card-icon svg{width:22px;height:22px;stroke:var(--accent-primary);stroke-width:2;}
+  .value-card-title{font-family:var(--font-primary);font-size:18px;font-weight:700;color:var(--text-primary);line-height:22px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .value-card-text{font-family:var(--font-primary);font-size:15.5px;font-weight:400;color:var(--text-secondary);line-height:22px;max-height:88px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;}
+  .value-card-counter{position:absolute;bottom:10px;right:14px;font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--text-muted);line-height:1;pointer-events:none;user-select:none;}
 
-  .personal-statement {
-    margin-top: 12px; padding-top: 0; border-top: none;
-    font-family: var(--font-primary); font-size: 16px; font-weight: 400;
-    color: var(--text-secondary); line-height: 22px; max-height: 66px;
-    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
-    overflow: hidden; text-overflow: ellipsis;
-  }
+  /* ===== HELP YOURSELF (Section 7) ===== */
+  .help-yourself-form-stack{display:flex;flex-direction:column;gap:12px;width:100%;box-sizing:border-box;}
+  .file-select-box{height:50px;min-height:50px;width:100%;display:flex;align-items:center;padding:0 16px;border-radius:8px;box-sizing:border-box;cursor:pointer;user-select:none;transition:all 0.2s ease;background:var(--bg-surface);border:1px solid var(--border-color);color:var(--text-secondary);}
+  .file-select-box:has(.file-checkbox:checked){background:#EFF6FF;border:1.5px solid var(--accent-primary);color:var(--accent-primary);}
+  .file-select-box.selected{background:#EFF6FF;border:1.5px solid var(--accent-primary);color:var(--accent-primary);}
+  .file-checkbox{opacity:0;pointer-events:none;position:absolute;}
+  .file-box-content{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;height:100%;}
+  .file-icon{width:22px;height:22px;}
+  .file-label{font-family:var(--font-primary);font-size:16px;font-weight:600;text-transform:uppercase;}
+  #recipient-email{height:50px;min-height:50px;width:100%;background:var(--bg-surface);border:1px solid var(--border-color);border-radius:8px;padding:0 16px;box-sizing:border-box;font-family:var(--font-primary);font-size:16px;color:var(--text-primary);}
+  #recipient-email:focus{outline:1.5px solid var(--accent-primary);}
+  #recipient-email::placeholder{color:#94A3B8;font-family:var(--font-primary);font-size:16px;}
+  .send-action-btn{height:50px;min-height:50px;width:100%;background:var(--accent-primary);color:#fff;border:none;border-radius:8px;font-family:var(--font-primary);font-size:17px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;transition:background 0.2s ease;box-sizing:border-box;display:flex;align-items:center;justify-content:center;}
+  .send-action-btn:disabled{opacity:0.5;cursor:not-allowed;}
+  .send-action-btn.success{background:#16A34A;}
 
-  /* ===================== FILTER / TAB BARS (shared pattern) ===================== */
-  .projects-filter-bar {
-    display: flex; flex-direction: row; justify-content: center;
-    align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;
-  }
-  .filter-btn, .event-filter-btn {
-    font-family: var(--font-mono); font-size: 13px; font-weight: 600;
-    padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.2s ease;
-    border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-secondary);
-  }
-  .filter-btn.active, .event-filter-btn.active {
-    background: var(--accent-primary); color: #FFFFFF; border-color: var(--accent-primary);
-  }
+  /* ===== STICKY FOOTER (Section 9) ===== */
+  .sticky-footer{position:fixed;bottom:0;left:0;width:100%;height:auto;z-index:90;background:rgba(255,255,255,0.90);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-top:1px solid var(--border-color);padding:8px 15px;display:flex;align-items:center;justify-content:center;box-sizing:border-box;}
+  .footer-line-2{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;}
+  .status-pulse-dot{width:8px;height:8px;border-radius:50%;background:#22C55E;position:relative;flex-shrink:0;animation:status-pulse 2s infinite;}
+  @keyframes status-pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,0.7);}70%{box-shadow:0 0 0 6px rgba(34,197,94,0);}100%{box-shadow:0 0 0 0 rgba(34,197,94,0);}}
+  .footer-status-text{font-family:var(--font-mono);font-size:13.5px;font-weight:500;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;}
 
-  /* ===================== CAROUSELS (container-relative, Section 1.6) ===================== */
-  .projects-carousel, .events-carousel, .value-carousel {
-    display: flex; flex-direction: row; gap: 12px; overflow-x: auto;
-    scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none;
-    padding: 4px; margin: 0 -4px;
-  }
-  .projects-carousel::-webkit-scrollbar, .events-carousel::-webkit-scrollbar, .value-carousel::-webkit-scrollbar { display: none; }
-  .project-card, .event-card, .value-card {
-    width: calc(100% - 19px); min-width: calc(100% - 19px); max-width: calc(100% - 19px);
-    scroll-snap-align: start; flex-shrink: 0;
-  }
+  /* ===== PAGE FOOTER (Section 10) ===== */
+  .page-footer{position:static;width:100%;padding:20px 15px 8px 15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-sizing:border-box;}
+  .footer-line-1{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;}
+  .footer-verified-badge{width:14px;height:14px;flex-shrink:0;border-radius:50%;background:var(--accent-primary);display:flex;align-items:center;justify-content:center;}
+  .footer-verified-badge svg{width:9px;height:9px;stroke:#fff;stroke-width:3;}
+  .footer-copyright-text{font-family:var(--font-mono);font-size:14.5px;font-weight:700;color:var(--text-primary);text-align:center;}
+  .sticky-footer-clearance{height:40px;width:100%;flex-shrink:0;}
 
-  /* ===================== SECTION 3: PROJECT CARD ===================== */
-  .project-card {
-    height: 460px; background: var(--bg-surface); border: 1px solid var(--border-color);
-    border-radius: 8px; padding: 12px; display: flex; flex-direction: column;
-    overflow: hidden; box-sizing: border-box;
-  }
-  .card-video-container {
-    width: 100%; aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden;
-    margin-bottom: 10px; position: relative; background: #000000;
-  }
-  .card-video-container iframe { width: 100%; height: 100%; }
-  .card-header { height: 48px; overflow: hidden; }
-  .card-title {
-    font-family: var(--font-primary); font-size: 17px; font-weight: 700;
-    color: var(--text-primary); margin: 0; white-space: nowrap; overflow: hidden;
-    text-overflow: ellipsis; line-height: 22px;
-  }
-  .card-description {
-    font-family: var(--font-primary); font-size: 14px; font-weight: 400;
-    color: var(--text-secondary); margin-top: 2px; white-space: nowrap;
-    overflow: hidden; text-overflow: ellipsis; line-height: 18px;
-  }
-  .card-subnav {
-    display: flex; flex-direction: row; gap: 6px; width: 100%;
-    margin-top: 8px; margin-bottom: 8px; padding-bottom: 0; border-bottom: none;
-  }
-  .subtab-btn, .event-subtab-btn {
-    font-family: var(--font-mono); font-size: 12px; font-weight: 600;
-    padding: 6px 10px; border-radius: 4px; cursor: pointer; flex-grow: 1;
-    text-align: center; border: 1px solid var(--border-color);
-    background: var(--bg-main); color: var(--text-secondary); text-decoration: none;
-    display: block;
-  }
-  .subtab-btn.active, .event-subtab-btn.active {
-    background: var(--accent-primary); color: #FFFFFF; border-color: var(--accent-primary);
-  }
-  .subtab-url-btn { background: var(--bg-main); color: var(--accent-primary); text-decoration: none; border-color: var(--border-color); }
-
-  .card-tab-content { flex-grow: 1; width: 100%; height: 170px; overflow-y: hidden; box-sizing: border-box; }
-  .pane-overview, .event-pane-overview {
-    font-family: var(--font-primary); font-size: 14px; color: var(--text-secondary); line-height: 20px;
-  }
-  .pane-line strong { color: var(--text-primary); }
-  .pane-techstack { display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; }
-  .tech-badge {
-    font-family: var(--font-mono); font-size: 12px; font-weight: 500;
-    background: var(--accent-subtle); color: var(--accent-primary); border: 1px solid #BFDBFE;
-    padding: 4px 8px; border-radius: 4px; white-space: nowrap;
-    flex: 0 1 calc(33.333% - 6px); text-align: center; box-sizing: border-box;
-  }
-
-  /* ===================== SECTION 4: SKILLSETS ===================== */
-  .skillset-tabs-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px;
-  }
-  .skill-tab {
-    height: 36px; padding: 0 8px; font-family: var(--font-mono); font-size: 13px;
-    font-weight: 600; text-align: center; text-transform: uppercase; border-radius: 6px;
-    cursor: pointer; transition: all 0.2s ease; white-space: nowrap; overflow: hidden;
-    text-overflow: ellipsis; background: var(--bg-main); color: var(--text-secondary);
-    border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center;
-  }
-  .skill-tab.active { background: var(--accent-primary); color: #FFFFFF; border-color: var(--accent-primary); }
-  .skills-display-box {
-    background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 6px;
-    padding: 16px; display: flex; flex-direction: column; gap: 14px;
-  }
-  .skills-inner-title {
-    font-family: var(--font-primary); font-size: 18px; font-weight: 600; color: var(--text-primary);
-    text-align: center; margin-top: 0; margin-bottom: 16px;
-  }
-  .skill-row { display: flex; flex-direction: column; gap: 6px; width: 100%; }
-  .skill-meta-line { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-  .skill-name { font-family: var(--font-primary); font-size: 15px; font-weight: 600; color: var(--text-primary); }
-  .skill-percentage { font-family: var(--font-mono); font-size: 14px; font-weight: 500; color: var(--accent-primary); }
-  .progress-track { width: 100%; height: 8px; background: #E2E8F0; border-radius: 4px; overflow: hidden; position: relative; }
-  .progress-fill { height: 100%; background: var(--accent-primary); border-radius: 4px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-
-  /* ===================== SECTION 5: EVENTS ===================== */
-  .events-filter-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; margin-bottom: 20px; box-sizing: border-box; }
-  .event-filter-btn {
-    height: 36px; padding: 0 4px; text-transform: uppercase; white-space: nowrap;
-    overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; justify-content: center;
-  }
-  .event-card {
-    height: 460px; background: var(--bg-surface); border: 1px solid var(--border-color);
-    border-radius: 8px; padding: 12px; display: flex; flex-direction: column;
-    overflow: hidden; box-sizing: border-box;
-  }
-  .card-photo-container {
-    width: 100%; aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden;
-    margin-bottom: 10px; position: relative; background: #F1F5F9;
-  }
-  .event-cover-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .event-pane-media { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; width: 100%; }
-  .lightbox-thumb {
-    width: 100%; height: 75px; object-fit: cover; border-radius: 4px; cursor: pointer;
-    border: 1px solid var(--border-color); transition: transform 0.2s ease;
-  }
-  .lightbox-thumb:hover { transform: scale(1.03); }
-  .lightbox-overlay {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(15, 23, 42, 0.85); display: none; align-items: center;
-    justify-content: center; z-index: 9999;
-  }
-  .lightbox-overlay.visible { display: flex; }
-  #lightbox-img { max-width: 90vw; max-height: 80vh; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-
-  /* ===================== SECTION 6: VALUE CARDS ===================== */
-  .value-card {
-    height: 230px; background: var(--bg-surface); border: 1px solid var(--border-color);
-    border-radius: 8px; padding: 16px 20px; display: flex; flex-direction: column;
-    justify-content: center; align-items: flex-start; overflow: hidden; box-sizing: border-box;
-  }
-  .value-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; width: 100%; }
-  .value-card-icon { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; color: var(--accent-primary); flex-shrink: 0; }
-  .value-card-icon svg { width: 22px; height: 22px; stroke: var(--accent-primary); stroke-width: 2; }
-  .value-card-title {
-    font-family: var(--font-primary); font-size: 18px; font-weight: 700; color: var(--text-primary);
-    line-height: 22px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .value-card-text {
-    font-family: var(--font-primary); font-size: 15.5px; font-weight: 400; color: var(--text-secondary);
-    line-height: 22px; max-height: 66px; display: -webkit-box; -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;
-  }
-
-  /* ===================== SECTION 7: HELP YOURSELF ===================== */
-  .help-yourself-form-stack { display: flex; flex-direction: column; gap: 12px; width: 100%; box-sizing: border-box; }
-  .file-select-box {
-    height: 50px; min-height: 50px; width: 100%; display: flex; align-items: center;
-    padding: 0 16px; border-radius: 8px; box-sizing: border-box; cursor: pointer;
-    user-select: none; transition: all 0.2s ease; background: var(--bg-surface);
-    border: 1px solid var(--border-color); color: var(--text-secondary);
-  }
-  .file-select-box:has(.file-checkbox:checked),
-  .file-select-box.selected {
-    background: #EFF6FF; border: 1.5px solid var(--accent-primary); color: var(--accent-primary);
-  }
-  .file-checkbox { position: absolute; opacity: 0; width: 0; height: 0; }
-  .file-box-content { display: flex; align-items: center; width: 100%; }
-  .file-icon { width: 22px; height: 22px; flex-shrink: 0; }
-  .file-label {
-    font-family: var(--font-primary); font-size: 16px; font-weight: 600;
-    margin-left: 12px; text-transform: uppercase; flex-grow: 1;
-  }
-  .checkbox-indicator {
-    width: 20px; height: 20px; border-radius: 4px; border: 1.5px solid var(--border-color);
-    flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
-  }
-  .file-select-box:has(.file-checkbox:checked) .checkbox-indicator,
-  .file-select-box.selected .checkbox-indicator {
-    background: #2563EB; border-color: #2563EB;
-  }
-  .checkbox-indicator svg { width: 14px; height: 14px; stroke: #FFFFFF; display: none; }
-  .file-select-box:has(.file-checkbox:checked) .checkbox-indicator svg,
-  .file-select-box.selected .checkbox-indicator svg { display: block; }
-
-  #recipient-email {
-    height: 50px; min-height: 50px; width: 100%; background: var(--bg-surface);
-    border: 1px solid var(--border-color); border-radius: 8px; padding: 0 16px;
-    box-sizing: border-box; font-family: var(--font-primary); font-size: 16px; color: var(--text-primary);
-  }
-  #recipient-email:focus { outline: 1.5px solid var(--accent-primary); }
-  #recipient-email::placeholder { color: #94A3B8; font-family: var(--font-primary); font-size: 16px; }
-
-  .send-action-btn {
-    height: 50px; min-height: 50px; width: 100%; background: var(--accent-primary); color: #FFFFFF;
-    border: none; border-radius: 8px; font-family: var(--font-primary); font-size: 17px; font-weight: 700;
-    letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: background 0.2s ease;
-    box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 8px;
-  }
-  .send-action-btn:hover:not(:disabled) { background: var(--accent-hover); }
-  .send-action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .send-action-btn.sending { background: var(--accent-primary); }
-  .send-action-btn.success { background: #16A34A; }
-
-  /* ===================== SECTION 8: STICKY HEADER ===================== */
-  .sticky-header {
-    position: fixed; top: 0; left: 0; width: 100%; height: 44px; min-height: 44px;
-    z-index: 100; display: flex; align-items: center; justify-content: space-between;
-    padding: 0 15px; box-sizing: border-box; border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-    background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    opacity: 0; transform: translateY(-100%); pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease;
-  }
-  .sticky-header.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-  .sticky-header-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .header-mini-avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid var(--border-color); }
-  .header-full-name {
-    font-family: var(--font-primary); font-size: 16px; font-weight: 700; color: var(--text-primary);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .sticky-header-right { margin-left: auto; display: flex; align-items: center; height: 100%; width: auto; }
-
-  /* ===================== SECTION 9: STICKY FOOTER ===================== */
-  .sticky-footer {
-    position: fixed; bottom: 0; left: 0; width: 100%; height: auto; z-index: 90;
-    background: rgba(255, 255, 255, 0.90); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    border-top: 1px solid var(--border-color); padding: 8px 15px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-    box-sizing: border-box;
-  }
-  .footer-line-1 { display: flex; align-items: center; justify-content: center; width: 100%; }
-  .footer-copyright-text {
-    font-family: var(--font-mono); font-size: 14.5px; font-weight: 700; color: var(--text-primary); text-align: center;
-  }
-  .footer-line-2 { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; }
-  .status-pulse-dot {
-    width: 8px; height: 8px; border-radius: 50%; background: #22C55E; position: relative; flex-shrink: 0;
-    animation: status-pulse 2s infinite;
-  }
-  @keyframes status-pulse {
-    0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-    70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-  }
-  .footer-status-text {
-    font-family: var(--font-mono); font-size: 13.5px; font-weight: 500; color: var(--text-secondary);
-    text-transform: uppercase; letter-spacing: 0.04em; text-align: center;
-  }
-
-  /* ===================== BREAKPOINT 1: TABLET ===================== */
-  @media (min-width: 768px) and (max-width: 1023px) {
-    .portfolio-container { max-width: 700px; margin-left: auto; margin-right: auto; width: 100%; }
-    .profile-photo-wrap, .profile-photo { width: 104px; height: 104px; }
-    .profile-content-col { height: 104px; }
-  }
-
-  /* ===================== BREAKPOINT 2: DESKTOP ===================== */
-  @media (min-width: 1024px) {
-    .portfolio-container { max-width: 1080px; margin-left: auto; margin-right: auto; width: 100%; padding-left: 32px; padding-right: 32px; }
-
-    .profile-top-row { align-items: flex-start; }
-    .profile-card-inner { display: flex; flex-direction: row; align-items: center; gap: 32px; }
-    .profile-meta-col { width: 280px; flex-shrink: 0; }
-    .profile-photo-wrap, .profile-photo { width: 120px; height: 120px; }
-    .profile-content-col { height: 120px; }
-    .profile-statement-col { flex-grow: 1; display: flex; align-items: center; }
-    .personal-statement { margin-top: 0; }
-
-    .projects-carousel, .events-carousel {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; overflow: visible; padding: 0; margin: 0;
-    }
-    .project-card, .event-card { width: 100%; min-width: 0; max-width: none; height: auto; min-height: 460px; }
-
-    .value-carousel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; overflow: visible; padding: 0; margin: 0; }
-    .value-card { width: 100%; min-width: 0; max-width: none; }
-
-    .skillset-tabs-grid { grid-template-columns: repeat(6, 1fr); }
-
-    .section-title { font-size: 26px; }
-    .card-description, .value-card-text, .personal-statement { font-size: 17px; }
-
-    .sticky-header, .sticky-footer-inner-wrap { left: 50%; transform: translateX(-50%); max-width: 1080px; width: 100%; padding-left: 32px; padding-right: 32px; }
-    .sticky-header.visible { transform: translateX(-50%) translateY(0); }
-  }
-
-  @media (min-width: 1440px) {
-    .projects-carousel, .events-carousel { grid-template-columns: repeat(3, 1fr); }
-  }
+  /* Events filter bar (Section 5.1) */
+  .events-filter-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;margin-bottom:10px;box-sizing:border-box;}
+  .event-filter-btn{height:36px;padding:0 4px;font-family:var(--font-mono);font-size:13px;font-weight:600;border-radius:6px;cursor:pointer;transition:all 0.2s ease;border:1px solid var(--border-color);text-align:center;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;justify-content:center;background:var(--bg-main);color:var(--text-secondary);}
+  .event-filter-btn.active{background:var(--accent-primary);color:#fff;border-color:var(--accent-primary);}
+  .events-carousel{margin:4px -15px;padding:0 15px;}
 </style>
 </head>
 <body>
@@ -421,44 +215,38 @@
 
 <main class="portfolio-container">
 
-  <!-- ===================== SECTION 2: PROFILE ===================== -->
+  <!-- ================= PROFILE (Section 2) ================= -->
   <section id="profile-section" class="profile-card">
-    <div class="profile-card-inner">
-      <div class="profile-meta-col">
-        <div class="profile-top-row">
-          <div class="profile-photo-wrap">
-            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80" alt="Lizi Zivzivadze Profile Photo" class="profile-photo">
-          </div>
-          <div class="profile-content-col">
-            <h1 class="profile-name">Lizi Zivzivadze</h1>
-            <p class="profile-title">Electromechanical Engineer</p>
-            <nav class="profile-actions">
-              <a href="tel:+32499221680" title="Call Lizi Zivzivadze" target="_self" class="action-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              </a>
-              <a href="https://wa.me/32499221680" title="WhatsApp Chat" target="_blank" rel="noopener noreferrer" class="action-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/></svg>
-              </a>
-              <a href="mailto:lizozivzivadze@gmail.com" title="Email Lizi Zivzivadze" target="_self" class="action-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-              </a>
-              <a href="https://www.linkedin.com/in/lizizivzivadze/" title="LinkedIn Profile" target="_blank" rel="noopener noreferrer" class="action-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
-              </a>
-              <a href="https://github.com/lizozivzivadze-star" title="GitHub Profile" target="_blank" rel="noopener noreferrer" class="action-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-              </a>
-            </nav>
-          </div>
-        </div>
+    <div class="profile-top-row">
+      <div class="profile-photo-wrap">
+        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80" alt="Lizi Zivzivadze Profile Photo" class="profile-photo">
       </div>
-      <div class="profile-statement-col">
-        <p class="personal-statement">Electromechanical engineer specialized in embedded systems, mechatronics, and real-time control. Focused on robust hardware-software integration for complex challenges.</p>
+      <div class="profile-content-col">
+        <h1 class="profile-name">Lizi Zivzivadze</h1>
+        <p class="profile-title" id="profile-title">Electromechanical Engineer</p>
+        <nav class="profile-actions">
+          <a href="tel:+32499221680" title="Call Lizi Zivzivadze" target="_self" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </a>
+          <a href="https://wa.me/32499221680" title="WhatsApp Chat" target="_blank" rel="noopener noreferrer" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/></svg>
+          </a>
+          <a href="mailto:lizozivzivadze@gmail.com" title="Email Lizi Zivzivadze" target="_self" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/lizizivzivadze/" title="LinkedIn Profile" target="_blank" rel="noopener noreferrer" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="https://github.com/lizozivzivadze-star" title="GitHub Profile" target="_blank" rel="noopener noreferrer" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          </a>
+        </nav>
       </div>
     </div>
+    <p class="personal-statement" id="personal-statement">Electromechanical engineer specialized in embedded systems, mechatronics, and real-time control. Focused on robust hardware-software integration for complex challenges.</p>
   </section>
 
-  <!-- ===================== SECTION 3: PROJECTS ===================== -->
+  <!-- ================= PROJECTS (Section 3) ================= -->
   <section id="projects-section" class="projects-card-container">
     <h2 class="section-title">PROJECTS</h2>
     <nav class="projects-filter-bar">
@@ -467,15 +255,16 @@
       <button class="filter-btn" data-filter="hw"><b>H</b>ard<b>W</b>are</button>
       <button class="filter-btn" data-filter="sw"><b>S</b>oft<b>W</b>are</button>
     </nav>
-    <div class="projects-carousel" id="projects-carousel">
+    <div class="carousel-row projects-carousel" id="projects-carousel">
 
-      <article class="project-card" data-category="hw-sw">
+      <!-- Project 1: AI Tactical Field Unit -->
+      <article class="project-card carousel-card" data-category="hw-sw">
         <div class="card-video-container">
-          <iframe class="project-video" src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?enablejsapi=1" title="Project Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe class="project-video" src="https://www.youtube-nocookie.com/embed/aqz-KE-bpKQ?enablejsapi=1" title="Field AI Unit Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;"></iframe>
         </div>
         <div class="card-header">
-          <h3 class="card-title">Watchpost — Acoustic Direction Finder</h3>
-          <p class="card-description">Mic array + ESP32 sound classification with incident alerts</p>
+          <h3 class="card-title">Field AI Unit</h3>
+          <p class="card-description">Portable ESP32 assistant chaining speech recognition, AI reasoning, and voice synthesis.</p>
         </div>
         <nav class="card-subnav">
           <button class="subtab-btn active" data-tab="overview">OVERVIEW</button>
@@ -483,24 +272,25 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="subtab-btn subtab-url-btn">URL ↗</a>
         </nav>
         <div class="card-tab-content">
-          <div class="pane-overview pane-active" data-pane="overview">
-            <p class="pane-line"><strong>Objective:</strong> <span class="pane-text">Detect, classify, and localize environmental sounds in real time using a low-cost microphone array and embedded inference.</span></p>
-            <p class="pane-line" style="margin-top: 8px;"><strong>Results:</strong> <span class="pane-text">Reliable classification pipeline with automated incident reporting sent to a monitoring dashboard.</span></p>
+          <div class="pane-overview">
+            <p class="pane-line"><strong>Objective:</strong> <span class="pane-text">Build a portable, voice-activated field assistant on ESP32 hardware.</span></p>
+            <p class="pane-line" style="margin-top:8px;"><strong>Results:</strong> <span class="pane-text">Chained Whisper, Claude, and ElevenLabs into a working I2S audio pipeline.</span></p>
           </div>
-          <div class="pane-techstack pane-hidden" data-pane="techstack" style="display:none;">
-            <span class="tech-badge">ESP32</span><span class="tech-badge">Python</span><span class="tech-badge">YAMNet</span>
-            <span class="tech-badge">n8n</span><span class="tech-badge">I2S Mic</span><span class="tech-badge">LoRa</span>
+          <div class="pane-techstack" style="display:none;">
+            <span class="tech-badge">ESP32</span><span class="tech-badge">C++</span><span class="tech-badge">I2S</span>
+            <span class="tech-badge">Whisper</span><span class="tech-badge">Claude</span><span class="tech-badge">ElevenLabs</span>
           </div>
         </div>
       </article>
 
-      <article class="project-card" data-category="hw">
+      <!-- Project 2: ARGUS -->
+      <article class="project-card carousel-card" data-category="sw">
         <div class="card-video-container">
-          <iframe class="project-video" src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?enablejsapi=1" title="Project Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe class="project-video" src="https://www.youtube-nocookie.com/embed/aqz-KE-bpKQ?enablejsapi=1" title="ARGUS ISR Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;"></iframe>
         </div>
         <div class="card-header">
-          <h3 class="card-title">TrackCam — Auto-Follow Mount</h3>
-          <p class="card-description">Pan-tilt rig that keeps the subject centered in frame</p>
+          <h3 class="card-title">ARGUS ISR</h3>
+          <p class="card-description">Single-file HTML ISR tool generating NATO SALUTE threat reports from a live feed.</p>
         </div>
         <nav class="card-subnav">
           <button class="subtab-btn active" data-tab="overview">OVERVIEW</button>
@@ -508,24 +298,24 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="subtab-btn subtab-url-btn">URL ↗</a>
         </nav>
         <div class="card-tab-content">
-          <div class="pane-overview pane-active" data-pane="overview">
-            <p class="pane-line"><strong>Objective:</strong> <span class="pane-text">Build a servo-driven camera mount that tracks a person using onboard vision without cloud dependency.</span></p>
-            <p class="pane-line" style="margin-top: 8px;"><strong>Results:</strong> <span class="pane-text">Smooth real-time tracking with sub-200ms response using an onboard person-detection model.</span></p>
+          <div class="pane-overview">
+            <p class="pane-line"><strong>Objective:</strong> <span class="pane-text">Build a single-file ISR application with automated threat reporting.</span></p>
+            <p class="pane-line" style="margin-top:8px;"><strong>Results:</strong> <span class="pane-text">Claude Vision generates SALUTE reports with a tactical HUD and event log.</span></p>
           </div>
-          <div class="pane-techstack pane-hidden" data-pane="techstack" style="display:none;">
-            <span class="tech-badge">Servo</span><span class="tech-badge">Stepper</span><span class="tech-badge">OpenCV</span>
-            <span class="tech-badge">Raspberry Pi</span><span class="tech-badge">C++</span>
+          <div class="pane-techstack" style="display:none;">
+            <span class="tech-badge">Claude Vision</span><span class="tech-badge">JavaScript</span><span class="tech-badge">WebRTC</span>
           </div>
         </div>
       </article>
 
-      <article class="project-card" data-category="sw">
+      <!-- Project 3: DCBench -->
+      <article class="project-card carousel-card" data-category="sw">
         <div class="card-video-container">
-          <iframe class="project-video" src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?enablejsapi=1" title="Project Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe class="project-video" src="https://www.youtube-nocookie.com/embed/aqz-KE-bpKQ?enablejsapi=1" title="DC Machine Bench Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;"></iframe>
         </div>
         <div class="card-header">
-          <h3 class="card-title">WattWatch — Home Energy Tracker</h3>
-          <p class="card-description">P1 port to live cost tracking and spike alerts</p>
+          <h3 class="card-title">DC Machine Bench</h3>
+          <p class="card-description">Browser simulation of a university DC machines lab bench with live wiring.</p>
         </div>
         <nav class="card-subnav">
           <button class="subtab-btn active" data-tab="overview">OVERVIEW</button>
@@ -533,13 +323,63 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="subtab-btn subtab-url-btn">URL ↗</a>
         </nav>
         <div class="card-tab-content">
-          <div class="pane-overview pane-active" data-pane="overview">
-            <p class="pane-line"><strong>Objective:</strong> <span class="pane-text">Read the Fluvius smart meter's P1 port and turn raw usage data into live cost and peak alerts.</span></p>
-            <p class="pane-line" style="margin-top: 8px;"><strong>Results:</strong> <span class="pane-text">Automated monthly bill-cut report generated from usage patterns, delivered without manual input.</span></p>
+          <div class="pane-overview">
+            <p class="pane-line"><strong>Objective:</strong> <span class="pane-text">Recreate the DC Machines lab test bench in the browser for guided study.</span></p>
+            <p class="pane-line" style="margin-top:8px;"><strong>Results:</strong> <span class="pane-text">Built a physics core, wiring layer, fault engine, and an n8n-backed AI tutor.</span></p>
           </div>
-          <div class="pane-techstack pane-hidden" data-pane="techstack" style="display:none;">
-            <span class="tech-badge">n8n</span><span class="tech-badge">P1 Port</span><span class="tech-badge">Node.js</span>
-            <span class="tech-badge">SQLite</span><span class="tech-badge">Grafana</span>
+          <div class="pane-techstack" style="display:none;">
+            <span class="tech-badge">Vanilla JS</span><span class="tech-badge">SVG</span><span class="tech-badge">Canvas</span>
+            <span class="tech-badge">n8n</span><span class="tech-badge">PostgreSQL</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 4: GhostLens -->
+      <article class="project-card carousel-card" data-category="sw">
+        <div class="card-video-container">
+          <iframe class="project-video" src="https://www.youtube-nocookie.com/embed/aqz-KE-bpKQ?enablejsapi=1" title="GhostLens Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;"></iframe>
+        </div>
+        <div class="card-header">
+          <h3 class="card-title">GhostLens</h3>
+          <p class="card-description">Simulated multispectral imaging tool with NIR, UV, LWIR, and X-ray filter modes.</p>
+        </div>
+        <nav class="card-subnav">
+          <button class="subtab-btn active" data-tab="overview">OVERVIEW</button>
+          <button class="subtab-btn" data-tab="techstack">TECH STACK</button>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="subtab-btn subtab-url-btn">URL ↗</a>
+        </nav>
+        <div class="card-tab-content">
+          <div class="pane-overview">
+            <p class="pane-line"><strong>Objective:</strong> <span class="pane-text">Simulate multispectral imaging modes without any specialized hardware.</span></p>
+            <p class="pane-line" style="margin-top:8px;"><strong>Results:</strong> <span class="pane-text">Shipped a dependency-free single HTML file with four working filter modes.</span></p>
+          </div>
+          <div class="pane-techstack" style="display:none;">
+            <span class="tech-badge">JavaScript</span><span class="tech-badge">HTML5 Canvas</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 5: Conveyor Classifier -->
+      <article class="project-card carousel-card" data-category="sw">
+        <div class="card-video-container">
+          <iframe class="project-video" src="https://www.youtube-nocookie.com/embed/aqz-KE-bpKQ?enablejsapi=1" title="Conveyor Classifier Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;"></iframe>
+        </div>
+        <div class="card-header">
+          <h3 class="card-title">Conveyor Classifier</h3>
+          <p class="card-description">Interactive conveyor demo classifying procedurally generated images in real time.</p>
+        </div>
+        <nav class="card-subnav">
+          <button class="subtab-btn active" data-tab="overview">OVERVIEW</button>
+          <button class="subtab-btn" data-tab="techstack">TECH STACK</button>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="subtab-btn subtab-url-btn">URL ↗</a>
+        </nav>
+        <div class="card-tab-content">
+          <div class="pane-overview">
+            <p class="pane-line"><strong>Objective:</strong> <span class="pane-text">Demonstrate a sorting pipeline with a browser-only classifier and sort arm.</span></p>
+            <p class="pane-line" style="margin-top:8px;"><strong>Results:</strong> <span class="pane-text">Delivered three classifier modes and animated sorting with zero backend.</span></p>
+          </div>
+          <div class="pane-techstack" style="display:none;">
+            <span class="tech-badge">JavaScript</span><span class="tech-badge">HTML5 Canvas</span>
           </div>
         </div>
       </article>
@@ -547,7 +387,7 @@
     </div>
   </section>
 
-  <!-- ===================== SECTION 4: SKILLSETS ===================== -->
+  <!-- ================= SKILLSETS (Section 4) ================= -->
   <section id="skills-section" class="skills-card">
     <h2 class="section-title">SKILLSETS</h2>
     <nav class="skillset-tabs-grid">
@@ -558,138 +398,169 @@
       <button class="skill-tab" data-skillset="controls">CONTROLS</button>
       <button class="skill-tab" data-skillset="prototyping">PROTOTYPING</button>
     </nav>
-    <div class="skills-display-box">
+    <div class="skills-display-box" id="skills-display-box">
       <h3 class="skills-inner-title">Skills</h3>
 
+      <!-- Mechatronics -->
       <div class="skill-row" data-category="mechatronics">
-        <div class="skill-meta-line"><span class="skill-name">Motor Control &amp; Drives</span><span class="skill-percentage">85%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="85%"></div></div>
-      </div>
-      <div class="skill-row" data-category="mechatronics">
-        <div class="skill-meta-line"><span class="skill-name">Sensor Integration</span><span class="skill-percentage">80%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="80%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Actuator Selection</span><span class="skill-percentage">82%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="82%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="mechatronics">
-        <div class="skill-meta-line"><span class="skill-name">System Architecture</span><span class="skill-percentage">75%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="75%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Sensor Integration</span><span class="skill-percentage">78%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="78%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="mechatronics">
-        <div class="skill-meta-line"><span class="skill-name">Actuator Selection</span><span class="skill-percentage">78%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="78%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Mechanical Design (NX CAD)</span><span class="skill-percentage">85%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="85%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="mechatronics">
-        <div class="skill-meta-line"><span class="skill-name">Mechanical Design</span><span class="skill-percentage">70%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="70%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">System Integration</span><span class="skill-percentage">80%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="80%" style="width:0%;"></div></div>
+      </div>
+      <div class="skill-row" data-category="mechatronics">
+        <div class="skill-meta-line"><span class="skill-name">Feedback Control Loops</span><span class="skill-percentage">75%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="75%" style="width:0%;"></div></div>
+      </div>
+      <div class="skill-row" data-category="mechatronics">
+        <div class="skill-meta-line"><span class="skill-name">Precision Assembly</span><span class="skill-percentage">70%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="70%" style="width:0%;"></div></div>
       </div>
 
+      <!-- Embedded -->
       <div class="skill-row" data-category="embedded" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">STM32 / ARM Cortex-M</span><span class="skill-percentage">82%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="82%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">ESP32 / Microcontrollers</span><span class="skill-percentage">88%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="88%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="embedded" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">ESP32 / Arduino</span><span class="skill-percentage">88%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="88%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">I2S &amp; Audio Protocols</span><span class="skill-percentage">80%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="80%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="embedded" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">RTOS &amp; Real-Time Control</span><span class="skill-percentage">70%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="70%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Firmware (C/C++)</span><span class="skill-percentage">85%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="85%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="embedded" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">I2C / SPI / UART</span><span class="skill-percentage">85%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="85%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Real-Time Systems</span><span class="skill-percentage">75%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="75%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="embedded" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">Firmware Debugging</span><span class="skill-percentage">76%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="76%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Serial / HTTP Comms</span><span class="skill-percentage">82%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="82%" style="width:0%;"></div></div>
+      </div>
+      <div class="skill-row" data-category="embedded" style="display:none;">
+        <div class="skill-meta-line"><span class="skill-name">PCB Prototyping</span><span class="skill-percentage">70%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="70%" style="width:0%;"></div></div>
       </div>
 
+      <!-- Software -->
       <div class="skill-row" data-category="software" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">Python</span><span class="skill-percentage">85%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="85%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">JavaScript / Web Apps</span><span class="skill-percentage">90%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="90%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="software" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">C / C++</span><span class="skill-percentage">78%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="78%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Python</span><span class="skill-percentage">80%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="80%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="software" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">JavaScript / Node.js</span><span class="skill-percentage">72%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="72%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">LLM API Integration</span><span class="skill-percentage">85%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="85%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="software" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">n8n / Automation</span><span class="skill-percentage">80%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="80%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">HTML5 Canvas / SVG</span><span class="skill-percentage">88%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="88%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="software" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">Databases &amp; APIs</span><span class="skill-percentage">68%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="68%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">n8n Workflow Automation</span><span class="skill-percentage">78%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="78%" style="width:0%;"></div></div>
+      </div>
+      <div class="skill-row" data-category="software" style="display:none;">
+        <div class="skill-meta-line"><span class="skill-name">Database Design</span><span class="skill-percentage">72%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="72%" style="width:0%;"></div></div>
       </div>
 
+      <!-- CAD/CAM -->
       <div class="skill-row" data-category="cad-cam" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">SolidWorks</span><span class="skill-percentage">80%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="80%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">NX CAD Modeling</span><span class="skill-percentage">85%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="85%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="cad-cam" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">Fusion 360</span><span class="skill-percentage">75%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="75%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Moldflow Analysis</span><span class="skill-percentage">75%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="75%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="cad-cam" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">3D Printing (FDM)</span><span class="skill-percentage">85%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="85%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">GD&amp;T</span><span class="skill-percentage">70%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="70%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="cad-cam" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">CNC Basics</span><span class="skill-percentage">60%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="60%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Design for Manufacture</span><span class="skill-percentage">78%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="78%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="cad-cam" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">PCB Layout (KiCad)</span><span class="skill-percentage">65%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="65%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">3D Printing</span><span class="skill-percentage">82%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="82%" style="width:0%;"></div></div>
+      </div>
+      <div class="skill-row" data-category="cad-cam" style="display:none;">
+        <div class="skill-meta-line"><span class="skill-name">Injection Mold Design</span><span class="skill-percentage">72%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="72%" style="width:0%;"></div></div>
       </div>
 
+      <!-- Controls -->
       <div class="skill-row" data-category="controls" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">PID Control</span><span class="skill-percentage">80%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="80%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">PID / Feedback Control</span><span class="skill-percentage">78%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="78%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="controls" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">Closed-Loop Systems</span><span class="skill-percentage">75%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="75%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">DC Machine Theory</span><span class="skill-percentage">82%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="82%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="controls" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">Signal Processing</span><span class="skill-percentage">65%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="65%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Motor Control</span><span class="skill-percentage">75%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="75%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="controls" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">PLC / Automation</span><span class="skill-percentage">70%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="70%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">System Modeling</span><span class="skill-percentage">72%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="72%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="controls" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">State Machines</span><span class="skill-percentage">78%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="78%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Automation (Industry 4.0)</span><span class="skill-percentage">80%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="80%" style="width:0%;"></div></div>
+      </div>
+      <div class="skill-row" data-category="controls" style="display:none;">
+        <div class="skill-meta-line"><span class="skill-name">Line Balancing</span><span class="skill-percentage">70%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="70%" style="width:0%;"></div></div>
       </div>
 
+      <!-- Prototyping -->
       <div class="skill-row" data-category="prototyping" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">Breadboarding</span><span class="skill-percentage">90%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="90%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Rapid Iteration</span><span class="skill-percentage">88%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="88%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="prototyping" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">Soldering &amp; Assembly</span><span class="skill-percentage">88%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="88%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Single-File Web Deploys</span><span class="skill-percentage">90%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="90%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="prototyping" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">Rapid Iteration</span><span class="skill-percentage">82%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="82%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Hardware Breadboarding</span><span class="skill-percentage">80%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="80%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="prototyping" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">Lab Instrumentation</span><span class="skill-percentage">75%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="75%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Vision Systems Testing</span><span class="skill-percentage">75%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="75%" style="width:0%;"></div></div>
       </div>
       <div class="skill-row" data-category="prototyping" style="display:none;">
-        <div class="skill-meta-line"><span class="skill-name">Testing &amp; Validation</span><span class="skill-percentage">72%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;" data-target-width="72%"></div></div>
+        <div class="skill-meta-line"><span class="skill-name">Sensor Fusion Testing</span><span class="skill-percentage">72%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="72%" style="width:0%;"></div></div>
       </div>
+      <div class="skill-row" data-category="prototyping" style="display:none;">
+        <div class="skill-meta-line"><span class="skill-name">Field Testing</span><span class="skill-percentage">78%</span></div>
+        <div class="progress-track"><div class="progress-fill" data-target-width="78%" style="width:0%;"></div></div>
+      </div>
+
     </div>
   </section>
 
-  <!-- ===================== SECTION 5: EVENTS ===================== -->
+  <!-- ================= EVENTS (Section 5) ================= -->
   <section id="events-section" class="events-card-container">
     <h2 class="section-title">EVENTS</h2>
     <nav class="events-filter-bar">
@@ -699,15 +570,15 @@
       <button class="event-filter-btn" data-filter="expo">EXPO</button>
       <button class="event-filter-btn" data-filter="meetup">MEETUP</button>
     </nav>
-    <div class="events-carousel" id="events-carousel">
+    <div class="carousel-row events-carousel" id="events-carousel">
 
-      <article class="event-card" data-category="hackathon">
+      <article class="event-card carousel-card" data-category="hackathon">
         <div class="card-photo-container">
-          <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80" alt="Event Photo" class="event-cover-photo">
+          <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=500&q=80" alt="Event Photo" class="event-cover-photo">
         </div>
         <div class="card-header">
-          <h3 class="card-title">KU Leuven Robotics Hackathon</h3>
-          <p class="card-description">48-hour build sprint, autonomous navigation track</p>
+          <h3 class="card-title">Campus Hackathon</h3>
+          <p class="card-description">48-hour build sprint focused on embedded systems and rapid prototyping.</p>
         </div>
         <nav class="card-subnav">
           <button class="event-subtab-btn active" data-tab="overview">OVERVIEW</button>
@@ -715,26 +586,26 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="event-subtab-btn subtab-url-btn">URL ↗</a>
         </nav>
         <div class="card-tab-content">
-          <div class="event-pane-overview pane-active" data-pane="overview">
-            <p class="pane-line"><strong>Participation:</strong> <span class="pane-text">Team lead for a 4-person team building an autonomous navigation demo in 48 hours.</span></p>
-            <p class="pane-line" style="margin-top: 8px;"><strong>Outcomes:</strong> <span class="pane-text">Finished top 3 out of 20 teams; demo praised for reliability under time pressure.</span></p>
+          <div class="event-pane-overview">
+            <p class="pane-line"><strong>Participation:</strong> <span class="pane-text">Team lead, hardware + firmware track.</span></p>
+            <p class="pane-line" style="margin-top:8px;"><strong>Outcomes:</strong> <span class="pane-text">Shipped a working prototype within the 48-hour window.</span></p>
           </div>
-          <div class="event-pane-media pane-hidden" data-pane="media" style="display:none;">
-            <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=300&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
-            <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=300&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
-            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=300&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
-            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=300&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+          <div class="event-pane-media" style="display:none;">
+            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
           </div>
         </div>
       </article>
 
-      <article class="event-card" data-category="conference">
+      <article class="event-card carousel-card" data-category="conference">
         <div class="card-photo-container">
-          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80" alt="Event Photo" class="event-cover-photo">
+          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=500&q=80" alt="Event Photo" class="event-cover-photo">
         </div>
         <div class="card-header">
-          <h3 class="card-title">European Defense Tech Conference</h3>
-          <p class="card-description">Autonomous systems and naval technology track</p>
+          <h3 class="card-title">Automation Conference</h3>
+          <p class="card-description">Talks and workshops on Industry 4.0 automation and line balancing.</p>
         </div>
         <nav class="card-subnav">
           <button class="event-subtab-btn active" data-tab="overview">OVERVIEW</button>
@@ -742,26 +613,26 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="event-subtab-btn subtab-url-btn">URL ↗</a>
         </nav>
         <div class="card-tab-content">
-          <div class="event-pane-overview pane-active" data-pane="overview">
-            <p class="pane-line"><strong>Participation:</strong> <span class="pane-text">Attended talks and networking sessions focused on autonomous naval and defense platforms.</span></p>
-            <p class="pane-line" style="margin-top: 8px;"><strong>Outcomes:</strong> <span class="pane-text">Built direct connections with engineers working on unmanned surface vessels.</span></p>
+          <div class="event-pane-overview">
+            <p class="pane-line"><strong>Participation:</strong> <span class="pane-text">Attendee, automation and production systems track.</span></p>
+            <p class="pane-line" style="margin-top:8px;"><strong>Outcomes:</strong> <span class="pane-text">Applied session insights to coursework in production automation.</span></p>
           </div>
-          <div class="event-pane-media pane-hidden" data-pane="media" style="display:none;">
-            <img src="https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?auto=format&fit=crop&w=300&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
-            <img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&w=300&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
-            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=300&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
-            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=300&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+          <div class="event-pane-media" style="display:none;">
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
           </div>
         </div>
       </article>
 
-      <article class="event-card" data-category="expo">
+      <article class="event-card carousel-card" data-category="expo">
         <div class="card-photo-container">
-          <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=600&q=80" alt="Event Photo" class="event-cover-photo">
+          <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=500&q=80" alt="Event Photo" class="event-cover-photo">
         </div>
         <div class="card-header">
-          <h3 class="card-title">Belgian Engineering Careers Expo</h3>
-          <p class="card-description">Live demo booth for Watchpost acoustic sensor</p>
+          <h3 class="card-title">Robotics Expo</h3>
+          <p class="card-description">Live demo booth showcasing browser-based mechatronics simulations.</p>
         </div>
         <nav class="card-subnav">
           <button class="event-subtab-btn active" data-tab="overview">OVERVIEW</button>
@@ -769,15 +640,42 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="event-subtab-btn subtab-url-btn">URL ↗</a>
         </nav>
         <div class="card-tab-content">
-          <div class="event-pane-overview pane-active" data-pane="overview">
-            <p class="pane-line"><strong>Participation:</strong> <span class="pane-text">Ran a live demo booth showcasing the Watchpost acoustic classification system to recruiters.</span></p>
-            <p class="pane-line" style="margin-top: 8px;"><strong>Outcomes:</strong> <span class="pane-text">Generated interview leads from three engineering companies attending the expo.</span></p>
+          <div class="event-pane-overview">
+            <p class="pane-line"><strong>Participation:</strong> <span class="pane-text">Exhibitor, demoed DCBench live to visitors.</span></p>
+            <p class="pane-line" style="margin-top:8px;"><strong>Outcomes:</strong> <span class="pane-text">Collected feedback that shaped the guided-mode redesign.</span></p>
           </div>
-          <div class="event-pane-media pane-hidden" data-pane="media" style="display:none;">
-            <img src="https://images.unsplash.com/photo-1560264280-88b68371db39?auto=format&fit=crop&w=300&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
-            <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=300&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
-            <img src="https://images.unsplash.com/photo-1581092335397-9583eb92d232?auto=format&fit=crop&w=300&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
-            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=300&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+          <div class="event-pane-media" style="display:none;">
+            <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+            <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+            <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+            <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+          </div>
+        </div>
+      </article>
+
+      <article class="event-card carousel-card" data-category="meetup">
+        <div class="card-photo-container">
+          <img src="https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=500&q=80" alt="Event Photo" class="event-cover-photo">
+        </div>
+        <div class="card-header">
+          <h3 class="card-title">Embedded Meetup</h3>
+          <p class="card-description">Local meetup on firmware architecture and low-power microcontroller design.</p>
+        </div>
+        <nav class="card-subnav">
+          <button class="event-subtab-btn active" data-tab="overview">OVERVIEW</button>
+          <button class="event-subtab-btn" data-tab="media">MEDIA</button>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="event-subtab-btn subtab-url-btn">URL ↗</a>
+        </nav>
+        <div class="card-tab-content">
+          <div class="event-pane-overview">
+            <p class="pane-line"><strong>Participation:</strong> <span class="pane-text">Attendee and lightning-talk presenter.</span></p>
+            <p class="pane-line" style="margin-top:8px;"><strong>Outcomes:</strong> <span class="pane-text">Presented the Field AI Unit's I2S audio pipeline to the group.</span></p>
+          </div>
+          <div class="event-pane-media" style="display:none;">
+            <img src="https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+            <img src="https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+            <img src="https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
+            <img src="https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=200&q=80" alt="Event Media" class="lightbox-thumb" onclick="openLightbox(this.src)">
           </div>
         </div>
       </article>
@@ -785,247 +683,342 @@
     </div>
   </section>
 
-  <div id="lightbox-modal" class="lightbox-overlay" onclick="closeLightbox()">
-    <img id="lightbox-img" src="" alt="Enlarged Media">
-  </div>
-
-  <!-- ===================== SECTION 6: VALUE CARDS ===================== -->
+  <!-- ================= VALUE CARDS (Section 6) ================= -->
   <section id="value-section" class="value-card-container">
     <h2 class="section-title single-line-title">WHAT DO I BRING TO THE TABLE?</h2>
-    <div class="value-carousel">
+    <div class="carousel-row value-carousel" id="value-carousel">
 
-      <article class="value-card">
+      <article class="value-card carousel-card">
         <div class="value-card-header">
-          <span class="value-card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg>
-          </span>
+          <span class="value-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg></span>
           <h3 class="value-card-title">Hardware/Software Integration</h3>
         </div>
-        <p class="value-card-text">Bridging the gap between electromechanical hardware and real-time software. Experienced in developing embedded control logic and automated firmware.</p>
+        <p class="value-card-text">Bridging electromechanical hardware and real-time software through embedded control logic and automated firmware development.</p>
+        <span class="value-card-counter"></span>
       </article>
 
-      <article class="value-card">
+      <article class="value-card carousel-card">
         <div class="value-card-header">
-          <span class="value-card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-          </span>
+          <span class="value-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
           <h3 class="value-card-title">Robust System Design</h3>
         </div>
-        <p class="value-card-text">Designing clean, maintainable mechatronic architectures focused on deterministic execution, thorough testing protocols, and robust component selection.</p>
+        <p class="value-card-text">Designing clean mechatronic architectures with deterministic execution, thorough testing, and robust component selection.</p>
+        <span class="value-card-counter"></span>
       </article>
 
-      <article class="value-card">
+      <article class="value-card carousel-card">
         <div class="value-card-header">
-          <span class="value-card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          </span>
+          <span class="value-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
           <h3 class="value-card-title">Rapid Prototype Execution</h3>
         </div>
-        <p class="value-card-text">Accelerating project lifecycles through rapid iteration, custom CAD modeling, microcontroller programming, and hands-on laboratory assembly.</p>
+        <p class="value-card-text">Accelerating project lifecycles through rapid iteration, custom CAD modeling, and hands-on microcontroller prototyping.</p>
+        <span class="value-card-counter"></span>
       </article>
 
     </div>
   </section>
 
-  <!-- ===================== SECTION 7: HELP YOURSELF ===================== -->
+  <!-- ================= HELP YOURSELF (Section 7) ================= -->
   <section id="help-yourself-section" class="help-yourself-card-container">
     <h2 class="section-title">HELP YOURSELF</h2>
     <form id="help-yourself-form" class="help-yourself-form-stack">
-
-      <label class="file-select-box" id="cv-box">
-        <input type="checkbox" name="selected_files" value="cv" class="file-checkbox">
+      <label class="file-select-box" for="file-cv">
+        <input type="checkbox" id="file-cv" name="selected_files" value="cv" class="file-checkbox">
         <span class="file-box-content">
-          <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
           <span class="file-label">CV</span>
-          <span class="checkbox-indicator">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </span>
         </span>
       </label>
-
-      <label class="file-select-box" id="portfolio-box">
-        <input type="checkbox" name="selected_files" value="portfolio" class="file-checkbox">
+      <label class="file-select-box" for="file-portfolio">
+        <input type="checkbox" id="file-portfolio" name="selected_files" value="portfolio" class="file-checkbox">
         <span class="file-box-content">
-          <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
           <span class="file-label">Portfolio</span>
-          <span class="checkbox-indicator">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </span>
         </span>
       </label>
-
       <input type="email" id="recipient-email" name="user_email" placeholder="your.email@example.com" required>
-
       <button type="submit" id="send-pdf-btn" class="send-action-btn" disabled>SEND</button>
     </form>
   </section>
 
+  <!-- ================= PAGE FOOTER (Section 10) ================= -->
+  <footer id="page-footer" class="page-footer">
+    <div class="footer-line-1">
+      <span class="footer-verified-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </span>
+      <span class="footer-copyright-text">© 2026 Lizi Zivzivadze</span>
+    </div>
+    <div class="footer-line-2">
+      <span class="status-pulse-dot"></span>
+      <span class="footer-status-text">Junior Engineer Ready For Deployment</span>
+    </div>
+  </footer>
+  <div class="sticky-footer-clearance"></div>
+
 </main>
 
 <footer id="sticky-footer" class="sticky-footer">
-  <div class="footer-line-1">
-    <span class="footer-copyright-text">© 2026 Lizi Zivzivadze</span>
-  </div>
   <div class="footer-line-2">
     <span class="status-pulse-dot"></span>
     <span class="footer-status-text">Junior Engineer Ready For Deployment</span>
   </div>
 </footer>
 
+<div id="lightbox-modal" class="lightbox-overlay" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="Enlarged Media">
+</div>
+
 <script>
-(function () {
-  // ---------- PROJECTS: category filter ----------
-  document.querySelectorAll('.filter-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      document.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      var filter = btn.getAttribute('data-filter');
-      document.querySelectorAll('#projects-section .project-card').forEach(function (card) {
-        var cat = card.getAttribute('data-category');
-        card.style.display = (filter === 'all' || cat === filter) ? 'flex' : 'none';
-      });
-    });
-  });
+(function(){
 
-  // ---------- EVENTS: category filter ----------
-  document.querySelectorAll('.event-filter-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      document.querySelectorAll('.event-filter-btn').forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      var filter = btn.getAttribute('data-filter');
-      document.querySelectorAll('#events-section .event-card').forEach(function (card) {
-        var cat = card.getAttribute('data-category');
-        card.style.display = (filter === 'all' || cat === filter) ? 'flex' : 'none';
-      });
-    });
-  });
-
-  // ---------- PROJECT CARD: subtab switching (overview / techstack) ----------
-  document.querySelectorAll('.project-card .card-subnav').forEach(function (nav) {
-    nav.querySelectorAll('.subtab-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        nav.querySelectorAll('.subtab-btn').forEach(function (b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        var tab = btn.getAttribute('data-tab');
-        var content = nav.closest('.project-card').querySelector('.card-tab-content');
-        content.querySelectorAll('[data-pane]').forEach(function (pane) {
-          pane.style.display = (pane.getAttribute('data-pane') === tab) ? (tab === 'techstack' ? 'flex' : 'block') : 'none';
-        });
-      });
-    });
-  });
-
-  // ---------- EVENT CARD: subtab switching (overview / media) ----------
-  document.querySelectorAll('.event-card .card-subnav').forEach(function (nav) {
-    nav.querySelectorAll('.event-subtab-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        nav.querySelectorAll('.event-subtab-btn').forEach(function (b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        var tab = btn.getAttribute('data-tab');
-        var content = nav.closest('.event-card').querySelector('.card-tab-content');
-        content.querySelectorAll('[data-pane]').forEach(function (pane) {
-          pane.style.display = (pane.getAttribute('data-pane') === tab) ? (tab === 'media' ? 'grid' : 'block') : 'none';
-        });
-      });
-    });
-  });
-
-  // ---------- LIGHTBOX ----------
-  window.openLightbox = function (src) {
-    var modal = document.getElementById('lightbox-modal');
-    document.getElementById('lightbox-img').src = src;
-    modal.classList.add('visible');
-  };
-  window.closeLightbox = function () {
-    document.getElementById('lightbox-modal').classList.remove('visible');
-  };
-
-  // ---------- SKILLSETS: tab switching + fill animation ----------
-  document.querySelectorAll('.skill-tab').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      document.querySelectorAll('.skill-tab').forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      var cat = btn.getAttribute('data-skillset');
-
-      document.querySelectorAll('.skill-row').forEach(function (row) {
-        row.style.display = (row.getAttribute('data-category') === cat) ? 'flex' : 'none';
-      });
-
-      document.querySelectorAll('.skill-row[data-category="' + cat + '"] .progress-fill').forEach(function (fill) {
-        fill.style.width = '0%';
-      });
-      setTimeout(function () {
-        document.querySelectorAll('.skill-row[data-category="' + cat + '"] .progress-fill').forEach(function (fill) {
-          fill.style.width = fill.getAttribute('data-target-width');
-        });
-      }, 50);
-    });
-  });
-
-  // Animate the default visible category's bars on load
-  window.addEventListener('load', function () {
-    setTimeout(function () {
-      document.querySelectorAll('.skill-row[data-category="mechatronics"] .progress-fill').forEach(function (fill) {
-        fill.style.width = fill.getAttribute('data-target-width');
-      });
-    }, 150);
-  });
-
-  // ---------- HELP YOURSELF: file toggle + form validation ----------
-  var fileBoxes = document.querySelectorAll('.file-select-box');
-  var emailInput = document.getElementById('recipient-email');
-  var sendBtn = document.getElementById('send-pdf-btn');
-
-  function validateForm() {
-    var anyChecked = Array.prototype.some.call(document.querySelectorAll('.file-checkbox'), function (c) { return c.checked; });
-    var emailValid = emailInput.checkValidity() && emailInput.value.trim().length > 0;
-    sendBtn.disabled = !(anyChecked && emailValid);
+  /* ---------- Auto-Fit Text Sizing (Section 2.6) ---------- */
+  function autoFitText(el, {maxLines, minFontPx, maxFontPx, step = 0.5}){
+    if(!el) return;
+    let fontPx = maxFontPx;
+    el.style.fontSize = fontPx + 'px';
+    const lineHeightMultiplier = parseFloat(getComputedStyle(el).lineHeight) || fontPx * 1.3;
+    function overflows(){
+      if(maxLines === 1){
+        return el.scrollWidth > el.clientWidth;
+      }
+      const lh = parseFloat(getComputedStyle(el).lineHeight);
+      const budget = lh * maxLines;
+      return el.scrollHeight > budget + 1;
+    }
+    let guard = 0;
+    while(overflows() && fontPx > minFontPx && guard < 200){
+      fontPx -= step;
+      el.style.fontSize = fontPx + 'px';
+      guard++;
+    }
   }
 
-  fileBoxes.forEach(function (box) {
-    var checkbox = box.querySelector('.file-checkbox');
-    checkbox.addEventListener('change', function () {
-      box.classList.toggle('selected', checkbox.checked);
-      validateForm();
-    });
-  });
-  emailInput.addEventListener('input', validateForm);
-
-  document.getElementById('help-yourself-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    if (sendBtn.disabled) return;
-
-    var originalText = 'SEND';
-    sendBtn.classList.add('sending');
-    sendBtn.textContent = 'SENDING...';
-    sendBtn.disabled = true;
-
-    // Dual-dispatch placeholder: wire this to a serverless endpoint (Formspree/EmailJS/etc.)
-    setTimeout(function () {
-      sendBtn.classList.remove('sending');
-      sendBtn.classList.add('success');
-      sendBtn.textContent = 'SENT ✓';
-      setTimeout(function () {
-        sendBtn.classList.remove('success');
-        sendBtn.textContent = originalText;
-        document.getElementById('help-yourself-form').reset();
-        fileBoxes.forEach(function (box) { box.classList.remove('selected'); });
-        validateForm();
-      }, 4000);
-    }, 900);
-  });
-
-  // ---------- STICKY HEADER: IntersectionObserver on profile section ----------
-  var stickyHeader = document.getElementById('sticky-header');
-  var profileSection = document.getElementById('profile-section');
-  if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        stickyHeader.classList.toggle('visible', !entry.isIntersecting);
-      });
-    }, { threshold: 0 });
-    observer.observe(profileSection);
+  function runAutoFit(){
+    autoFitText(document.getElementById('profile-title'), {maxLines:1, minFontPx:12, maxFontPx:15});
+    autoFitText(document.getElementById('personal-statement'), {maxLines:3, minFontPx:13, maxFontPx:16});
   }
+
+  /* ---------- Sticky Header (Section 8.5) ---------- */
+  function initStickyHeader(){
+    const header = document.getElementById('sticky-header');
+    const profile = document.getElementById('profile-section');
+    if(!header || !profile) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        header.classList.toggle('visible', !entry.isIntersecting);
+      });
+    }, { rootMargin: "-44px 0px 0px 0px", threshold: 0 });
+    observer.observe(profile);
+  }
+
+  /* ---------- Projects Filter (Section 3.1) ---------- */
+  function initProjectFilters(){
+    const buttons = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.project-card');
+    const carousel = document.getElementById('projects-carousel');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        cards.forEach(card => {
+          const match = filter === 'all' || card.dataset.category === filter;
+          card.style.display = match ? 'flex' : 'none';
+        });
+        carousel.scrollTo({ left: 0, behavior: 'auto' });
+      });
+    });
+  }
+
+  /* ---------- Events Filter (Section 5.1) ---------- */
+  function initEventFilters(){
+    const buttons = document.querySelectorAll('.event-filter-btn');
+    const cards = document.querySelectorAll('.event-card');
+    const carousel = document.getElementById('events-carousel');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        cards.forEach(card => {
+          const match = filter === 'all' || card.dataset.category === filter;
+          card.style.display = match ? 'flex' : 'none';
+        });
+        carousel.scrollTo({ left: 0, behavior: 'auto' });
+      });
+    });
+  }
+
+  /* ---------- Project card sub-tabs (Overview / Tech Stack) ---------- */
+  function initProjectSubtabs(){
+    document.querySelectorAll('.project-card').forEach(card => {
+      const tabs = card.querySelectorAll('.subtab-btn[data-tab]');
+      const overview = card.querySelector('.pane-overview');
+      const techstack = card.querySelector('.pane-techstack');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const which = tab.dataset.tab;
+          overview.style.display = which === 'overview' ? 'block' : 'none';
+          techstack.style.display = which === 'techstack' ? 'flex' : 'none';
+        });
+      });
+    });
+  }
+
+  /* ---------- Event card sub-tabs (Overview / Media) ---------- */
+  function initEventSubtabs(){
+    document.querySelectorAll('.event-card').forEach(card => {
+      const tabs = card.querySelectorAll('.event-subtab-btn[data-tab]');
+      const overview = card.querySelector('.event-pane-overview');
+      const media = card.querySelector('.event-pane-media');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const which = tab.dataset.tab;
+          overview.style.display = which === 'overview' ? 'block' : 'none';
+          media.style.display = which === 'media' ? 'grid' : 'none';
+        });
+      });
+    });
+  }
+
+  /* ---------- Lightbox ---------- */
+  window.openLightbox = function(src){
+    const modal = document.getElementById('lightbox-modal');
+    const img = document.getElementById('lightbox-img');
+    img.src = src;
+    modal.classList.add('open');
+  };
+  window.closeLightbox = function(){
+    document.getElementById('lightbox-modal').classList.remove('open');
+  };
+
+  /* ---------- Skillset Tabs (Section 4.6) ---------- */
+  function fillVisibleBars(box){
+    box.querySelectorAll('.skill-row').forEach(row => {
+      if(row.style.display === 'none') return;
+      const fill = row.querySelector('.progress-fill');
+      fill.style.width = '0%';
+    });
+    setTimeout(() => {
+      box.querySelectorAll('.skill-row').forEach(row => {
+        if(row.style.display === 'none') return;
+        const fill = row.querySelector('.progress-fill');
+        fill.style.width = fill.dataset.targetWidth;
+      });
+    }, 50);
+  }
+
+  function initSkillTabs(){
+    const tabs = document.querySelectorAll('.skill-tab');
+    const box = document.getElementById('skills-display-box');
+    const rows = box.querySelectorAll('.skill-row');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const cat = tab.dataset.skillset;
+        rows.forEach(row => {
+          row.style.display = row.dataset.category === cat ? 'flex' : 'none';
+        });
+        fillVisibleBars(box);
+      });
+    });
+    fillVisibleBars(box);
+  }
+
+  /* ---------- Value Card Counters (Section 6.7) ---------- */
+  function initValueCounters(){
+    const cards = document.querySelectorAll('.value-card');
+    cards.forEach((card, i) => {
+      card.querySelector('.value-card-counter').textContent = (i + 1) + '/' + cards.length;
+    });
+  }
+
+  /* ---------- File Select Boxes (Section 7.3) ---------- */
+  function initFileSelectBoxes(){
+    document.querySelectorAll('.file-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        const label = checkbox.closest('.file-select-box');
+        label.classList.toggle('selected', checkbox.checked);
+        updateSendButtonState();
+      });
+    });
+  }
+
+  /* ---------- Email + Send Button Validation (Section 7.5) ---------- */
+  function isValidEmail(value){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+  function updateSendButtonState(){
+    const emailInput = document.getElementById('recipient-email');
+    const sendBtn = document.getElementById('send-pdf-btn');
+    const anyChecked = document.querySelectorAll('.file-checkbox:checked').length > 0;
+    const emailOk = isValidEmail(emailInput.value.trim());
+    sendBtn.disabled = !(anyChecked && emailOk);
+  }
+
+  /* ---------- Form Submit (Section 7.6) ---------- */
+  function initFormSubmit(){
+    const form = document.getElementById('help-yourself-form');
+    const emailInput = document.getElementById('recipient-email');
+    const sendBtn = document.getElementById('send-pdf-btn');
+    emailInput.addEventListener('input', updateSendButtonState);
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if(sendBtn.disabled) return;
+      const originalText = sendBtn.textContent;
+      sendBtn.textContent = 'SENDING...';
+      sendBtn.disabled = true;
+
+      // NOTE: no backend is wired up yet. Swap this block for a real
+      // fetch() call to a Formspree / EmailJS / serverless endpoint
+      // that dispatches both the visitor payload and the owner alert
+      // described in Section 7.6 of the spec.
+      setTimeout(() => {
+        sendBtn.textContent = 'SENT ✓';
+        sendBtn.classList.add('success');
+        setTimeout(() => {
+          form.reset();
+          document.querySelectorAll('.file-select-box').forEach(b => b.classList.remove('selected'));
+          sendBtn.classList.remove('success');
+          sendBtn.textContent = originalText;
+          updateSendButtonState();
+        }, 4000);
+      }, 900);
+    });
+  }
+
+  /* ---------- Debounce ---------- */
+  function debounce(fn, wait){
+    let t;
+    return function(...args){
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, args), wait);
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    runAutoFit();
+    initStickyHeader();
+    initProjectFilters();
+    initEventFilters();
+    initProjectSubtabs();
+    initEventSubtabs();
+    initSkillTabs();
+    initValueCounters();
+    initFileSelectBoxes();
+    initFormSubmit();
+    updateSendButtonState();
+  });
+
+  window.addEventListener('resize', debounce(runAutoFit, 150));
+
 })();
 </script>
 
