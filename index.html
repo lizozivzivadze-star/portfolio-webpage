@@ -325,23 +325,6 @@
     video.lazy-media {
       background: transparent;
     }
-    /* Play triangle overlay: visible by default, hidden once the video plays */
-    .video-thumb-wrap.is-playing .video-play-overlay {
-      opacity: 0;
-      pointer-events: none;
-    }
-    .video-play-overlay {
-      transition: opacity 0.15s ease;
-      background: none !important;
-      width: auto !important;
-      height: auto !important;
-    }
-    .video-play-overlay svg {
-      width: 64px !important;
-      height: 64px !important;
-      margin-left: 0 !important;
-      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.45));
-    }
     /* Video thumbnail poster keeps its dimmed look after lazy load */
     .media-video-thumb .lazy-media.lazy-loaded {
       opacity: 0.75;
@@ -578,10 +561,7 @@
         <article class="project-card" data-category="sw" style="height: 531px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 12px 32px 12px; display: flex; flex-direction: column; position: relative; overflow: hidden; box-sizing: border-box;">
           <div class="video-thumb-wrap" style="width: 100%; aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden; margin-bottom: 10px; position: relative; background: #E2E8F0;">
             <div class="lazy-shimmer"></div>
-            <video class="project-video lazy-media" data-src="video1.mp4" playsinline preload="auto" style="width:100%; height:100%; object-fit: cover; background:transparent;"></video>
-            <span class="video-play-overlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; z-index: 2;">
-              <svg viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg>
-            </span>
+            <video class="project-video lazy-media" data-src="video1.mp4" controls playsinline preload="auto" style="width:100%; height:100%; object-fit: cover; background:transparent;"></video>
           </div>
           <div style="height: 64px;">
             <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
@@ -607,10 +587,7 @@
         <article class="project-card" data-category="hw-sw" style="height: 531px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 12px 32px 12px; display: flex; flex-direction: column; position: relative; overflow: hidden; box-sizing: border-box;">
           <div class="video-thumb-wrap" style="width: 100%; aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden; margin-bottom: 10px; position: relative; background: #E2E8F0;">
             <div class="lazy-shimmer"></div>
-            <video class="project-video lazy-media" data-src="video1.mp4" playsinline preload="auto" style="width:100%; height:100%; object-fit: cover; background:transparent;"></video>
-            <span class="video-play-overlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; z-index: 2;">
-              <svg viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg>
-            </span>
+            <video class="project-video lazy-media" data-src="video1.mp4" controls playsinline preload="auto" style="width:100%; height:100%; object-fit: cover; background:transparent;"></video>
           </div>
           <div style="height: 64px;">
             <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
@@ -1304,66 +1281,42 @@
   <!-- Lazy-load: media loads as its card enters the carousel viewport; videos show their first frame, not a black box -->
   <script>
     (function() {
-      // Wire a video's play/pause/ended state to the play-triangle overlay.
-      // Native controls are OFF in the thumbnail state (so only our single
-      // triangle shows — no double triangle). Tapping the overlay starts
-      // playback and turns native controls on; pausing/ending brings the
-      // overlay back and hides native controls again.
-      function wirePlayOverlay(video) {
-        const wrap = video.closest('.video-thumb-wrap');
-        if (!wrap) return;
-        const overlay = wrap.querySelector('.video-play-overlay');
-        if (overlay) {
-          overlay.style.pointerEvents = 'auto';
-          overlay.style.cursor = 'pointer';
-          overlay.addEventListener('click', (e) => {
-            e.stopPropagation();
-            video.setAttribute('controls', '');
-            video.play();
-          });
-        }
-        video.addEventListener('play',  () => { wrap.classList.add('is-playing'); video.setAttribute('controls',''); });
-        video.addEventListener('pause', () => { wrap.classList.remove('is-playing'); video.removeAttribute('controls'); });
-        video.addEventListener('ended', () => { wrap.classList.remove('is-playing'); video.removeAttribute('controls'); });
-      }
-
       function loadLazyMedia(root) {
+        // Hide a card's shimmer only once its media has actually revealed,
+        // so the pulsing placeholder holds until the first frame is ready.
+        const hideShimmers = () => {
+          root.querySelectorAll('.lazy-shimmer').forEach(s => s.classList.add('lazy-hide'));
+        };
         root.querySelectorAll('.lazy-media').forEach(el => {
           if (el.dataset.lazyDone) return;
           const rawSrc = el.getAttribute('data-src') || el.getAttribute('data-src-lazy');
           if (!rawSrc) return;
-          const reveal = () => { el.classList.add('lazy-loaded'); };
+          const reveal = () => { el.classList.add('lazy-loaded'); hideShimmers(); };
 
           if (el.tagName === 'VIDEO') {
             el.preload = 'auto';
-            el.muted = el.muted; // no-op guard for some iOS builds
-            wirePlayOverlay(el);
             // Reveal as soon as the first frame is decoded and painted.
             el.addEventListener('loadeddata', reveal, { once: true });
             el.addEventListener('canplay', reveal, { once: true });
             // Append a media fragment so the browser seeks to and RENDERS the
-            // first frame automatically — this is what shows the frame instead
-            // of a black box on iOS Safari.
+            // first frame automatically — shows the frame instead of a black box.
             const frag = rawSrc.indexOf('#') === -1 ? (rawSrc + '#t=0.1') : rawSrc;
             el.src = frag;
             el.load();
             // Safety reveal if events are delayed.
-            setTimeout(reveal, 500);
+            setTimeout(reveal, 1000);
           } else {
             if (el.complete) { reveal(); } else { el.addEventListener('load', reveal, { once: true }); }
             el.src = rawSrc;
           }
           el.dataset.lazyDone = '1';
         });
-        // fade out the shimmer placeholders quickly
-        root.querySelectorAll('.lazy-shimmer').forEach(s => {
-          setTimeout(() => s.classList.add('lazy-hide'), 60);
-        });
       }
 
-      // Observe each carousel's cards against the CAROUSEL viewport (horizontal scroll).
-      // rootMargin preloads the next card ~half a screen early so it's ready in well
-      // under half a second by the time it's swiped into view.
+      // Observe each card against the carousel viewport. A modest rootMargin
+      // starts the load just as the card begins entering view, so you SEE the
+      // pulsing placeholder resolve into the video (~0.5–1s) rather than it
+      // being silently preloaded far in advance.
       const carousels = document.querySelectorAll('.projects-carousel, .events-carousel');
       carousels.forEach(carousel => {
         const io = new IntersectionObserver((entries) => {
@@ -1373,7 +1326,7 @@
               io.unobserve(entry.target);
             }
           });
-        }, { root: carousel, rootMargin: '100% 0px', threshold: 0.01 });
+        }, { root: carousel, rootMargin: '0px', threshold: 0.1 });
         carousel.querySelectorAll('.project-card, .event-card').forEach(card => {
           if (card.querySelector('.lazy-media')) io.observe(card);
         });
