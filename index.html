@@ -30,8 +30,7 @@
       --accent-primary: #8B7EE8;
       --accent-hover: #7A6BE0;
       --accent-subtle: #F0EDFB;
-      --accent-secondary: #EBB863;
-      --accent-secondary-text: #B87A1A;
+      --accent-secondary: #16A34A;
       --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --font-mono: "JetBrains Mono", "Fira Code", "Courier New", monospace;
     }
@@ -276,8 +275,8 @@
       border: 1px solid #E4DEF7 !important;
     }
     .skill-tab.business-tab:not(.active) {
-      background: #FDF6EA !important;
-      border: 1px solid #F5E7CC !important;
+      background: #EEF9F1 !important;
+      border: 1px solid #D6EFDD !important;
     }
 
     /* Forced line break: makes exactly 3 content-sized tabs per line while staying left-aligned */
@@ -322,12 +321,17 @@
     .lazy-media.lazy-loaded {
       opacity: 1;
     }
-    /* Video thumbnails: show the captured first-frame poster immediately, no black box */
+    /* Video thumbnails: first frame shows via #t fragment; no black box */
     video.lazy-media {
-      background: #000000;
+      background: transparent;
     }
-    video.lazy-media[poster] {
-      object-fit: cover;
+    /* Play triangle overlay: visible by default, hidden once the video plays */
+    .video-thumb-wrap.is-playing .video-play-overlay {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .video-play-overlay {
+      transition: opacity 0.15s ease;
     }
     /* Video thumbnail poster keeps its dimmed look after lazy load */
     .media-video-thumb .lazy-media.lazy-loaded {
@@ -563,8 +567,9 @@
       <div class="projects-carousel" id="projects-carousel">
         <!-- Project Card 1 -->
         <article class="project-card" data-category="sw" style="height: 531px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 12px 32px 12px; display: flex; flex-direction: column; position: relative; overflow: hidden; box-sizing: border-box;">
-          <div class="video-thumb-wrap" style="width: 100%; aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden; margin-bottom: 10px; position: relative; background: #000000;">
-            <video class="project-video lazy-media" data-src="video1.mp4" controls playsinline preload="auto" style="width:100%; height:100%; object-fit: cover; background:#000000;"></video>
+          <div class="video-thumb-wrap" style="width: 100%; aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden; margin-bottom: 10px; position: relative; background: #E2E8F0;">
+            <div class="lazy-shimmer"></div>
+            <video class="project-video lazy-media" data-src="video1.mp4" controls playsinline preload="auto" style="width:100%; height:100%; object-fit: cover; background:transparent;"></video>
             <span class="video-play-overlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 44px; height: 44px; background: rgba(0,0,0,0.55); border-radius: 50%; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 2;">
               <svg viewBox="0 0 24 24" fill="#FFFFFF" style="width: 20px; height: 20px; margin-left: 3px;"><path d="M8 5v14l11-7z"/></svg>
             </span>
@@ -591,9 +596,9 @@
 
         <!-- Project Card 2 -->
         <article class="project-card" data-category="hw-sw" style="height: 531px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 12px 32px 12px; display: flex; flex-direction: column; position: relative; overflow: hidden; box-sizing: border-box;">
-          <div class="video-thumb-wrap" style="width: 100%; aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden; margin-bottom: 10px; position: relative; background: #000000;">
+          <div class="video-thumb-wrap" style="width: 100%; aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden; margin-bottom: 10px; position: relative; background: #E2E8F0;">
             <div class="lazy-shimmer"></div>
-            <video class="project-video lazy-media" data-src="video1.mp4" controls playsinline preload="auto" style="width:100%; height:100%; object-fit: cover; background:#000000;"></video>
+            <video class="project-video lazy-media" data-src="video1.mp4" controls playsinline preload="auto" style="width:100%; height:100%; object-fit: cover; background:transparent;"></video>
             <span class="video-play-overlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 44px; height: 44px; background: rgba(0,0,0,0.55); border-radius: 50%; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 2;">
               <svg viewBox="0 0 24 24" fill="#FFFFFF" style="width: 20px; height: 20px; margin-left: 3px;"><path d="M8 5v14l11-7z"/></svg>
             </span>
@@ -1179,9 +1184,8 @@
         });
         tab.classList.add('active');
         const activeColor = isBusiness ? 'var(--accent-secondary)' : 'var(--accent-primary)';
-        const activeTextColor = isBusiness ? 'var(--accent-secondary-text)' : 'var(--accent-primary)';
         tab.style.background = activeColor;
-        tab.style.color = isBusiness ? '#3D2A08' : '#FFFFFF';
+        tab.style.color = '#FFFFFF';
         tab.style.borderColor = activeColor;
 
         const skillset = tab.getAttribute('data-skillset');
@@ -1194,7 +1198,7 @@
             if (fill) {
               fill.style.width = '0%';
               fill.style.background = activeColor;
-              if (pctLabel) pctLabel.style.color = activeTextColor;
+              if (pctLabel) pctLabel.style.color = activeColor;
               setTimeout(() => {
                 fill.style.width = fill.getAttribute('data-target-width');
               }, 50);
@@ -1288,52 +1292,45 @@
     })();
   </script>
 
-  <!-- Lazy-load: 2nd card's media loads the moment it starts entering the carousel viewport (start of swipe) -->
+  <!-- Lazy-load: media loads as its card enters the carousel viewport; videos show their first frame, not a black box -->
   <script>
     (function() {
-      // Capture the first frame of a video and use it as an instant poster,
-      // so the thumbnail shows immediately instead of a black box.
-      function captureVideoPoster(video) {
-        const grab = () => {
-          try {
-            if (!video.videoWidth || !video.videoHeight) return;
-            const c = document.createElement('canvas');
-            c.width = video.videoWidth;
-            c.height = video.videoHeight;
-            c.getContext('2d').drawImage(video, 0, 0, c.width, c.height);
-            video.setAttribute('poster', c.toDataURL('image/jpeg', 0.7));
-            video.classList.add('lazy-loaded');
-          } catch (e) {
-            // Cross-origin or decode failure: still reveal so the native frame shows
-            video.classList.add('lazy-loaded');
-          }
-        };
-        // loadeddata means the first frame is decoded and drawable
-        video.addEventListener('loadeddata', () => {
-          if (video.readyState >= 2) {
-            // nudge to frame 0 to guarantee a paintable frame
-            try { video.currentTime = 0.05; } catch (e) {}
-            grab();
-          }
-        }, { once: true });
-        video.addEventListener('seeked', grab, { once: true });
+      // Wire a video's play/pause/ended state to the play-triangle overlay,
+      // so the triangle disappears while the video is actually playing.
+      function wirePlayOverlay(video) {
+        const wrap = video.closest('.video-thumb-wrap');
+        if (!wrap) return;
+        video.addEventListener('play',  () => wrap.classList.add('is-playing'));
+        video.addEventListener('pause', () => wrap.classList.remove('is-playing'));
+        video.addEventListener('ended', () => wrap.classList.remove('is-playing'));
       }
 
       function loadLazyMedia(root) {
         root.querySelectorAll('.lazy-media').forEach(el => {
           if (el.dataset.lazyDone) return;
-          const src = el.getAttribute('data-src') || el.getAttribute('data-src-lazy');
-          if (!src) return;
+          const rawSrc = el.getAttribute('data-src') || el.getAttribute('data-src-lazy');
+          if (!rawSrc) return;
           const reveal = () => { el.classList.add('lazy-loaded'); };
+
           if (el.tagName === 'VIDEO') {
             el.preload = 'auto';
-            captureVideoPoster(el);
-            // safety reveal in case events don't fire
-            setTimeout(reveal, 400);
+            el.muted = el.muted; // no-op guard for some iOS builds
+            wirePlayOverlay(el);
+            // Reveal as soon as the first frame is decoded and painted.
+            el.addEventListener('loadeddata', reveal, { once: true });
+            el.addEventListener('canplay', reveal, { once: true });
+            // Append a media fragment so the browser seeks to and RENDERS the
+            // first frame automatically — this is what shows the frame instead
+            // of a black box on iOS Safari.
+            const frag = rawSrc.indexOf('#') === -1 ? (rawSrc + '#t=0.1') : rawSrc;
+            el.src = frag;
+            el.load();
+            // Safety reveal if events are delayed.
+            setTimeout(reveal, 500);
           } else {
             if (el.complete) { reveal(); } else { el.addEventListener('load', reveal, { once: true }); }
+            el.src = rawSrc;
           }
-          el.src = src;
           el.dataset.lazyDone = '1';
         });
         // fade out the shimmer placeholders quickly
@@ -1342,8 +1339,9 @@
         });
       }
 
-      // Observe each carousel's cards against the CAROUSEL viewport (horizontal scroll),
-      // so the 2nd card's media loads only when the user swipes it into view — not on page load.
+      // Observe each carousel's cards against the CAROUSEL viewport (horizontal scroll).
+      // rootMargin preloads the next card ~half a screen early so it's ready in well
+      // under half a second by the time it's swiped into view.
       const carousels = document.querySelectorAll('.projects-carousel, .events-carousel');
       carousels.forEach(carousel => {
         const io = new IntersectionObserver((entries) => {
@@ -1353,10 +1351,16 @@
               io.unobserve(entry.target);
             }
           });
-        }, { root: carousel, rootMargin: '50% 0px', threshold: 0.01 });
+        }, { root: carousel, rootMargin: '100% 0px', threshold: 0.01 });
         carousel.querySelectorAll('.project-card, .event-card').forEach(card => {
           if (card.querySelector('.lazy-media')) io.observe(card);
         });
+      });
+
+      // First (already-visible) card: load immediately on page load so it never sits black.
+      document.querySelectorAll('.projects-carousel, .events-carousel').forEach(carousel => {
+        const firstCard = carousel.querySelector('.project-card, .event-card');
+        if (firstCard) loadLazyMedia(firstCard);
       });
     })();
   </script>
