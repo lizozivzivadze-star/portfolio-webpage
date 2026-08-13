@@ -501,7 +501,7 @@
         </div>
       </div>
       <!-- Personal Statement -->
-      <p class="personal-statement" style="font-family: var(--font-primary); font-size: 16px; font-weight: 400; color: var(--text-secondary); line-height: 1.375; margin-top: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">I build hardware-software systems from scratch — 1 project per week in my home lab. My goal: work on real products that matter.</p>
+      <p class="personal-statement" style="font-family: var(--font-primary); font-size: 16px; font-weight: 400; color: var(--text-secondary); line-height: 1.375; margin-top: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">Every week I build a hardware-software system from scratch in my home lab, working toward real products that actually matter.</p>
     </section>
 
     <!-- SECTION 3: PROJECTS COMPONENT -->
@@ -533,15 +533,9 @@
             <button class="subtab-btn" data-tab="ilearned" style="background: var(--bg-main); color: var(--text-muted); border: 1px solid var(--border-color); border-bottom: none; border-radius: 6px 6px 0 0; padding: 6px 8px; font-family: var(--font-mono); font-size: 12px; font-weight: 500; position: relative; bottom: -1px; z-index: 1; cursor: pointer; white-space: nowrap;">I-Learned</button>
           </nav>
           <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 0 6px 6px 6px; padding: 12px; height: 235px; flex-grow: 0; flex-shrink: 0; width: 100%; box-sizing: border-box; position: relative; z-index: 1; margin-top: -1px; overflow: hidden;">
-            <div class="pane-overview" style="font-size: 13.5px; color: var(--text-secondary);">Solar power feels abstract until it's visible — turning sunlight into live readable numbers: voltage, temp, humidity.</div>
-            <div class="pane-techstack" style="display: none; flex-wrap: wrap; gap: 6px;">
-              <span style="font-family: var(--font-mono); font-size: 11px; background: var(--accent-subtle); color: var(--accent-primary); padding: 2px 6px; border-radius: 4px;">ESP32</span>
-              <span style="font-family: var(--font-mono); font-size: 11px; background: var(--accent-subtle); color: var(--accent-primary); padding: 2px 6px; border-radius: 4px;">Solar Panel</span>
-              <span style="font-family: var(--font-mono); font-size: 11px; background: var(--accent-subtle); color: var(--accent-primary); padding: 2px 6px; border-radius: 4px;">DHT11</span>
-              <span style="font-family: var(--font-mono); font-size: 11px; background: var(--accent-subtle); color: var(--accent-primary); padding: 2px 6px; border-radius: 4px;">OLED</span>
-              <span style="font-family: var(--font-mono); font-size: 11px; background: var(--accent-subtle); color: var(--accent-primary); padding: 2px 6px; border-radius: 4px;">Voltage Divider</span>
-            </div>
-            <div class="pane-ilearned" style="display: none; font-size: 13.5px; color: var(--text-secondary);">[Placeholder — what I learned building this project. Add your reflections here later.]</div>
+            <div class="pane-overview" style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">A desktop solar station that shows live voltage, temperature, and humidity on a small screen, so anyone can actually see clean energy working in real time. I built it to turn an abstract idea into something you can watch and understand — and to teach myself how sensors and microcontrollers work together.</div>
+            <div class="pane-techstack" style="display: none; font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">The station runs on an <span style="color: var(--accent-primary); font-weight: 600;">ESP32</span> microcontroller, which reads temperature and humidity from a <span style="color: var(--accent-primary); font-weight: 600;">DHT11</span> sensor and measures the panel's output through a <span style="color: var(--accent-primary); font-weight: 600;">voltage divider</span>. Everything is displayed live on an <span style="color: var(--accent-primary); font-weight: 600;">OLED</span> screen, powered directly by the <span style="color: var(--accent-primary); font-weight: 600;">solar panel</span> itself.</div>
+            <div class="pane-ilearned" style="display: none; font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">I learned how to read analog sensor data and scale it correctly with a voltage divider, how to drive an OLED display over I2C, and how to structure clean embedded firmware. It sharpened my skills in embedded programming, real-time data handling, and debugging hardware and code together.</div>
           </div>
           <span class="project-card-counter" style="position: absolute; bottom: 10px; right: 14px; font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--text-muted); line-height: 1; pointer-events: none;">2/2</span>
         </article>
@@ -565,15 +559,9 @@
             <button class="subtab-btn" data-tab="ilearned" style="background: var(--bg-main); color: var(--text-muted); border: 1px solid var(--border-color); border-bottom: none; border-radius: 6px 6px 0 0; padding: 6px 8px; font-family: var(--font-mono); font-size: 12px; font-weight: 500; position: relative; bottom: -1px; z-index: 1; cursor: pointer; white-space: nowrap;">I-Learned</button>
           </nav>
           <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 0 6px 6px 6px; padding: 12px; height: 235px; flex-grow: 0; flex-shrink: 0; width: 100%; box-sizing: border-box; position: relative; z-index: 1; margin-top: -1px; overflow: hidden;">
-            <div class="pane-overview" style="font-size: 13.5px; color: var(--text-secondary);">Solar power feels abstract until it's visible — turning sunlight into live readable numbers: voltage, temp, humidity.</div>
-            <div class="pane-techstack" style="display: none; flex-wrap: wrap; gap: 6px;">
-              <span style="font-family: var(--font-mono); font-size: 11px; background: var(--accent-subtle); color: var(--accent-primary); padding: 2px 6px; border-radius: 4px;">ESP32</span>
-              <span style="font-family: var(--font-mono); font-size: 11px; background: var(--accent-subtle); color: var(--accent-primary); padding: 2px 6px; border-radius: 4px;">Solar Panel</span>
-              <span style="font-family: var(--font-mono); font-size: 11px; background: var(--accent-subtle); color: var(--accent-primary); padding: 2px 6px; border-radius: 4px;">DHT11</span>
-              <span style="font-family: var(--font-mono); font-size: 11px; background: var(--accent-subtle); color: var(--accent-primary); padding: 2px 6px; border-radius: 4px;">OLED</span>
-              <span style="font-family: var(--font-mono); font-size: 11px; background: var(--accent-subtle); color: var(--accent-primary); padding: 2px 6px; border-radius: 4px;">Voltage Divider</span>
-            </div>
-            <div class="pane-ilearned" style="display: none; font-size: 13.5px; color: var(--text-secondary);">[Placeholder — what I learned building this project. Add your reflections here later.]</div>
+            <div class="pane-overview" style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">A desktop solar station that shows live voltage, temperature, and humidity on a small screen, so anyone can actually see clean energy working in real time. I built it to turn an abstract idea into something you can watch and understand — and to teach myself how sensors and microcontrollers work together.</div>
+            <div class="pane-techstack" style="display: none; font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">The station runs on an <span style="color: var(--accent-primary); font-weight: 600;">ESP32</span> microcontroller, which reads temperature and humidity from a <span style="color: var(--accent-primary); font-weight: 600;">DHT11</span> sensor and measures the panel's output through a <span style="color: var(--accent-primary); font-weight: 600;">voltage divider</span>. Everything is displayed live on an <span style="color: var(--accent-primary); font-weight: 600;">OLED</span> screen, powered directly by the <span style="color: var(--accent-primary); font-weight: 600;">solar panel</span> itself.</div>
+            <div class="pane-ilearned" style="display: none; font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">I learned how to read analog sensor data and scale it correctly with a voltage divider, how to drive an OLED display over I2C, and how to structure clean embedded firmware. It sharpened my skills in embedded programming, real-time data handling, and debugging hardware and code together.</div>
           </div>
           <span class="project-card-counter" style="position: absolute; bottom: 10px; right: 14px; font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--text-muted); line-height: 1; pointer-events: none;">1/2</span>
         </article>
@@ -753,9 +741,9 @@
             <button class="event-subtab-btn" data-tab="media" style="background: var(--bg-main); color: var(--text-muted); border: 1px solid var(--border-color); border-bottom: none; border-radius: 6px 6px 0 0; padding: 6px 12px; font-family: var(--font-mono); font-size: 12px; font-weight: 500; position: relative; bottom: -1px; z-index: 1; cursor: pointer;">MEDIA</button>
           </nav>
           <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 0 6px 6px 6px; padding: 12px; height: 235px; flex-grow: 0; flex-shrink: 0; width: 100%; box-sizing: border-box; position: relative; z-index: 1; margin-top: -1px; overflow: hidden;">
-            <div class="event-pane-overview" style="font-size: 13.5px; color: var(--text-secondary);">Controlled a robot dog, explored its software stack, and programmed a robotic arm at hands-on demo stations.</div>
+            <div class="event-pane-overview" style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">A tech fair and keynote evening by Clusity x KdG bringing professionals and students together. I networked and connected with attendees, controlled a robot dog and explored the software behind it, programmed a robotic arm, and competed in software games before keynotes on continuous learning, resilience, and AI.</div>
             <div class="event-pane-media" style="display: none; width: 100%; height: 100%; overflow: hidden;">
-              <div class="media-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 6px; width: 100%; height: 100%;">
+              <div class="media-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 1fr; gap: 6px; width: 100%; height: 100%; align-content: center; justify-content: stretch;">
                 <img src="photo1.jpg" alt="Event media 1" class="media-thumb media-grid-img" data-media-type="image" data-media-src="photo1.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
                 <img src="photo2.jpg" alt="Event media 2" class="media-thumb media-grid-img" data-media-type="image" data-media-src="photo2.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
                 <img src="photo3.jpg" alt="Event media 3" class="media-thumb media-grid-img" data-media-type="image" data-media-src="photo3.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
@@ -794,9 +782,9 @@
             <button class="event-subtab-btn" data-tab="media" style="background: var(--bg-main); color: var(--text-muted); border: 1px solid var(--border-color); border-bottom: none; border-radius: 6px 6px 0 0; padding: 6px 12px; font-family: var(--font-mono); font-size: 12px; font-weight: 500; position: relative; bottom: -1px; z-index: 1; cursor: pointer;">MEDIA</button>
           </nav>
           <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 0 6px 6px 6px; padding: 12px; height: 235px; flex-grow: 0; flex-shrink: 0; width: 100%; box-sizing: border-box; position: relative; z-index: 1; margin-top: -1px; overflow: hidden;">
-            <div class="event-pane-overview" style="font-size: 13.5px; color: var(--text-secondary);">Closed the night with keynote talks on continuous learning, career resilience, and AI after networking with peers.</div>
+            <div class="event-pane-overview" style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">A tech fair and keynote evening by Clusity x KdG bringing professionals and students together. I networked and connected with attendees, controlled a robot dog and explored the software behind it, programmed a robotic arm, and competed in software games before keynotes on continuous learning, resilience, and AI.</div>
             <div class="event-pane-media" style="display: none; width: 100%; height: 100%; overflow: hidden;">
-              <div class="media-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 6px; width: 100%; height: 100%;">
+              <div class="media-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 1fr; gap: 6px; width: 100%; height: 100%; align-content: center; justify-content: stretch;">
                 <img data-src-lazy="photo1.jpg" alt="Event media 1" class="media-thumb media-grid-img lazy-media" data-media-type="image" data-media-src="photo1.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
                 <img data-src-lazy="photo2.jpg" alt="Event media 2" class="media-thumb media-grid-img lazy-media" data-media-type="image" data-media-src="photo2.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
                 <img data-src-lazy="photo3.jpg" alt="Event media 3" class="media-thumb media-grid-img lazy-media" data-media-type="image" data-media-src="photo3.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
@@ -831,7 +819,7 @@
             </span>
             <h3 style="font-family: var(--font-primary); font-size: 18px; font-weight: 700; color: var(--text-primary); line-height: 22px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Self-Starter</h3>
           </div>
-          <p class="value-card-text" style="font-family: var(--font-primary); font-size: 15.5px; font-weight: 400; color: var(--text-secondary); line-height: 22px; max-height: 110px; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">Autonomous builder shipping one complete hardware-software project every week since early 2026, without waiting to be taught.</p>
+          <p class="value-card-text" style="font-family: var(--font-primary); font-size: 15.5px; font-weight: 400; color: var(--text-secondary); line-height: 22px; max-height: 200px; display: -webkit-box; -webkit-line-clamp: 9; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">An engineer who doesn't wait to be taught. Since early 2026 I've been building autonomously — one hardware-software project every week, end to end. Most students write code or wire circuits; I do both, and I ship.</p>
           <span class="value-card-counter" style="position: absolute; bottom: 10px; right: 14px; font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--text-muted); line-height: 1; pointer-events: none;">3/3</span>
         </article>
 
@@ -841,9 +829,9 @@
             <span class="value-card-icon" style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; color: var(--accent-primary); flex-shrink: 0;">
               <svg style="width: 22px; height: 22px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </span>
-            <h3 style="font-family: var(--font-primary); font-size: 18px; font-weight: 700; color: var(--text-primary); line-height: 22px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Full-Stack</h3>
+            <h3 style="font-family: var(--font-primary); font-size: 18px; font-weight: 700; color: var(--text-primary); line-height: 22px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Who I Am</h3>
           </div>
-          <p class="value-card-text" style="font-family: var(--font-primary); font-size: 15.5px; font-weight: 400; color: var(--text-secondary); line-height: 22px; max-height: 110px; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">Most students only code or only wire circuits. I do both, end-to-end, and ship a tested, working project every single week.</p>
+          <p class="value-card-text" style="font-family: var(--font-primary); font-size: 15.5px; font-weight: 400; color: var(--text-secondary); line-height: 22px; max-height: 200px; display: -webkit-box; -webkit-line-clamp: 9; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">A Georgian national studying Electromechanical Engineering Technology at KU Leuven Group T in Belgium. I'm looking for an internship, part-time role, or lab position here, and I'm open to employers that support work authorization.</p>
           <span class="value-card-counter" style="position: absolute; bottom: 10px; right: 14px; font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--text-muted); line-height: 1; pointer-events: none;">2/3</span>
         </article>
 
@@ -853,9 +841,9 @@
             <span class="value-card-icon" style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; color: var(--accent-primary); flex-shrink: 0;">
               <svg style="width: 22px; height: 22px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             </span>
-            <h3 style="font-family: var(--font-primary); font-size: 18px; font-weight: 700; color: var(--text-primary); line-height: 22px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Target Roles</h3>
+            <h3 style="font-family: var(--font-primary); font-size: 18px; font-weight: 700; color: var(--text-primary); line-height: 22px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">How I Build</h3>
           </div>
-          <p class="value-card-text" style="font-family: var(--font-primary); font-size: 15.5px; font-weight: 400; color: var(--text-secondary); line-height: 22px; max-height: 110px; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">Seeking an internship or lab role in Belgium at a defense contractor, mechatronics firm, or research lab building real products.</p>
+          <p class="value-card-text" style="font-family: var(--font-primary); font-size: 15.5px; font-weight: 400; color: var(--text-secondary); line-height: 22px; max-height: 200px; display: -webkit-box; -webkit-line-clamp: 9; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">I combine hardware and software end-to-end, building real products rather than just writing code or wiring circuits. I aim at domains where what you build matters — autonomous systems, naval and defense, robotics, industrial automation, and embedded hardware.</p>
           <span class="value-card-counter" style="position: absolute; bottom: 10px; right: 14px; font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--text-muted); line-height: 1; pointer-events: none;">1/3</span>
         </article>
       </div>
