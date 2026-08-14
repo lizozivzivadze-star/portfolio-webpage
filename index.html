@@ -328,6 +328,18 @@
       animation: revealFade 0.5s ease both;
     }
 
+    /* Section reveal (vertical scroll): fade ONLY — no movement — so it feels
+       seamless while scrolling, not like content loading in. Starts nearly
+       visible and settles gently; the JS triggers it before the section
+       reaches view, so the fade is basically finished by the time you see it. */
+    @keyframes sectionReveal {
+      0%   { opacity: 0.55; }
+      100% { opacity: 1; }
+    }
+    .section-reveal {
+      animation: sectionReveal 0.45s ease-out both;
+    }
+
     /* Lazy-load shimmer placeholder for the 2nd card's media */
     @keyframes lazyShimmer {
       0% { background-position: -200% 0; }
@@ -1284,19 +1296,22 @@
       });
     })();
 
-    // Vertical scroll reveal: each section fades in ONCE the first time it
-    // enters the viewport. Sections already on screen at load stay instant.
+    // Vertical scroll reveal: each section eases in ONCE the first time it
+    // approaches the viewport. Fade-only (no movement) and triggered EARLY — the
+    // negative rootMargin fires it ~120px before the section reaches view, so the
+    // fade is nearly done by the time you actually see it. Feels seamless, not
+    // like loading. Sections already on screen at load stay fully instant.
     (function() {
       const sections = document.querySelectorAll('main.portfolio-container > section');
       const vh = window.innerHeight || document.documentElement.clientHeight;
       const io = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('reveal-fade');
+            entry.target.classList.add('section-reveal');
             io.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.08 });
+      }, { threshold: 0, rootMargin: '0px 0px -120px 0px' });
       sections.forEach(section => {
         const top = section.getBoundingClientRect().top;
         // If it's already in view on load, leave it instant; otherwise observe it.

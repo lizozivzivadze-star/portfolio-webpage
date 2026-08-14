@@ -313,19 +313,22 @@
       });
     })();
 
-    // Vertical scroll reveal: each section fades in ONCE the first time it
-    // enters the viewport. Sections already on screen at load stay instant.
+    // Vertical scroll reveal: each section eases in ONCE the first time it
+    // approaches the viewport. Fade-only (no movement) and triggered EARLY — the
+    // negative rootMargin fires it ~120px before the section reaches view, so the
+    // fade is nearly done by the time you actually see it. Feels seamless, not
+    // like loading. Sections already on screen at load stay fully instant.
     (function() {
       const sections = document.querySelectorAll('main.portfolio-container > section');
       const vh = window.innerHeight || document.documentElement.clientHeight;
       const io = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('reveal-fade');
+            entry.target.classList.add('section-reveal');
             io.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.08 });
+      }, { threshold: 0, rootMargin: '0px 0px -120px 0px' });
       sections.forEach(section => {
         const top = section.getBoundingClientRect().top;
         // If it's already in view on load, leave it instant; otherwise observe it.
