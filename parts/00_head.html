@@ -328,16 +328,16 @@
       animation: revealFade 0.5s ease both;
     }
 
-    /* Section reveal (vertical scroll): fade ONLY — no movement — so it feels
-       seamless while scrolling, not like content loading in. Starts nearly
-       visible and settles gently; the JS triggers it before the section
-       reaches view, so the fade is basically finished by the time you see it. */
+    /* Section reveal (vertical scroll): a visible but smooth fade-in. No vertical
+       movement (that felt like loading); just opacity from 0 to 1 over ~0.6s with
+       a soft ease. The JS triggers it slightly before the section is fully in view
+       so it reads as smooth, not abrupt. */
     @keyframes sectionReveal {
-      0%   { opacity: 0.55; }
+      0%   { opacity: 0; }
       100% { opacity: 1; }
     }
     .section-reveal {
-      animation: sectionReveal 0.45s ease-out both;
+      animation: sectionReveal 0.6s ease-out both;
     }
 
     /* Lazy-load shimmer placeholder for the 2nd card's media */

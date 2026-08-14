@@ -138,6 +138,9 @@
           const cat = card.getAttribute('data-category');
           if (filterVal === 'all' || cat === filterVal || (filterVal === 'hw-sw' && cat === 'hw-sw')) {
             card.style.display = 'flex';
+            card.classList.remove('reveal-fade');
+            void card.offsetWidth;
+            card.classList.add('reveal-fade');
             visibleProjects.push(card);
           } else {
             card.style.display = 'none';
@@ -184,6 +187,9 @@
           const cat = card.getAttribute('data-category');
           if (filterVal === 'all' || cat === filterVal) {
             card.style.display = 'flex';
+            card.classList.remove('reveal-fade');
+            void card.offsetWidth;
+            card.classList.add('reveal-fade');
             visibleEvents.push(card);
           } else {
             card.style.display = 'none';
@@ -328,7 +334,7 @@
             io.unobserve(entry.target);
           }
         });
-      }, { threshold: 0, rootMargin: '0px 0px -120px 0px' });
+      }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
       sections.forEach(section => {
         const top = section.getBoundingClientRect().top;
         // If it's already in view on load, leave it instant; otherwise observe it.
