@@ -250,6 +250,8 @@
 
     // Skillset Tabs Interactivity
     const skillTabs = document.querySelectorAll('.skill-tab');
+    const skillTabList = Array.from(skillTabs);
+    const skillsetCounter = document.querySelector('.skillset-counter');
     skillTabs.forEach(tab => {
       tab.addEventListener('click', () => {
         const isBusiness = tab.hasAttribute('data-type');
@@ -265,6 +267,12 @@
         tab.style.background = activeColor;
         tab.style.color = '#FFFFFF';
         tab.style.borderColor = activeColor;
+
+        // Update the skillset counter: this tab's position out of all tabs.
+        if (skillsetCounter) {
+          const idx = skillTabList.indexOf(tab) + 1;
+          skillsetCounter.textContent = idx + '/' + skillTabList.length;
+        }
 
         const skillset = tab.getAttribute('data-skillset');
         const rows = document.querySelectorAll('.skill-row');
