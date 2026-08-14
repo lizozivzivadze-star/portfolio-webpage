@@ -1,0 +1,487 @@
+  <!-- JavaScript Behavior & Logic -->
+  <script>
+    // Shared Auto-Fit Text Sizing Utility
+    function autoFitText(element, options) {
+      if (!element) return;
+      const { minFontPx, maxFontPx, step = 0.5 } = options;
+      let currentSize = maxFontPx;
+      element.style.fontSize = currentSize + 'px';
+      
+      // Temporarily remove line clamp to measure natural height/width
+      const originalOverflow = element.style.overflow;
+      element.style.overflow = 'visible';
+      
+      while (currentSize > minFontPx) {
+        let isOverflowing = false;
+        if (element.scrollWidth > element.clientWidth) {
+          isOverflowing = true;
+        } else {
+          // Check line height bounds if needed
+          const computedLineHeight = parseFloat(window.getComputedStyle(element).lineHeight);
+          const computedHeight = element.scrollHeight;
+          // If multi-line height check is required
+          if (options.maxLines && computedHeight > (computedLineHeight * options.maxLines * 1.1)) {
+            isOverflowing = true;
+          }
+        }
+        
+        if (isOverflowing) {
+          currentSize -= step;
+          element.style.fontSize = currentSize + 'px';
+        } else {
+          break;
+        }
+      }
+      element.style.overflow = originalOverflow;
+    }
+
+    function runAutoFits() {
+      const titleElem = document.querySelector('.profile-title');
+      const statementElem = document.querySelector('.personal-statement');
+      if (titleElem) autoFitText(titleElem, { minFontPx: 12, maxFontPx: 16 });
+      if (statementElem) autoFitText(statementElem, { maxLines: 3, minFontPx: 12, maxFontPx: 16 });
+      
+      // Only the STICKY footer's status line is auto-fit; the static page-footer status line stays locked at 14.5px so it always matches the copyright line above it exactly.
+      document.querySelectorAll('#sticky-footer .footer-status-text').forEach(el => {
+        autoFitText(el, { minFontPx: 11, maxFontPx: 14.5 });
+      });
+
+      // Card overview / i-learned text panes: shrink to always fit the fixed ~235px box (holds ~300 chars comfortably at 13.5px)
+      document.querySelectorAll('.pane-overview, .event-pane-overview, .pane-ilearned').forEach(el => {
+        if (getComputedStyle(el).display !== 'none') autoFitText(el, { minFontPx: 10, maxFontPx: 13.5 });
+      });
+
+      // Project sub-tabs (Overview / Tech Stack / I-Learned): start at 13px and
+      // only shrink on genuinely narrow screens so all 3 still fit on one line
+      document.querySelectorAll('.project-card').forEach(card => {
+        const nav = card.querySelector('.subtab-btn');
+        if (!nav) return;
+        const navRow = nav.parentElement;
+        const tabs = [...navRow.querySelectorAll('.subtab-btn')];
+        const avail = navRow.clientWidth;
+        for (let fs = 13; fs >= 9; fs -= 0.5) {
+          tabs.forEach(t => t.style.fontSize = fs + 'px');
+          const total = tabs.reduce((a,t)=>a+t.getBoundingClientRect().width,0) + 4*(tabs.length-1);
+          if (total <= avail) break;
+        }
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      runAutoFits();
+    });
+
+    // Re-run once web fonts finish loading (they swap in wider than the fallback and can overflow on narrow screens like Galaxy S20)
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(runAutoFits);
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(runAutoFits, 150);
+    });
+
+    // Sticky Header Intersection Observer
+    const profileSection = document.getElementById('profile-section');
+    const stickyHeader = document.getElementById('sticky-header');
+    if (profileSection && stickyHeader) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) {
+            stickyHeader.classList.add('visible');
+          } else {
+            stickyHeader.classList.remove('visible');
+          }
+        });
+      }, { rootMargin: "-44px 0px 0px 0px", threshold: 0 });
+      observer.observe(profileSection);
+    }
+
+    // Sticky Footer: hide (slide down + fade) once the static page footer scrolls into view
+    const pageFooter = document.getElementById('page-footer');
+    const stickyFooter = document.getElementById('sticky-footer');
+    if (pageFooter && stickyFooter) {
+      const footerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            stickyFooter.classList.add('hidden');
+          } else {
+            stickyFooter.classList.remove('hidden');
+          }
+        });
+      }, { threshold: 0 });
+      footerObserver.observe(pageFooter);
+    }
+
+    // Projects Filtering & Scroll Stability Fix
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+    const projectsCarousel = document.getElementById('projects-carousel');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('active');
+          b.style.background = 'var(--bg-main)';
+          b.style.color = 'var(--text-secondary)';
+          b.style.borderColor = 'var(--border-color)';
+        });
+        btn.classList.add('active');
+        btn.style.background = 'var(--accent-primary)';
+        btn.style.color = '#FFFFFF';
+        btn.style.borderColor = 'var(--accent-primary)';
+
+        const filterVal = btn.getAttribute('data-filter');
+        const visibleProjects = [];
+        projectCards.forEach((card) => {
+          const cat = card.getAttribute('data-category');
+          if (filterVal === 'all' || cat === filterVal || (filterVal === 'hw-sw' && cat === 'hw-sw')) {
+            card.style.display = 'flex';
+            visibleProjects.push(card);
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        const projTotal = visibleProjects.length;
+        visibleProjects.forEach((card, i) => {
+          const counter = card.querySelector('.project-card-counter');
+          if (counter) counter.textContent = (projTotal - i) + '/' + projTotal;
+        });
+
+        // Scroll reset stability fix (Section 1.7)
+        if (projectsCarousel) {
+          projectsCarousel.scrollTo({ left: 0, behavior: 'auto' });
+          projectsCarousel.scrollLeft = 0;
+          requestAnimationFrame(() => {
+            projectsCarousel.scrollLeft = 0;
+          });
+        }
+      });
+    });
+
+    // Events Filtering & Scroll Stability Fix
+    const eventFilterBtns = document.querySelectorAll('.event-filter-btn');
+    const eventCards = document.querySelectorAll('.event-card');
+    const eventsCarousel = document.getElementById('events-carousel');
+
+    eventFilterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        eventFilterBtns.forEach(b => {
+          b.classList.remove('active');
+          b.style.background = 'var(--bg-main)';
+          b.style.color = 'var(--text-secondary)';
+          b.style.borderColor = 'var(--border-color)';
+        });
+        btn.classList.add('active');
+        btn.style.background = 'var(--accent-primary)';
+        btn.style.color = '#FFFFFF';
+        btn.style.borderColor = 'var(--accent-primary)';
+
+        const filterVal = btn.getAttribute('data-filter');
+        const visibleEvents = [];
+        eventCards.forEach((card) => {
+          const cat = card.getAttribute('data-category');
+          if (filterVal === 'all' || cat === filterVal) {
+            card.style.display = 'flex';
+            visibleEvents.push(card);
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        const evTotal = visibleEvents.length;
+        visibleEvents.forEach((card, i) => {
+          const counter = card.querySelector('.event-card-counter');
+          if (counter) counter.textContent = (evTotal - i) + '/' + evTotal;
+        });
+
+        if (eventsCarousel) {
+          eventsCarousel.scrollTo({ left: 0, behavior: 'auto' });
+          eventsCarousel.scrollLeft = 0;
+          requestAnimationFrame(() => {
+            eventsCarousel.scrollLeft = 0;
+          });
+        }
+      });
+    });
+
+    // Card Sub-Tabs Logic (Projects & Events)
+    document.querySelectorAll('.project-card, .event-card').forEach(card => {
+      const subTabs = card.querySelectorAll('.subtab-btn, .event-subtab-btn');
+      subTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          subTabs.forEach(t => {
+            t.classList.remove('active');
+            t.style.background = 'var(--bg-main)';
+            t.style.color = 'var(--text-muted)';
+            t.style.borderBottom = 'none';
+            t.style.bottom = '-1px';
+            t.style.zIndex = '1';
+          });
+          tab.classList.add('active');
+          tab.style.background = 'var(--bg-surface)';
+          tab.style.color = 'var(--accent-primary)';
+          tab.style.borderBottom = '1px solid #FFFFFF';
+          tab.style.bottom = '-1px';
+          tab.style.zIndex = '3';
+
+          const targetPane = tab.getAttribute('data-tab');
+          const panes = card.querySelectorAll('.pane-overview, .pane-techstack, .pane-ilearned, .event-pane-overview, .event-pane-media');
+          panes.forEach(pane => {
+            if (pane.classList.contains('pane-' + targetPane) || pane.classList.contains('event-pane-' + targetPane)) {
+              pane.style.display = 'block';
+            } else {
+              pane.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+
+    // Skillset Tabs Interactivity
+    const skillTabs = document.querySelectorAll('.skill-tab');
+    skillTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const isBusiness = tab.hasAttribute('data-type');
+        skillTabs.forEach(t => {
+          t.classList.remove('active');
+          t.style.background = '';
+          t.style.border = '';
+          t.style.borderColor = '';
+          t.style.color = 'var(--text-primary)';
+        });
+        tab.classList.add('active');
+        const activeColor = isBusiness ? 'var(--accent-secondary)' : 'var(--accent-primary)';
+        tab.style.background = activeColor;
+        tab.style.color = '#FFFFFF';
+        tab.style.borderColor = activeColor;
+
+        const skillset = tab.getAttribute('data-skillset');
+        const rows = document.querySelectorAll('.skill-row');
+        rows.forEach(row => {
+          if (row.getAttribute('data-category') === skillset) {
+            row.style.display = 'flex';
+            const fill = row.querySelector('.progress-fill');
+            const pctLabel = row.querySelector('.skill-percentage');
+            if (fill) {
+              fill.style.width = '0%';
+              fill.style.background = activeColor;
+              if (pctLabel) pctLabel.style.color = activeColor;
+              setTimeout(() => {
+                fill.style.width = fill.getAttribute('data-target-width');
+              }, 50);
+            }
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+    });
+
+  </script>
+
+  <!-- Desktop carousel arrows (Projects / Events / Value) -->
+  <script>
+    (function() {
+      const carousels = document.querySelectorAll('.projects-carousel, .events-carousel, .value-carousel');
+      carousels.forEach(carousel => {
+        // wrap carousel so arrows can be positioned relative to it
+        const wrap = document.createElement('div');
+        wrap.className = 'carousel-wrap';
+        carousel.parentNode.insertBefore(wrap, carousel);
+        wrap.appendChild(carousel);
+
+        const prev = document.createElement('button');
+        prev.className = 'carousel-arrow prev';
+        prev.setAttribute('aria-label', 'Previous');
+        prev.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><polyline points="15 18 9 12 15 6"/></svg>';
+        const next = document.createElement('button');
+        next.className = 'carousel-arrow next';
+        next.setAttribute('aria-label', 'Next');
+        next.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><polyline points="9 18 15 12 9 6"/></svg>';
+        wrap.appendChild(prev);
+        wrap.appendChild(next);
+
+        function cardStep() {
+          const card = carousel.querySelector('.project-card, .event-card, .value-card');
+          if (!card) return carousel.clientWidth;
+          const gap = parseFloat(getComputedStyle(carousel).columnGap || getComputedStyle(carousel).gap) || 12;
+          return card.getBoundingClientRect().width + gap;
+        }
+        function update() {
+          const maxScroll = carousel.scrollWidth - carousel.clientWidth - 2;
+          prev.disabled = carousel.scrollLeft <= 2;
+          next.disabled = carousel.scrollLeft >= maxScroll;
+        }
+        prev.addEventListener('click', () => { carousel.scrollBy({ left: -cardStep(), behavior: 'smooth' }); });
+        next.addEventListener('click', () => { carousel.scrollBy({ left: cardStep(), behavior: 'smooth' }); });
+        carousel.addEventListener('scroll', update);
+        window.addEventListener('resize', update);
+        update();
+      });
+    })();
+  </script>
+
+  <!-- Header download menu (CV / Portfolio) -->
+  <script>
+    (function() {
+      const btn = document.getElementById('header-menu-btn');
+      const menu = document.getElementById('header-download-menu');
+      if (!btn || !menu) return;
+      let open = false;
+      function openMenu() {
+        menu.style.display = 'block';
+        requestAnimationFrame(() => { menu.style.opacity = '1'; menu.style.transform = 'translateY(0)'; });
+        btn.setAttribute('aria-expanded', 'true');
+        open = true;
+      }
+      function closeMenu() {
+        menu.style.opacity = '0';
+        menu.style.transform = 'translateY(-6px)';
+        btn.setAttribute('aria-expanded', 'false');
+        open = false;
+        setTimeout(() => { if (!open) menu.style.display = 'none'; }, 200);
+      }
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        open ? closeMenu() : openMenu();
+      });
+      // tapping outside closes
+      document.addEventListener('click', (e) => {
+        if (open && !menu.contains(e.target) && e.target !== btn) closeMenu();
+      });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) closeMenu(); });
+      // hover feedback on items + close after choosing
+      menu.querySelectorAll('.header-download-item').forEach(item => {
+        item.addEventListener('mouseenter', () => item.style.background = 'var(--bg-main)');
+        item.addEventListener('mouseleave', () => item.style.background = 'transparent');
+        item.addEventListener('click', () => closeMenu());
+      });
+    })();
+  </script>
+
+  <!-- Lazy-load: media loads as its card enters the carousel viewport; videos show their first frame, not a black box -->
+  <script>
+    (function() {
+      function loadLazyMedia(root) {
+        // Hide a card's shimmer only once its media has actually revealed,
+        // so the pulsing placeholder holds until the first frame is ready.
+        const hideShimmers = () => {
+          root.querySelectorAll('.lazy-shimmer').forEach(s => s.classList.add('lazy-hide'));
+        };
+        root.querySelectorAll('.lazy-media').forEach(el => {
+          if (el.dataset.lazyDone) return;
+          const rawSrc = el.getAttribute('data-src') || el.getAttribute('data-src-lazy');
+          if (!rawSrc) return;
+          const reveal = () => { el.classList.add('lazy-loaded'); hideShimmers(); };
+
+          if (el.tagName === 'VIDEO') {
+            el.preload = 'auto';
+            // Reveal as soon as the first frame is decoded and painted.
+            el.addEventListener('loadeddata', reveal, { once: true });
+            el.addEventListener('canplay', reveal, { once: true });
+            // Append a media fragment so the browser seeks to and RENDERS the
+            // first frame automatically — shows the frame instead of a black box.
+            const frag = rawSrc.indexOf('#') === -1 ? (rawSrc + '#t=0.1') : rawSrc;
+            el.src = frag;
+            el.load();
+            // Safety reveal if events are delayed.
+            setTimeout(reveal, 1000);
+          } else {
+            if (el.complete) { reveal(); } else { el.addEventListener('load', reveal, { once: true }); }
+            el.src = rawSrc;
+          }
+          el.dataset.lazyDone = '1';
+        });
+      }
+
+      // Observe each card against the carousel viewport. A modest rootMargin
+      // starts the load just as the card begins entering view, so you SEE the
+      // pulsing placeholder resolve into the video (~0.5–1s) rather than it
+      // being silently preloaded far in advance.
+      const carousels = document.querySelectorAll('.projects-carousel, .events-carousel');
+      carousels.forEach(carousel => {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              loadLazyMedia(entry.target);
+              io.unobserve(entry.target);
+            }
+          });
+        }, { root: carousel, rootMargin: '0px', threshold: 0.1 });
+        carousel.querySelectorAll('.project-card, .event-card').forEach(card => {
+          if (card.querySelector('.lazy-media')) io.observe(card);
+        });
+      });
+
+      // First (already-visible) card: load immediately on page load so it never sits black.
+      document.querySelectorAll('.projects-carousel, .events-carousel').forEach(carousel => {
+        const firstCard = carousel.querySelector('.project-card, .event-card');
+        if (firstCard) loadLazyMedia(firstCard);
+      });
+    })();
+  </script>
+
+  <!-- Media Lightbox (shared) -->
+  <div id="media-lightbox" style="position: fixed; inset: 0; z-index: 9999; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); opacity: 0; transition: opacity 0.25s ease; padding: 24px; box-sizing: border-box;">
+    <button id="media-lightbox-close" aria-label="Close" style="position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.15); border: none; color: #FFFFFF; font-size: 22px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width: 20px; height: 20px;"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+    </button>
+    <div id="media-lightbox-content" style="max-width: 100%; max-height: 100%; display: flex; align-items: center; justify-content: center;"></div>
+  </div>
+  <script>
+    // Media Lightbox: tap any thumbnail (photo or video) to open enlarged with an X to close
+    (function() {
+      const lightbox = document.getElementById('media-lightbox');
+      const content = document.getElementById('media-lightbox-content');
+      const closeBtn = document.getElementById('media-lightbox-close');
+      if (!lightbox || !content || !closeBtn) return;
+
+      function openLightbox(type, src) {
+        content.innerHTML = '';
+        if (type === 'video') {
+          const v = document.createElement('video');
+          v.src = src;
+          v.controls = true;
+          v.autoplay = true;
+          v.playsInline = true;
+          v.style.cssText = 'max-width: 100%; max-height: 85vh; border-radius: 6px; background: #000;';
+          content.appendChild(v);
+        } else {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = 'Enlarged media';
+          img.style.cssText = 'max-width: 100%; max-height: 85vh; border-radius: 6px; object-fit: contain;';
+          content.appendChild(img);
+        }
+        lightbox.style.display = 'flex';
+        requestAnimationFrame(() => { lightbox.style.opacity = '1'; });
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.style.opacity = '0';
+        setTimeout(() => {
+          lightbox.style.display = 'none';
+          content.innerHTML = ''; // stops any playing video
+          document.body.style.overflow = '';
+        }, 250);
+      }
+
+      document.querySelectorAll('.media-thumb').forEach(thumb => {
+        thumb.addEventListener('click', () => {
+          openLightbox(thumb.getAttribute('data-media-type'), thumb.getAttribute('data-media-src'));
+        });
+      });
+
+      closeBtn.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox(); // click backdrop to close
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.style.display === 'flex') closeLightbox();
+      });
+    })();
+  </script>
+</body>
+</html>
