@@ -230,6 +230,10 @@
           panes.forEach(pane => {
             if (pane.classList.contains('pane-' + targetPane) || pane.classList.contains('event-pane-' + targetPane)) {
               pane.style.display = 'block';
+              // restart the fade each switch
+              pane.classList.remove('reveal-fade');
+              void pane.offsetWidth;
+              pane.classList.add('reveal-fade');
             } else {
               pane.style.display = 'none';
             }
@@ -261,6 +265,9 @@
         rows.forEach(row => {
           if (row.getAttribute('data-category') === skillset) {
             row.style.display = 'flex';
+            row.classList.remove('reveal-fade');
+            void row.offsetWidth;
+            row.classList.add('reveal-fade');
             const fill = row.querySelector('.progress-fill');
             const pctLabel = row.querySelector('.skill-percentage');
             if (fill) {
@@ -277,6 +284,55 @@
         });
       });
     });
+
+    // Scroll-in reveal: cards NOT visible on first load fade in (~0.5s) as you
+    // scroll them into view. Cards already on screen at load are left instant.
+    (function() {
+      function cardVisible(card, carousel) {
+        const c = carousel.getBoundingClientRect();
+        const r = card.getBoundingClientRect();
+        return r.right > c.left + 1 && r.left < c.right - 1;
+      }
+      document.querySelectorAll('.projects-carousel, .events-carousel, .value-carousel').forEach(carousel => {
+        const cards = Array.from(carousel.children).filter(el =>
+          el.classList.contains('project-card') ||
+          el.classList.contains('event-card') ||
+          el.classList.contains('value-card'));
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('reveal-fade');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { root: carousel, threshold: 0.1 });
+        cards.forEach(card => {
+          // Only observe cards hidden at load; visible ones stay instant.
+          if (!cardVisible(card, carousel)) io.observe(card);
+        });
+      });
+    })();
+
+    // Vertical scroll reveal: each section fades in ONCE the first time it
+    // enters the viewport. Sections already on screen at load stay instant.
+    (function() {
+      const sections = document.querySelectorAll('main.portfolio-container > section');
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('reveal-fade');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08 });
+      sections.forEach(section => {
+        const top = section.getBoundingClientRect().top;
+        // If it's already in view on load, leave it instant; otherwise observe it.
+        if (top < vh - 40) return;
+        io.observe(section);
+      });
+    })();
 
   </script>
 
@@ -395,12 +451,36 @@
         });
       }
 
-      // Observe each card against the carousel viewport. A modest rootMargin
-      // starts the load just as the card begins entering view, so you SEE the
-      // pulsing placeholder resolve into the video (~0.5–1s) rather than it
-      // being silently preloaded far in advance.
+      // Is any part of this card currently within the carousel's visible box?
+      // Used to decide, on first load, which cards are ALREADY on screen.
+      function cardIsVisible(card, carousel) {
+        const c = carousel.getBoundingClientRect();
+        const r = card.getBoundingClientRect();
+        // horizontal overlap between the card and the carousel viewport
+        return r.right > c.left + 1 && r.left < c.right - 1;
+      }
+
       const carousels = document.querySelectorAll('.projects-carousel, .events-carousel');
       carousels.forEach(carousel => {
+        const cards = Array.from(carousel.querySelectorAll('.project-card, .event-card'))
+          .filter(card => card.querySelector('.lazy-media'));
+
+        // 1) EAGER PASS — every card already showing on first paint (including a
+        //    card peeking in from the right edge) loads immediately. Its shimmer
+        //    is hidden instantly, so you never see a pulsing placeholder on media
+        //    that was on screen from the start.
+        cards.forEach(card => {
+          if (cardIsVisible(card, carousel)) {
+            card.querySelectorAll('.lazy-shimmer').forEach(s => {
+              s.style.animation = 'none';   // no pulse for already-visible media
+              s.classList.add('lazy-hide');
+            });
+            loadLazyMedia(card);
+          }
+        });
+
+        // 2) LAZY PASS — only cards NOT visible at load get the observer. When you
+        //    scroll one into view it loads with the ~0.5s shimmer→media reveal.
         const io = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -409,15 +489,10 @@
             }
           });
         }, { root: carousel, rootMargin: '0px', threshold: 0.1 });
-        carousel.querySelectorAll('.project-card, .event-card').forEach(card => {
-          if (card.querySelector('.lazy-media')) io.observe(card);
-        });
-      });
 
-      // First (already-visible) card: load immediately on page load so it never sits black.
-      document.querySelectorAll('.projects-carousel, .events-carousel').forEach(carousel => {
-        const firstCard = carousel.querySelector('.project-card, .event-card');
-        if (firstCard) loadLazyMedia(firstCard);
+        cards.forEach(card => {
+          if (!cardIsVisible(card, carousel)) io.observe(card);
+        });
       });
     })();
   </script>

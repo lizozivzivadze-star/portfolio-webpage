@@ -317,6 +317,17 @@
     .card-url-tag:hover {
       color: var(--accent-hover);
     }
+    /* Reveal fade-in: applied to content that becomes visible via a tab switch
+       or by scrolling a hidden card into view. ~0.5s so transitions feel smooth.
+       Anything already on screen never gets this class, so it stays instant. */
+    @keyframes revealFade {
+      0%   { opacity: 0; transform: translateY(4px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .reveal-fade {
+      animation: revealFade 0.5s ease both;
+    }
+
     /* Lazy-load shimmer placeholder for the 2nd card's media */
     @keyframes lazyShimmer {
       0% { background-position: -200% 0; }
