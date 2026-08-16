@@ -109,12 +109,12 @@
     }
 
     .projects-carousel {
-      margin: 4px -15px;
+      margin: 0 -15px 4px -15px;
       padding: 0 15px;
       scroll-padding-left: 15px;
     }
     .events-carousel {
-      margin: 4px -15px;
+      margin: 0 -15px 4px -15px;
       padding: 0 15px;
       scroll-padding-left: 15px;
     }
@@ -355,6 +355,12 @@
     video.lazy-media {
       background: transparent;
     }
+    /* Crop in slightly to hide the light border baked into the source video clips —
+       wrapper already clips overflow, so this just zooms past the visible edge */
+    .project-video {
+      transform: scale(1.12);
+      transform-origin: center center;
+    }
     /* Video thumbnail poster keeps its dimmed look after lazy load */
     .media-video-thumb .lazy-media.lazy-loaded {
       opacity: 0.75;
@@ -464,7 +470,7 @@
         display: flex !important;
         overflow-x: auto !important;
         scroll-snap-type: x mandatory;
-        margin: 4px 0 !important;
+        margin: 0 0 4px 0 !important;
         padding: 0 !important;
         scroll-padding-left: 0 !important;
       }
@@ -592,7 +598,7 @@
     <!-- SECTION 3: PROJECTS COMPONENT -->
     <section id="projects-section" class="projects-card-container">
       <h2 class="section-title">Projects</h2>
-      <nav class="projects-filter-bar" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; gap: 6px; margin-bottom: 10px;">
+      <nav class="projects-filter-bar" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; gap: 6px; margin-bottom: 2px;">
         <button class="filter-btn active" data-filter="all" style="font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; height: 28px; padding: 0 10px; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--accent-primary); white-space: nowrap; flex: 0 1 auto; text-align: center; min-width: 0; display: flex; align-items: center; justify-content: center; background: var(--accent-primary); color: #FFFFFF;">All</button>
         <button class="filter-btn" data-filter="hw-sw" style="font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; height: 28px; padding: 0 10px; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-color); white-space: nowrap; flex: 0 1 auto; text-align: center; min-width: 0; display: flex; align-items: center; justify-content: center; background: var(--bg-main); color: var(--text-secondary);">HW+SW</button>
         <button class="filter-btn" data-filter="hw" style="font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; height: 28px; padding: 0 10px; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-color); white-space: nowrap; flex: 0 1 auto; text-align: center; min-width: 0; display: flex; align-items: center; justify-content: center; background: var(--bg-main); color: var(--text-secondary);"><b>H</b>ard<b>W</b>are</button>
@@ -840,7 +846,7 @@
     <!-- SECTION 5: EVENTS COMPONENT -->
     <section id="events-section" class="events-card-container">
       <h2 class="section-title">Events</h2>
-      <nav class="events-filter-bar" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; width: 100%; margin-bottom: 10px; box-sizing: border-box;">
+      <nav class="events-filter-bar" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; width: 100%; margin-bottom: 2px; box-sizing: border-box;">
         <button class="event-filter-btn active" data-filter="all" style="flex: 0 1 auto; height: 28px; padding: 0 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--accent-primary); text-align: center; white-space: nowrap; display: flex; align-items: center; justify-content: center; background: var(--accent-primary); color: #FFFFFF;">All</button>
         <button class="event-filter-btn" data-filter="hackathon" style="flex: 0 1 auto; height: 28px; padding: 0 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-color); text-align: center; white-space: nowrap; display: flex; align-items: center; justify-content: center; background: var(--bg-main); color: var(--text-secondary);">Hackathon</button>
         <button class="event-filter-btn" data-filter="conference" style="flex: 0 1 auto; height: 28px; padding: 0 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-color); text-align: center; white-space: nowrap; display: flex; align-items: center; justify-content: center; background: var(--bg-main); color: var(--text-secondary);">Conference</button>
