@@ -438,7 +438,7 @@
 
     @media (min-width: 1024px) {
       .portfolio-container {
-        max-width: 1080px;
+        max-width: 1200px;
         margin-left: auto;
         margin-right: auto;
         width: 100%;
@@ -447,7 +447,7 @@
       .sticky-header, .sticky-footer {
         left: 50%;
         transform: translateX(-50%);
-        max-width: 1080px;
+        max-width: 1200px;
         width: 100%;
       }
       .sticky-header.visible {
@@ -460,7 +460,7 @@
         transform: translateX(-50%) translateY(100%);
       }
       
-      /* Desktop: keep Projects/Events/Value as horizontal sliders (~1.5 cards visible) with arrow navigation */
+      /* Desktop: keep Projects/Events/Value as horizontal sliders — sized so 3 cards show fully and a 4th peeks at the edge */
       .projects-carousel, .events-carousel, .value-carousel {
         display: flex !important;
         overflow-x: auto !important;
@@ -470,10 +470,22 @@
         scroll-padding-left: 0 !important;
       }
       .project-card, .event-card, .value-card {
-        width: 62% !important;
-        min-width: 62% !important;
-        max-width: 62% !important;
+        width: 30% !important;
+        min-width: 30% !important;
+        max-width: 30% !important;
         flex-shrink: 0 !important;
+      }
+
+      /* Desktop: skillset + events filter tabs stay on a single line (container widened above to make room) */
+      .skillset-tabs-grid, .events-filter-bar {
+        flex-wrap: nowrap !important;
+        column-gap: 6px !important;
+      }
+      .skillset-tabs-grid .tab-row-break, .events-filter-bar .tab-row-break {
+        display: none !important;
+      }
+      .skill-tab, .event-filter-btn {
+        padding: 0 8px !important;
       }
       /* Arrow navigation buttons (desktop only) */
       .carousel-wrap { position: relative; }
