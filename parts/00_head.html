@@ -301,6 +301,28 @@
     .events-filter-bar { column-gap: 8px !important; row-gap: 0 !important; }
     .events-filter-bar .tab-row-break { height: 7px; }
 
+    /* Mobile/tablet: left-align tab rows so leftover space collects on one side only,
+       instead of being split (and wasted-looking) on both sides of a short row */
+    @media (max-width: 1023px) {
+      .skillset-tabs-grid, .events-filter-bar {
+        justify-content: flex-start !important;
+      }
+    }
+    /* Narrow phones (e.g. Galaxy S20 at 360px): tighten tab padding/gap/font so more
+       tabs fit per row, closing the gap with wider phones like standard iPhones */
+    @media (max-width: 380px) {
+      .skill-tab, .event-filter-btn {
+        padding: 0 7px !important;
+        font-size: 11.5px !important;
+      }
+      .skillset-tabs-grid {
+        column-gap: 5px !important;
+      }
+      .events-filter-bar {
+        column-gap: 6px !important;
+      }
+    }
+
     /* Card URL tag: small blue mono tag on the right edge of the title line */
     .card-url-tag {
       font-family: var(--font-mono);

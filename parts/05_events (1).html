@@ -1,0 +1,95 @@
+    <!-- SECTION 5: EVENTS COMPONENT -->
+    <section id="events-section" class="events-card-container">
+      <h2 class="section-title">Events</h2>
+      <nav class="events-filter-bar" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; width: 100%; margin-bottom: 2px; box-sizing: border-box;">
+        <button class="event-filter-btn active" data-filter="all" style="flex: 0 1 auto; height: 28px; padding: 0 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--accent-primary); text-align: center; white-space: nowrap; display: flex; align-items: center; justify-content: center; background: var(--accent-primary); color: #FFFFFF;">All</button>
+        <button class="event-filter-btn" data-filter="hackathon" style="flex: 0 1 auto; height: 28px; padding: 0 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-color); text-align: center; white-space: nowrap; display: flex; align-items: center; justify-content: center; background: var(--bg-main); color: var(--text-secondary);">Hackathon</button>
+        <button class="event-filter-btn" data-filter="conference" style="flex: 0 1 auto; height: 28px; padding: 0 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-color); text-align: center; white-space: nowrap; display: flex; align-items: center; justify-content: center; background: var(--bg-main); color: var(--text-secondary);">Conference</button>
+        <div class="tab-row-break"></div>
+        <button class="event-filter-btn" data-filter="expo" style="flex: 0 1 auto; height: 28px; padding: 0 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-color); text-align: center; white-space: nowrap; display: flex; align-items: center; justify-content: center; background: var(--bg-main); color: var(--text-secondary);">Expo</button>
+        <button class="event-filter-btn" data-filter="meetup" style="flex: 0 1 auto; height: 28px; padding: 0 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-color); text-align: center; white-space: nowrap; display: flex; align-items: center; justify-content: center; background: var(--bg-main); color: var(--text-secondary);">Meetup</button>
+      </nav>
+
+      <div class="events-carousel" id="events-carousel">
+        <!-- Event Card 1 -->
+        <article class="event-card" data-category="expo" style="height: 531px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 12px 32px 12px; display: flex; flex-direction: column; position: relative; overflow: hidden; box-sizing: border-box;">
+          <div style="width: 100%; aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden; margin-bottom: 10px; position: relative; background: #F1F5F9;">
+            <img src="photo1.jpg" alt="Event Photo" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+          </div>
+          <div style="height: 64px;">
+            <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+              <h3 style="font-family: var(--font-primary); font-size: 17px; font-weight: 700; color: var(--text-primary); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 22px; flex-grow: 1;">Decoding Tech 2026</h3>
+              <a href="https://clusity.be/blog/recap-decoding-tech-2026" target="_blank" rel="noopener noreferrer" class="card-url-tag" title="Open link">URL</a>
+            </div>
+            <p style="font-family: var(--font-primary); font-size: 15px; font-weight: 400; color: var(--text-secondary); margin-top: 2px; line-height: 19px; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">Clusity x KdG tech fair linking students with industry.</p>
+          </div>
+          <nav style="display: flex; flex-direction: row; gap: 4px; width: 100%; margin-top: 8px; position: relative; z-index: 2;">
+            <button class="event-subtab-btn active" data-tab="overview" style="background: var(--bg-surface); color: var(--accent-primary); border: 1px solid var(--border-color); border-bottom: 1px solid #FFFFFF; border-radius: 6px 6px 0 0; padding: 6px 12px; font-family: var(--font-mono); font-size: 13px; font-weight: 600; position: relative; bottom: -1px; z-index: 3; cursor: pointer;">OVERVIEW</button>
+            <button class="event-subtab-btn" data-tab="media" style="background: var(--bg-main); color: var(--text-muted); border: 1px solid var(--border-color); border-bottom: none; border-radius: 6px 6px 0 0; padding: 6px 12px; font-family: var(--font-mono); font-size: 13px; font-weight: 500; position: relative; bottom: -1px; z-index: 1; cursor: pointer;">MEDIA</button>
+          </nav>
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 0 6px 6px 6px; padding: 12px; height: 235px; flex-grow: 0; flex-shrink: 0; width: 100%; box-sizing: border-box; position: relative; z-index: 1; margin-top: -1px; overflow: hidden;">
+            <div class="event-pane-overview" style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">A tech fair and keynote evening by Clusity x KdG bringing professionals and students together. I networked and connected with attendees, controlled a robot dog and explored the software behind it, programmed a robotic arm, and competed in software games before keynotes on continuous learning, resilience, and AI.</div>
+            <div class="event-pane-media" style="display: none; width: 100%; height: 100%; overflow: hidden;">
+              <div class="media-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 1fr; gap: 6px; width: 100%; height: 100%; align-content: center; justify-content: stretch;">
+                <img src="photo1.jpg" alt="Event media 1" class="media-thumb media-grid-img" data-media-type="image" data-media-src="photo1.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                <img src="photo2.jpg" alt="Event media 2" class="media-thumb media-grid-img" data-media-type="image" data-media-src="photo2.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                <img src="photo3.jpg" alt="Event media 3" class="media-thumb media-grid-img" data-media-type="image" data-media-src="photo3.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                <img src="photo1.jpg" alt="Event media 4" class="media-thumb media-grid-img" data-media-type="image" data-media-src="photo1.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                <div class="media-thumb media-video-thumb" data-media-type="video" data-media-src="vvideo1.mp4" style="position: relative; width: 100%; height: 100%; border-radius: 4px; overflow: hidden; cursor: pointer; background: #000000;">
+                  <img src="photo1.jpg" alt="Video thumbnail" class="media-grid-img" style="width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.75;">
+                  <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 26px; height: 26px; background: rgba(0,0,0,0.55); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <svg viewBox="0 0 24 24" fill="#FFFFFF" style="width: 12px; height: 12px; margin-left: 2px;"><path d="M8 5v14l11-7z"/></svg>
+                  </span>
+                </div>
+                <img src="photo3.jpg" alt="Event media 6" class="media-thumb media-grid-img" data-media-type="image" data-media-src="photo3.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                <img src="photo1.jpg" alt="Event media 7" class="media-thumb media-grid-img" data-media-type="image" data-media-src="photo1.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                <img src="photo2.jpg" alt="Event media 8" class="media-thumb media-grid-img" data-media-type="image" data-media-src="photo2.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                <img src="photo3.jpg" alt="Event media 9" class="media-thumb media-grid-img" data-media-type="image" data-media-src="photo3.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+              </div>
+            </div>
+          </div>
+          <span class="event-card-counter" style="position: absolute; bottom: 10px; right: 14px; font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--text-muted); line-height: 1; pointer-events: none;">2/2</span>
+        </article>
+
+        <!-- Event Card 2 -->
+        <article class="event-card" data-category="expo" style="height: 531px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 12px 32px 12px; display: flex; flex-direction: column; position: relative; overflow: hidden; box-sizing: border-box;">
+          <div style="width: 100%; aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden; margin-bottom: 10px; position: relative; background: #F1F5F9;">
+            <div class="lazy-shimmer"></div>
+            <img data-src="photo2.jpg" alt="Event Photo" class="lazy-media" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+          </div>
+          <div style="height: 64px;">
+            <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+              <h3 style="font-family: var(--font-primary); font-size: 17px; font-weight: 700; color: var(--text-primary); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 22px; flex-grow: 1;">Decoding Tech 2026</h3>
+              <a href="https://clusity.be/blog/recap-decoding-tech-2026" target="_blank" rel="noopener noreferrer" class="card-url-tag" title="Open link">URL</a>
+            </div>
+            <p style="font-family: var(--font-primary); font-size: 15px; font-weight: 400; color: var(--text-secondary); margin-top: 2px; line-height: 19px; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">Clusity x KdG tech fair linking students with industry.</p>
+          </div>
+          <nav style="display: flex; flex-direction: row; gap: 4px; width: 100%; margin-top: 8px; position: relative; z-index: 2;">
+            <button class="event-subtab-btn active" data-tab="overview" style="background: var(--bg-surface); color: var(--accent-primary); border: 1px solid var(--border-color); border-bottom: 1px solid #FFFFFF; border-radius: 6px 6px 0 0; padding: 6px 12px; font-family: var(--font-mono); font-size: 13px; font-weight: 600; position: relative; bottom: -1px; z-index: 3; cursor: pointer;">OVERVIEW</button>
+            <button class="event-subtab-btn" data-tab="media" style="background: var(--bg-main); color: var(--text-muted); border: 1px solid var(--border-color); border-bottom: none; border-radius: 6px 6px 0 0; padding: 6px 12px; font-family: var(--font-mono); font-size: 13px; font-weight: 500; position: relative; bottom: -1px; z-index: 1; cursor: pointer;">MEDIA</button>
+          </nav>
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 0 6px 6px 6px; padding: 12px; height: 235px; flex-grow: 0; flex-shrink: 0; width: 100%; box-sizing: border-box; position: relative; z-index: 1; margin-top: -1px; overflow: hidden;">
+            <div class="event-pane-overview" style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">A tech fair and keynote evening by Clusity x KdG bringing professionals and students together. I networked and connected with attendees, controlled a robot dog and explored the software behind it, programmed a robotic arm, and competed in software games before keynotes on continuous learning, resilience, and AI.</div>
+            <div class="event-pane-media" style="display: none; width: 100%; height: 100%; overflow: hidden;">
+              <div class="media-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 1fr; gap: 6px; width: 100%; height: 100%; align-content: center; justify-content: stretch;">
+                <img data-src-lazy="photo1.jpg" alt="Event media 1" class="media-thumb media-grid-img lazy-media" data-media-type="image" data-media-src="photo1.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                <img data-src-lazy="photo2.jpg" alt="Event media 2" class="media-thumb media-grid-img lazy-media" data-media-type="image" data-media-src="photo2.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                <img data-src-lazy="photo3.jpg" alt="Event media 3" class="media-thumb media-grid-img lazy-media" data-media-type="image" data-media-src="photo3.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                <img data-src-lazy="photo1.jpg" alt="Event media 4" class="media-thumb media-grid-img lazy-media" data-media-type="image" data-media-src="photo1.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                <div class="media-thumb media-video-thumb" data-media-type="video" data-media-src="vvideo1.mp4" style="position: relative; width: 100%; height: 100%; border-radius: 4px; overflow: hidden; cursor: pointer; background: #000000;">
+                  <img data-src-lazy="photo2.jpg" alt="Video thumbnail" class="media-grid-img lazy-media" style="width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.75;">
+                  <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 26px; height: 26px; background: rgba(0,0,0,0.55); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <svg viewBox="0 0 24 24" fill="#FFFFFF" style="width: 12px; height: 12px; margin-left: 2px;"><path d="M8 5v14l11-7z"/></svg>
+                  </span>
+                </div>
+                <img data-src-lazy="photo3.jpg" alt="Event media 6" class="media-thumb media-grid-img lazy-media" data-media-type="image" data-media-src="photo3.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                <img data-src-lazy="photo1.jpg" alt="Event media 7" class="media-thumb media-grid-img lazy-media" data-media-type="image" data-media-src="photo1.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                <img data-src-lazy="photo2.jpg" alt="Event media 8" class="media-thumb media-grid-img lazy-media" data-media-type="image" data-media-src="photo2.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                <img data-src-lazy="photo3.jpg" alt="Event media 9" class="media-thumb media-grid-img lazy-media" data-media-type="image" data-media-src="photo3.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; cursor: pointer;">
+              </div>
+            </div>
+          </div>
+          <span class="event-card-counter" style="position: absolute; bottom: 10px; right: 14px; font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--text-muted); line-height: 1; pointer-events: none;">1/2</span>
+        </article>
+      </div>
+    </section>
