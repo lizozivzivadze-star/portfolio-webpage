@@ -5,9 +5,10 @@
     
     <div class="contact-grid">
       <!-- Email Card -->
-      <a href="mailto:lizozivzivadze@gmail.com" class="contact-btn-card">
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=lizozivzivadze@gmail.com" target="_blank" rel="noopener noreferrer" class="contact-btn-card">
         <div class="contact-btn-content">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="card-icon">
+          <!-- Uses your global CSS variable for the perfect color match -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="card-icon">
             <rect x="2" y="4" width="20" height="16" rx="2"></rect>
             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
           </svg>
@@ -18,7 +19,8 @@
       <!-- WhatsApp Card -->
       <a href="https://wa.me/32499221680" target="_blank" rel="noopener noreferrer" class="contact-btn-card">
         <div class="contact-btn-content">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="card-icon">
+          <!-- Uses your global CSS variable for the perfect color match -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="card-icon">
             <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
           </svg>
           <h3>WhatsApp</h3>
@@ -29,7 +31,7 @@
 </section>
 
 <style>
-  /* Outer card matching 'What do I bring to the table?' structure */
+  /* Outer container layout matching top section structure */
   .contact-section {
     width: 100%;
     margin-bottom: 2rem;
@@ -52,7 +54,7 @@
     margin: 0 0 2rem 0;
   }
 
-  /* Centered, safely sized grid */
+  /* Centered, responsive two-column grid */
   .contact-grid {
     display: flex;
     justify-content: center;
@@ -61,7 +63,7 @@
     margin: 0 auto;
   }
 
-  /* Unique class name prevents global CSS from squishing the box */
+  /* Distinct card styling preventing global rule overrides */
   .contact-btn-card {
     flex: 1;
     background: #ffffff;
@@ -74,7 +76,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 160px; /* Forces the box to stay wide enough for text */
+    min-width: 160px;
     box-sizing: border-box;
   }
 
@@ -89,7 +91,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
-    white-space: nowrap; /* Strictly prevents text from wrapping or spilling */
+    white-space: nowrap; 
   }
 
   .card-icon {
@@ -103,7 +105,7 @@
     color: #0f172a;
   }
 
-  /* Stacks buttons vertically on mobile screens */
+  /* Responsive fallback for mobile devices */
   @media (max-width: 480px) {
     .contact-grid {
       flex-direction: column;
