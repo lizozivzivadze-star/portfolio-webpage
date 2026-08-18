@@ -169,15 +169,19 @@
     }
     .value-card-container .value-card {
       height: auto !important;
-      min-height: 241px;
+      min-height: 251px;
     }
 
     /* Contact section: compact. Height is only whatever the title + one row of
        buttons needs (no min-height, no vertical centering). As the last section
        before the footer it keeps the 12px bottom margin the value section used to
-       carry, so the footer clearance stays exactly as it was. */
+       carry, so the footer clearance stays exactly as it was. The extra bottom
+       padding (15px base + 48px) makes the space below the last button (63px)
+       mirror the space above the title (card edge -> first button = 63px), so the
+       buttons read as vertically balanced inside the card. */
     .contact-card-container {
       margin-bottom: 12px;
+      padding-bottom: 25px;
     }
     .contact-buttons-row {
       display: flex;
@@ -559,7 +563,7 @@
 
     @media (min-width: 1024px) {
       .portfolio-container {
-        max-width: 1200px;
+        max-width: 1320px;
         margin-left: auto;
         margin-right: auto;
         width: 100%;
@@ -568,7 +572,7 @@
       .sticky-header, .sticky-footer {
         left: 50%;
         transform: translateX(-50%);
-        max-width: 1200px;
+        max-width: 1320px;
         width: 100%;
       }
       .sticky-header.visible {
