@@ -307,8 +307,11 @@
     .skillset-tabs-grid { column-gap: 8px !important; row-gap: 7px !important; }
     /* Events filter rows: match skillset vertical gap exactly (7px).
        row-gap does the spacing; the break div only forces the wrap (height 0). */
+    /* Events filter rows: force 3+2 via the break div, but the break sits on its own
+       wrapped line so row-gap would apply on BOTH sides of it (7+7=14). Pull it up by
+       one row-gap so the visible rows are separated by exactly one 7px gap. */
     .events-filter-bar { column-gap: 8px !important; row-gap: 7px !important; }
-    .events-filter-bar .tab-row-break { height: 0; }
+    .events-filter-bar .tab-row-break { height: 0; margin-top: -7px; }
 
     /* Phones: tighten tab padding/gap/font so more tabs fit per row — denser, better-
        filled centered rows, and narrower devices like Galaxy S20 keep up with wider ones */
