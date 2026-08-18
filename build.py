@@ -16,6 +16,7 @@ order = [
     '04_skills.html',
     '05_events.html',
     '06_value.html',
+    '06b_contact.html',
     '07_footer_static.html',   # includes </main>
     '08_footer_sticky.html',
     '09_scripts.html',         # includes </body></html>

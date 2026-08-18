@@ -141,11 +141,12 @@
       box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
     }
 
-    /* Projects, Skills, Events, Value, Help Yourself Containers */
+    /* Projects, Skills, Events, Value, Contact, Help Yourself Containers */
     .projects-card-container,
     .skills-card,
     .events-card-container,
     .value-card-container,
+    .contact-card-container,
     .help-yourself-card-container {
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
@@ -154,12 +155,13 @@
       margin-bottom: 24px;
       box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
     }
-    /* Value section covers at least half the screen on every device */
+    /* Value section covers at least half the screen on every device.
+       margin-bottom stays 24px (from the shared rule) so the gap down to the
+       Contact section matches the spacing between all other sections. */
     .value-card-container {
       min-height: 50vh;
       display: flex;
       flex-direction: column;
-      margin-bottom: 12px;
     }
     .value-card-container .value-carousel {
       flex: 1 1 auto;
@@ -168,6 +170,69 @@
     .value-card-container .value-card {
       height: auto !important;
       min-height: 231px;
+    }
+
+    /* Contact section: same tall footprint as the value section (>= 50vh), with the
+       two contact buttons centered vertically and horizontally. As the last section
+       before the footer it keeps the 12px bottom margin the value section used to
+       carry, so the footer clearance stays exactly as it was. */
+    .contact-card-container {
+      min-height: 50vh;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 12px;
+    }
+    .contact-buttons-wrap {
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .contact-buttons-row {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      width: 100%;
+    }
+    .contact-btn {
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      height: 52px;
+      padding: 0 16px;
+      background: var(--accent-primary);
+      color: #FFFFFF;
+      border: 1px solid var(--accent-primary);
+      border-radius: 8px;
+      font-family: var(--font-primary);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      transition: background 0.15s ease, border-color 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .contact-btn:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+    .contact-btn svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+    .contact-btn span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    /* Desktop: cap the button row so two buttons don't stretch absurdly wide */
+    @media (min-width: 1024px) {
+      .contact-buttons-row { max-width: 640px; }
     }
 
     .skills-card {
@@ -1026,6 +1091,25 @@
           <p class="value-card-text" style="font-family: var(--font-primary); font-size: 15.5px; font-weight: 400; color: var(--text-secondary); line-height: 22px; max-height: 200px; display: -webkit-box; -webkit-line-clamp: 9; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">I'm a Georgian national studying Electromechanical Engineering Technology at KU Leuven Group T in Leuven, Belgium.</p>
           <span class="value-card-counter" style="position: absolute; bottom: 10px; right: 14px; font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--text-muted); line-height: 1; pointer-events: none;">1/3</span>
         </article>
+      </div>
+    </section>
+
+    <!-- SECTION 6b: CONTACT ME -->
+    <section id="contact-section" class="contact-card-container">
+      <h2 class="section-title single-line-title" style="font-size: clamp(16px, 5.3vw, 22px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">Contact Me</h2>
+      <div class="contact-buttons-wrap">
+        <div class="contact-buttons-row">
+          <!-- WhatsApp -->
+          <a href="https://wa.me/32499221680" title="WhatsApp Chat" target="_blank" rel="noopener noreferrer" class="contact-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/></svg>
+            <span>WhatsApp</span>
+          </a>
+          <!-- Email -->
+          <a href="mailto:lizozivzivadze@gmail.com" title="Email Lizi Zivzivadze" target="_self" class="contact-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            <span>Email</span>
+          </a>
+        </div>
       </div>
     </section>
 
