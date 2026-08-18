@@ -190,7 +190,7 @@
     }
     .contact-buttons-row {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       gap: 12px;
       width: 100%;
     }
@@ -201,38 +201,42 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      height: 52px;
+      height: 84px;
       padding: 0 16px;
-      background: var(--accent-primary);
-      color: #FFFFFF;
-      border: 1px solid var(--accent-primary);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       font-family: var(--font-primary);
-      font-size: 16px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
       text-decoration: none;
       box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
       transition: background 0.15s ease, border-color 0.15s ease;
       -webkit-tap-highlight-color: transparent;
     }
     .contact-btn:hover {
-      background: var(--accent-hover);
-      border-color: var(--accent-hover);
+      background: var(--accent-subtle);
+      border-color: var(--accent-primary);
     }
     .contact-btn svg {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       flex-shrink: 0;
+      color: var(--accent-primary);
     }
     .contact-btn span {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    /* Desktop: cap the button row so two buttons don't stretch absurdly wide */
+    /* Desktop: side by side, capped so the pair doesn't stretch absurdly wide */
     @media (min-width: 1024px) {
-      .contact-buttons-row { max-width: 640px; }
+      .contact-buttons-row {
+        flex-direction: row;
+        max-width: 720px;
+      }
     }
 
     .skills-card {
