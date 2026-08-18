@@ -169,7 +169,7 @@
     }
     .value-card-container .value-card {
       height: auto !important;
-      min-height: 231px;
+      min-height: 241px;
     }
 
     /* Contact section: compact. Height is only whatever the title + one row of
@@ -181,12 +181,14 @@
     }
     .contact-buttons-row {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
+      align-items: center;
       gap: 12px;
       width: 100%;
     }
     .contact-btn {
-      flex: 1 1 0;
+      width: 80%;
+      max-width: 300px;
       min-width: 0;
       display: flex;
       align-items: center;
@@ -212,8 +214,8 @@
       border-color: var(--accent-primary);
     }
     .contact-btn svg {
-      width: 19px;
-      height: 19px;
+      width: 21px;
+      height: 21px;
       flex-shrink: 0;
       color: var(--accent-primary);
     }
@@ -229,11 +231,10 @@
         gap: 6px;
         padding: 0 8px;
       }
-      .contact-btn svg { width: 18px; height: 18px; }
+      .contact-btn svg { width: 20px; height: 20px; }
     }
-    /* Desktop: cap the pair so they don't stretch absurdly wide */
+    /* Desktop: keep the same centered, capped width */
     @media (min-width: 1024px) {
-      .contact-buttons-row { max-width: 720px; margin: 0 auto; }
       .contact-btn { height: 52px; font-size: 16px; }
     }
 

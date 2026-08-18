@@ -169,7 +169,7 @@
     }
     .value-card-container .value-card {
       height: auto !important;
-      min-height: 231px;
+      min-height: 241px;
     }
 
     /* Contact section: compact. Height is only whatever the title + one row of
@@ -181,12 +181,14 @@
     }
     .contact-buttons-row {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
+      align-items: center;
       gap: 12px;
       width: 100%;
     }
     .contact-btn {
-      flex: 1 1 0;
+      width: 80%;
+      max-width: 300px;
       min-width: 0;
       display: flex;
       align-items: center;
@@ -212,8 +214,8 @@
       border-color: var(--accent-primary);
     }
     .contact-btn svg {
-      width: 19px;
-      height: 19px;
+      width: 21px;
+      height: 21px;
       flex-shrink: 0;
       color: var(--accent-primary);
     }
@@ -229,11 +231,10 @@
         gap: 6px;
         padding: 0 8px;
       }
-      .contact-btn svg { width: 18px; height: 18px; }
+      .contact-btn svg { width: 20px; height: 20px; }
     }
-    /* Desktop: cap the pair so they don't stretch absurdly wide */
+    /* Desktop: keep the same centered, capped width */
     @media (min-width: 1024px) {
-      .contact-buttons-row { max-width: 720px; margin: 0 auto; }
       .contact-btn { height: 52px; font-size: 16px; }
     }
 
@@ -1100,15 +1101,15 @@
     <section id="contact-section" class="contact-card-container">
       <h2 class="section-title single-line-title" style="font-size: clamp(16px, 5.3vw, 22px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">Contact Me</h2>
       <div class="contact-buttons-row">
-        <!-- Email -->
-        <a href="mailto:lizozivzivadze@gmail.com" title="Email Lizi Zivzivadze" target="_self" class="contact-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-          <span>Email</span>
-        </a>
         <!-- WhatsApp -->
         <a href="https://wa.me/32499221680" title="WhatsApp Chat" target="_blank" rel="noopener noreferrer" class="contact-btn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/></svg>
           <span>WhatsApp</span>
+        </a>
+        <!-- Email -->
+        <a href="mailto:lizozivzivadze@gmail.com" title="Email Lizi Zivzivadze" target="_self" class="contact-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          <span>Email</span>
         </a>
       </div>
     </section>
