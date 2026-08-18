@@ -172,25 +172,16 @@
       min-height: 231px;
     }
 
-    /* Contact section: same tall footprint as the value section (>= 50vh), with the
-       two contact buttons centered vertically and horizontally. As the last section
+    /* Contact section: compact. Height is only whatever the title + one row of
+       buttons needs (no min-height, no vertical centering). As the last section
        before the footer it keeps the 12px bottom margin the value section used to
        carry, so the footer clearance stays exactly as it was. */
     .contact-card-container {
-      min-height: 50vh;
-      display: flex;
-      flex-direction: column;
       margin-bottom: 12px;
-    }
-    .contact-buttons-wrap {
-      flex: 1 1 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     .contact-buttons-row {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       gap: 12px;
       width: 100%;
     }
@@ -200,15 +191,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      height: 84px;
-      padding: 0 16px;
+      gap: 8px;
+      height: 48px;
+      padding: 0 10px;
       background: var(--bg-surface);
       color: var(--text-primary);
       border: 1px solid var(--border-color);
       border-radius: 8px;
       font-family: var(--font-primary);
-      font-size: 17px;
+      font-size: 15px;
       font-weight: 700;
       letter-spacing: 0.01em;
       text-decoration: none;
@@ -221,8 +212,8 @@
       border-color: var(--accent-primary);
     }
     .contact-btn svg {
-      width: 22px;
-      height: 22px;
+      width: 19px;
+      height: 19px;
       flex-shrink: 0;
       color: var(--accent-primary);
     }
@@ -231,12 +222,19 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    /* Desktop: side by side, capped so the pair doesn't stretch absurdly wide */
-    @media (min-width: 1024px) {
-      .contact-buttons-row {
-        flex-direction: row;
-        max-width: 720px;
+    /* Narrow phones: trim gap/padding/font a touch so icon + label never crowd */
+    @media (max-width: 380px) {
+      .contact-btn {
+        font-size: 14px;
+        gap: 6px;
+        padding: 0 8px;
       }
+      .contact-btn svg { width: 18px; height: 18px; }
+    }
+    /* Desktop: cap the pair so they don't stretch absurdly wide */
+    @media (min-width: 1024px) {
+      .contact-buttons-row { max-width: 720px; margin: 0 auto; }
+      .contact-btn { height: 52px; font-size: 16px; }
     }
 
     .skills-card {
