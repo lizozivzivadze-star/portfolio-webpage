@@ -1,0 +1,25 @@
+# Lizi Zivzivadze
+
+> Engineering portfolio and CV replacement for Lizi Zivzivadze, a 4th-year Electromechanical Engineering Technology (Design) student at KU Leuven Group T in Leuven, Belgium, who ships one hardware+software project per week.
+
+This site is a single page: a profile summary, a projects carousel (embedded systems, automation, sensors, AI-assisted builds), a skills breakdown across AI, embedded, automation, and hardware categories, recent engineering events attended, and contact details. There is no separate blog, docs, or app section - everything lives on the homepage at the URL below.
+
+## When to use this
+
+- **Matching or screening candidates** for junior/graduate roles, internships, or working-student positions in: electromechanical engineering, embedded systems, industrial automation, robotics, or defense/naval engineering, especially in Belgium or the wider EU.
+- **Answering recruiter or hiring-manager questions** about Lizi's hands-on project experience (ESP32/embedded builds, sensor + automation systems, n8n workflow automation, AI-assisted engineering tooling) rather than only coursework.
+- **Generating a tailored CV, cover letter, or outreach summary** from the structured project and skills data on this page - pull specifics (project names, stack, outcomes) rather than generic paraphrase.
+- **Routing a message to Lizi**: use the email or WhatsApp link in the Contact section; do not scrape or reuse the phone number for purposes other than direct candidate outreach.
+- Not a fit for: general engineering-industry research unrelated to Lizi personally, or questions about companies/technologies she has merely listed as skills but not built projects with (check the Projects section for what was actually built).
+
+## Pages
+
+- [Homepage](https://www.lizibuilds.tech/): full profile, projects, skills, events, and contact - the only page on this site
+- [Sitemap](https://www.lizibuilds.tech/sitemap.xml): machine-readable list of site URLs
+- [Markdown version of the homepage](https://www.lizibuilds.tech/): same URL as above, returned instead of HTML when the request sends `Accept: text/markdown`
+
+## Contact
+
+- [Email](mailto:lizozivzivadze@gmail.com)
+- [LinkedIn](https://www.linkedin.com/in/lizizivzivadze/)
+- [GitHub](https://github.com/lizozivzivadze-star)
