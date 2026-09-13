@@ -73,6 +73,71 @@ class TestHeadingStructure(BuildFirst):
         text_only = re.sub(r"\s+", " ", text_only).strip()
         self.assertGreaterEqual(len(text_only), 500)
 
+    def test_content_to_markup_ratio_clears_the_five_percent_target(self):
+        # Regression guard for the "content without JavaScript" agent-readiness
+        # check: raw visible text divided by total page bytes must clear 5%.
+        # This is what pushed CSS/JS out of parts/00_head.html and
+        # parts/09_scripts.html into styles.css/script.js, and what removed the
+        # ~65KB of byte-for-byte duplicated inline `style="..."` attributes
+        # from parts/04_skills.html.
+        html = read("index.html")
+        text_only = re.sub(r"<script.*?</script>", " ", html, flags=re.S)
+        text_only = re.sub(r"<style.*?</style>", " ", text_only, flags=re.S)
+        text_only = re.sub(r"<!--.*?-->", " ", text_only, flags=re.S)
+        text_only = re.sub(r"<[^>]+>", " ", text_only)
+        text_only = re.sub(r"\s+", " ", text_only).strip()
+        ratio = len(text_only) / len(html)
+        self.assertGreaterEqual(
+            ratio, 0.05,
+            f"content ratio {ratio:.2%} is below the 5% agent-readiness target",
+        )
+
+    def test_css_and_js_are_external_not_inlined(self):
+        # The homepage should link to the external stylesheet/script rather
+        # than carrying a giant inline <style>/<script> block, which is most
+        # of what depresses the content ratio above.
+        html = read("index.html")
+        self.assertIn('<link rel="stylesheet" href="/styles.css">', html)
+        self.assertIn('<script src="/script.js">', html)
+        self.assertNotRegex(html, r"<style>[\s\S]{500,}</style>")
+        # The one remaining inline <script> block is the small JSON-LD block,
+        # not a bare JS <script> tag.
+        bare_scripts = re.findall(r'<script(?![^>]*type="application/ld\+json")(?![^>]*src=)[^>]*>', html)
+        self.assertEqual(bare_scripts, [], f"unexpected inline <script> block(s): {bare_scripts}")
+
+    def test_styles_and_script_files_exist_and_are_nonempty(self):
+        self.assertGreater(len(read("styles.css")), 1000)
+        self.assertGreater(len(read("script.js")), 1000)
+
+
+class TestTrustAnchorPages(unittest.TestCase):
+    def _visible_text_len(self, html):
+        body = html.split("<body>", 1)[1].split("</body>", 1)[0]
+        text_only = re.sub(r"<[^>]+>", " ", body)
+        text_only = re.sub(r"\s+", " ", text_only).strip()
+        return len(text_only)
+
+    def test_about_contact_privacy_each_have_500_plus_chars_of_content(self):
+        for path in ("about/index.html", "contact/index.html", "privacy/index.html"):
+            html = read(path)
+            self.assertIn("<h1", html, f"{path} missing an <h1>")
+            length = self._visible_text_len(html)
+            self.assertGreaterEqual(
+                length, 500, f"{path} has only {length} visible chars (need >= 500)"
+            )
+
+    def test_trust_pages_link_back_to_home_and_each_other(self):
+        for path in ("about/index.html", "contact/index.html", "privacy/index.html"):
+            html = read(path)
+            self.assertIn('href="/"', html)
+
+    def test_sitemap_lists_the_trust_anchor_pages(self):
+        tree = ET.fromstring(read("sitemap.xml"))
+        ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+        locs = {el.text for el in tree.findall("sm:url/sm:loc", ns)}
+        for path in ("about", "contact", "privacy"):
+            self.assertIn(f"https://www.lizibuilds.tech/{path}", locs)
+
 
 class TestSitemap(unittest.TestCase):
     def test_sitemap_is_well_formed_and_lists_homepage(self):
@@ -89,6 +154,8 @@ class TestNotFoundPage(unittest.TestCase):
         self.assertIn('href="/"', html)
         self.assertIn("sitemap.xml", html)
         self.assertIn("llms.txt", html)
+        self.assertIn('href="/about"', html)
+        self.assertIn('href="/contact"', html)
         # meta robots noindex so the 404 itself doesn't get indexed
         self.assertIn('name="robots"', html)
 
@@ -115,6 +182,10 @@ class TestLlmsTxt(unittest.TestCase):
 
     def test_has_at_least_one_markdown_link(self):
         self.assertRegex(self.content, r"\[[^\]]+\]\((https?://|/)[^)]+\)")
+
+    def test_lists_the_trust_anchor_pages(self):
+        for path in ("/about", "/contact", "/privacy"):
+            self.assertIn(f"https://www.lizibuilds.tech{path}", self.content)
 
 
 class TestHomepageMarkdown(BuildFirst):

@@ -2,8 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import middleware, { negotiate, parseAccept, config } from '../middleware.js';
 
-test('config: matcher is scoped to the homepage only', () => {
-  assert.equal(config.matcher, '/');
+test('config: matcher covers the homepage plus every extensionless path', () => {
+  // "/" must be listed explicitly: a negative-lookahead-for-extension pattern
+  // does not, by itself, match the root route.
+  assert.deepEqual(config.matcher, ['/', '/((?!.*\\.).*)']);
 });
 
 test('middleware: Accept: text/markdown returns text/markdown with Vary: Accept', async () => {
@@ -105,4 +107,84 @@ test('parseAccept: parses q-values and defaults to q=1 when absent', () => {
 test('parseAccept: is case-insensitive on the type', () => {
   const parsed = parseAccept('Text/Markdown');
   assert.equal(parsed[0].type, 'text/markdown');
+});
+
+// --- Agent-friendly 404 handling for unknown extensionless paths ---------
+
+test('middleware: unknown path with Accept: text/markdown returns a real 404 with a Markdown body and links', async () => {
+  const req = new Request('https://www.lizibuilds.tech/this-does-not-exist', {
+    headers: { accept: 'text/markdown' },
+  });
+  const res = await middleware(req);
+  assert.equal(res.status, 404);
+  assert.equal(res.headers.get('content-type'), 'text/markdown; charset=utf-8');
+  assert.ok(res.headers.get('vary').includes('Accept'));
+  const body = await res.text();
+  assert.match(body, /^# 404/);
+  assert.match(body, /\[Home\]\(https:\/\/www\.lizibuilds\.tech\/\)/);
+  assert.match(body, /\[Sitemap\]/);
+  assert.match(body, /\[Agent instructions \(llms\.txt\)\]/);
+});
+
+test('middleware: unknown path with a normal browser Accept header returns a real 404 with the styled HTML body', async () => {
+  const originalFetch = global.fetch;
+  global.fetch = async (url) => {
+    assert.ok(String(url).endsWith('/404.html'));
+    return new Response('<html><body>styled 404</body></html>', { status: 200 });
+  };
+  try {
+    const req = new Request('https://www.lizibuilds.tech/some/nested/nonsense', {
+      headers: { accept: 'text/html,application/xhtml+xml' },
+    });
+    const res = await middleware(req);
+    assert.equal(res.status, 404);
+    assert.equal(res.headers.get('content-type'), 'text/html; charset=utf-8');
+    assert.ok(res.headers.get('vary').includes('Accept'));
+    const body = await res.text();
+    assert.match(body, /styled 404/);
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
+
+test('middleware: unknown path with no Accept header defaults to the HTML 404 (not markdown)', async () => {
+  const originalFetch = global.fetch;
+  global.fetch = async () => new Response('<html>404</html>', { status: 200 });
+  try {
+    const req = new Request('https://www.lizibuilds.tech/nope');
+    const res = await middleware(req);
+    assert.equal(res.status, 404);
+    assert.equal(res.headers.get('content-type'), 'text/html; charset=utf-8');
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
+
+test('middleware: unknown path with both representations excluded (q=0, q=0) still 406s, never 404s wrongly', async () => {
+  const req = new Request('https://www.lizibuilds.tech/whatever', {
+    headers: { accept: 'text/markdown;q=0, text/html;q=0' },
+  });
+  const res = await middleware(req);
+  assert.equal(res.status, 406);
+  assert.ok(res.headers.get('vary').includes('Accept'));
+});
+
+test('middleware: known real pages (/about, /contact, /privacy) pass through instead of 404ing', async () => {
+  for (const path of ['/about', '/about/', '/contact', '/contact/', '/privacy', '/privacy/']) {
+    const req = new Request(`https://www.lizibuilds.tech${path}`, {
+      headers: { accept: 'text/html' },
+    });
+    const res = await middleware(req);
+    assert.notEqual(res.status, 404, `${path} should not 404`);
+    assert.equal(res.headers.get('x-middleware-next'), '1', `${path} should continue to the static file`);
+    assert.ok(res.headers.get('vary').includes('Accept'));
+  }
+});
+
+test('middleware: root path is unaffected by the 404 branch and still passes through for a normal request', async () => {
+  const req = new Request('https://www.lizibuilds.tech/', {
+    headers: { accept: 'text/html' },
+  });
+  const res = await middleware(req);
+  assert.equal(res.headers.get('x-middleware-next'), '1');
 });

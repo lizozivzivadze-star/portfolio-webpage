@@ -1,0 +1,565 @@
+// script.js — extracted from parts/09_scripts.html.
+// Single external script for www.lizibuilds.tech, bundling what used to be five
+// inline <script> blocks in original order. Moved out of inline <script> tags so
+// the raw HTML document is mostly content, not markup/script (agent-readiness:
+// higher text-to-markup ratio). Behavior is unchanged — same code, same order,
+// just loaded via <script src> instead of inlined.
+// Edit this file directly (there is no build step for it); if you touch
+// parts/09_scripts.html's <script> tag, keep the src in sync.
+
+    // Shared Auto-Fit Text Sizing Utility
+    function autoFitText(element, options) {
+      if (!element) return;
+      const { minFontPx, maxFontPx, step = 0.5 } = options;
+      let currentSize = maxFontPx;
+      element.style.fontSize = currentSize + 'px';
+      
+      // Temporarily remove line clamp to measure natural height/width
+      const originalOverflow = element.style.overflow;
+      element.style.overflow = 'visible';
+      
+      while (currentSize > minFontPx) {
+        let isOverflowing = false;
+        if (element.scrollWidth > element.clientWidth) {
+          isOverflowing = true;
+        } else {
+          // Check line height bounds if needed
+          const computedLineHeight = parseFloat(window.getComputedStyle(element).lineHeight);
+          const computedHeight = element.scrollHeight;
+          // If multi-line height check is required
+          if (options.maxLines && computedHeight > (computedLineHeight * options.maxLines * 1.1)) {
+            isOverflowing = true;
+          }
+        }
+        
+        if (isOverflowing) {
+          currentSize -= step;
+          element.style.fontSize = currentSize + 'px';
+        } else {
+          break;
+        }
+      }
+      element.style.overflow = originalOverflow;
+    }
+
+    function runAutoFits() {
+      const titleElem = document.querySelector('.profile-title');
+      const statementElem = document.querySelector('.personal-statement');
+      if (titleElem) autoFitText(titleElem, { minFontPx: 12, maxFontPx: 16 });
+      if (statementElem) autoFitText(statementElem, { maxLines: 3, minFontPx: 12, maxFontPx: 16 });
+      
+      // Only the STICKY footer's status line is auto-fit; the static page-footer status line stays locked at 14.5px so it always matches the copyright line above it exactly.
+      document.querySelectorAll('#sticky-footer .footer-status-text').forEach(el => {
+        autoFitText(el, { minFontPx: 11, maxFontPx: 14.5 });
+      });
+
+      // Card overview / i-learned text panes: shrink to always fit the fixed ~235px box (holds ~300 chars comfortably at 13.5px)
+      document.querySelectorAll('.pane-overview, .event-pane-overview, .pane-ilearned').forEach(el => {
+        if (getComputedStyle(el).display !== 'none') autoFitText(el, { minFontPx: 10, maxFontPx: 13.5 });
+      });
+
+      // Project sub-tabs (Overview / Tech Stack / I-Learned): start at 13px and
+      // only shrink on genuinely narrow screens so all 3 still fit on one line
+      document.querySelectorAll('.project-card').forEach(card => {
+        const nav = card.querySelector('.subtab-btn');
+        if (!nav) return;
+        const navRow = nav.parentElement;
+        const tabs = [...navRow.querySelectorAll('.subtab-btn')];
+        const avail = navRow.clientWidth;
+        for (let fs = 13; fs >= 9; fs -= 0.5) {
+          tabs.forEach(t => t.style.fontSize = fs + 'px');
+          const total = tabs.reduce((a,t)=>a+t.getBoundingClientRect().width,0) + 4*(tabs.length-1);
+          if (total <= avail) break;
+        }
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      runAutoFits();
+    });
+
+    // Re-run once web fonts finish loading (they swap in wider than the fallback and can overflow on narrow screens like Galaxy S20)
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(runAutoFits);
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(runAutoFits, 150);
+    });
+
+    // Sticky Header Intersection Observer
+    const profileSection = document.getElementById('profile-section');
+    const stickyHeader = document.getElementById('sticky-header');
+    if (profileSection && stickyHeader) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) {
+            stickyHeader.classList.add('visible');
+          } else {
+            stickyHeader.classList.remove('visible');
+          }
+        });
+      }, { rootMargin: "-44px 0px 0px 0px", threshold: 0 });
+      observer.observe(profileSection);
+    }
+
+    // Sticky Footer: hide (slide down + fade) once the static page footer scrolls into view
+    const pageFooter = document.getElementById('page-footer');
+    const stickyFooter = document.getElementById('sticky-footer');
+    if (pageFooter && stickyFooter) {
+      const footerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            stickyFooter.classList.add('hidden');
+          } else {
+            stickyFooter.classList.remove('hidden');
+          }
+        });
+      }, { threshold: 0 });
+      footerObserver.observe(pageFooter);
+    }
+
+    // Projects Filtering & Scroll Stability Fix
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+    const projectsCarousel = document.getElementById('projects-carousel');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('active');
+          b.style.background = 'var(--bg-main)';
+          b.style.color = 'var(--text-secondary)';
+          b.style.borderColor = 'var(--border-color)';
+        });
+        btn.classList.add('active');
+        btn.style.background = 'var(--accent-primary)';
+        btn.style.color = '#FFFFFF';
+        btn.style.borderColor = 'var(--accent-primary)';
+
+        const filterVal = btn.getAttribute('data-filter');
+        const visibleProjects = [];
+        projectCards.forEach((card) => {
+          const cat = card.getAttribute('data-category');
+          if (filterVal === 'all' || cat === filterVal || (filterVal === 'hw-sw' && cat === 'hw-sw')) {
+            card.style.display = 'flex';
+            card.classList.remove('reveal-fade');
+            void card.offsetWidth;
+            card.classList.add('reveal-fade');
+            visibleProjects.push(card);
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        const projTotal = visibleProjects.length;
+        visibleProjects.forEach((card, i) => {
+          const counter = card.querySelector('.project-card-counter');
+          if (counter) counter.textContent = (projTotal - i) + '/' + projTotal;
+        });
+
+        // Scroll reset stability fix (Section 1.7)
+        if (projectsCarousel) {
+          projectsCarousel.scrollTo({ left: 0, behavior: 'auto' });
+          projectsCarousel.scrollLeft = 0;
+          requestAnimationFrame(() => {
+            projectsCarousel.scrollLeft = 0;
+          });
+        }
+      });
+    });
+
+    // Events Filtering & Scroll Stability Fix
+    const eventFilterBtns = document.querySelectorAll('.event-filter-btn');
+    const eventCards = document.querySelectorAll('.event-card');
+    const eventsCarousel = document.getElementById('events-carousel');
+
+    eventFilterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        eventFilterBtns.forEach(b => {
+          b.classList.remove('active');
+          b.style.background = 'var(--bg-main)';
+          b.style.color = 'var(--text-secondary)';
+          b.style.borderColor = 'var(--border-color)';
+        });
+        btn.classList.add('active');
+        btn.style.background = 'var(--accent-primary)';
+        btn.style.color = '#FFFFFF';
+        btn.style.borderColor = 'var(--accent-primary)';
+
+        const filterVal = btn.getAttribute('data-filter');
+        const visibleEvents = [];
+        eventCards.forEach((card) => {
+          const cat = card.getAttribute('data-category');
+          if (filterVal === 'all' || cat === filterVal) {
+            card.style.display = 'flex';
+            card.classList.remove('reveal-fade');
+            void card.offsetWidth;
+            card.classList.add('reveal-fade');
+            visibleEvents.push(card);
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        const evTotal = visibleEvents.length;
+        visibleEvents.forEach((card, i) => {
+          const counter = card.querySelector('.event-card-counter');
+          if (counter) counter.textContent = (evTotal - i) + '/' + evTotal;
+        });
+
+        if (eventsCarousel) {
+          eventsCarousel.scrollTo({ left: 0, behavior: 'auto' });
+          eventsCarousel.scrollLeft = 0;
+          requestAnimationFrame(() => {
+            eventsCarousel.scrollLeft = 0;
+          });
+        }
+      });
+    });
+
+    // Card Sub-Tabs Logic (Projects & Events)
+    document.querySelectorAll('.project-card, .event-card').forEach(card => {
+      const subTabs = card.querySelectorAll('.subtab-btn, .event-subtab-btn');
+      subTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          subTabs.forEach(t => {
+            t.classList.remove('active');
+            t.style.background = 'var(--bg-main)';
+            t.style.color = 'var(--text-muted)';
+            t.style.borderBottom = 'none';
+            t.style.bottom = '-1px';
+            t.style.zIndex = '1';
+          });
+          tab.classList.add('active');
+          tab.style.background = 'var(--bg-surface)';
+          tab.style.color = 'var(--accent-primary)';
+          tab.style.borderBottom = '1px solid #FFFFFF';
+          tab.style.bottom = '-1px';
+          tab.style.zIndex = '3';
+
+          const targetPane = tab.getAttribute('data-tab');
+          const panes = card.querySelectorAll('.pane-overview, .pane-techstack, .pane-ilearned, .event-pane-overview, .event-pane-media');
+          panes.forEach(pane => {
+            if (pane.classList.contains('pane-' + targetPane) || pane.classList.contains('event-pane-' + targetPane)) {
+              pane.style.display = 'block';
+              // restart the fade each switch
+              pane.classList.remove('reveal-fade');
+              void pane.offsetWidth;
+              pane.classList.add('reveal-fade');
+            } else {
+              pane.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+
+    // Skillset Tabs Interactivity
+    const skillTabs = document.querySelectorAll('.skill-tab');
+    const skillTabList = Array.from(skillTabs);
+    const skillsetCounter = document.querySelector('.skillset-counter');
+    skillTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const isBusiness = tab.hasAttribute('data-type');
+        skillTabs.forEach(t => {
+          t.classList.remove('active');
+          t.style.background = '';
+          t.style.border = '';
+          t.style.borderColor = '';
+          t.style.color = 'var(--text-primary)';
+        });
+        tab.classList.add('active');
+        const activeColor = isBusiness ? 'var(--accent-secondary)' : 'var(--accent-primary)';
+        tab.style.background = activeColor;
+        tab.style.color = '#FFFFFF';
+        tab.style.borderColor = activeColor;
+
+        // Update the skillset counter: this tab's position out of all tabs.
+        if (skillsetCounter) {
+          const idx = skillTabList.indexOf(tab) + 1;
+          skillsetCounter.textContent = idx + '/' + skillTabList.length;
+        }
+
+        const skillset = tab.getAttribute('data-skillset');
+        const rows = document.querySelectorAll('.skill-row');
+        rows.forEach(row => {
+          if (row.getAttribute('data-category') === skillset) {
+            row.style.display = 'flex';
+            row.classList.remove('reveal-fade');
+            void row.offsetWidth;
+            row.classList.add('reveal-fade');
+            const fill = row.querySelector('.progress-fill');
+            const pctLabel = row.querySelector('.skill-percentage');
+            if (fill) {
+              fill.style.width = '0%';
+              fill.style.background = activeColor;
+              if (pctLabel) pctLabel.style.color = activeColor;
+              setTimeout(() => {
+                fill.style.width = fill.getAttribute('data-target-width');
+              }, 50);
+            }
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Scroll-in reveal: cards NOT visible on first load fade in (~0.5s) as you
+    // scroll them into view. Cards already on screen at load are left instant.
+    (function() {
+      function cardVisible(card, carousel) {
+        const c = carousel.getBoundingClientRect();
+        const r = card.getBoundingClientRect();
+        return r.right > c.left + 1 && r.left < c.right - 1;
+      }
+      document.querySelectorAll('.projects-carousel, .events-carousel, .value-carousel').forEach(carousel => {
+        const cards = Array.from(carousel.children).filter(el =>
+          el.classList.contains('project-card') ||
+          el.classList.contains('event-card') ||
+          el.classList.contains('value-card'));
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('reveal-fade');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { root: carousel, threshold: 0.1 });
+        cards.forEach(card => {
+          // Only observe cards hidden at load; visible ones stay instant.
+          if (!cardVisible(card, carousel)) io.observe(card);
+        });
+      });
+    })();
+
+    // Vertical scroll reveal: each section eases in ONCE the first time it
+    // approaches the viewport. Fade-only (no movement) and triggered EARLY — the
+    // negative rootMargin fires it ~120px before the section reaches view, so the
+    // fade is nearly done by the time you actually see it. Feels seamless, not
+    // like loading. Sections already on screen at load stay fully instant.
+    (function() {
+      const sections = document.querySelectorAll('main.portfolio-container > section');
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('section-reveal');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+      sections.forEach(section => {
+        const top = section.getBoundingClientRect().top;
+        // If it's already in view on load, leave it instant; otherwise observe it.
+        if (top < vh - 40) return;
+        io.observe(section);
+      });
+    })();
+
+
+    (function() {
+      const carousels = document.querySelectorAll('.projects-carousel, .events-carousel, .value-carousel');
+      carousels.forEach(carousel => {
+        // wrap carousel so arrows can be positioned relative to it
+        const wrap = document.createElement('div');
+        wrap.className = 'carousel-wrap';
+        carousel.parentNode.insertBefore(wrap, carousel);
+        wrap.appendChild(carousel);
+
+        const prev = document.createElement('button');
+        prev.className = 'carousel-arrow prev';
+        prev.setAttribute('aria-label', 'Previous');
+        prev.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><polyline points="15 18 9 12 15 6"/></svg>';
+        const next = document.createElement('button');
+        next.className = 'carousel-arrow next';
+        next.setAttribute('aria-label', 'Next');
+        next.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><polyline points="9 18 15 12 9 6"/></svg>';
+        wrap.appendChild(prev);
+        wrap.appendChild(next);
+
+        function cardStep() {
+          const card = carousel.querySelector('.project-card, .event-card, .value-card');
+          if (!card) return carousel.clientWidth;
+          const gap = parseFloat(getComputedStyle(carousel).columnGap || getComputedStyle(carousel).gap) || 12;
+          return card.getBoundingClientRect().width + gap;
+        }
+        function update() {
+          const maxScroll = carousel.scrollWidth - carousel.clientWidth - 2;
+          prev.disabled = carousel.scrollLeft <= 2;
+          next.disabled = carousel.scrollLeft >= maxScroll;
+        }
+        prev.addEventListener('click', () => { carousel.scrollBy({ left: -cardStep(), behavior: 'smooth' }); });
+        next.addEventListener('click', () => { carousel.scrollBy({ left: cardStep(), behavior: 'smooth' }); });
+        carousel.addEventListener('scroll', update);
+        window.addEventListener('resize', update);
+        update();
+      });
+    })();
+
+    (function() {
+      const btn = document.getElementById('header-menu-btn');
+      const menu = document.getElementById('header-download-menu');
+      if (!btn || !menu) return;
+      let open = false;
+      function openMenu() {
+        menu.style.display = 'block';
+        requestAnimationFrame(() => { menu.style.opacity = '1'; menu.style.transform = 'translateY(0)'; });
+        btn.setAttribute('aria-expanded', 'true');
+        open = true;
+      }
+      function closeMenu() {
+        menu.style.opacity = '0';
+        menu.style.transform = 'translateY(-6px)';
+        btn.setAttribute('aria-expanded', 'false');
+        open = false;
+        setTimeout(() => { if (!open) menu.style.display = 'none'; }, 200);
+      }
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        open ? closeMenu() : openMenu();
+      });
+      // tapping outside closes
+      document.addEventListener('click', (e) => {
+        if (open && !menu.contains(e.target) && e.target !== btn) closeMenu();
+      });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) closeMenu(); });
+      // hover feedback on items + close after choosing
+      menu.querySelectorAll('.header-download-item').forEach(item => {
+        item.addEventListener('mouseenter', () => item.style.background = 'var(--bg-main)');
+        item.addEventListener('mouseleave', () => item.style.background = 'transparent');
+        item.addEventListener('click', () => closeMenu());
+      });
+    })();
+
+    (function() {
+      function loadLazyMedia(root) {
+        // Hide a card's shimmer only once its media has actually revealed,
+        // so the pulsing placeholder holds until the first frame is ready.
+        const hideShimmers = () => {
+          root.querySelectorAll('.lazy-shimmer').forEach(s => s.classList.add('lazy-hide'));
+        };
+        root.querySelectorAll('.lazy-media').forEach(el => {
+          if (el.dataset.lazyDone) return;
+          const rawSrc = el.getAttribute('data-src') || el.getAttribute('data-src-lazy');
+          if (!rawSrc) return;
+          const reveal = () => { el.classList.add('lazy-loaded'); hideShimmers(); };
+
+          if (el.tagName === 'VIDEO') {
+            el.preload = 'auto';
+            // Reveal as soon as the first frame is decoded and painted.
+            el.addEventListener('loadeddata', reveal, { once: true });
+            el.addEventListener('canplay', reveal, { once: true });
+            // Append a media fragment so the browser seeks to and RENDERS the
+            // first frame automatically — shows the frame instead of a black box.
+            const frag = rawSrc.indexOf('#') === -1 ? (rawSrc + '#t=0.1') : rawSrc;
+            el.src = frag;
+            el.load();
+            // Safety reveal if events are delayed.
+            setTimeout(reveal, 1000);
+          } else {
+            if (el.complete) { reveal(); } else { el.addEventListener('load', reveal, { once: true }); }
+            el.src = rawSrc;
+          }
+          el.dataset.lazyDone = '1';
+        });
+      }
+
+      // Is any part of this card currently within the carousel's visible box?
+      // Used to decide, on first load, which cards are ALREADY on screen.
+      function cardIsVisible(card, carousel) {
+        const c = carousel.getBoundingClientRect();
+        const r = card.getBoundingClientRect();
+        // horizontal overlap between the card and the carousel viewport
+        return r.right > c.left + 1 && r.left < c.right - 1;
+      }
+
+      const carousels = document.querySelectorAll('.projects-carousel, .events-carousel');
+      carousels.forEach(carousel => {
+        const cards = Array.from(carousel.querySelectorAll('.project-card, .event-card'))
+          .filter(card => card.querySelector('.lazy-media'));
+
+        // 1) EAGER PASS — every card already showing on first paint (including a
+        //    card peeking in from the right edge) loads immediately. Its shimmer
+        //    is hidden instantly, so you never see a pulsing placeholder on media
+        //    that was on screen from the start.
+        cards.forEach(card => {
+          if (cardIsVisible(card, carousel)) {
+            card.querySelectorAll('.lazy-shimmer').forEach(s => {
+              s.style.animation = 'none';   // no pulse for already-visible media
+              s.classList.add('lazy-hide');
+            });
+            loadLazyMedia(card);
+          }
+        });
+
+        // 2) LAZY PASS — only cards NOT visible at load get the observer. When you
+        //    scroll one into view it loads with the ~0.5s shimmer→media reveal.
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              loadLazyMedia(entry.target);
+              io.unobserve(entry.target);
+            }
+          });
+        }, { root: carousel, rootMargin: '0px', threshold: 0.1 });
+
+        cards.forEach(card => {
+          if (!cardIsVisible(card, carousel)) io.observe(card);
+        });
+      });
+    })();
+
+    // Media Lightbox: tap any thumbnail (photo or video) to open enlarged with an X to close
+    (function() {
+      const lightbox = document.getElementById('media-lightbox');
+      const content = document.getElementById('media-lightbox-content');
+      const closeBtn = document.getElementById('media-lightbox-close');
+      if (!lightbox || !content || !closeBtn) return;
+
+      function openLightbox(type, src) {
+        content.innerHTML = '';
+        if (type === 'video') {
+          const v = document.createElement('video');
+          v.src = src;
+          v.controls = true;
+          v.autoplay = true;
+          v.playsInline = true;
+          v.style.cssText = 'max-width: 100%; max-height: 85vh; border-radius: 6px; background: #000;';
+          content.appendChild(v);
+        } else {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = 'Enlarged media';
+          img.style.cssText = 'max-width: 100%; max-height: 85vh; border-radius: 6px; object-fit: contain;';
+          content.appendChild(img);
+        }
+        lightbox.style.display = 'flex';
+        requestAnimationFrame(() => { lightbox.style.opacity = '1'; });
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.style.opacity = '0';
+        setTimeout(() => {
+          lightbox.style.display = 'none';
+          content.innerHTML = ''; // stops any playing video
+          document.body.style.overflow = '';
+        }, 250);
+      }
+
+      document.querySelectorAll('.media-thumb').forEach(thumb => {
+        thumb.addEventListener('click', () => {
+          openLightbox(thumb.getAttribute('data-media-type'), thumb.getAttribute('data-media-src'));
+        });
+      });
+
+      closeBtn.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox(); // click backdrop to close
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.style.display === 'flex') closeLightbox();
+      });
+    })();

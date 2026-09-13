@@ -14,9 +14,12 @@ This site is a single page: a profile summary, a projects carousel (embedded sys
 
 ## Pages
 
-- [Homepage](https://www.lizibuilds.tech/): full profile, projects, skills, events, and contact - the only page on this site
+- [Homepage](https://www.lizibuilds.tech/): full profile, projects, skills, events, and contact
+- [About](https://www.lizibuilds.tech/about): bio, focus areas, and what Lizi is looking for
+- [Contact](https://www.lizibuilds.tech/contact): email, WhatsApp, LinkedIn, and GitHub
+- [Privacy](https://www.lizibuilds.tech/privacy): what data this site does and does not collect
 - [Sitemap](https://www.lizibuilds.tech/sitemap.xml): machine-readable list of site URLs
-- [Markdown version of the homepage](https://www.lizibuilds.tech/): same URL as above, returned instead of HTML when the request sends `Accept: text/markdown`
+- [Markdown version of the homepage](https://www.lizibuilds.tech/): same URL as the homepage, returned instead of HTML when the request sends `Accept: text/markdown`
 
 ## Contact
 

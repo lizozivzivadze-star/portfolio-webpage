@@ -33,629 +33,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <style>
-    /* CSS Custom Properties (:root) */
-    :root {
-      --bg-main: #FAFAFA;
-      --bg-surface: #FFFFFF;
-      --text-primary: #0F172A;
-      --text-secondary: #475569;
-      --text-muted: #64748B;
-      --border-color: #E2E8F0;
-      --accent-primary: #8B7EE8;
-      --accent-hover: #7A6BE0;
-      --accent-subtle: #F0EDFB;
-      --accent-secondary: #16A34A;
-      --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --font-mono: "JetBrains Mono", "Fira Code", "Courier New", monospace;
-    }
-
-    /* Global Viewport & Reset Rules */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      -webkit-text-size-adjust: 100%;
-      -moz-text-size-adjust: 100%;
-      text-size-adjust: 100%;
-    }
-
-    body {
-      background-color: var(--bg-main);
-      color: var(--text-primary);
-      font-family: var(--font-primary);
-      font-size: 16px;
-      line-height: 1.5;
-    }
-
-    /* Primary Layout Wrapper */
-    .portfolio-container {
-      max-width: 100%;
-      margin-left: auto;
-      margin-right: auto;
-      width: 100%;
-      padding: 7px 15px 15px 15px;
-    }
-
-    /* Bold letter contrast for filter buttons */
-    .filter-btn b {
-      font-weight: 800;
-    }
-
-    /* Carousel & Scroll Stability */
-    .projects-carousel, .events-carousel, .value-carousel {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      gap: 12px;
-      overflow-x: auto;
-      overflow-anchor: none;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .projects-carousel::-webkit-scrollbar,
-    .events-carousel::-webkit-scrollbar,
-    .value-carousel::-webkit-scrollbar {
-      display: none;
-    }
-
-    .project-card, .event-card {
-      width: calc(100% - 22px);
-      min-width: calc(100% - 22px);
-      max-width: calc(100% - 22px);
-      scroll-snap-align: start;
-      flex-shrink: 0;
-      flex-grow: 0;
-      overflow-anchor: none;
-    }
-    .value-card {
-      width: calc(100% - 20px);
-      min-width: calc(100% - 20px);
-      max-width: calc(100% - 20px);
-      scroll-snap-align: start;
-      flex-shrink: 0;
-      flex-grow: 0;
-      overflow-anchor: none;
-    }
-
-    .projects-carousel {
-      margin: 0 -15px 4px -15px;
-      padding: 0 15px;
-      scroll-padding-left: 15px;
-    }
-    .events-carousel {
-      margin: 0 -15px 4px -15px;
-      padding: 0 15px;
-      scroll-padding-left: 15px;
-    }
-    .value-carousel {
-      margin: 4px -15px;
-      padding: 0 15px;
-      scroll-padding-left: 15px;
-    }
-
-    /* Profile Card Styling */
-    .profile-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 24px;
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-    }
-
-    /* Projects, Skills, Events, Value, Contact, Help Yourself Containers */
-    .projects-card-container,
-    .skills-card,
-    .events-card-container,
-    .value-card-container,
-    .contact-card-container,
-    .help-yourself-card-container {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 24px;
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-    }
-    /* Value section covers at least half the screen on every device.
-       margin-bottom stays 24px (from the shared rule) so the gap down to the
-       Contact section matches the spacing between all other sections. */
-    .value-card-container {
-      min-height: 50vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .value-card-container .value-carousel {
-      flex: 1 1 auto;
-      align-items: stretch;
-    }
-    .value-card-container .value-card {
-      height: auto !important;
-      min-height: 251px;
-    }
-
-    /* Contact section: compact. Height is only whatever the title + one row of
-       buttons needs (no min-height, no vertical centering). As the last section
-       before the footer it keeps the 12px bottom margin the value section used to
-       carry, so the footer clearance stays exactly as it was. The extra bottom
-       padding (15px base + 48px) makes the space below the last button (63px)
-       mirror the space above the title (card edge -> first button = 63px), so the
-       buttons read as vertically balanced inside the card. */
-    .contact-card-container {
-      margin-bottom: 12px;
-      padding-bottom: 25px;
-    }
-    .contact-buttons-row {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-    }
-    .contact-btn {
-      width: 80%;
-      max-width: 300px;
-      min-width: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      height: 48px;
-      padding: 0 10px;
-      background: var(--bg-surface);
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-family: var(--font-primary);
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-      text-decoration: none;
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-      transition: background 0.15s ease, border-color 0.15s ease;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .contact-btn:hover {
-      background: var(--accent-subtle);
-      border-color: var(--accent-primary);
-    }
-    .contact-btn svg {
-      width: 21px;
-      height: 21px;
-      flex-shrink: 0;
-      color: var(--accent-primary);
-    }
-    .contact-btn span {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    /* Narrow phones: trim gap/padding/font a touch so icon + label never crowd */
-    @media (max-width: 380px) {
-      .contact-btn {
-        font-size: 14px;
-        gap: 6px;
-        padding: 0 8px;
-      }
-      .contact-btn svg { width: 20px; height: 20px; }
-    }
-    /* Desktop: keep the same centered, capped width */
-    @media (min-width: 1024px) {
-      .contact-btn { height: 52px; font-size: 16px; }
-    }
-
-    .skills-card {
-      padding: 16px;
-    }
-
-    .section-title {
-      font-family: var(--font-primary);
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--text-primary);
-      text-align: center;
-      margin-top: 0;
-      margin-bottom: 16px;
-      letter-spacing: 0.05em;
-    }
-
-    /* Sticky Header & Footer Styles */
-    .sticky-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 44px;
-      min-height: 44px;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0px 19.5px 0px 15px;
-      box-sizing: border-box;
-      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      opacity: 0;
-      transform: translateY(-100%);
-      pointer-events: none;
-      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-    }
-    .sticky-header.visible {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-
-    .sticky-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 44px;
-      min-height: 44px;
-      z-index: 90;
-      background: rgba(255, 255, 255, 0.90);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-top: 1px solid var(--border-color);
-      padding: 4px 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-sizing: border-box;
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-    }
-    .sticky-footer.hidden {
-      opacity: 0;
-      transform: translateY(100%);
-      pointer-events: none;
-    }
-
-    /* Status Pulse Animation */
-    .status-pulse-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #22C55E;
-      position: relative;
-      flex-shrink: 0;
-      animation: status-pulse 2s infinite;
-    }
-    @keyframes status-pulse {
-      0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-      70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-    }
-
-    /* File Select Box Fallback — !important is required because the label carries inline background/border/color that would otherwise win over this rule */
-    .file-select-box:has(.file-checkbox:checked),
-    .file-select-box.selected {
-      background: var(--accent-subtle) !important;
-      border: 1.5px solid var(--accent-primary) !important;
-      color: var(--accent-primary) !important;
-    }
-
-    /* Card sub-tab alignment: both tabs share identical geometry so top/bottom edges line up; only the active tab's bottom edge dissolves into the content box */
-    .subtab-btn, .event-subtab-btn {
-      padding: 6px 12px;
-      line-height: 1;
-      border: 1px solid var(--border-color);
-      border-radius: 6px 6px 0 0;
-      position: relative;
-      bottom: -1px;
-      box-sizing: border-box;
-    }
-    /* Project sub-tabs: all caps (match events) */
-    .subtab-btn {
-      text-transform: uppercase;
-    }
-    /* Event sub-tabs: all caps */
-    .event-subtab-btn {
-      text-transform: uppercase;
-    }
-
-    /* Skillset inactive tints: light lavender = technical, light amber = business/finance */
-    .skill-tab:not(.active) {
-      background: #F3F1FC !important;
-      border: 1px solid #E4DEF7 !important;
-    }
-    .skill-tab.business-tab:not(.active) {
-      background: #EEF9F1 !important;
-      border: 1px solid #D6EFDD !important;
-    }
-
-    /* Forced line break: used only by the events filter bar (fewer, shorter tabs) */
-    .tab-row-break {
-      flex-basis: 100%;
-      width: 100%;
-      height: 0;
-      margin: 0;
-      padding: 0;
-    }
-    /* Skillset rows: tabs wrap naturally (browser packs each row as full as it can fit);
-       row-gap gives the ~7px vertical spacing since there's no manual break div here */
-    .skillset-tabs-grid { column-gap: 8px !important; row-gap: 7px !important; }
-    /* Events filter rows: match skillset vertical gap exactly (7px).
-       row-gap does the spacing; the break div only forces the wrap (height 0). */
-    /* Events filter rows: force 3+2 via the break div, but the break sits on its own
-       wrapped line so row-gap would apply on BOTH sides of it (7+7=14). Pull it up by
-       one row-gap so the visible rows are separated by exactly one 7px gap. */
-    .events-filter-bar { column-gap: 8px !important; row-gap: 0 !important; }
-    .events-filter-bar .tab-row-break { height: 7px; margin-top: 0; }
-
-    /* Phones: tighten tab padding/gap/font so more tabs fit per row — denser, better-
-       filled centered rows, and narrower devices like Galaxy S20 keep up with wider ones */
-    @media (max-width: 767px) {
-      .skill-tab, .event-filter-btn {
-        padding: 0 7px !important;
-        font-size: 11.5px !important;
-      }
-      .skillset-tabs-grid {
-        column-gap: 5px !important;
-      }
-      .events-filter-bar {
-        column-gap: 6px !important;
-      }
-    }
-
-    /* Mobile/tablet: center tab rows */
-    @media (max-width: 1023px) {
-      .skillset-tabs-grid, .events-filter-bar {
-        justify-content: center !important;
-      }
-    }
-    /* Narrow phones (e.g. Galaxy S20 at 360px): tighten tab padding/gap/font so more
-       tabs fit per row, closing the gap with wider phones like standard iPhones */
-    @media (max-width: 380px) {
-      .skill-tab, .event-filter-btn {
-        padding: 0 7px !important;
-        font-size: 11.5px !important;
-      }
-      .skillset-tabs-grid {
-        column-gap: 5px !important;
-      }
-      .events-filter-bar {
-        column-gap: 6px !important;
-      }
-    }
-
-    /* Card URL tag: small blue mono tag on the right edge of the title line */
-    .card-url-tag {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--accent-primary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      flex-shrink: 0;
-      text-decoration: none;
-      margin-left: auto;
-    }
-    .card-url-tag:hover {
-      color: var(--accent-hover);
-    }
-    /* Reveal fade-in: applied to content that becomes visible via a tab switch
-       or by scrolling a hidden card into view. ~0.5s so transitions feel smooth.
-       Anything already on screen never gets this class, so it stays instant. */
-    @keyframes revealFade {
-      0%   { opacity: 0; transform: translateY(4px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .reveal-fade {
-      animation: revealFade 0.5s ease both;
-    }
-
-    /* Section reveal (vertical scroll): a visible but smooth fade-in. No vertical
-       movement (that felt like loading); just opacity from 0 to 1 over ~0.6s with
-       a soft ease. The JS triggers it slightly before the section is fully in view
-       so it reads as smooth, not abrupt. */
-    @keyframes sectionReveal {
-      0%   { opacity: 0; }
-      100% { opacity: 1; }
-    }
-    .section-reveal {
-      animation: sectionReveal 0.6s ease-out both;
-    }
-
-    /* Lazy-load shimmer placeholder for the 2nd card's media */
-    @keyframes lazyShimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-    .lazy-media {
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-    .lazy-media.lazy-loaded {
-      opacity: 1;
-    }
-    /* Video thumbnails: first frame shows via #t fragment; no black box */
-    video.lazy-media {
-      background: transparent;
-    }
-    /* Crop in slightly to hide the light border baked into the source video clips —
-       wrapper already clips overflow, so this just zooms past the visible edge */
-    .project-video {
-      transform: scale(1.12);
-      transform-origin: center center;
-    }
-    /* Video thumbnail poster keeps its dimmed look after lazy load */
-    .media-video-thumb .lazy-media.lazy-loaded {
-      opacity: 0.75;
-    }
-    .lazy-shimmer {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, #E2E8F0 25%, #F1F5F9 50%, #E2E8F0 75%);
-      background-size: 200% 100%;
-      animation: lazyShimmer 1.4s ease-in-out infinite;
-      z-index: 1;
-    }
-    .lazy-shimmer.lazy-hide {
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none;
-    }
-    /* Tech Stack: always a single flowing paragraph — never columns/tabs/grid.
-       Tool names stay highlighted in blue; body text stays gray. */
-    .pane-techstack {
-      column-count: 1 !important;
-      columns: auto !important;
-      grid-template-columns: none !important;
-      display: block;
-    }
-    /* Events media: uniform 3x3 grid that fills the fixed pane exactly.
-       Every cell is an equal slot; media fills via object-fit: cover (clips
-       overflow). No scrolling. Native size only shows in the lightbox popup. */
-    .media-grid {
-      display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
-      grid-template-rows: repeat(3, 1fr) !important;
-      grid-auto-rows: 1fr !important;
-      gap: 6px !important;
-      width: 100%;
-      height: 100%;
-    }
-    .media-grid > .media-thumb,
-    .media-grid > .media-grid-img {
-      width: 100%;
-      height: 100%;
-      min-width: 0;
-      min-height: 0;
-      object-fit: cover;
-    }
-    .media-grid > .media-thumb > .media-grid-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    /* Media pane: fixed, no scrolling */
-    .event-pane-media {
-      overflow: hidden !important;
-    }
-    /* Disabled URL tag: gray + unclickable, used on hardware/HW+SW cards where there's nothing to open */
-    .card-url-tag.card-url-disabled,
-    .card-url-tag.card-url-disabled:hover {
-      color: var(--text-muted);
-      pointer-events: none;
-      cursor: default;
-    }
-
-    /* Profile action icons: stay 22.5px normally; only shrink a hair on the very narrowest viewports so all 5 fit */
-    .profile-actions .action-btn { flex-shrink: 0; display: flex; align-items: center; }
-    .profile-actions .action-btn svg {
-      width: clamp(19px, 6vw, 22.5px) !important;
-      height: clamp(19px, 6vw, 22.5px) !important;
-    }
-
-    /* Desktop Media Queries (>= 1024px) */
-    @media (min-width: 768px) and (max-width: 1023px) {
-      .portfolio-container {
-        max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
-        width: 100%;
-        padding: 7px 15px 15px 15px;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .portfolio-container {
-        max-width: 1320px;
-        margin-left: auto;
-        margin-right: auto;
-        width: 100%;
-        padding: 16px 32px 32px 32px;
-      }
-      .sticky-header, .sticky-footer {
-        left: 50%;
-        transform: translateX(-50%);
-        max-width: 1320px;
-        width: 100%;
-      }
-      .sticky-header.visible {
-        transform: translateX(-50%) translateY(0);
-      }
-      .sticky-footer {
-        transform: translateX(-50%) translateY(0);
-      }
-      .sticky-footer.hidden {
-        transform: translateX(-50%) translateY(100%);
-      }
-      
-      /* Desktop: keep Projects/Events/Value as horizontal sliders — sized so 3 cards show fully and a 4th peeks at the edge */
-      .projects-carousel, .events-carousel, .value-carousel {
-        display: flex !important;
-        overflow-x: auto !important;
-        scroll-snap-type: x mandatory;
-        margin: 0 0 4px 0 !important;
-        padding: 0 !important;
-        scroll-padding-left: 0 !important;
-      }
-      .project-card, .event-card, .value-card {
-        width: 30% !important;
-        min-width: 30% !important;
-        max-width: 30% !important;
-        flex-shrink: 0 !important;
-      }
-
-      /* Desktop: skillset + events filter tabs stay on a single line (container widened above to make room) */
-      .skillset-tabs-grid, .events-filter-bar {
-        flex-wrap: nowrap !important;
-        column-gap: 6px !important;
-      }
-      .skillset-tabs-grid .tab-row-break, .events-filter-bar .tab-row-break {
-        display: none !important;
-      }
-      .skill-tab, .event-filter-btn {
-        padding: 0 8px !important;
-      }
-      /* Arrow navigation buttons (desktop only) */
-      .carousel-wrap { position: relative; }
-      .carousel-arrow {
-        display: flex;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-        box-shadow: 0 2px 10px rgba(15,23,42,0.12);
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        z-index: 20;
-        color: var(--text-primary);
-        transition: opacity 0.2s ease, background 0.15s ease;
-      }
-      .carousel-arrow.prev { left: -14px; }
-      .carousel-arrow.next { right: -14px; }
-      .carousel-arrow:disabled { opacity: 0.3; cursor: default; }
-
-      .section-title {
-        font-size: 26px;
-      }
-      .card-description, .value-card-text, .personal-statement {
-        font-size: calc(1em + 1px);
-      }
-    }
-    /* Arrows are hidden on mobile (touch swipe instead) */
-    @media (max-width: 1023px) {
-      .carousel-arrow { display: none !important; }
-    }
-  </style>
+  <link rel="stylesheet" href="/styles.css">
 
   <script type="application/ld+json">
   {
@@ -833,18 +211,18 @@
     <section id="skills-section" class="skills-card">
       <h2 class="section-title">Skillsets</h2>
       <nav class="skillset-tabs-grid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; align-items: center; margin-bottom: 7px;">
-        <button class="skill-tab active" data-skillset="ai" style="flex: 0 1 auto; height: 28px; padding: 0px 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; background: var(--accent-primary); border: 1px solid var(--accent-primary); color: #FFFFFF;">AI</button>
-        <button class="skill-tab" data-skillset="embedded" style="flex: 0 1 auto; height: 28px; padding: 0px 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; color: var(--text-primary);">Embedded</button>
-        <button class="skill-tab" data-skillset="automation" style="flex: 0 1 auto; height: 28px; padding: 0px 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; color: var(--text-primary);">Automation</button>
-        <button class="skill-tab" data-skillset="compvision" style="flex: 0 1 auto; height: 28px; padding: 0px 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; color: var(--text-primary);">CompVision</button>
-        <button class="skill-tab" data-skillset="simulation" style="flex: 0 1 auto; height: 28px; padding: 0px 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; color: var(--text-primary);">Simulation</button>
-        <button class="skill-tab" data-skillset="robotics" style="flex: 0 1 auto; height: 28px; padding: 0px 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; color: var(--text-primary);">Robotics</button>
-        <button class="skill-tab" data-skillset="electrical" style="flex: 0 1 auto; height: 28px; padding: 0px 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; color: var(--text-primary);">Electrical</button>
-        <button class="skill-tab" data-skillset="prototyping" style="flex: 0 1 auto; height: 28px; padding: 0px 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; color: var(--text-primary);">Prototyping</button>
-        <button class="skill-tab" data-skillset="cybersecurity" style="flex: 0 1 auto; height: 28px; padding: 0px 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; color: var(--text-primary);">Cybersecurity</button>
-        <button class="skill-tab business-tab" data-skillset="leadership" data-type="business" style="flex: 0 1 auto; height: 28px; padding: 0px 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; color: var(--text-primary);">Leadership</button>
-        <button class="skill-tab business-tab" data-skillset="projects" data-type="business" style="flex: 0 1 auto; height: 28px; padding: 0px 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; color: var(--text-primary);">Project Management</button>
-        <button class="skill-tab business-tab" data-skillset="strategy" data-type="business" style="flex: 0 1 auto; height: 28px; padding: 0px 10px; font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; color: var(--text-primary);">Strategy</button>
+        <button class="skill-tab active" data-skillset="ai">AI</button>
+        <button class="skill-tab" data-skillset="embedded">Embedded</button>
+        <button class="skill-tab" data-skillset="automation">Automation</button>
+        <button class="skill-tab" data-skillset="compvision">CompVision</button>
+        <button class="skill-tab" data-skillset="simulation">Simulation</button>
+        <button class="skill-tab" data-skillset="robotics">Robotics</button>
+        <button class="skill-tab" data-skillset="electrical">Electrical</button>
+        <button class="skill-tab" data-skillset="prototyping">Prototyping</button>
+        <button class="skill-tab" data-skillset="cybersecurity">Cybersecurity</button>
+        <button class="skill-tab business-tab" data-skillset="leadership" data-type="business">Leadership</button>
+        <button class="skill-tab business-tab" data-skillset="projects" data-type="business">Project Management</button>
+        <button class="skill-tab business-tab" data-skillset="strategy" data-type="business">Strategy</button>
       </nav>
 
       <div class="skills-display-box" style="position: relative; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 16px 16px 16px; display: flex; flex-direction: column; gap: 10px; height: 476px; box-sizing: border-box; overflow: hidden;">
@@ -853,106 +231,106 @@
 
         <div class="skills-rows-container" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
           <!-- AI (5 items) -->
-          <div class="skill-row" data-category="ai" style="display:flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Prompt Engineering</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 88%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="88%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">88%</span></div>
-          <div class="skill-row" data-category="ai" style="display:flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Multi-AI Systems</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 80%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="80%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">80%</span></div>
-          <div class="skill-row" data-category="ai" style="display:flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">AI Agents</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 72%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="72%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">72%</span></div>
-          <div class="skill-row" data-category="ai" style="display:flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Voice Interfaces</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 76%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="76%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">76%</span></div>
-          <div class="skill-row" data-category="ai" style="display:flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Vision Models</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 74%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="74%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">74%</span></div>
+          <div class="skill-row" data-category="ai"><span class="skill-name">Prompt Engineering</span><div class="progress-track"><div class="progress-fill" style="width: 88%;" data-target-width="88%"></div></div><span class="skill-percentage">88%</span></div>
+          <div class="skill-row" data-category="ai"><span class="skill-name">Multi-AI Systems</span><div class="progress-track"><div class="progress-fill" style="width: 80%;" data-target-width="80%"></div></div><span class="skill-percentage">80%</span></div>
+          <div class="skill-row" data-category="ai"><span class="skill-name">AI Agents</span><div class="progress-track"><div class="progress-fill" style="width: 72%;" data-target-width="72%"></div></div><span class="skill-percentage">72%</span></div>
+          <div class="skill-row" data-category="ai"><span class="skill-name">Voice Interfaces</span><div class="progress-track"><div class="progress-fill" style="width: 76%;" data-target-width="76%"></div></div><span class="skill-percentage">76%</span></div>
+          <div class="skill-row" data-category="ai"><span class="skill-name">Vision Models</span><div class="progress-track"><div class="progress-fill" style="width: 74%;" data-target-width="74%"></div></div><span class="skill-percentage">74%</span></div>
           <!-- Embedded (8 items) -->
-          <div class="skill-row" data-category="embedded" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ESP32</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 88%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="88%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">88%</span></div>
-          <div class="skill-row" data-category="embedded" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Sensors</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 84%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="84%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">84%</span></div>
-          <div class="skill-row" data-category="embedded" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Circuit Design</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 78%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="78%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">78%</span></div>
-          <div class="skill-row" data-category="embedded" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Sound Processing</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 76%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="76%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">76%</span></div>
-          <div class="skill-row" data-category="embedded" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Wireless</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 74%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="74%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">74%</span></div>
-          <div class="skill-row" data-category="embedded" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Signal Decoding</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 74%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="74%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">74%</span></div>
-          <div class="skill-row" data-category="embedded" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Battery Systems</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 62%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="62%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">62%</span></div>
-          <div class="skill-row" data-category="embedded" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Sensor Devices</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 60%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="60%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">60%</span></div>
+          <div class="skill-row" data-category="embedded"><span class="skill-name">ESP32</span><div class="progress-track"><div class="progress-fill" style="width: 88%;" data-target-width="88%"></div></div><span class="skill-percentage">88%</span></div>
+          <div class="skill-row" data-category="embedded"><span class="skill-name">Sensors</span><div class="progress-track"><div class="progress-fill" style="width: 84%;" data-target-width="84%"></div></div><span class="skill-percentage">84%</span></div>
+          <div class="skill-row" data-category="embedded"><span class="skill-name">Circuit Design</span><div class="progress-track"><div class="progress-fill" style="width: 78%;" data-target-width="78%"></div></div><span class="skill-percentage">78%</span></div>
+          <div class="skill-row" data-category="embedded"><span class="skill-name">Sound Processing</span><div class="progress-track"><div class="progress-fill" style="width: 76%;" data-target-width="76%"></div></div><span class="skill-percentage">76%</span></div>
+          <div class="skill-row" data-category="embedded"><span class="skill-name">Wireless</span><div class="progress-track"><div class="progress-fill" style="width: 74%;" data-target-width="74%"></div></div><span class="skill-percentage">74%</span></div>
+          <div class="skill-row" data-category="embedded"><span class="skill-name">Signal Decoding</span><div class="progress-track"><div class="progress-fill" style="width: 74%;" data-target-width="74%"></div></div><span class="skill-percentage">74%</span></div>
+          <div class="skill-row" data-category="embedded"><span class="skill-name">Battery Systems</span><div class="progress-track"><div class="progress-fill" style="width: 62%;" data-target-width="62%"></div></div><span class="skill-percentage">62%</span></div>
+          <div class="skill-row" data-category="embedded"><span class="skill-name">Sensor Devices</span><div class="progress-track"><div class="progress-fill" style="width: 60%;" data-target-width="60%"></div></div><span class="skill-percentage">60%</span></div>
           <!-- Automation (6 items) -->
-          <div class="skill-row" data-category="automation" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Workflow Automation</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 85%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="85%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">85%</span></div>
-          <div class="skill-row" data-category="automation" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Task Automation</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 80%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="80%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">80%</span></div>
-          <div class="skill-row" data-category="automation" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">App Integration</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 78%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="78%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">78%</span></div>
-          <div class="skill-row" data-category="automation" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Auto Reports</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 72%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="72%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">72%</span></div>
-          <div class="skill-row" data-category="automation" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Automation Scripts</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 76%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="76%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">76%</span></div>
-          <div class="skill-row" data-category="automation" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Data Collection</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 64%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="64%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">64%</span></div>
+          <div class="skill-row" data-category="automation"><span class="skill-name">Workflow Automation</span><div class="progress-track"><div class="progress-fill" style="width: 85%;" data-target-width="85%"></div></div><span class="skill-percentage">85%</span></div>
+          <div class="skill-row" data-category="automation"><span class="skill-name">Task Automation</span><div class="progress-track"><div class="progress-fill" style="width: 80%;" data-target-width="80%"></div></div><span class="skill-percentage">80%</span></div>
+          <div class="skill-row" data-category="automation"><span class="skill-name">App Integration</span><div class="progress-track"><div class="progress-fill" style="width: 78%;" data-target-width="78%"></div></div><span class="skill-percentage">78%</span></div>
+          <div class="skill-row" data-category="automation"><span class="skill-name">Auto Reports</span><div class="progress-track"><div class="progress-fill" style="width: 72%;" data-target-width="72%"></div></div><span class="skill-percentage">72%</span></div>
+          <div class="skill-row" data-category="automation"><span class="skill-name">Automation Scripts</span><div class="progress-track"><div class="progress-fill" style="width: 76%;" data-target-width="76%"></div></div><span class="skill-percentage">76%</span></div>
+          <div class="skill-row" data-category="automation"><span class="skill-name">Data Collection</span><div class="progress-track"><div class="progress-fill" style="width: 64%;" data-target-width="64%"></div></div><span class="skill-percentage">64%</span></div>
           <!-- CompVision (8 items) -->
-          <div class="skill-row" data-category="compvision" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Camera Streaming</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 80%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="80%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">80%</span></div>
-          <div class="skill-row" data-category="compvision" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Hand Tracking</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 78%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="78%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">78%</span></div>
-          <div class="skill-row" data-category="compvision" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Gesture Recognition</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 74%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="74%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">74%</span></div>
-          <div class="skill-row" data-category="compvision" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Face Analysis</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 70%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="70%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">70%</span></div>
-          <div class="skill-row" data-category="compvision" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Image Analysis</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 70%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="70%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">70%</span></div>
-          <div class="skill-row" data-category="compvision" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Photo Editing</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 72%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="72%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">72%</span></div>
-          <div class="skill-row" data-category="compvision" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Object Detection</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 60%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="60%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">60%</span></div>
-          <div class="skill-row" data-category="compvision" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Real-Time Tracking</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 66%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="66%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">66%</span></div>
+          <div class="skill-row" data-category="compvision"><span class="skill-name">Camera Streaming</span><div class="progress-track"><div class="progress-fill" style="width: 80%;" data-target-width="80%"></div></div><span class="skill-percentage">80%</span></div>
+          <div class="skill-row" data-category="compvision"><span class="skill-name">Hand Tracking</span><div class="progress-track"><div class="progress-fill" style="width: 78%;" data-target-width="78%"></div></div><span class="skill-percentage">78%</span></div>
+          <div class="skill-row" data-category="compvision"><span class="skill-name">Gesture Recognition</span><div class="progress-track"><div class="progress-fill" style="width: 74%;" data-target-width="74%"></div></div><span class="skill-percentage">74%</span></div>
+          <div class="skill-row" data-category="compvision"><span class="skill-name">Face Analysis</span><div class="progress-track"><div class="progress-fill" style="width: 70%;" data-target-width="70%"></div></div><span class="skill-percentage">70%</span></div>
+          <div class="skill-row" data-category="compvision"><span class="skill-name">Image Analysis</span><div class="progress-track"><div class="progress-fill" style="width: 70%;" data-target-width="70%"></div></div><span class="skill-percentage">70%</span></div>
+          <div class="skill-row" data-category="compvision"><span class="skill-name">Photo Editing</span><div class="progress-track"><div class="progress-fill" style="width: 72%;" data-target-width="72%"></div></div><span class="skill-percentage">72%</span></div>
+          <div class="skill-row" data-category="compvision"><span class="skill-name">Object Detection</span><div class="progress-track"><div class="progress-fill" style="width: 60%;" data-target-width="60%"></div></div><span class="skill-percentage">60%</span></div>
+          <div class="skill-row" data-category="compvision"><span class="skill-name">Real-Time Tracking</span><div class="progress-track"><div class="progress-fill" style="width: 66%;" data-target-width="66%"></div></div><span class="skill-percentage">66%</span></div>
           <!-- Simulation (7 items) -->
-          <div class="skill-row" data-category="simulation" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Educational Tools</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 82%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="82%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">82%</span></div>
-          <div class="skill-row" data-category="simulation" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Physics Simulation</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 80%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="80%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">80%</span></div>
-          <div class="skill-row" data-category="simulation" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Circuit Simulation</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 78%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="78%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">78%</span></div>
-          <div class="skill-row" data-category="simulation" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Engineering Models</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 76%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="76%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">76%</span></div>
-          <div class="skill-row" data-category="simulation" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Data Visuals</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 74%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="74%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">74%</span></div>
-          <div class="skill-row" data-category="simulation" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Power Calc</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 72%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="72%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">72%</span></div>
-          <div class="skill-row" data-category="simulation" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Math Modeling</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 62%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="62%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">62%</span></div>
+          <div class="skill-row" data-category="simulation"><span class="skill-name">Educational Tools</span><div class="progress-track"><div class="progress-fill" style="width: 82%;" data-target-width="82%"></div></div><span class="skill-percentage">82%</span></div>
+          <div class="skill-row" data-category="simulation"><span class="skill-name">Physics Simulation</span><div class="progress-track"><div class="progress-fill" style="width: 80%;" data-target-width="80%"></div></div><span class="skill-percentage">80%</span></div>
+          <div class="skill-row" data-category="simulation"><span class="skill-name">Circuit Simulation</span><div class="progress-track"><div class="progress-fill" style="width: 78%;" data-target-width="78%"></div></div><span class="skill-percentage">78%</span></div>
+          <div class="skill-row" data-category="simulation"><span class="skill-name">Engineering Models</span><div class="progress-track"><div class="progress-fill" style="width: 76%;" data-target-width="76%"></div></div><span class="skill-percentage">76%</span></div>
+          <div class="skill-row" data-category="simulation"><span class="skill-name">Data Visuals</span><div class="progress-track"><div class="progress-fill" style="width: 74%;" data-target-width="74%"></div></div><span class="skill-percentage">74%</span></div>
+          <div class="skill-row" data-category="simulation"><span class="skill-name">Power Calc</span><div class="progress-track"><div class="progress-fill" style="width: 72%;" data-target-width="72%"></div></div><span class="skill-percentage">72%</span></div>
+          <div class="skill-row" data-category="simulation"><span class="skill-name">Math Modeling</span><div class="progress-track"><div class="progress-fill" style="width: 62%;" data-target-width="62%"></div></div><span class="skill-percentage">62%</span></div>
           <!-- Robotics (7 items) -->
-          <div class="skill-row" data-category="robotics" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Motor Control</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 78%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="78%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">78%</span></div>
-          <div class="skill-row" data-category="robotics" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Motion Systems</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 74%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="74%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">74%</span></div>
-          <div class="skill-row" data-category="robotics" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Self-Adjusting</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 74%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="74%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">74%</span></div>
-          <div class="skill-row" data-category="robotics" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Motion Tuning</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 70%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="70%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">70%</span></div>
-          <div class="skill-row" data-category="robotics" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Decision Logic</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 66%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="66%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">66%</span></div>
-          <div class="skill-row" data-category="robotics" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ROS2</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 12%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="12%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">12%</span></div>
-          <div class="skill-row" data-category="robotics" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">SLAM</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 8%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="8%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">8%</span></div>
+          <div class="skill-row" data-category="robotics"><span class="skill-name">Motor Control</span><div class="progress-track"><div class="progress-fill" style="width: 78%;" data-target-width="78%"></div></div><span class="skill-percentage">78%</span></div>
+          <div class="skill-row" data-category="robotics"><span class="skill-name">Motion Systems</span><div class="progress-track"><div class="progress-fill" style="width: 74%;" data-target-width="74%"></div></div><span class="skill-percentage">74%</span></div>
+          <div class="skill-row" data-category="robotics"><span class="skill-name">Self-Adjusting</span><div class="progress-track"><div class="progress-fill" style="width: 74%;" data-target-width="74%"></div></div><span class="skill-percentage">74%</span></div>
+          <div class="skill-row" data-category="robotics"><span class="skill-name">Motion Tuning</span><div class="progress-track"><div class="progress-fill" style="width: 70%;" data-target-width="70%"></div></div><span class="skill-percentage">70%</span></div>
+          <div class="skill-row" data-category="robotics"><span class="skill-name">Decision Logic</span><div class="progress-track"><div class="progress-fill" style="width: 66%;" data-target-width="66%"></div></div><span class="skill-percentage">66%</span></div>
+          <div class="skill-row" data-category="robotics"><span class="skill-name">ROS2</span><div class="progress-track"><div class="progress-fill" style="width: 12%;" data-target-width="12%"></div></div><span class="skill-percentage">12%</span></div>
+          <div class="skill-row" data-category="robotics"><span class="skill-name">SLAM</span><div class="progress-track"><div class="progress-fill" style="width: 8%;" data-target-width="8%"></div></div><span class="skill-percentage">8%</span></div>
           <!-- Electrical (8 items) -->
-          <div class="skill-row" data-category="electrical" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Circuit Analysis</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 80%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="80%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">80%</span></div>
-          <div class="skill-row" data-category="electrical" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Transformers</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 74%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="74%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">74%</span></div>
-          <div class="skill-row" data-category="electrical" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Motors & Generators</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 70%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="70%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">70%</span></div>
-          <div class="skill-row" data-category="electrical" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Shock Protection</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 70%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="70%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">70%</span></div>
-          <div class="skill-row" data-category="electrical" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Fault Detection</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 68%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="68%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">68%</span></div>
-          <div class="skill-row" data-category="electrical" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Meter Reading</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 74%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="74%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">74%</span></div>
-          <div class="skill-row" data-category="electrical" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Renewable Energy</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 54%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="54%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">54%</span></div>
-          <div class="skill-row" data-category="electrical" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Grid Systems</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 68%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="68%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">68%</span></div>
+          <div class="skill-row" data-category="electrical"><span class="skill-name">Circuit Analysis</span><div class="progress-track"><div class="progress-fill" style="width: 80%;" data-target-width="80%"></div></div><span class="skill-percentage">80%</span></div>
+          <div class="skill-row" data-category="electrical"><span class="skill-name">Transformers</span><div class="progress-track"><div class="progress-fill" style="width: 74%;" data-target-width="74%"></div></div><span class="skill-percentage">74%</span></div>
+          <div class="skill-row" data-category="electrical"><span class="skill-name">Motors & Generators</span><div class="progress-track"><div class="progress-fill" style="width: 70%;" data-target-width="70%"></div></div><span class="skill-percentage">70%</span></div>
+          <div class="skill-row" data-category="electrical"><span class="skill-name">Shock Protection</span><div class="progress-track"><div class="progress-fill" style="width: 70%;" data-target-width="70%"></div></div><span class="skill-percentage">70%</span></div>
+          <div class="skill-row" data-category="electrical"><span class="skill-name">Fault Detection</span><div class="progress-track"><div class="progress-fill" style="width: 68%;" data-target-width="68%"></div></div><span class="skill-percentage">68%</span></div>
+          <div class="skill-row" data-category="electrical"><span class="skill-name">Meter Reading</span><div class="progress-track"><div class="progress-fill" style="width: 74%;" data-target-width="74%"></div></div><span class="skill-percentage">74%</span></div>
+          <div class="skill-row" data-category="electrical"><span class="skill-name">Renewable Energy</span><div class="progress-track"><div class="progress-fill" style="width: 54%;" data-target-width="54%"></div></div><span class="skill-percentage">54%</span></div>
+          <div class="skill-row" data-category="electrical"><span class="skill-name">Grid Systems</span><div class="progress-track"><div class="progress-fill" style="width: 68%;" data-target-width="68%"></div></div><span class="skill-percentage">68%</span></div>
           <!-- Prototyping (8 items) -->
-          <div class="skill-row" data-category="prototyping" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Soldering</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 82%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="82%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">82%</span></div>
-          <div class="skill-row" data-category="prototyping" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Perfboard Soldering</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 80%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="80%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">80%</span></div>
-          <div class="skill-row" data-category="prototyping" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Circuit Assembly</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 72%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="72%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">72%</span></div>
-          <div class="skill-row" data-category="prototyping" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Cable Repair</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 70%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="70%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">70%</span></div>
-          <div class="skill-row" data-category="prototyping" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">DIY Antennas</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 42%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="42%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">42%</span></div>
-          <div class="skill-row" data-category="prototyping" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Casing Design</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 2%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="2%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">2%</span></div>
-          <div class="skill-row" data-category="prototyping" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">3D Printing</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 3%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="3%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">3%</span></div>
-          <div class="skill-row" data-category="prototyping" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">PCB Making</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 0%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="0%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">0%</span></div>
+          <div class="skill-row" data-category="prototyping"><span class="skill-name">Soldering</span><div class="progress-track"><div class="progress-fill" style="width: 82%;" data-target-width="82%"></div></div><span class="skill-percentage">82%</span></div>
+          <div class="skill-row" data-category="prototyping"><span class="skill-name">Perfboard Soldering</span><div class="progress-track"><div class="progress-fill" style="width: 80%;" data-target-width="80%"></div></div><span class="skill-percentage">80%</span></div>
+          <div class="skill-row" data-category="prototyping"><span class="skill-name">Circuit Assembly</span><div class="progress-track"><div class="progress-fill" style="width: 72%;" data-target-width="72%"></div></div><span class="skill-percentage">72%</span></div>
+          <div class="skill-row" data-category="prototyping"><span class="skill-name">Cable Repair</span><div class="progress-track"><div class="progress-fill" style="width: 70%;" data-target-width="70%"></div></div><span class="skill-percentage">70%</span></div>
+          <div class="skill-row" data-category="prototyping"><span class="skill-name">DIY Antennas</span><div class="progress-track"><div class="progress-fill" style="width: 42%;" data-target-width="42%"></div></div><span class="skill-percentage">42%</span></div>
+          <div class="skill-row" data-category="prototyping"><span class="skill-name">Casing Design</span><div class="progress-track"><div class="progress-fill" style="width: 2%;" data-target-width="2%"></div></div><span class="skill-percentage">2%</span></div>
+          <div class="skill-row" data-category="prototyping"><span class="skill-name">3D Printing</span><div class="progress-track"><div class="progress-fill" style="width: 3%;" data-target-width="3%"></div></div><span class="skill-percentage">3%</span></div>
+          <div class="skill-row" data-category="prototyping"><span class="skill-name">PCB Making</span><div class="progress-track"><div class="progress-fill" style="width: 0%;" data-target-width="0%"></div></div><span class="skill-percentage">0%</span></div>
           <!-- Cybersecurity (8 items) -->
-          <div class="skill-row" data-category="cybersecurity" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Encryption</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 25%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="25%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">25%</span></div>
-          <div class="skill-row" data-category="cybersecurity" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Secure Connections</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 28%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="28%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">28%</span></div>
-          <div class="skill-row" data-category="cybersecurity" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Secure Apps</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 22%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="22%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">22%</span></div>
-          <div class="skill-row" data-category="cybersecurity" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Data Protection</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 16%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="16%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">16%</span></div>
-          <div class="skill-row" data-category="cybersecurity" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Login Security</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 15%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="15%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">15%</span></div>
-          <div class="skill-row" data-category="cybersecurity" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Industrial Security</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 5%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="5%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">5%</span></div>
-          <div class="skill-row" data-category="cybersecurity" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Network Security</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 6%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="6%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">6%</span></div>
-          <div class="skill-row" data-category="cybersecurity" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Ethical Hacking</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 2%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="2%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">2%</span></div>
+          <div class="skill-row" data-category="cybersecurity"><span class="skill-name">Encryption</span><div class="progress-track"><div class="progress-fill" style="width: 25%;" data-target-width="25%"></div></div><span class="skill-percentage">25%</span></div>
+          <div class="skill-row" data-category="cybersecurity"><span class="skill-name">Secure Connections</span><div class="progress-track"><div class="progress-fill" style="width: 28%;" data-target-width="28%"></div></div><span class="skill-percentage">28%</span></div>
+          <div class="skill-row" data-category="cybersecurity"><span class="skill-name">Secure Apps</span><div class="progress-track"><div class="progress-fill" style="width: 22%;" data-target-width="22%"></div></div><span class="skill-percentage">22%</span></div>
+          <div class="skill-row" data-category="cybersecurity"><span class="skill-name">Data Protection</span><div class="progress-track"><div class="progress-fill" style="width: 16%;" data-target-width="16%"></div></div><span class="skill-percentage">16%</span></div>
+          <div class="skill-row" data-category="cybersecurity"><span class="skill-name">Login Security</span><div class="progress-track"><div class="progress-fill" style="width: 15%;" data-target-width="15%"></div></div><span class="skill-percentage">15%</span></div>
+          <div class="skill-row" data-category="cybersecurity"><span class="skill-name">Industrial Security</span><div class="progress-track"><div class="progress-fill" style="width: 5%;" data-target-width="5%"></div></div><span class="skill-percentage">5%</span></div>
+          <div class="skill-row" data-category="cybersecurity"><span class="skill-name">Network Security</span><div class="progress-track"><div class="progress-fill" style="width: 6%;" data-target-width="6%"></div></div><span class="skill-percentage">6%</span></div>
+          <div class="skill-row" data-category="cybersecurity"><span class="skill-name">Ethical Hacking</span><div class="progress-track"><div class="progress-fill" style="width: 2%;" data-target-width="2%"></div></div><span class="skill-percentage">2%</span></div>
           <!-- Leadership (9 items) -->
-          <div class="skill-row" data-category="leadership" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Self-Direction</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 90%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="90%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">90%</span></div>
-          <div class="skill-row" data-category="leadership" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Initiative</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 88%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="88%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">88%</span></div>
-          <div class="skill-row" data-category="leadership" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Ownership</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 86%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="86%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">86%</span></div>
-          <div class="skill-row" data-category="leadership" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Resilience</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 86%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="86%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">86%</span></div>
-          <div class="skill-row" data-category="leadership" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Problem Solving</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 82%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="82%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">82%</span></div>
-          <div class="skill-row" data-category="leadership" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Execution</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 86%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="86%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">86%</span></div>
-          <div class="skill-row" data-category="leadership" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Communication</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 74%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="74%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">74%</span></div>
-          <div class="skill-row" data-category="leadership" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Decision Making</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 76%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="76%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">76%</span></div>
-          <div class="skill-row" data-category="leadership" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Adaptability</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 84%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="84%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">84%</span></div>
+          <div class="skill-row" data-category="leadership"><span class="skill-name">Self-Direction</span><div class="progress-track"><div class="progress-fill" style="width: 90%;" data-target-width="90%"></div></div><span class="skill-percentage">90%</span></div>
+          <div class="skill-row" data-category="leadership"><span class="skill-name">Initiative</span><div class="progress-track"><div class="progress-fill" style="width: 88%;" data-target-width="88%"></div></div><span class="skill-percentage">88%</span></div>
+          <div class="skill-row" data-category="leadership"><span class="skill-name">Ownership</span><div class="progress-track"><div class="progress-fill" style="width: 86%;" data-target-width="86%"></div></div><span class="skill-percentage">86%</span></div>
+          <div class="skill-row" data-category="leadership"><span class="skill-name">Resilience</span><div class="progress-track"><div class="progress-fill" style="width: 86%;" data-target-width="86%"></div></div><span class="skill-percentage">86%</span></div>
+          <div class="skill-row" data-category="leadership"><span class="skill-name">Problem Solving</span><div class="progress-track"><div class="progress-fill" style="width: 82%;" data-target-width="82%"></div></div><span class="skill-percentage">82%</span></div>
+          <div class="skill-row" data-category="leadership"><span class="skill-name">Execution</span><div class="progress-track"><div class="progress-fill" style="width: 86%;" data-target-width="86%"></div></div><span class="skill-percentage">86%</span></div>
+          <div class="skill-row" data-category="leadership"><span class="skill-name">Communication</span><div class="progress-track"><div class="progress-fill" style="width: 74%;" data-target-width="74%"></div></div><span class="skill-percentage">74%</span></div>
+          <div class="skill-row" data-category="leadership"><span class="skill-name">Decision Making</span><div class="progress-track"><div class="progress-fill" style="width: 76%;" data-target-width="76%"></div></div><span class="skill-percentage">76%</span></div>
+          <div class="skill-row" data-category="leadership"><span class="skill-name">Adaptability</span><div class="progress-track"><div class="progress-fill" style="width: 84%;" data-target-width="84%"></div></div><span class="skill-percentage">84%</span></div>
           <!-- Project Management (8 items) -->
-          <div class="skill-row" data-category="projects" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Execution Focus</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 86%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="86%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">86%</span></div>
-          <div class="skill-row" data-category="projects" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Task Breakdown</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 80%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="80%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">80%</span></div>
-          <div class="skill-row" data-category="projects" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Planning</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 72%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="72%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">72%</span></div>
-          <div class="skill-row" data-category="projects" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Timeline Planning</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 74%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="74%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">74%</span></div>
-          <div class="skill-row" data-category="projects" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Scheduling Methods</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 72%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="72%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">72%</span></div>
-          <div class="skill-row" data-category="projects" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Progress Tracking</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 76%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="76%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">76%</span></div>
-          <div class="skill-row" data-category="projects" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Prioritization</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 80%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="80%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">80%</span></div>
-          <div class="skill-row" data-category="projects" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Risk Assessment</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 64%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="64%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">64%</span></div>
+          <div class="skill-row" data-category="projects"><span class="skill-name">Execution Focus</span><div class="progress-track"><div class="progress-fill" style="width: 86%;" data-target-width="86%"></div></div><span class="skill-percentage">86%</span></div>
+          <div class="skill-row" data-category="projects"><span class="skill-name">Task Breakdown</span><div class="progress-track"><div class="progress-fill" style="width: 80%;" data-target-width="80%"></div></div><span class="skill-percentage">80%</span></div>
+          <div class="skill-row" data-category="projects"><span class="skill-name">Planning</span><div class="progress-track"><div class="progress-fill" style="width: 72%;" data-target-width="72%"></div></div><span class="skill-percentage">72%</span></div>
+          <div class="skill-row" data-category="projects"><span class="skill-name">Timeline Planning</span><div class="progress-track"><div class="progress-fill" style="width: 74%;" data-target-width="74%"></div></div><span class="skill-percentage">74%</span></div>
+          <div class="skill-row" data-category="projects"><span class="skill-name">Scheduling Methods</span><div class="progress-track"><div class="progress-fill" style="width: 72%;" data-target-width="72%"></div></div><span class="skill-percentage">72%</span></div>
+          <div class="skill-row" data-category="projects"><span class="skill-name">Progress Tracking</span><div class="progress-track"><div class="progress-fill" style="width: 76%;" data-target-width="76%"></div></div><span class="skill-percentage">76%</span></div>
+          <div class="skill-row" data-category="projects"><span class="skill-name">Prioritization</span><div class="progress-track"><div class="progress-fill" style="width: 80%;" data-target-width="80%"></div></div><span class="skill-percentage">80%</span></div>
+          <div class="skill-row" data-category="projects"><span class="skill-name">Risk Assessment</span><div class="progress-track"><div class="progress-fill" style="width: 64%;" data-target-width="64%"></div></div><span class="skill-percentage">64%</span></div>
           <!-- Strategy (7 items) -->
-          <div class="skill-row" data-category="strategy" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">First Principles</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 82%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="82%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">82%</span></div>
-          <div class="skill-row" data-category="strategy" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Trade-Off Analysis</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 80%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="80%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">80%</span></div>
-          <div class="skill-row" data-category="strategy" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Domain Research</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 82%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="82%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">82%</span></div>
-          <div class="skill-row" data-category="strategy" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Tech Foresight</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 76%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="76%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">76%</span></div>
-          <div class="skill-row" data-category="strategy" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Innovation Scouting</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 74%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="74%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">74%</span></div>
-          <div class="skill-row" data-category="strategy" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Cost Modeling</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 66%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="66%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">66%</span></div>
-          <div class="skill-row" data-category="strategy" style="display:none; align-items: center; justify-content: space-between; gap: 10px; width: 100%; height: 24px;"><span class="skill-name" style="font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Adaptability</span><div class="progress-track" style="flex-grow: 1; height: 4px; background: #E2E8F0; border-radius: 2px; overflow: hidden; position: relative;"><div class="progress-fill" style="width: 84%; height: 100%; background: var(--accent-primary); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);" data-target-width="84%"></div></div><span class="skill-percentage" style="font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-primary); width: 38px; text-align: right; flex-shrink: 0;">84%</span></div>
+          <div class="skill-row" data-category="strategy"><span class="skill-name">First Principles</span><div class="progress-track"><div class="progress-fill" style="width: 82%;" data-target-width="82%"></div></div><span class="skill-percentage">82%</span></div>
+          <div class="skill-row" data-category="strategy"><span class="skill-name">Trade-Off Analysis</span><div class="progress-track"><div class="progress-fill" style="width: 80%;" data-target-width="80%"></div></div><span class="skill-percentage">80%</span></div>
+          <div class="skill-row" data-category="strategy"><span class="skill-name">Domain Research</span><div class="progress-track"><div class="progress-fill" style="width: 82%;" data-target-width="82%"></div></div><span class="skill-percentage">82%</span></div>
+          <div class="skill-row" data-category="strategy"><span class="skill-name">Tech Foresight</span><div class="progress-track"><div class="progress-fill" style="width: 76%;" data-target-width="76%"></div></div><span class="skill-percentage">76%</span></div>
+          <div class="skill-row" data-category="strategy"><span class="skill-name">Innovation Scouting</span><div class="progress-track"><div class="progress-fill" style="width: 74%;" data-target-width="74%"></div></div><span class="skill-percentage">74%</span></div>
+          <div class="skill-row" data-category="strategy"><span class="skill-name">Cost Modeling</span><div class="progress-track"><div class="progress-fill" style="width: 66%;" data-target-width="66%"></div></div><span class="skill-percentage">66%</span></div>
+          <div class="skill-row" data-category="strategy"><span class="skill-name">Adaptability</span><div class="progress-track"><div class="progress-fill" style="width: 84%;" data-target-width="84%"></div></div><span class="skill-percentage">84%</span></div>
         </div>
       </div>
     </section>
@@ -1137,520 +515,12 @@
   </footer>
 
   <!-- JavaScript Behavior & Logic -->
-  <script>
-    // Shared Auto-Fit Text Sizing Utility
-    function autoFitText(element, options) {
-      if (!element) return;
-      const { minFontPx, maxFontPx, step = 0.5 } = options;
-      let currentSize = maxFontPx;
-      element.style.fontSize = currentSize + 'px';
-      
-      // Temporarily remove line clamp to measure natural height/width
-      const originalOverflow = element.style.overflow;
-      element.style.overflow = 'visible';
-      
-      while (currentSize > minFontPx) {
-        let isOverflowing = false;
-        if (element.scrollWidth > element.clientWidth) {
-          isOverflowing = true;
-        } else {
-          // Check line height bounds if needed
-          const computedLineHeight = parseFloat(window.getComputedStyle(element).lineHeight);
-          const computedHeight = element.scrollHeight;
-          // If multi-line height check is required
-          if (options.maxLines && computedHeight > (computedLineHeight * options.maxLines * 1.1)) {
-            isOverflowing = true;
-          }
-        }
-        
-        if (isOverflowing) {
-          currentSize -= step;
-          element.style.fontSize = currentSize + 'px';
-        } else {
-          break;
-        }
-      }
-      element.style.overflow = originalOverflow;
-    }
-
-    function runAutoFits() {
-      const titleElem = document.querySelector('.profile-title');
-      const statementElem = document.querySelector('.personal-statement');
-      if (titleElem) autoFitText(titleElem, { minFontPx: 12, maxFontPx: 16 });
-      if (statementElem) autoFitText(statementElem, { maxLines: 3, minFontPx: 12, maxFontPx: 16 });
-      
-      // Only the STICKY footer's status line is auto-fit; the static page-footer status line stays locked at 14.5px so it always matches the copyright line above it exactly.
-      document.querySelectorAll('#sticky-footer .footer-status-text').forEach(el => {
-        autoFitText(el, { minFontPx: 11, maxFontPx: 14.5 });
-      });
-
-      // Card overview / i-learned text panes: shrink to always fit the fixed ~235px box (holds ~300 chars comfortably at 13.5px)
-      document.querySelectorAll('.pane-overview, .event-pane-overview, .pane-ilearned').forEach(el => {
-        if (getComputedStyle(el).display !== 'none') autoFitText(el, { minFontPx: 10, maxFontPx: 13.5 });
-      });
-
-      // Project sub-tabs (Overview / Tech Stack / I-Learned): start at 13px and
-      // only shrink on genuinely narrow screens so all 3 still fit on one line
-      document.querySelectorAll('.project-card').forEach(card => {
-        const nav = card.querySelector('.subtab-btn');
-        if (!nav) return;
-        const navRow = nav.parentElement;
-        const tabs = [...navRow.querySelectorAll('.subtab-btn')];
-        const avail = navRow.clientWidth;
-        for (let fs = 13; fs >= 9; fs -= 0.5) {
-          tabs.forEach(t => t.style.fontSize = fs + 'px');
-          const total = tabs.reduce((a,t)=>a+t.getBoundingClientRect().width,0) + 4*(tabs.length-1);
-          if (total <= avail) break;
-        }
-      });
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      runAutoFits();
-    });
-
-    // Re-run once web fonts finish loading (they swap in wider than the fallback and can overflow on narrow screens like Galaxy S20)
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(runAutoFits);
-    }
-
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(runAutoFits, 150);
-    });
-
-    // Sticky Header Intersection Observer
-    const profileSection = document.getElementById('profile-section');
-    const stickyHeader = document.getElementById('sticky-header');
-    if (profileSection && stickyHeader) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) {
-            stickyHeader.classList.add('visible');
-          } else {
-            stickyHeader.classList.remove('visible');
-          }
-        });
-      }, { rootMargin: "-44px 0px 0px 0px", threshold: 0 });
-      observer.observe(profileSection);
-    }
-
-    // Sticky Footer: hide (slide down + fade) once the static page footer scrolls into view
-    const pageFooter = document.getElementById('page-footer');
-    const stickyFooter = document.getElementById('sticky-footer');
-    if (pageFooter && stickyFooter) {
-      const footerObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            stickyFooter.classList.add('hidden');
-          } else {
-            stickyFooter.classList.remove('hidden');
-          }
-        });
-      }, { threshold: 0 });
-      footerObserver.observe(pageFooter);
-    }
-
-    // Projects Filtering & Scroll Stability Fix
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card');
-    const projectsCarousel = document.getElementById('projects-carousel');
-
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterBtns.forEach(b => {
-          b.classList.remove('active');
-          b.style.background = 'var(--bg-main)';
-          b.style.color = 'var(--text-secondary)';
-          b.style.borderColor = 'var(--border-color)';
-        });
-        btn.classList.add('active');
-        btn.style.background = 'var(--accent-primary)';
-        btn.style.color = '#FFFFFF';
-        btn.style.borderColor = 'var(--accent-primary)';
-
-        const filterVal = btn.getAttribute('data-filter');
-        const visibleProjects = [];
-        projectCards.forEach((card) => {
-          const cat = card.getAttribute('data-category');
-          if (filterVal === 'all' || cat === filterVal || (filterVal === 'hw-sw' && cat === 'hw-sw')) {
-            card.style.display = 'flex';
-            card.classList.remove('reveal-fade');
-            void card.offsetWidth;
-            card.classList.add('reveal-fade');
-            visibleProjects.push(card);
-          } else {
-            card.style.display = 'none';
-          }
-        });
-        const projTotal = visibleProjects.length;
-        visibleProjects.forEach((card, i) => {
-          const counter = card.querySelector('.project-card-counter');
-          if (counter) counter.textContent = (projTotal - i) + '/' + projTotal;
-        });
-
-        // Scroll reset stability fix (Section 1.7)
-        if (projectsCarousel) {
-          projectsCarousel.scrollTo({ left: 0, behavior: 'auto' });
-          projectsCarousel.scrollLeft = 0;
-          requestAnimationFrame(() => {
-            projectsCarousel.scrollLeft = 0;
-          });
-        }
-      });
-    });
-
-    // Events Filtering & Scroll Stability Fix
-    const eventFilterBtns = document.querySelectorAll('.event-filter-btn');
-    const eventCards = document.querySelectorAll('.event-card');
-    const eventsCarousel = document.getElementById('events-carousel');
-
-    eventFilterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        eventFilterBtns.forEach(b => {
-          b.classList.remove('active');
-          b.style.background = 'var(--bg-main)';
-          b.style.color = 'var(--text-secondary)';
-          b.style.borderColor = 'var(--border-color)';
-        });
-        btn.classList.add('active');
-        btn.style.background = 'var(--accent-primary)';
-        btn.style.color = '#FFFFFF';
-        btn.style.borderColor = 'var(--accent-primary)';
-
-        const filterVal = btn.getAttribute('data-filter');
-        const visibleEvents = [];
-        eventCards.forEach((card) => {
-          const cat = card.getAttribute('data-category');
-          if (filterVal === 'all' || cat === filterVal) {
-            card.style.display = 'flex';
-            card.classList.remove('reveal-fade');
-            void card.offsetWidth;
-            card.classList.add('reveal-fade');
-            visibleEvents.push(card);
-          } else {
-            card.style.display = 'none';
-          }
-        });
-        const evTotal = visibleEvents.length;
-        visibleEvents.forEach((card, i) => {
-          const counter = card.querySelector('.event-card-counter');
-          if (counter) counter.textContent = (evTotal - i) + '/' + evTotal;
-        });
-
-        if (eventsCarousel) {
-          eventsCarousel.scrollTo({ left: 0, behavior: 'auto' });
-          eventsCarousel.scrollLeft = 0;
-          requestAnimationFrame(() => {
-            eventsCarousel.scrollLeft = 0;
-          });
-        }
-      });
-    });
-
-    // Card Sub-Tabs Logic (Projects & Events)
-    document.querySelectorAll('.project-card, .event-card').forEach(card => {
-      const subTabs = card.querySelectorAll('.subtab-btn, .event-subtab-btn');
-      subTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          subTabs.forEach(t => {
-            t.classList.remove('active');
-            t.style.background = 'var(--bg-main)';
-            t.style.color = 'var(--text-muted)';
-            t.style.borderBottom = 'none';
-            t.style.bottom = '-1px';
-            t.style.zIndex = '1';
-          });
-          tab.classList.add('active');
-          tab.style.background = 'var(--bg-surface)';
-          tab.style.color = 'var(--accent-primary)';
-          tab.style.borderBottom = '1px solid #FFFFFF';
-          tab.style.bottom = '-1px';
-          tab.style.zIndex = '3';
-
-          const targetPane = tab.getAttribute('data-tab');
-          const panes = card.querySelectorAll('.pane-overview, .pane-techstack, .pane-ilearned, .event-pane-overview, .event-pane-media');
-          panes.forEach(pane => {
-            if (pane.classList.contains('pane-' + targetPane) || pane.classList.contains('event-pane-' + targetPane)) {
-              pane.style.display = 'block';
-              // restart the fade each switch
-              pane.classList.remove('reveal-fade');
-              void pane.offsetWidth;
-              pane.classList.add('reveal-fade');
-            } else {
-              pane.style.display = 'none';
-            }
-          });
-        });
-      });
-    });
-
-    // Skillset Tabs Interactivity
-    const skillTabs = document.querySelectorAll('.skill-tab');
-    const skillTabList = Array.from(skillTabs);
-    const skillsetCounter = document.querySelector('.skillset-counter');
-    skillTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const isBusiness = tab.hasAttribute('data-type');
-        skillTabs.forEach(t => {
-          t.classList.remove('active');
-          t.style.background = '';
-          t.style.border = '';
-          t.style.borderColor = '';
-          t.style.color = 'var(--text-primary)';
-        });
-        tab.classList.add('active');
-        const activeColor = isBusiness ? 'var(--accent-secondary)' : 'var(--accent-primary)';
-        tab.style.background = activeColor;
-        tab.style.color = '#FFFFFF';
-        tab.style.borderColor = activeColor;
-
-        // Update the skillset counter: this tab's position out of all tabs.
-        if (skillsetCounter) {
-          const idx = skillTabList.indexOf(tab) + 1;
-          skillsetCounter.textContent = idx + '/' + skillTabList.length;
-        }
-
-        const skillset = tab.getAttribute('data-skillset');
-        const rows = document.querySelectorAll('.skill-row');
-        rows.forEach(row => {
-          if (row.getAttribute('data-category') === skillset) {
-            row.style.display = 'flex';
-            row.classList.remove('reveal-fade');
-            void row.offsetWidth;
-            row.classList.add('reveal-fade');
-            const fill = row.querySelector('.progress-fill');
-            const pctLabel = row.querySelector('.skill-percentage');
-            if (fill) {
-              fill.style.width = '0%';
-              fill.style.background = activeColor;
-              if (pctLabel) pctLabel.style.color = activeColor;
-              setTimeout(() => {
-                fill.style.width = fill.getAttribute('data-target-width');
-              }, 50);
-            }
-          } else {
-            row.style.display = 'none';
-          }
-        });
-      });
-    });
-
-    // Scroll-in reveal: cards NOT visible on first load fade in (~0.5s) as you
-    // scroll them into view. Cards already on screen at load are left instant.
-    (function() {
-      function cardVisible(card, carousel) {
-        const c = carousel.getBoundingClientRect();
-        const r = card.getBoundingClientRect();
-        return r.right > c.left + 1 && r.left < c.right - 1;
-      }
-      document.querySelectorAll('.projects-carousel, .events-carousel, .value-carousel').forEach(carousel => {
-        const cards = Array.from(carousel.children).filter(el =>
-          el.classList.contains('project-card') ||
-          el.classList.contains('event-card') ||
-          el.classList.contains('value-card'));
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('reveal-fade');
-              io.unobserve(entry.target);
-            }
-          });
-        }, { root: carousel, threshold: 0.1 });
-        cards.forEach(card => {
-          // Only observe cards hidden at load; visible ones stay instant.
-          if (!cardVisible(card, carousel)) io.observe(card);
-        });
-      });
-    })();
-
-    // Vertical scroll reveal: each section eases in ONCE the first time it
-    // approaches the viewport. Fade-only (no movement) and triggered EARLY — the
-    // negative rootMargin fires it ~120px before the section reaches view, so the
-    // fade is nearly done by the time you actually see it. Feels seamless, not
-    // like loading. Sections already on screen at load stay fully instant.
-    (function() {
-      const sections = document.querySelectorAll('main.portfolio-container > section');
-      const vh = window.innerHeight || document.documentElement.clientHeight;
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('section-reveal');
-            io.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
-      sections.forEach(section => {
-        const top = section.getBoundingClientRect().top;
-        // If it's already in view on load, leave it instant; otherwise observe it.
-        if (top < vh - 40) return;
-        io.observe(section);
-      });
-    })();
-
-  </script>
 
   <!-- Desktop carousel arrows (Projects / Events / Value) -->
-  <script>
-    (function() {
-      const carousels = document.querySelectorAll('.projects-carousel, .events-carousel, .value-carousel');
-      carousels.forEach(carousel => {
-        // wrap carousel so arrows can be positioned relative to it
-        const wrap = document.createElement('div');
-        wrap.className = 'carousel-wrap';
-        carousel.parentNode.insertBefore(wrap, carousel);
-        wrap.appendChild(carousel);
-
-        const prev = document.createElement('button');
-        prev.className = 'carousel-arrow prev';
-        prev.setAttribute('aria-label', 'Previous');
-        prev.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><polyline points="15 18 9 12 15 6"/></svg>';
-        const next = document.createElement('button');
-        next.className = 'carousel-arrow next';
-        next.setAttribute('aria-label', 'Next');
-        next.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><polyline points="9 18 15 12 9 6"/></svg>';
-        wrap.appendChild(prev);
-        wrap.appendChild(next);
-
-        function cardStep() {
-          const card = carousel.querySelector('.project-card, .event-card, .value-card');
-          if (!card) return carousel.clientWidth;
-          const gap = parseFloat(getComputedStyle(carousel).columnGap || getComputedStyle(carousel).gap) || 12;
-          return card.getBoundingClientRect().width + gap;
-        }
-        function update() {
-          const maxScroll = carousel.scrollWidth - carousel.clientWidth - 2;
-          prev.disabled = carousel.scrollLeft <= 2;
-          next.disabled = carousel.scrollLeft >= maxScroll;
-        }
-        prev.addEventListener('click', () => { carousel.scrollBy({ left: -cardStep(), behavior: 'smooth' }); });
-        next.addEventListener('click', () => { carousel.scrollBy({ left: cardStep(), behavior: 'smooth' }); });
-        carousel.addEventListener('scroll', update);
-        window.addEventListener('resize', update);
-        update();
-      });
-    })();
-  </script>
 
   <!-- Header download menu (CV / Portfolio) -->
-  <script>
-    (function() {
-      const btn = document.getElementById('header-menu-btn');
-      const menu = document.getElementById('header-download-menu');
-      if (!btn || !menu) return;
-      let open = false;
-      function openMenu() {
-        menu.style.display = 'block';
-        requestAnimationFrame(() => { menu.style.opacity = '1'; menu.style.transform = 'translateY(0)'; });
-        btn.setAttribute('aria-expanded', 'true');
-        open = true;
-      }
-      function closeMenu() {
-        menu.style.opacity = '0';
-        menu.style.transform = 'translateY(-6px)';
-        btn.setAttribute('aria-expanded', 'false');
-        open = false;
-        setTimeout(() => { if (!open) menu.style.display = 'none'; }, 200);
-      }
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        open ? closeMenu() : openMenu();
-      });
-      // tapping outside closes
-      document.addEventListener('click', (e) => {
-        if (open && !menu.contains(e.target) && e.target !== btn) closeMenu();
-      });
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) closeMenu(); });
-      // hover feedback on items + close after choosing
-      menu.querySelectorAll('.header-download-item').forEach(item => {
-        item.addEventListener('mouseenter', () => item.style.background = 'var(--bg-main)');
-        item.addEventListener('mouseleave', () => item.style.background = 'transparent');
-        item.addEventListener('click', () => closeMenu());
-      });
-    })();
-  </script>
 
   <!-- Lazy-load: media loads as its card enters the carousel viewport; videos show their first frame, not a black box -->
-  <script>
-    (function() {
-      function loadLazyMedia(root) {
-        // Hide a card's shimmer only once its media has actually revealed,
-        // so the pulsing placeholder holds until the first frame is ready.
-        const hideShimmers = () => {
-          root.querySelectorAll('.lazy-shimmer').forEach(s => s.classList.add('lazy-hide'));
-        };
-        root.querySelectorAll('.lazy-media').forEach(el => {
-          if (el.dataset.lazyDone) return;
-          const rawSrc = el.getAttribute('data-src') || el.getAttribute('data-src-lazy');
-          if (!rawSrc) return;
-          const reveal = () => { el.classList.add('lazy-loaded'); hideShimmers(); };
-
-          if (el.tagName === 'VIDEO') {
-            el.preload = 'auto';
-            // Reveal as soon as the first frame is decoded and painted.
-            el.addEventListener('loadeddata', reveal, { once: true });
-            el.addEventListener('canplay', reveal, { once: true });
-            // Append a media fragment so the browser seeks to and RENDERS the
-            // first frame automatically — shows the frame instead of a black box.
-            const frag = rawSrc.indexOf('#') === -1 ? (rawSrc + '#t=0.1') : rawSrc;
-            el.src = frag;
-            el.load();
-            // Safety reveal if events are delayed.
-            setTimeout(reveal, 1000);
-          } else {
-            if (el.complete) { reveal(); } else { el.addEventListener('load', reveal, { once: true }); }
-            el.src = rawSrc;
-          }
-          el.dataset.lazyDone = '1';
-        });
-      }
-
-      // Is any part of this card currently within the carousel's visible box?
-      // Used to decide, on first load, which cards are ALREADY on screen.
-      function cardIsVisible(card, carousel) {
-        const c = carousel.getBoundingClientRect();
-        const r = card.getBoundingClientRect();
-        // horizontal overlap between the card and the carousel viewport
-        return r.right > c.left + 1 && r.left < c.right - 1;
-      }
-
-      const carousels = document.querySelectorAll('.projects-carousel, .events-carousel');
-      carousels.forEach(carousel => {
-        const cards = Array.from(carousel.querySelectorAll('.project-card, .event-card'))
-          .filter(card => card.querySelector('.lazy-media'));
-
-        // 1) EAGER PASS — every card already showing on first paint (including a
-        //    card peeking in from the right edge) loads immediately. Its shimmer
-        //    is hidden instantly, so you never see a pulsing placeholder on media
-        //    that was on screen from the start.
-        cards.forEach(card => {
-          if (cardIsVisible(card, carousel)) {
-            card.querySelectorAll('.lazy-shimmer').forEach(s => {
-              s.style.animation = 'none';   // no pulse for already-visible media
-              s.classList.add('lazy-hide');
-            });
-            loadLazyMedia(card);
-          }
-        });
-
-        // 2) LAZY PASS — only cards NOT visible at load get the observer. When you
-        //    scroll one into view it loads with the ~0.5s shimmer→media reveal.
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              loadLazyMedia(entry.target);
-              io.unobserve(entry.target);
-            }
-          });
-        }, { root: carousel, rootMargin: '0px', threshold: 0.1 });
-
-        cards.forEach(card => {
-          if (!cardIsVisible(card, carousel)) io.observe(card);
-        });
-      });
-    })();
-  </script>
 
   <!-- Media Lightbox (shared) -->
   <div id="media-lightbox" style="position: fixed; inset: 0; z-index: 9999; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); opacity: 0; transition: opacity 0.25s ease; padding: 24px; box-sizing: border-box;">
@@ -1659,59 +529,6 @@
     </button>
     <div id="media-lightbox-content" style="max-width: 100%; max-height: 100%; display: flex; align-items: center; justify-content: center;"></div>
   </div>
-  <script>
-    // Media Lightbox: tap any thumbnail (photo or video) to open enlarged with an X to close
-    (function() {
-      const lightbox = document.getElementById('media-lightbox');
-      const content = document.getElementById('media-lightbox-content');
-      const closeBtn = document.getElementById('media-lightbox-close');
-      if (!lightbox || !content || !closeBtn) return;
-
-      function openLightbox(type, src) {
-        content.innerHTML = '';
-        if (type === 'video') {
-          const v = document.createElement('video');
-          v.src = src;
-          v.controls = true;
-          v.autoplay = true;
-          v.playsInline = true;
-          v.style.cssText = 'max-width: 100%; max-height: 85vh; border-radius: 6px; background: #000;';
-          content.appendChild(v);
-        } else {
-          const img = document.createElement('img');
-          img.src = src;
-          img.alt = 'Enlarged media';
-          img.style.cssText = 'max-width: 100%; max-height: 85vh; border-radius: 6px; object-fit: contain;';
-          content.appendChild(img);
-        }
-        lightbox.style.display = 'flex';
-        requestAnimationFrame(() => { lightbox.style.opacity = '1'; });
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeLightbox() {
-        lightbox.style.opacity = '0';
-        setTimeout(() => {
-          lightbox.style.display = 'none';
-          content.innerHTML = ''; // stops any playing video
-          document.body.style.overflow = '';
-        }, 250);
-      }
-
-      document.querySelectorAll('.media-thumb').forEach(thumb => {
-        thumb.addEventListener('click', () => {
-          openLightbox(thumb.getAttribute('data-media-type'), thumb.getAttribute('data-media-src'));
-        });
-      });
-
-      closeBtn.addEventListener('click', closeLightbox);
-      lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) closeLightbox(); // click backdrop to close
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && lightbox.style.display === 'flex') closeLightbox();
-      });
-    })();
-  </script>
+  <script src="/script.js"></script>
 </body>
 </html>
